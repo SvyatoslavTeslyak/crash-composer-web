@@ -23,3 +23,15 @@
 .review-json{margin:16px 0;border-top:1px solid #35404c;padding-top:12px}.review-json summary{cursor:pointer;color:#a1afbf;font-size:13px}.review-json pre{max-height:360px;overflow:auto;padding:14px;background:#0e151e;border-radius:8px;font:12px/1.6 monospace;white-space:pre-wrap;overflow-wrap:anywhere}.review-local-note{margin:20px 0;padding:16px 18px;border:1px solid #475566;border-left:3px solid #6cccff;border-radius:12px;background:#0e151e}.review-local-note strong{display:block;color:#6cccff;font-size:16px}.review-local-note p{margin:8px 0 0;color:#e2e7ee;font-size:14px;line-height:1.6}
 
 .review-author{font-size:14px;color:#a1afbf;overflow-wrap:anywhere}.review-author strong{color:#e2e7ee;font-weight:600}.review-author span{font-size:13px}
+
+/* Keep the close control visible in every shared dialog. */
+.share-dialog{--dialog-inset:24px;scroll-padding-top:120px;isolation:isolate}
+.share-dialog>header{position:sticky;top:calc(-1 * var(--dialog-inset));z-index:5;background:#161e28;margin:calc(-1 * var(--dialog-inset)) calc(-1 * var(--dialog-inset)) 16px;padding:var(--dialog-inset);border-bottom:1px solid #394451}
+.share-dialog>header [data-close]{flex-shrink:0}
+.review-queue{border:1px solid #394451;border-radius:12px;padding:16px;margin:20px 0}
+.review-queue h3{margin:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.review-queue[data-review-status=submitted]{border-left:3px solid #6cccff}
+.review-queue[data-review-status=approved]{border-left:3px solid #bce8cc}
+.review-queue[data-review-status=approved] h3,.review-published{color:#bce8cc}
+#cloud-diff,#draft-changes{scroll-margin-top:120px}
+@media(max-width:480px){.share-dialog{--dialog-inset:16px}}
