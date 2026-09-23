@@ -4,7 +4,7 @@ if(document.querySelector('#access-root[data-page=people]')){
  const dialog=document.createElement('dialog');dialog.className='share-dialog';dialog.setAttribute('aria-labelledby','invite-title');
  dialog.innerHTML=`<header><div><small>TEAM</small><h2 id="invite-title">Invite people</h2></div><button type="button" class="wb-button" data-close aria-label="Close">✕</button></header>
  <p>Create a one-time invitation. The person chooses their own password, then signs in with email and password.</p>
- <form id="invite-form">
+ <p class="share-note">Create a private link, then send it to the person yourself. No invitation email is sent automatically.</p><form id="invite-form">
  <label>Email<input name="email" type="email" autocomplete="off" required></label>
  <label>Access<select name="role"></select></label>
  <fieldset><legend>Games</legend><div id="invite-games"></div></fieldset>

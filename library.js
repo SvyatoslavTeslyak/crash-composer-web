@@ -93,14 +93,14 @@ function typographySection(){
 </select>${remove}</span></div>`;
  }).join('');
  flushFaces();
- return head('Typography','Which faces the brand in the sidebar is set in, every family it could be set in, and how to add another. A theme never changes type, so Typography does not ask for one.')
+ return head('Typography','Choose fonts for the selected game and brand. Existing resources are below; library management is a separate section.')
 +card('Font library',`<div class="font-list">${rows||'<p class="lib-note">Nothing matches.</p>'}</div>`,`<p class="lib-sub">Body is every label; numbers is amounts, multipliers and the action totals. Use as body, Use as numbers and Use for both write to ${esc(catalog.brands[brand].title)}. A family a brand holds cannot be removed.</p>`)
-+card('Add a font',`<div class="add-font">
++'<details class="asset-management"><summary>Manage library · add fonts</summary>'+card('Add a font',`<div class="add-font">
  <div class="add-way"><b>From Google Fonts</b><p>Open the family on fonts.google.com and paste the link. Its latin cut and licence land in the kit.</p>
   <div class="add-row"><input id="library-google" type="text" placeholder="https://fonts.google.com/specimen/Inter" autocomplete="off" spellcheck="false"><button id="library-google-add" type="button" class="wb-button">Add</button></div></div>
  <div class="add-way"><b>From files</b><p>A .ttf, .otf, .woff or .woff2 for each weight, or one .zip of the whole family with its licence.</p>
   <div class="add-row"><button id="library-upload" type="button" class="wb-button">Choose files…</button><input id="library-file" type="file" accept=".ttf,.otf,.woff,.woff2,.zip" multiple hidden></div></div>
-</div>`)
+</div>`)+'</details>'
 +card('In use',cards,'<p class="lib-sub">The two faces '+esc(catalog.brands[brand].title)+' is set in, at every step of the type scale.</p>');
 }
 
@@ -183,7 +183,7 @@ const SECTIONS={typography:typographySection,colour:colourSection,scales:scalesS
 function draw(){
  report.innerHTML=SECTIONS[section]();
  report.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{navigator.clipboard?.writeText(b.dataset.copy);b.classList.add('copied');setTimeout(()=>b.classList.remove('copied'),900)});
- report.querySelectorAll('.use-select').forEach(n=>n.onchange=()=>{if(n.value)use(n.value,n.dataset.family,Number(n.dataset.weight))});
+ report.querySelectorAll('.use-select').forEach(n=>n.onchange=()=>{if(n.value)use(n.value,n.dataset.family,Number(n.dataset.weight)).catch(e=>note(e.message,true))});
  report.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFamily(catalog.families.find(f=>f.id===b.dataset.remove)));
  report.querySelectorAll('[data-replace]').forEach(b=>b.onclick=()=>pickFile(f=>putIcon(b.dataset.replace,f),'.svg,.png'));
  report.querySelectorAll('[data-drop]').forEach(b=>b.onclick=()=>dropIcon(b.dataset.drop));
@@ -197,6 +197,7 @@ function draw(){
  const lookBlock=$('#library-look-block');if(lookBlock){lookBlock.hidden=!LOOKED_AT[section];buildLook()}
 }
 async function use(role,family,weight){
+ if(!confirm('Apply this font to '+(window.ComposerTarget?.entry()?.title||'selected game')+' · '+catalog.brands[brand].title+'? It will be saved to this game’s design draft.')){draw();return}
  const roles=role==='both'?['body','numbers']:[role];
  const fam=catalog.families.find(f=>f.id===family);
  const file=(fam.files[weight+'|normal']||Object.values(fam.files)[0]).split('/').pop();

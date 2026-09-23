@@ -18,7 +18,7 @@ const sourceOf=id=>catalog()?.sources.find(s=>s.id===id)||null;
 const isGame=()=>current()?.build?.kind==='game';
 const gain=db=>Math.min(1,Math.pow(10,db/20));
 const baseName=file=>file.split('/').pop();
-function message(text,error=false){const node=$('#sound-message');if(node){node.textContent=text;node.classList.toggle('sound-error',error)}}
+function message(text,error=false){if(error)window.ComposerUX?.status('error',text);const node=$('#sound-message');if(node){node.textContent=text;node.classList.toggle('sound-error',error)}}
 
 async function request(path,options={}){
  const response=await fetch(path,{cache:'no-store',...options});
@@ -60,15 +60,16 @@ function render(){
    // The shared kit has no scene of its own, so the chip is left out rather than greyed.
    +(game?chip('scene','Scene sounds',own?own.events.length:null,!own):'')
   +'</div></div>'
-  +'<div class="toolbar"><strong>Manifest</strong><button id="sound-refresh" title="Reload manifests from disk">Refresh</button>'
+  +'<div class="toolbar"><strong>Saved sounds</strong><button id="sound-refresh" title="Reload the shared sound draft">Refresh</button>'
    +'<button id="sound-reset" title="Put every event of this manifest back to the sounds it shipped with">Reset to default</button></div>'
-  +'<div class="toolbar"><strong>Generation</strong><small>'+(catalog().generation.available?'ElevenLabs regeneration is available.':esc(catalog().generation.reason)+' Until then, add your own file to an event.')+'</small></div>'
+  +'<div class="toolbar"><label>Find a sound<input id="sound-search" type="search" placeholder="Event name or description"></label><small>Changes autosave to the shared draft. Use Play to audition; game audio updates after publication.</small>'+(window.ComposerDraftEditors?.enabled?'<small>Choose existing sounds. New asset uploads are not available for shared drafts.</small>':catalog().generation.available?'<small>Sound generation available.</small>':'')+'</div>'
   +'<div class="toolbar"><small id="sound-message" role="status"></small></div>';
  if(!kit&&!own){report.innerHTML='<div class="sound-empty"><h2>'+esc(window.ComposerTarget.entry().title)+'</h2><p>No manifest to show yet. Start Composer with tools/preview.py so the shared kit is copied in.</p></div>';return}
  const title=game?window.ComposerTarget.entry().title:(kit?.title||'Shared UI sounds');
  report.innerHTML='<header class="sound-head"><div><h2>'+esc(title)+'</h2></div>'
-  +'</header>'
+  +'</header><p id="sound-no-results" class="sound-empty" role="status" hidden>No matching sounds. Try another name or description.</p>'
   +sections(game,own);
+ $('#sound-search').oninput=e=>{const q=e.target.value.toLowerCase();let visible=0;for(const card of report.querySelectorAll('.sound-grid>*')){card.hidden=!card.textContent.toLowerCase().includes(q);if(!card.hidden)visible++}$('#sound-no-results').hidden=visible>0};
  for(const audio of report.querySelectorAll('[data-duration]'))measure(audio);
  const canEdit=window.ComposerAuth?.has('audio.edit',targetId()==='kit'?null:targetId());
  for(const field of report.querySelectorAll('input,textarea'))field.disabled=!canEdit;
@@ -112,7 +113,7 @@ function card(event,index,sid){
   +(silent?'<p class="sound-warn">No sound chosen: this event is silent.</p>':'')
   +'<label class="sound-slider"><span>Volume</span><input type="range" data-volume min="-40" max="6" step="0.5" value="'+volume+'"><output>'+volume.toFixed(1)+' dB</output></label>'
   +'<ol class="sound-takes">'+rows.map(row=>takeRow(event,row,sid,chosen)).join('')+'</ol>'
-  +(window.ComposerDraftEditors?.enabled?'<p class="sound-note">Choose existing sounds below. Uploading new files to shared drafts is not available yet.</p>':'<div class="sound-card-actions"><label class="sound-replace">Add a sound<input type="file" data-take-add accept="'+AUDIO_ACCEPT+'"></label></div>')
+  +(window.ComposerDraftEditors?.enabled?'':'<div class="sound-card-actions"><label class="sound-replace">Add a sound<input type="file" data-take-add accept="'+AUDIO_ACCEPT+'"></label></div>')
   +'<details class="sound-prompt"><summary>Details</summary>'
    +'<p class="sound-meta">Event <code>'+esc(event.id)+'</code>'+(base?' · falls back to '+esc(base.label||base.id):'')+'</p>'
    +'<label class="sound-slider"><span>Pitch spread</span><input type="range" data-jitter min="0" max="0.2" step="0.01" value="'+(event.pitch_jitter||0)+'"><output>±'+Math.round((event.pitch_jitter||0)*100)+'%</output></label>'
@@ -151,12 +152,12 @@ function pump(){
 
 let playingButton=null;
 function stop(){
- if(playingButton){playingButton.textContent='▶';playingButton.setAttribute('aria-label',playingButton.dataset.playLabel||'Play');playingButton=null}
+ if(playingButton){playingButton.textContent='▶';playingButton.setAttribute('aria-pressed','false');playingButton.setAttribute('aria-label',playingButton.dataset.playLabel||'Play');playingButton.setAttribute('aria-pressed','false');playingButton=null}
  if(player){player.onended=null;player.pause();player=null}
 }
 function play(event,take,sid,button){
  stop();
- if(button){playingButton=button;button.textContent='■';button.setAttribute('aria-label','Stop')}
+ if(button){playingButton=button;button.textContent='■';button.setAttribute('aria-label','Stop');button.setAttribute('aria-pressed','true')}
  player=new Audio(audioUrl(event.takes[take].file,sid));
  player.volume=gain(level(event,sid));
  const jitter=Number(event.pitch_jitter||0);
@@ -167,7 +168,7 @@ function play(event,take,sid,button){
 
 let saveTimer=null;
 function markDirty(sid){
- dirty.add(sid);flagDirty();message('Saving…');
+ dirty.add(sid);flagDirty();window.ComposerUX?.status('saving');message('Saving…');
  clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveTimer=null;save().catch(error=>message(error.message,true))},500);
 }
 

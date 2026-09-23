@@ -1,25 +1,26 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
+<meta name="composer-version" content="ux-20260923.1-f0a420fe7a0f">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Crash Composer</title>
-<script src="cloud-config.js?v=1790191123"></script>
-<script src="hosted.js?v=1790191123259508674"></script>
-<script type="module" src="roles.js?v=1790191123"></script>
-<script type="module" src="lotomobil.js?v=1790191123"></script>
-<script src="session.js?v=1790191123"></script>
-<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=1790191123">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1790191123">
-<link rel="stylesheet" href="crash-ui/tokens.css?v=1790191123">
-<link rel="stylesheet" href="inspector.css?v=1790191123">
-<link rel="stylesheet" href="workbench.css?v=1790191123">
-<link rel="stylesheet" href="translates.css?v=1790191123">
-<link rel="stylesheet" href="share.css?v=8be064a">
-<script src="crash-ui/tokens.js?v=1790191123"></script>
-<script src="icons.js?v=1790191123"></script>
-<script src="workbench.js?v=1790191123"></script>
-<link rel="stylesheet" href="math.css?v=1790191123">
-<link rel="stylesheet" href="sound.css?v=1790191123">
+<script src="cloud-config.js?v=1790194488"></script>
+<script src="hosted.js?v=ux-20260923.1-f0a420fe7a0f"></script>
+<script type="module" src="roles.js?v=1790194488"></script>
+<script type="module" src="lotomobil.js?v=1790194488"></script>
+<script src="session.js?v=1790194488"></script>
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=1790194488">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1790194488">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790194488">
+<link rel="stylesheet" href="inspector.css?v=1790194488">
+<link rel="stylesheet" href="workbench.css?v=1790194488">
+<link rel="stylesheet" href="translates.css?v=1790194488">
+<link rel="stylesheet" href="share.css?v=1790194488">
+<script src="crash-ui/tokens.js?v=1790194488"></script>
+<script src="icons.js?v=1790194488"></script>
+<script src="workbench.js?v=1790194488"></script>
+<link rel="stylesheet" href="math.css?v=1790194488">
+<link rel="stylesheet" href="sound.css?v=1790194488">
 <style>
 #lotomobil-section p{margin:0;color:var(--inspector-muted);font-size:var(--inspector-type-base);line-height:1.5}#lotomobil-section .wb-button{padding:var(--inspector-type-xs)}.lotomobil-mode{font-size:var(--inspector-type-base);color:var(--inspector-accent)}.share-dialog.lotomobil-dialog{width:min(var(--inspector-size-420),calc(100vw - var(--space-32)));padding:var(--type-20);border-radius:var(--space-16)}.lotomobil-dialog h2{font-size:var(--type-20);margin:var(--space-4) 0 var(--inspector-type-base)}.lotomobil-dialog>p{margin:0 0 var(--space-16);font-size:var(--inspector-type-md)}.lotomobil-dialog form{display:grid;gap:var(--inspector-type-base)}.lotomobil-dialog label{margin:0;gap:var(--space-6);font-size:var(--inspector-type-md)}.lotomobil-dialog input{padding:var(--inspector-size-9) var(--inspector-type-xs)}.lotomobil-dialog #lotomobil-error{margin:var(--inspector-type-base) 0 0}.lotomobil-dialog #lotomobil-error:empty{display:none}.lotomobil-dialog [hidden]{display:none!important}.lotomobil-dialog button[type=submit]:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}.lotomobil-dialog button.is-loading{gap:var(--space-8)}.lotomobil-dialog button.is-loading::before{content:"";width:var(--type-14);height:var(--type-14);border:var(--stroke-2) solid currentColor;border-right-color:transparent;border-radius:50%;animation:lotomobil-spin var(--inspector-loading-duration) linear infinite}@keyframes lotomobil-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.lotomobil-dialog button.is-loading::before{animation:none}}
 
@@ -251,13 +252,14 @@ aside#side{grid-column:2;grid-row:2}
 .workspace-rail .workspace-dirty::after{content:"";position:absolute;top:var(--space-6);right:var(--space-6);width:var(--space-6);height:var(--space-6);border-radius:50%;background:var(--inspector-warning)}
 @media(max-width:640px){body{grid-template-columns:var(--radius-64) var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr)}}
 </style>
+<link rel="stylesheet" href="ux.css?v=1790194488">
 <header class="appbar">
-<h1><img src="favicon-256.png?v=1790191123" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 23 Sep 2026, 18:00</small></span></h1>
+<h1><img src="favicon-256.png?v=1790194488" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 23 Sep 2026, 18:00</small></span></h1>
 <div id="picker" class="picker"></div><select id="language" aria-label="Preview language"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
 
 <span class="grow"></span>
 <button id="cloud-configurations" class="wb-button" type="button">Cloud</button>
-<button id="share-game" class="wb-button" type="button">Share</button>
+<button id="share-game" class="wb-button" type="button">Share published game</button>
 <a id="showcase-link" class="wb-button" href="https://svyatoslavteslyak.github.io/crash-showcase/" target="_blank" rel="noopener" title="The public showcase of the same builds"><i data-icon="external"></i>Showcase</a>
 </header>
 <nav class="workspace-rail" aria-label="Composer workspace">
@@ -299,7 +301,7 @@ aside#side{grid-column:2;grid-row:2}
 <span id="size"></span>
 </div>
 <div class="toolbar" aria-label="Look" hidden><strong>Look</strong><div id="look"></div><small>Brands and seasonal themes restyle the panels and controls only; the game scene is the game's.</small></div>
-<div class="toolbar" aria-label="Game configuration"><strong>Game configuration</strong>
+<div class="toolbar" aria-label="Game configuration"><strong>Temporary preview controls</strong><small>Only affects this preview. Not included in Send changes or published configuration.</small>
 <label class="property">Header &amp; tabs <select id="presentation-preset"><option value="standard">Game default</option><option value="tabbed-shell-v1">Tabbed shell · v1</option></select></label>
 <label class="property" data-placeholder-only>Bet panel <select id="control-variant"><option value="standard">Standard</option><option value="tabbed">Two columns · Goat Road</option><option value="three-position">Three positions · Catch Clash</option></select></label>
 <em class="subhead" data-visibility-heading>Panels the player sees</em>
@@ -313,10 +315,10 @@ aside#side{grid-column:2;grid-row:2}
 <label class="switch visibility-option"><input type="checkbox" data-feature="difficulty" checked>Difficulty level</label>
 <label class="switch visibility-option"><input type="checkbox" data-feature="presets">Preset amounts</label>
 </div>
-<div class="toolbar" aria-label="Open"><strong>Open</strong>
+<details class="toolbar" aria-label="Open"><summary>Advanced · preview a window</summary>
 <small>Put a modal on the stage to look at it.</small>
 <label class="property">Modal <select id="modal"><option value="">No modal</option><option value="difficulty">Difficulty</option><option value="menu">Settings / Auto</option><option value="account">Account</option><option value="wins">All wins</option><option value="win">Win</option></select></label>
-</div>
+</details>
 </div>
 <section id="look-controls" hidden aria-label="Brand editor"></section>
 <section id="library-controls" hidden aria-label="UI library"></section>
@@ -326,7 +328,7 @@ aside#side{grid-column:2;grid-row:2}
 <div id="math-inputs" class="toolbar"><strong>Return, limits & strategy</strong></div>
 <details id="math-mechanics" open><summary>Mechanics</summary><label class="property">Risk preset <select id="math-risk-preset"><option value="0">Easy</option><option value="1">Normal</option><option value="2">Hard</option><option value="3">Expert</option><option value="custom">Custom</option></select></label><label class="property" id="math-kind-row">Fruit scenario <select id="math-kind"><option value="normal">Normal / Freeze</option><option value="hot">Hot</option></select></label></details>
 <div id="math-liquidity" class="toolbar"><strong>Liquidity scenario</strong></div>
-<div class="toolbar"><small id="math-error" role="alert"></small><button id="math-reset">Restore source defaults</button><button id="math-pin">Pin as baseline</button><button id="math-apply">Apply to game preview</button><button id="math-source">Preview source defaults</button><button id="math-export">Export draft JSON</button><label>Import draft<input id="math-import" type="file" accept="application/json,.json"></label><small id="math-message" role="status"></small></div>
+<div class="toolbar"><small id="math-error" role="alert"></small><button id="math-apply" class="wb-button primary">Test in preview</button><details><summary>Advanced · import, export and defaults</summary><button id="math-reset">Restore source defaults</button><button id="math-pin">Pin as baseline</button><button id="math-source">Preview source defaults</button><button id="math-export">Export draft JSON</button><label>Import draft<input id="math-import" type="file" accept="application/json,.json"></label></details><small id="math-message" role="status"></small></div>
 </section>
 <section id="translates-controls" hidden aria-label="Translation controls"></section><section id="sound-controls" hidden aria-label="Sound effects sources"></section>
 </aside>
@@ -394,16 +396,18 @@ for(const mode of Object.keys(workspaces))document.querySelector('#'+mode+'-tab'
  window.dispatchEvent(new CustomEvent('composer-workspace',{detail:mode}));
 };
 </script>
-<script src="draft-editors.js?v=1790191123"></script>
-<script src="target.js?v=1790191123"></script>
-<script src="live.js?v=1790191123"></script>
-<script src="look.js?v=1790191123"></script>
-<script src="library.js?v=1790191123"></script>
-<script type="module" src="math.js?v=1790191123"></script>
-<script src="sound.js?v=1790191123"></script>
-<script src="translation-table.js?v=1790191123"></script>
+<script src="draft-editors.js?v=1790194488"></script>
+<script src="target.js?v=1790194488"></script>
+<script src="live.js?v=1790194488"></script>
+<script src="look.js?v=1790194488"></script>
+<script src="library.js?v=1790194488"></script>
+<script type="module" src="math.js?v=1790194488"></script>
+<script src="sound.js?v=1790194488"></script>
+<script src="translation-table.js?v=1790194488"></script>
 
-<script type="module" src="cloud.js?v=34c5f71"></script>
-<script src="translates.js?v=1790191123"></script>
-<script src="share.js?v=1790191123"></script>
+<script type="module" src="cloud.js?v=1790194488"></script>
+<script src="translates.js?v=1790194488"></script>
+<script src="share.js?v=1790194488"></script>
 </html>
+
+<script src="ux.js?v=1790194488"></script>

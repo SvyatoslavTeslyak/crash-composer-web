@@ -14,7 +14,8 @@
  async function save(g,s,value){
   if(!ComposerAuth.has(s==='design'?'design.edit':'audio.edit',g))throw Error('You do not have permission to edit this section.');
   const old=snapshots.get(key(g,s));if(!old)throw Error('Reload this section before saving.');
-  const saved=result(await ComposerAuth.client.rpc('composer_save_section',{p_game:g,p_revision:old.revision,p_section:s,p_value:value}));
+  window.ComposerUX?.status('saving');
+  let saved;try{saved=result(await ComposerAuth.client.rpc('composer_save_section',{p_game:g,p_revision:old.revision,p_section:s,p_value:value}));}catch(error){window.ComposerUX?.status('error',error.message);throw error}
   snapshots.set(key(g,s),clone(saved));window.dispatchEvent(new CustomEvent('composer-draft-saved',{detail:{game:g,section:s,revision:saved.revision}}));return saved;
  }
  const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}});

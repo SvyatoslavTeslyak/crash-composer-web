@@ -24,7 +24,8 @@ window.ComposerCloud={
    const body=JSON.parse(options.body);if(body.revision!=='cloud:'+saved.revision)throw Error('Cloud draft changed. Reload before saving.');
    const translations={...body.overrides};for(const [key,values] of Object.entries(body.entries||{}))translations[key]={...translations[key],...values};
    for(const [key,values] of Object.entries(translations)){if(!base.catalog.entries[key])throw Error('Unknown translation key: '+key);clean(values,base.catalog.entries[key].source)}
-   saved=await rpc('composer_save_draft',{p_game:id,p_revision:saved.revision,p_payload:{...saved.payload,translations}});
+   window.ComposerUX?.status('saving');
+   try{saved=await rpc('composer_save_draft',{p_game:id,p_revision:saved.revision,p_payload:{...saved.payload,translations}});}catch(error){window.ComposerUX?.status('error',error.message);throw error}
    window.dispatchEvent(new CustomEvent('composer-draft-saved',{detail:{game:id,section:'translations',revision:saved.revision}}));
   }
   return {catalog:base.catalog,overrides:saved.payload.translations||{},revision:'cloud:'+saved.revision};
@@ -36,6 +37,7 @@ const sectionNames={translations:'Translations',design:'Design',audio:'Sounds'};
 const feedback=document.createElement('span');feedback.id='changes-feedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');button.after(feedback);
 const isReviewer=()=>ComposerAuth.member?.role!=='art_director'&&ComposerAuth.has('drafts.review',game());
 let feedbackTimer;
+let appliedRelease=null,releases=[];
 let authors=new Map();
 function authorName(id){return authors.get(id)||(id===session?.user?.id?session.user.email:null)||'Unknown author'}
 function authorLine(label,id,time){return '<p class="review-author">'+esc(label)+' <strong>'+esc(authorName(id))+'</strong>'+(time?' <span>· '+esc(new Date(time).toLocaleString())+'</span>':'')+'</p>'}
@@ -111,6 +113,9 @@ async function refresh(){
   const [v,n,d,p,a]=await Promise.all([client.from('composer_versions').select('*').eq('game_id',id).order('submitted_at',{ascending:false}).limit(20),client.from('composer_notifications').select('id,kind,version_id,read_at,created_at').order('created_at',{ascending:false}).limit(30),draft(id),client.from('composer_versions').select('*').eq('game_id',id).eq('status','published').order('revision',{ascending:false}).limit(1),ComposerAuth.member?.role==='admin'?Promise.resolve(client.rpc('composer_list_members')).catch(()=>({data:[]})):Promise.resolve({data:[]})]);
   const baseline=await window.ComposerDraftEditors.baseline(d.payload,id);
   if(request!==refreshId||id!==game())return;
+  const receipts=await client.from('composer_releases').select('version_id,published_at,git_commit').order('published_at',{ascending:false}).limit(100);
+  if(request!==refreshId||id!==game())return;
+  releases=receipts.error?[]:receipts.data||[];
   authors=new Map((a.error?[]:a.data||[]).map(person=>[person.user_id,person.email]));versions=check(v);notices=check(n);currentDraft=d;published=check(p)[0]||null;basePayload=baseline;loadError='';
  }else{versions=[];notices=[];currentDraft=null}
  render();
@@ -122,9 +127,13 @@ function releaseActions(v){
  return can&&localRelease()?'<button class="wb-button primary" data-apply="'+esc(v.id)+'">Apply locally</button>':'';
 }
 function reviewStatus(status,count){const accepted=status==='approved';return '<span class="review-status '+(accepted?'accepted':'awaiting')+'"'+(accepted?' title="Accepted by Admin; not published yet"':'')+'>'+(accepted?'Accepted':'Awaiting review')+(count?' · '+count:'')+'</span>'}
+function publicationHistory(){
+ const items=versions.filter(v=>v.status==='published');if(published&&!items.some(v=>v.id===published.id))items.unshift(published);
+ return items.length?'<details class="review-history"><summary>Published history · '+items.length+'</summary>'+items.map(v=>{const r=releases.find(r=>r.version_id===v.id);return '<p>Revision '+esc(v.revision)+(r?.published_at?' · '+esc(new Date(r.published_at).toLocaleString()):'')+'</p>'}).join('')+'<a target="_blank" rel="noopener" href="https://svyatoslavteslyak.github.io/crash-showcase/games/'+encodeURIComponent(game())+'/index.html">Open published game ↗</a></details>':'';
+}
 function reviewVersions(){
  const groups=[['submitted','Needs review','Apply locally accepts this version. Use Discard all changes to reset unpublished changes for this game.'],['approved','Accepted · not published','Already accepted. Apply locally if needed, then commit and push to publish.']];
- return groups.map(([status,title,hint])=>{const items=sentVersions().filter(v=>v.status===status);return items.length?'<section class="review-queue" data-review-status="'+status+'"><h3>'+title+' <span class="review-count">'+items.length+'</span></h3><p class="review-intro">'+hint+'</p><div class="cloud-list">'+items.map(v=>'<article><strong>'+esc(v.summary)+'</strong>'+authorLine('Sent by',v.submitted_by,v.submitted_at)+diffHTML(v.payload,{...basePayload,...published?.payload})+jsonView({schema_version:1,game_id:v.game_id,version_id:v.id,revision:v.revision,payload:v.payload})+'<div class="share-actions">'+releaseActions(v)+'</div>'+'</article>').join('')+'</div></section>':''}).join('')+(published?'<p class="review-published">Published: revision '+esc(published.revision)+' — already live.</p>':'');
+ return groups.map(([status,title,hint])=>{const items=sentVersions().filter(v=>v.status===status);return items.length?'<section class="review-queue" data-review-status="'+status+'"><h3>'+title+' <span class="review-count">'+items.length+'</span></h3><p class="review-intro">'+hint+'</p><div class="cloud-list">'+items.map(v=>'<article><strong>'+esc(v.summary)+'</strong>'+authorLine('Sent by',v.submitted_by,v.submitted_at)+diffHTML(v.payload,{...basePayload,...published?.payload})+jsonView({schema_version:1,game_id:v.game_id,version_id:v.id,revision:v.revision,payload:v.payload})+'<div class="share-actions">'+releaseActions(v)+'</div>'+'</article>').join('')+'</div></section>':''}).join('');
 }
 
 function render(){
@@ -141,7 +150,8 @@ function render(){
  (newCount?'<h3 class="review-new-title">'+(returnedVersion()?'Returned for changes':'New changes')+' <span class="review-count">'+newCount+'</span></h3>'+diffHTML({...basePayload,...currentDraft?.payload},editingBaseline()):'<div class="review-empty"><strong>'+(sent.length?'All changes sent':'No new changes')+'</strong><p>'+(sent.length?'Your changes are with Admin. You can keep editing; only new edits will appear here.':'Saved edits will appear here when you change texts, design or sounds.')+'</p></div>'))+'</div>'+
 
  (!isReviewer()?'<div class="review-send"><p id="cloud-save-hint"></p><button class="wb-button discard-changes" id="cloud-discard-unsent">Discard unsent changes</button><button class="wb-button primary" id="cloud-submit"'+(!newCount?' hidden':'')+'>Send changes</button></div>'+ (sent.length?'<details class="review-sent"><summary><span>Sent to Admin</span><span class="review-count">'+sent.length+'</span></summary><p>Already sent. These changes are not included in your red counter.</p>'+sent.map(v=>'<details class="review-sent-version"><summary><span class="review-version-label"><strong>View changes</strong><time>'+esc(new Date(v.submitted_at).toLocaleString())+'</time></span>'+reviewStatus(v.status)+'</summary>'+diffHTML(v.payload,{...basePayload,...published?.payload})+jsonView(v.payload)+'</details>').join('')+'</details>':''):'')+
- '<p role="status" aria-live="polite"></p>';
+ publicationHistory()+
+ (appliedRelease?.game===game()?'<section class="release-next"><strong>Configuration ready to publish</strong><p><code>'+esc(appliedRelease.path)+'</code></p><p>In the Composer repository, review the file, then commit and push. GitHub publishes both sites automatically.</p><button class="wb-button primary" id="copy-publish">Copy publish commands</button></section>':'')+'<p role="status" aria-live="polite"></p>';
  if(sentExpanded&&dialog.querySelector('.review-sent'))dialog.querySelector('.review-sent').open=true;
  for(const group of dialog.querySelectorAll('[data-review-group]'))if(collapsed.has(group.dataset.reviewGroup))group.open=false;
  dialog.querySelector('[data-close]').onclick=()=>dialog.close();$('#cloud-refresh').onclick=()=>run(refresh);
@@ -153,9 +163,10 @@ function render(){
  });
  for(const b of dialog.querySelectorAll('[data-apply]'))b.onclick=()=>{
   if(!confirm('Apply this sent version to the local game configuration? Review the file, then commit and push to publish.'))return;
-  run(async()=>{const auth=check(await client.auth.getSession());const response=await fetch('release/apply',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({version_id:b.dataset.apply})});const data=await response.json();if(!response.ok)throw Error(data.message||'Could not apply configuration');await refresh();message('Applied locally: '+data.path+'. Review, commit and push to publish.');notify('Configuration ready to commit')});
+  run(async()=>{const auth=check(await client.auth.getSession());const response=await fetch('release/apply',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({version_id:b.dataset.apply})});const data=await response.json();if(!response.ok)throw Error(data.message||'Could not apply configuration');appliedRelease={game:game(),path:data.path};await refresh();message('Applied locally: '+data.path+'. Review, commit and push to publish.');notify('Configuration ready to commit')});
  };
  $('#cloud-submit')?.addEventListener('click',sendChanges);
+ $('#copy-publish')?.addEventListener('click',async()=>{const path=appliedRelease?.path;if(!/^configurations\/[a-z][a-z0-9_]*\.json$/.test(path))return;try{await navigator.clipboard.writeText('git add -- '+path+'\ngit diff --cached -- '+path+'\ngit commit --only '+path+' -m "Publish reviewed game configuration"\ngit push origin main');message('Publish commands copied. Run them from the Composer repository.')}catch{message('Could not copy. Review, commit and push '+path+' from the Composer repository.')}});
  busyControls();
 }
 function open(){render();if(!dialog.open)dialog.showModal();run(refresh)}

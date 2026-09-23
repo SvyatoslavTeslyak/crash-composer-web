@@ -130,7 +130,7 @@ function render(){
  panel.innerHTML=`
 <section class="wb-section"><h2>Brands</h2><div id="look-pick"></div></section>
 <section class="wb-section look-view" id="look-strip-section"><h2>Colours</h2><div class="look-strip" id="look-strip"></div></section>
-<section class="wb-section look-view" id="look-faces-section"><h2>Faces</h2><div class="look-faces-view" id="look-faces-view"></div></section>
+<section class="wb-section look-view" id="look-faces-section"><h2>Fonts</h2><div class="look-faces-view" id="look-faces-view"></div></section>
 <div id="look-editor" hidden></div><div class="toolbar"><button id="look-refresh" type="button">Reload shared draft</button><small>Private changes for the selected game. Use Send changes to send your saved edits to Admin.</small></div><div class="toolbar" id="look-view-actions"><button id="look-edit-main" type="button"></button><button id="look-edit-other" type="button" class="quiet"></button></div>`;
  sheet=$('#look-editor');
  sheet.innerHTML=`
@@ -142,7 +142,7 @@ function render(){
 <div class="toolbar" id="look-colours" aria-label="Colours"><strong>Colours</strong>
 ${pairs().filter(([a])=>a!=='primary').map(([a,b])=>`<div class="role-pair">${[a,b].filter(Boolean).map(k=>roleRow(k)).join('')}</div>`).join('')}
 <small>Twelve colours describe a brand; panels, borders, switches and shadows derive from them.</small></div>
-<div class="toolbar" id="look-faces" aria-label="Faces"><strong>Faces</strong><small>Body is every label; numbers is amounts, multipliers and the action totals. The library lives in the Library tab.</small>
+<div class="toolbar" id="look-faces" aria-label="Faces"><strong>Fonts</strong><small>Body is every label; numbers is amounts, multipliers and the action totals. The library lives in the Library tab.</small>
 ${catalog.roles.map(role=>`<div class="face" data-role="${role}"><b>${role==='body'?'Body':'Numbers'}</b>
 <select data-family="${role}" aria-label="${role} font" title="The family every ${role==="body"?"label":"amount and multiplier"} is set in">${catalog.families.map(f=>`<option value="${f.id}">${esc(f.title)}</option>`).join('')}</select>
 <select data-weight="${role}" aria-label="${role} weight"></select>
@@ -165,6 +165,7 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
   // A theme keeps its brand's surfaces and text; only the actions and accents come from the primary.
   if(editingTheme){for(const k of ['surface','onSurface'])delete generated[k]}
   Object.assign(roles,generated);staged=false;dirty=true;mode();paint();apply();toast((editingTheme?'Accents generated from ':'Palette generated from ')+p+'. Adjust any role, then Save.')};
+ sheet.querySelectorAll('.role[data-role]').forEach(row=>{row.addEventListener('focusin',()=>highlightRole(row.dataset.role));row.addEventListener('focusout',()=>clearHighlight())});
  sheet.querySelectorAll('[data-role-key]').forEach(n=>n.oninput=()=>setRole(n.dataset.roleKey,n.value));
  sheet.querySelectorAll('[data-role-hex]').forEach(n=>n.onchange=()=>{const v=n.value.trim().toLowerCase();if(/^#[0-9a-f]{6}$/.test(v))setRole(n.dataset.roleHex,v);else n.value=roles[n.dataset.roleHex]});
  sheet.querySelectorAll('[data-role-reset]').forEach(n=>n.onclick=()=>{if(!editingTheme)return;roles[n.dataset.roleReset]=brandRoles()[n.dataset.roleReset];dirty=true;paint();apply()});
@@ -180,6 +181,13 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
 }
 let lookPicker=null;
 function pairs(){const k=catalog.colorRoles.map(r=>r.key);const out=[];for(let i=0;i<k.length;){if(k[i+1]&&k[i+1]==='on'+k[i][0].toUpperCase()+k[i].slice(1)){out.push([k[i],k[i+1]]);i+=2}else{out.push([k[i],null]);i++}}return out}
+function clearHighlight(){frame.contentDocument?.querySelectorAll('[data-composer-highlight]').forEach(el=>el.removeAttribute('data-composer-highlight'))}
+function highlightRole(key){
+ clearHighlight();const doc=frame.contentDocument;if(!doc||!roles[key])return;
+ let style=doc.getElementById('composer-role-highlight');if(!style){style=doc.createElement('style');style.id='composer-role-highlight';style.textContent='[data-composer-highlight]{outline:2px dashed #70ccff!important;outline-offset:3px!important}';doc.head.append(style)}
+ const probe=doc.createElement('span');probe.style.color=roles[key];doc.body.append(probe);const color=doc.defaultView.getComputedStyle(probe).color;probe.remove();
+ for(const el of doc.body.querySelectorAll('button,label,input,select,h1,h2,h3,p,span,svg')){const rect=el.getBoundingClientRect();if(!rect.width||!rect.height)continue;const css=doc.defaultView.getComputedStyle(el);if([css.color,css.backgroundColor,css.borderTopColor].includes(color))el.setAttribute('data-composer-highlight','')}
+}
 function roleRow(k){const r=catalog.colorRoles.find(x=>x.key===k);return `<label class="role" data-role="${k}"><span class="role-title">${esc(r.title)}<em class="ratio"></em></span><span class="role-about">${esc(r.about)}</span><span class="role-swatch"><input type="color" data-role-key="${k}"><input type="text" data-role-hex="${k}" maxlength="7" spellcheck="false"><button type="button" class="wb-button reset" data-role-reset="${k}" title="Back to the brand colour">↺</button></span></label>`}
 const CYR={а:'a',б:'b',в:'v',г:'h',ґ:'g',д:'d',е:'e',є:'ie',ж:'zh',з:'z',и:'y',і:'i',ї:'i',й:'i',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'kh',ц:'ts',ч:'ch',ш:'sh',щ:'shch',ь:'',ю:'iu',я:'ia',ы:'y',э:'e',ё:'io',ъ:''};
 const slug=t=>{let v=t.toLowerCase().replace(/[а-яёґєіїъы]/g,c=>CYR[c]??'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,30);if(v&&!/^[a-z]/.test(v))v='brand-'+v;return v};
@@ -310,12 +318,12 @@ function clear(){const root=frame.contentDocument?.documentElement;if(!root)retu
 // --- feedback, fonts, save --------------------------------------------------------------------------
 let toastTimer=0;
 function toast(text,error){let t=$('#look-toast');if(!t){t=document.createElement('div');t.id='look-toast';t.setAttribute('role','status');document.body.append(t)}t.textContent=text;t.classList.toggle('sound-error',!!error);t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3600)}
-function say(text,error){const m=$('#look-message');if(m){m.textContent=text||'';m.classList.toggle('sound-error',!!error)}}
+function say(text,error){if(error)window.ComposerUX?.status('error',text);const m=$('#look-message');if(m){m.textContent=text||'';m.classList.toggle('sound-error',!!error)}}
 function targetId(){if(editingTheme)return creating?slug($('#look-title').value):themeId;return creating?slug($('#look-title').value):brandId}
 async function save(){
  const id=targetId();
  if(!id)return say('Give the brand a title first',true);
- say('Saving…');
+ window.ComposerUX?.status('saving');say('Saving…');
  let response;
  if(editingTheme){
   response=await fetch('brands/'+brandId+'/themes/'+id,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:$('#look-title').value||id,roles})});

@@ -52,8 +52,9 @@ auth.ready=(async()=>{
  await dom();
  const errorBox=document.querySelector('#entry-error');
  const fragment=new URLSearchParams(location.hash.slice(1)),invitation=login?fragment.get('invite_token'):null;
+ const recovery=login&&(fragment.get('type')==='recovery'||new URLSearchParams(location.search).get('mode')==='recovery');
  if(invitation){sessionStorage.setItem('composer-pending-invite',invitation);sessionStorage.removeItem('composer-password-setup');history.replaceState(null,'',location.pathname+location.search)}
- let setup=login&&(!!sessionStorage.getItem('composer-pending-invite')||!!sessionStorage.getItem('composer-password-setup')||new URLSearchParams(location.search).get('mode')==='password');
+ let setup=login&&(recovery||!!sessionStorage.getItem('composer-pending-invite')||!!sessionStorage.getItem('composer-password-setup')||new URLSearchParams(location.search).get('mode')==='password');
  const open=()=>{setupAccountMenu();document.documentElement.style.visibility='';document.dispatchEvent(new Event('composer-auth-ready'))};
  try{
   const {createClient}=await import('./vendor/supabase.js');
@@ -61,13 +62,18 @@ auth.ready=(async()=>{
   if(!login&&(sessionStorage.getItem('composer-pending-invite')||sessionStorage.getItem('composer-password-setup'))){location.replace('login.html');return}
   const signed=await account();
   if(!login){if(!signed){location.replace('login.html');return}open();return}
+  if(login&&fragment.get('error_description'))errorBox.textContent='This recovery link is invalid or expired. Request a new link.';
   if(signed&&!setup){location.replace('index.html');return}
  }catch(error){if(!login){sessionStorage.setItem('composer-login-error',error.message);location.replace('login.html');return}errorBox.textContent=error.message}
+ if(recovery&&!state.session){setup=false;errorBox.textContent='This recovery link is invalid or expired. Enter your email and request a new link.'}
  const form=document.querySelector('#login-form'),email=form.elements.email,password=form.elements.password,confirm=form.elements.confirm;
  const submit=form.querySelector('button[type=submit]'),cancel=document.querySelector('#cancel-setup');
  errorBox.textContent=errorBox.textContent||sessionStorage.getItem('composer-login-error')||'';sessionStorage.removeItem('composer-login-error');
+ const visibility=document.querySelector('#password-visibility'),forgot=document.querySelector('#forgot-password');
+ visibility.onclick=()=>{const shown=password.type==='password';password.type=shown?'text':'password';confirm.type=shown?'text':'password';visibility.textContent=shown?'Hide password':'Show password';visibility.setAttribute('aria-pressed',String(shown))};
+ forgot.hidden=setup;
  if(setup){
-  document.querySelector('#entry-title').textContent='Create your password';
+  document.querySelector('#entry-title').textContent=recovery?'Reset your password':'Create your password';
   document.querySelector('#entry-hint').textContent='Choose a password to access Crash Composer. Next time, sign in with your email and password.';
   document.querySelector('#email-field').hidden=true;email.required=false;
   document.querySelector('#confirm-field').hidden=false;confirm.required=true;
@@ -76,6 +82,7 @@ auth.ready=(async()=>{
   cancel.onclick=async()=>{try{if(sessionStorage.getItem('composer-password-setup')){const {error}=await client.auth.signOut();if(error)throw error;}sessionStorage.removeItem('composer-pending-invite');sessionStorage.removeItem('composer-password-setup');location.replace('login.html')}catch(error){errorBox.textContent=error.message}};
  }
  let busy=false;
+ forgot.onclick=async()=>{if(busy)return;if(!email.value.trim()||!email.checkValidity()){email.reportValidity();email.focus();return}busy=true;forgot.disabled=true;submit.disabled=true;errorBox.textContent='';try{if(!client)throw Error('Sign-in service unavailable. Try again.');const redirect=new URL('login.html',window.ComposerCloudConfig.workspaceUrl||location.href);redirect.searchParams.set('mode','recovery');const {error}=await client.auth.resetPasswordForEmail(email.value.trim(),{redirectTo:redirect.href});if(error)throw error;document.querySelector('#entry-status').textContent='If this email has an account, a reset link will arrive shortly. Check your inbox and spam folder.'}catch(error){errorBox.textContent=error.status===429?'Too many requests. Wait a few minutes before trying again.':error.message}finally{busy=false;forgot.disabled=false;submit.disabled=false}};
  form.addEventListener('submit',async event=>{
   event.preventDefault();if(busy)return;busy=true;submit.disabled=true;errorBox.textContent='';
   try{
