@@ -153,6 +153,8 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
 <small>Each one follows the roles above until you set it here.</small></details>
 <div class="toolbar look-danger" id="look-danger"><button id="look-delete" type="button">Delete brand</button></div>
 <div class="toolbar" id="look-actions" aria-label="Actions"><button id="look-save" type="button">Save brand</button><button id="look-revert" type="button">Cancel</button><small id="look-message" role="status"></small></div>`;
+ const viewActions=$('#look-view-actions'),editActions=$('#look-actions'),scroll=document.createElement('div');
+ scroll.className='look-scroll';viewActions.remove();editActions.remove();scroll.append(...panel.childNodes);panel.append(scroll,viewActions,editActions);
  const pickerState=window.ComposerLookPicker;
  lookPicker=Workbench.lookPicker({container:$('#look-pick'),catalogTokens:{BRAND_SWATCHES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,b.roles?.primary||b.colors?.ACTION_GO])),THEME_SWATCHES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,Object.fromEntries(Object.entries(b.themes).map(([tid,t])=>[tid,t.roles?.primary||b.roles?.primary||b.colors?.ACTION_GO]))])),BRANDS:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,b.title])),THEMES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,Object.fromEntries(Object.entries(b.themes).map(([tid,t])=>[tid,t.title]))]))},brand:pickerState?.brand||'default',theme:pickerState?.theme||'',onChange:v=>{if(pickerState){pickerState.brand=v.brand;pickerState.theme=v.theme}Workbench.applyLook(frame,v);if(!editing)show(v.brand,v.theme)},onAddTheme:()=>editTheme(true),onAddBrand:()=>edit(true)});
  $('#look-edit-main').onclick=()=>themeId?editTheme(false):edit(false);$('#look-edit-other').onclick=()=>edit(false);
@@ -220,6 +222,7 @@ function mode(){
  const brand=catalog.brands[brandId];
  sheet.hidden=!editing;
  $('#look-view-actions').hidden=editing;
+ $('#look-actions').hidden=!editing;
  // One primary action: edit what is on the stage (the theme when one is chosen). The brand is a quiet second choice.
  const PEN=icon('edit');
  $('#look-edit-main').innerHTML=PEN+(themeId?'Edit '+esc(brand.themes[themeId].title)+' theme':'Edit '+esc(brand.title));
