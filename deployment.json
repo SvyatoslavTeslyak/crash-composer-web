@@ -9,5 +9,6 @@
   "firstClickFraming": "stable-risk-slot-preserve-start",
   "playerTransport": "direct-qa",
   "hopDurationMs": 160,
-  "roundStartAudio": "demo-and-api"
+  "roundStartAudio": "demo-and-api",
+  "barrier": "synchronized-with-reservation"
 }
