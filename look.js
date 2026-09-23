@@ -131,7 +131,7 @@ function render(){
 <section class="wb-section"><h2>Brands</h2><div id="look-pick"></div></section>
 <section class="wb-section look-view" id="look-strip-section"><h2>Colours</h2><div class="look-strip" id="look-strip"></div></section>
 <section class="wb-section look-view" id="look-faces-section"><h2>Faces</h2><div class="look-faces-view" id="look-faces-view"></div></section>
-<div id="look-editor" hidden></div><div class="toolbar"><button id="look-refresh" type="button">Reload shared draft</button><small>Private changes for the selected game. Submit saved changes in Changes & review.</small></div><div class="toolbar" id="look-view-actions"><button id="look-edit-main" type="button"></button><button id="look-edit-other" type="button" class="quiet"></button></div>`;
+<div id="look-editor" hidden></div><div class="toolbar"><button id="look-refresh" type="button">Reload shared draft</button><small>Private changes for the selected game. Use Send changes to send your saved edits to Admin.</small></div><div class="toolbar" id="look-view-actions"><button id="look-edit-main" type="button"></button><button id="look-edit-other" type="button" class="quiet"></button></div>`;
  sheet=$('#look-editor');
  sheet.innerHTML=`
 <h2 id="sheet-title"><span></span><small></small></h2>

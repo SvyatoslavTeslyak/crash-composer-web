@@ -33,7 +33,10 @@ window.ComposerCloud={
 function canSwitch(){return !document.querySelector('.workspace-dirty')&&!window.ComposerLook?.dirty}
 
 const sectionNames={translations:'Translations',design:'Design',audio:'Sounds'};
-const sidebar=document.createElement('section');sidebar.id='draft-progress';sidebar.setAttribute('aria-label','Changes and review');$('#workspace-title').after(sidebar);
+const feedback=document.createElement('span');feedback.id='changes-feedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');button.after(feedback);
+const isReviewer=()=>ComposerAuth.member?.role!=='art_director'&&ComposerAuth.has('drafts.review',game());
+let feedbackTimer;
+function notify(text){feedback.textContent=text;clearTimeout(feedbackTimer);feedbackTimer=setTimeout(()=>feedback.textContent='',7000)}
 const dirty=()=>!canSwitch();
 function flat(value,path='',out={}){
  if(value&&typeof value==='object'){
@@ -51,20 +54,13 @@ function changes(payload,baseline){
  });
 }
 function draftChanges(){return changes(currentDraft?.payload,{...basePayload,...published?.payload})}
-function state(){
- if(loadError)return {title:'Could not load changes',help:loadError};
- if(!currentDraft)return {title:game()==='kit'?'Choose a game':'Loading changes…',help:'Drafts belong to the selected game.'};
- if(dirty())return {title:'Unsaved changes',help:'Save or cancel your open edits before sending them for review.'};
- const version=versions.find(v=>Number(v.revision)===Number(currentDraft.revision));
- if(version){const messages={submitted:['Awaiting review','Sent to Admin. You can keep editing; new edits will form the next version.'],approved:['Approved · not published','A publisher must publish this version before players see it.'],rejected:['Changes requested','Update the draft and send a new version for review.'],published:['Published','This version has been published.']};const [title,help]=messages[version.status]||['Saved',''];return {title,help,version}}
- if(!draftChanges().some(s=>s.rows.length))return {title:'No changes to send',help:'Save edits in Brands or Translates. Sound edits save automatically. Then review and send them here.'};
- return {title:'Saved · not sent',help:'Review your saved changes and send them to Admin.'};
-}
 function renderProgress(){
- const s=state(),groups=draftChanges().filter(g=>g.rows.length);
- button.textContent='Changes & review'+(groups.length?' · '+groups.length:'');
- sidebar.innerHTML='<strong>'+esc(s.title)+'</strong><p>'+esc(s.help)+'</p>'+(groups.length?'<div class="draft-chips">'+groups.map(g=>'<span>'+sectionNames[g.section]+' · '+g.rows.length+'</span>').join('')+'</div>':'')+'<button type="button" class="wb-button" id="draft-open">'+(s.version?'View review status':groups.length&&ComposerAuth.has('drafts.submit',game())?'Review & send':'View changes')+'</button><small>Shared draft · '+esc(ComposerTarget.entry().title)+'</small>';
- sidebar.querySelector('button').onclick=open;
+ const review=isReviewer(),pending=versions.filter(v=>v.status==='submitted').length;
+ const unsent=canSubmit()?1:0;
+ button.textContent=review?'Changes'+(pending+unsent?' · '+(pending+unsent):''):'Send changes';
+ button.disabled=busy||(!review&&!canSubmit());
+ button.title=review?'View saved changes':dirty()?'Save your open edits first':canSubmit()?'Send saved changes to Admin':'No new saved changes to send';
+ button.hidden=!review&&!ComposerAuth.has('drafts.submit',game());
 }
 const showValue=v=>v===undefined?'Not set':v===null?'Default':v===true?'On':v===false?'Off':String(v);
 function settingLabel(section,path,labels){
@@ -80,8 +76,8 @@ function diffHTML(payload,baseline){
 }
 function message(text){const status=dialog.querySelector('[role=status]');if(status)status.textContent=text}
 function canSubmit(){return !loadError&&!!currentDraft&&!dirty()&&draftChanges().some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision))&&ComposerAuth.has('drafts.submit',game())}
-function busyControls(){for(const b of dialog.querySelectorAll('button:not([data-close]),textarea'))b.disabled=busy;const submit=dialog.querySelector('#cloud-submit button');if(submit)submit.disabled=busy||!canSubmit()}
-async function run(fn){if(busy)return;busy=true;busyControls();try{await fn()}catch(e){message(e.message)}finally{busy=false;busyControls();renderProgress()}}
+function busyControls(){for(const b of dialog.querySelectorAll('button:not([data-close])'))b.disabled=busy;renderProgress()}
+async function run(fn){if(busy)return;busy=true;busyControls();try{await fn()}catch(e){message(e.message);notify(e.message)}finally{busy=false;busyControls();renderProgress()}}
 async function refresh(){
  const request=++refreshId,id=game();if(!client||ComposerAuth.local)return;
  if(id==='kit'){currentDraft=null;versions=[];published=null;basePayload={};loadError='';render();return}
@@ -96,31 +92,34 @@ async function refresh(){
  render();
 }
 function render(){
- const summary=dialog.dataset.game===game()?dialog.querySelector('#cloud-submit textarea')?.value||'':'';dialog.dataset.game=game();
- const reviewer=ComposerAuth.has('drafts.review',game()),s=state();renderProgress();
- dialog.innerHTML='<header><div><small>'+esc(ComposerTarget.entry().title)+'</small><h2 id="cloud-title">Changes & review</h2></div><button class="wb-button" data-close aria-label="Close">✕</button></header>'+
- '<ol class="review-steps"><li>1. Edit & save</li><li>2. Send for review</li><li>3. Approval</li><li>4. Publication</li></ol><div class="review-summary"><strong>'+esc(s.title)+'</strong><p>'+esc(s.help)+'</p></div><p class="share-note">This is a shared draft for the game. It can include changes saved by your teammates. Players see changes only after publication.</p>'+
- '<button class="wb-button" id="cloud-refresh">Refresh changes</button>'+
- (ComposerAuth.has('drafts.submit',game())?'<form id="cloud-submit"><label>What should Admin check?<textarea name="summary" rows="2" maxlength="2000" placeholder="For example: updated the button colors and lowered the cashout sound." required></textarea></label><button class="wb-button review-primary" type="submit">Send to Admin for review</button><small>Admin receives a notification. Sending does not publish the game.</small></form>':'')+
+ renderProgress();if(!isReviewer()){if(dialog.open)dialog.close();return}
+ const pending=versions.filter(v=>v.status==='submitted');
+ dialog.innerHTML='<header><div><small>'+esc(ComposerTarget.entry().title)+'</small><h2 id="cloud-title">Changes</h2></div><button class="wb-button" data-close aria-label="Close">✕</button></header><button class="wb-button" id="cloud-refresh">Refresh</button>'+
  '<div id="draft-changes">'+diffHTML(currentDraft?.payload,{...basePayload,...published?.payload})+'</div>'+
- '<h3>Review history</h3><div class="cloud-list">'+(versions.map(v=>'<article><strong>'+esc(v.summary)+'</strong><p>Version '+v.revision+' · '+esc(({submitted:'Awaiting review',approved:'Approved · not published',rejected:'Changes requested',published:'Published'})[v.status]||v.status)+'</p>'+(v.review_note?'<p>Reviewer note: '+esc(v.review_note)+'</p>':'')+'<button class="wb-button" data-view="'+esc(v.id)+'">View changes</button>'+(reviewer&&v.status==='submitted'?' <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="true">Approve</button> <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="false">Return</button>':'')+'</article>').join('')||'<p>No versions sent yet.</p>')+'</div><div id="cloud-diff"></div>'+
- '<details><summary>Notifications · '+notices.filter(n=>!n.read_at).length+' unread</summary>'+notices.slice(0,6).map(n=>'<p>'+esc(n.kind)+' · '+esc(new Date(n.created_at).toLocaleString())+(!n.read_at?' <button class="wb-button" data-read="'+esc(n.id)+'">Mark read</button>':'')+'</p>').join('')+'</details><p role="status" aria-live="polite"></p>';
- if(dialog.querySelector('#cloud-submit textarea'))dialog.querySelector('#cloud-submit textarea').value=summary;
+ (pending.length?'<h3>Sent for approval</h3><div class="cloud-list">'+pending.map(v=>'<article><strong>'+esc(v.summary)+'</strong><p>'+esc(new Date(v.submitted_at).toLocaleString())+'</p><button class="wb-button" data-view="'+esc(v.id)+'">View sent changes</button> <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="true">Approve</button> <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="false">Return</button></article>').join('')+'</div>':'')+
+ '<div id="cloud-diff"></div><p role="status" aria-live="polite"></p>';
  dialog.querySelector('[data-close]').onclick=()=>dialog.close();$('#cloud-refresh').onclick=()=>run(refresh);
- $('#cloud-submit')?.addEventListener('submit',e=>{e.preventDefault();const summary=new FormData(e.target).get('summary');run(async()=>{if(!canSubmit())throw Error('Save your edits and refresh the changes before sending.');const id=game(),revision=currentDraft.revision;await rpc('composer_submit',{p_game:id,p_revision:revision,p_summary:summary});await refresh();message('Submitted. Administrators have been notified.')})});
- for(const b of dialog.querySelectorAll('[data-read]'))b.onclick=()=>run(async()=>{await rpc('composer_mark_read',{p_id:b.dataset.read});await refresh()});
- for(const b of dialog.querySelectorAll('[data-review]'))b.onclick=()=>run(async()=>{await rpc('composer_review',{p_version:b.dataset.review,p_approve:b.dataset.approve==='true',p_note:''});await refresh()});
- for(const b of dialog.querySelectorAll('[data-view]'))b.onclick=()=>run(async()=>{const v=versions.find(v=>v.id===b.dataset.view);const rows=check(await client.from('composer_versions').select('payload').eq('game_id',v.game_id).eq('status','published').lt('revision',v.revision).order('revision',{ascending:false}).limit(1));const base=await ComposerDraftEditors.baseline(v.payload,v.game_id);$('#cloud-diff').innerHTML='<h3>Version '+v.revision+' · changes from publication</h3>'+diffHTML(v.payload,{...base,...rows[0]?.payload});$('#cloud-diff').scrollIntoView({block:'start',behavior:'smooth'})});
+ for(const b of dialog.querySelectorAll('[data-review]'))b.onclick=()=>run(async()=>{const approve=b.dataset.approve==='true';await rpc('composer_review',{p_version:b.dataset.review,p_approve:approve,p_note:''});await refresh();message(approve?'Approved.':'Returned.');notify(approve?'Changes approved':'Changes returned')});
+ for(const b of dialog.querySelectorAll('[data-view]'))b.onclick=()=>run(async()=>{const v=versions.find(v=>v.id===b.dataset.view);const rows=check(await client.from('composer_versions').select('payload').eq('game_id',v.game_id).eq('status','published').lt('revision',v.revision).order('revision',{ascending:false}).limit(1));const base=await ComposerDraftEditors.baseline(v.payload,v.game_id);$('#cloud-diff').innerHTML='<h3>Sent changes</h3>'+diffHTML(v.payload,{...base,...rows[0]?.payload});$('#cloud-diff').scrollIntoView({block:'start',behavior:'smooth'})});
  busyControls();
 }
 function open(){render();if(!dialog.open)dialog.showModal();run(refresh)}
-button.onclick=open;
+button.onclick=()=>{
+ if(isReviewer()){open();return}
+ run(async()=>{
+  if(!canSubmit())throw Error('Save your changes first.');
+  const id=game(),revision=currentDraft.revision;
+  const sections=draftChanges().filter(g=>g.rows.length).map(g=>sectionNames[g.section]).join(', ');
+  await rpc('composer_submit',{p_game:id,p_revision:revision,p_summary:ComposerTarget.entry().title+' · '+sections});
+  await refresh();notify('Changes sent to Admin');
+ });
+};
 let refreshTimer;
 function schedule(){clearTimeout(refreshTimer);refreshTimer=setTimeout(()=>{if(busy){schedule();return}run(async()=>{try{await refresh()}catch(e){loadError=e.message;renderProgress();throw e}})},250)}
 window.addEventListener('composer-target',()=>{++refreshId;currentDraft=null;published=null;versions=[];basePayload={};renderProgress();schedule()});
 window.addEventListener('composer-draft-saved',schedule);
 window.addEventListener('focus',()=>{if(!dialog.open)schedule()});
 let lastDirty=false;setInterval(()=>{const d=dirty();if(d!==lastDirty){lastDirty=d;renderProgress();busyControls()}},500);
-setInterval(()=>{if(dialog.open&&!busy&&!dialog.contains(document.activeElement))schedule()},30000);
+setInterval(()=>{if(isReviewer()&&!busy&&!dialog.contains(document.activeElement))schedule()},15000);
 if(cloudMode)run(async()=>{try{await refresh();window.dispatchEvent(new Event('composer-storage'))}catch(e){loadError=e.message;renderProgress();throw e}});
 if(ComposerAuth.local)window.dispatchEvent(new Event('composer-storage'));
