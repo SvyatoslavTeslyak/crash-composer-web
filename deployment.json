@@ -5,7 +5,7 @@
   "bytes": 171869219,
   "runnerApi": "named-levels-v2",
   "firstClick": "bet-and-move-new-and-accepted",
-  "traffic": "prepare-following-lane",
+  "traffic": "reserve-requested-step-only",
   "firstClickFraming": "stable-risk-slot-preserve-start",
   "playerTransport": "direct-qa",
   "hopDurationMs": 160
