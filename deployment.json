@@ -8,5 +8,5 @@
   "traffic": "prepare-following-lane",
   "firstClickFraming": "stable-risk-slot-preserve-start",
   "playerTransport": "direct-qa",
-  "hopDurationMs": 140
+  "hopDurationMs": 160
 }
