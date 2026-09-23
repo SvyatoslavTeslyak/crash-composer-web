@@ -40,6 +40,8 @@ const events=sid=>drafts[sid]?.events||[];
 const eventAt=(sid,index)=>events(sid)[index];
 
 async function load(keepMessage=false){
+ if(dirty.size&&!confirm('Discard unsaved sound edits and reload the shared draft?'))return;
+ dirty.clear();flagDirty();
  try{
   await window.ComposerTarget.refresh();
   adopt();render();if(!keepMessage)message('');
@@ -68,6 +70,9 @@ function render(){
   +'</header>'
   +sections(game,own);
  for(const audio of report.querySelectorAll('[data-duration]'))measure(audio);
+ const canEdit=window.ComposerAuth?.has('audio.edit',targetId()==='kit'?null:targetId());
+ for(const field of report.querySelectorAll('input,textarea'))field.disabled=!canEdit;
+ $('#sound-reset').disabled=!canEdit;
 }
 
 // One group at a time: the chips in the sidebar choose which half is on screen.
@@ -107,7 +112,7 @@ function card(event,index,sid){
   +(silent?'<p class="sound-warn">No sound chosen: this event is silent.</p>':'')
   +'<label class="sound-slider"><span>Volume</span><input type="range" data-volume min="-40" max="6" step="0.5" value="'+volume+'"><output>'+volume.toFixed(1)+' dB</output></label>'
   +'<ol class="sound-takes">'+rows.map(row=>takeRow(event,row,sid,chosen)).join('')+'</ol>'
-  +'<div class="sound-card-actions"><label class="sound-replace">Add a sound<input type="file" data-take-add accept="'+AUDIO_ACCEPT+'"></label></div>'
+  +(window.ComposerDraftEditors?.enabled?'<p class="sound-note">Choose existing sounds below. Uploading new files to shared drafts is not available yet.</p>':'<div class="sound-card-actions"><label class="sound-replace">Add a sound<input type="file" data-take-add accept="'+AUDIO_ACCEPT+'"></label></div>')
   +'<details class="sound-prompt"><summary>Details</summary>'
    +'<p class="sound-meta">Event <code>'+esc(event.id)+'</code>'+(base?' · falls back to '+esc(base.label||base.id):'')+'</p>'
    +'<label class="sound-slider"><span>Pitch spread</span><input type="range" data-jitter min="0" max="0.2" step="0.01" value="'+(event.pitch_jitter||0)+'"><output>±'+Math.round((event.pitch_jitter||0)*100)+'%</output></label>'
@@ -166,14 +171,19 @@ function markDirty(sid){
  clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveTimer=null;save().catch(error=>message(error.message,true))},500);
 }
 
-async function save(){
+let saving=null;
+async function save(){if(saving)return saving;saving=savePending();try{return await saving}finally{saving=null}}
+async function savePending(){
  const pending=[...dirty];if(!pending.length)return;
  for(const sid of pending){
   const payload={source:sid,engine:engineId(),events:events(sid).map(e=>({id:e.id,volume_db:e.volume_db===null||e.volume_db===undefined?null:Number(e.volume_db),pitch_jitter:Number(e.pitch_jitter||0),...('prompt' in e?{prompt:e.prompt}:{}),takes:e.takes.map(t=>({enabled:t.enabled!==false}))}))};
+  const submitted=JSON.stringify(events(sid));
   await request('studio/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-  dirty.delete(sid);
+  if(JSON.stringify(events(sid))===submitted)dirty.delete(sid);
  }
  flagDirty();
+ if(dirty.size){await savePending();return}
+ if(window.ComposerDraftEditors?.enabled){message('Saved to private draft. Submit it in Cloud drafts for review.');return}
  message('Saved'+(isGame()&&pending.includes(targetId())?'. Rebuild web-dev to hear it in the game.':'.'));
 }
 
@@ -244,7 +254,7 @@ window.addEventListener('composer-target',()=>{if(!loaded)return;stop();adopt();
 window.addEventListener('composer-catalog',()=>{if(loaded&&!dirty.size){adopt();render()}});
 // Edits save themselves, so leaving only has to flush what is still waiting.
 window.ComposerTarget.guard(()=>{
- if(dirty.size){clearTimeout(saveTimer);saveTimer=null;save().catch(error=>message(error.message,true))}
+ if(dirty.size){clearTimeout(saveTimer);saveTimer=null;save().catch(error=>message(error.message,true));message('Wait for saving to finish before switching games.');return false}
  return true;
 });
 window.addEventListener('beforeunload',event=>{if(dirty.size){event.preventDefault();event.returnValue=''}});

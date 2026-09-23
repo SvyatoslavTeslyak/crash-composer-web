@@ -131,7 +131,7 @@ function render(){
 <section class="wb-section"><h2>Brands</h2><div id="look-pick"></div></section>
 <section class="wb-section look-view" id="look-strip-section"><h2>Colours</h2><div class="look-strip" id="look-strip"></div></section>
 <section class="wb-section look-view" id="look-faces-section"><h2>Faces</h2><div class="look-faces-view" id="look-faces-view"></div></section>
-<div id="look-editor" hidden></div><div class="toolbar" id="look-view-actions"><button id="look-edit-main" type="button"></button><button id="look-edit-other" type="button" class="quiet"></button></div>`;
+<div id="look-editor" hidden></div><div class="toolbar"><button id="look-refresh" type="button">Reload shared draft</button><small>Private changes for the selected game. Submit saved changes in Cloud drafts.</small></div><div class="toolbar" id="look-view-actions"><button id="look-edit-main" type="button"></button><button id="look-edit-other" type="button" class="quiet"></button></div>`;
  sheet=$('#look-editor');
  sheet.innerHTML=`
 <h2 id="sheet-title"><span></span><small></small></h2>
@@ -154,7 +154,7 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
 <div class="toolbar look-danger" id="look-danger"><button id="look-delete" type="button">Delete brand</button></div>
 <div class="toolbar" id="look-actions" aria-label="Actions"><button id="look-save" type="button">Save brand</button><button id="look-revert" type="button">Cancel</button><small id="look-message" role="status"></small></div>`;
  const pickerState=window.ComposerLookPicker;
- lookPicker=Workbench.lookPicker({container:$('#look-pick'),brand:pickerState?.brand||'default',theme:pickerState?.theme||'',onChange:v=>{if(pickerState){pickerState.brand=v.brand;pickerState.theme=v.theme}Workbench.applyLook(frame,v);if(!editing)show(v.brand,v.theme)},onAddTheme:()=>editTheme(true),onAddBrand:()=>edit(true)});
+ lookPicker=Workbench.lookPicker({container:$('#look-pick'),catalogTokens:{BRANDS:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,b.title])),THEMES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,Object.fromEntries(Object.entries(b.themes).map(([tid,t])=>[tid,t.title]))]))},brand:pickerState?.brand||'default',theme:pickerState?.theme||'',onChange:v=>{if(pickerState){pickerState.brand=v.brand;pickerState.theme=v.theme}Workbench.applyLook(frame,v);if(!editing)show(v.brand,v.theme)},onAddTheme:()=>editTheme(true),onAddBrand:()=>edit(true)});
  $('#look-edit-main').onclick=()=>themeId?editTheme(false):edit(false);$('#look-edit-other').onclick=()=>edit(false);
  $('#look-title').oninput=()=>{if(!creating)return;const id=slug($('#look-title').value);$('#look-id-hint').textContent=id?(editingTheme?'Saved as brands/'+brandId+'/themes/'+id+'.json':'Saved as brands/'+id+'/'):'';dirty=true};
  $('#look-seasons').replaceChildren(...Object.entries(SEASONS).map(([id,sn])=>{const b=document.createElement('button');b.type='button';b.className='wb-button season';b.innerHTML=`<i style="background:linear-gradient(135deg,${sn.primary} 50%,${sn.success} 50%)"></i>${esc(sn.title)}`;b.onclick=()=>{// A season replaces the one before it: start again from the brand, then apply it.
@@ -175,7 +175,8 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
  sheet.querySelectorAll('[data-weight]').forEach(n=>n.onchange=()=>setFace(n.dataset.weight,{weight:Number(n.value)}));
  sheet.querySelectorAll('[data-italic]').forEach(n=>n.onchange=()=>setFace(n.dataset.italic,{style:n.checked?'italic':'normal'}));
 
- $('#look-save').onclick=save;$('#look-revert').onclick=()=>{show(brandId,themeId)};$('#look-delete').onclick=remove;
+ $('#look-refresh').onclick=()=>{if(dirty&&!confirm('Discard unsaved design edits and reload?'))return;dirty=false;editing=false;catalog=null;open().catch(e=>say(e.message,true))};
+ $('#look-save').onclick=()=>save().catch(e=>say(e.message,true));$('#look-revert').onclick=()=>{show(brandId,themeId)};$('#look-delete').onclick=remove;
 }
 let lookPicker=null;
 function pairs(){const k=catalog.colorRoles.map(r=>r.key);const out=[];for(let i=0;i<k.length;){if(k[i+1]&&k[i+1]==='on'+k[i][0].toUpperCase()+k[i].slice(1)){out.push([k[i],k[i+1]]);i+=2}else{out.push([k[i],null]);i++}}return out}
@@ -299,7 +300,7 @@ function applyFaces(root){
 }
 function apply(){
  const root=frame.contentDocument?.documentElement;if(!root)return;
- if(!editing){clear();return}
+ if(!editing&&!window.ComposerDraftEditors?.enabled){clear();return}
  const all=colors();
  for(const [k,v] of Object.entries(all))root.style.setProperty(cssName(k),v);
  for(const [k,v] of Object.entries(derivedVars(all)))root.style.setProperty(k,v);
@@ -324,6 +325,7 @@ async function save(){
  }
  const data=await response.json().catch(()=>({}));
  if(!response.ok)return say(data.message||('HTTP '+response.status),true);
+ dirty=false;
  const savedBrand=editingTheme?brandId:id,savedTheme=editingTheme?id:'';
  try{sessionStorage.setItem('crash-composer-look',savedBrand);sessionStorage.setItem('crash-composer-look-theme',savedTheme)}catch{}
  const p=new URLSearchParams(location.hash.slice(1));p.set('tab','look');p.set('brand',savedBrand);if(savedTheme)p.set('theme',savedTheme);else p.delete('theme');location.hash='#'+p;location.reload();
@@ -346,10 +348,12 @@ async function remove(){
 }
 // --- lifecycle ------------------------------------------------------------------------------------
 async function open(){
+ if(window.ComposerDraftEditors?.enabled&&!editing)catalog=null;
  if(!catalog){
   catalog=await (await fetch('brands/')).json();render();
   let wanted='',wantedTheme=null;try{wanted=sessionStorage.getItem('crash-composer-look')||'';wantedTheme=sessionStorage.getItem('crash-composer-look-theme');sessionStorage.removeItem('crash-composer-look');sessionStorage.removeItem('crash-composer-look-theme')}catch{}
   const hash=new URLSearchParams(location.hash.slice(1));
+  if(!wanted&&catalog.draftSelection){wanted=catalog.draftSelection.brand;wantedTheme=catalog.draftSelection.theme}
   if(!wanted)wanted=hash.get('brand')||window.ComposerLookPicker?.brand||'default';
   if(wantedTheme===null)wantedTheme=hash.get('theme')||window.ComposerLookPicker?.theme||'';
   if(!catalog.brands[wanted])wanted='default';
@@ -366,5 +370,7 @@ async function open(){
 }
 window.addEventListener('composer-workspace',e=>{if(e.detail==='look')open().catch(err=>{panel.innerHTML='<small class="sound-error">'+esc(err.message)+'</small>'});else{if(catalog)clear();if(sheet)sheet.hidden=true}});
 frame.addEventListener('load',()=>{if(window.ComposerTarget?.workspace==='look'&&catalog)setTimeout(apply,300)});
-window.ComposerLook={get roles(){return roles},get brand(){return brandId},get editing(){return editing}};
+window.ComposerTarget.guard(()=>{if(dirty){say('Save or cancel your design edits before switching games.',true);return false}return true});
+window.addEventListener('composer-target',()=>{catalog=null;editing=false;clear();if(window.ComposerTarget.workspace==='look')open().catch(e=>say(e.message,true))});
+window.ComposerLook={get dirty(){return dirty},get roles(){return roles},get brand(){return brandId},get editing(){return editing}};
 })();

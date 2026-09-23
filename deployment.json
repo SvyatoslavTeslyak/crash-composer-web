@@ -10,5 +10,10 @@
   "playerTransport": "direct-qa",
   "hopDurationMs": 160,
   "roundStartAudio": "demo-and-api",
-  "barrier": "close-only-after-confirmed-safe-step"
+  "barrier": "close-only-after-confirmed-safe-step",
+  "cloudDraftSections": [
+    "translations",
+    "design",
+    "audio"
+  ]
 }

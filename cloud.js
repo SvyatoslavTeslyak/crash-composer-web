@@ -24,15 +24,16 @@ window.ComposerCloud={
    const body=JSON.parse(options.body);if(body.revision!=='cloud:'+saved.revision)throw Error('Cloud draft changed. Reload before saving.');
    const translations={...body.overrides};for(const [key,values] of Object.entries(body.entries||{}))translations[key]={...translations[key],...values};
    for(const [key,values] of Object.entries(translations)){if(!base.catalog.entries[key])throw Error('Unknown translation key: '+key);clean(values,base.catalog.entries[key].source)}
-   saved=await rpc('composer_save_draft',{p_game:id,p_revision:saved.revision,p_payload:{translations}});
+   saved=await rpc('composer_save_draft',{p_game:id,p_revision:saved.revision,p_payload:{...saved.payload,translations}});
   }
   return {catalog:base.catalog,overrides:saved.payload.translations||{},revision:'cloud:'+saved.revision};
  }
 };
-function canSwitch(){return !document.querySelector('#translates-tab.workspace-dirty')}
+function canSwitch(){return !document.querySelector('.workspace-dirty')&&!window.ComposerLook?.dirty}
 
 function message(text){const status=dialog.querySelector('[role=status]');if(status)status.textContent=text}
-async function run(fn){if(busy)return;busy=true;try{await fn()}catch(e){message(e.message)}finally{busy=false}}
+function busyControls(){for(const b of dialog.querySelectorAll('button:not([data-close]),textarea'))b.disabled=busy}
+async function run(fn){if(busy)return;busy=true;busyControls();try{await fn()}catch(e){message(e.message)}finally{busy=false;busyControls()}}
 async function refresh(){
  const request=++refreshId;if(!client||window.ComposerAuth.local)return;
  const auth=check(await client.auth.getSession());session=auth.session;
@@ -45,19 +46,20 @@ async function refresh(){
 }
 function render(){
  const admin=window.ComposerAuth.has('drafts.review',game());
- dialog.innerHTML='<header><div><small>CONFIGURATIONS</small><h2 id="cloud-title">Cloud drafts</h2></div><button class="wb-button" data-close aria-label="Close">✕</button></header><p>Translations · '+esc(window.ComposerTarget.entry().title)+'</p><p class="share-note">Drafts stay private. Submitting for review does not publish the iframe.</p>'+
+ dialog.innerHTML='<header><div><small>CONFIGURATIONS</small><h2 id="cloud-title">Cloud drafts</h2></div><button class="wb-button" data-close aria-label="Close">✕</button></header><p>Translations · Design · Sounds · '+esc(window.ComposerTarget.entry().title)+'</p><p class="share-note">Drafts stay private. Submitting for review does not publish the iframe.</p>'+
  (window.ComposerAuth.local?'<p>You are in the local development workspace. Cloud drafts are available when you sign in on the entry screen.</p>':!session||!member?.active?'<p>Workspace access is unavailable. Sign out using the account menu and sign in again.</p>':
  '<p>'+esc(session.user.email)+' · '+esc(window.ComposerAuth.member?.role_name||member.role)+'</p><div class="share-actions"><button class="wb-button" id="cloud-refresh">Refresh</button></div><form id="cloud-submit"><label>Review summary<textarea name="summary" rows="2" maxlength="2000" required></textarea></label><button class="wb-button">Submit saved draft for review</button></form>'+
  '<h3>Notifications · '+notices.filter(n=>!n.read_at).length+' unread</h3><div class="cloud-list">'+notices.slice(0,6).map(n=>'<p>'+esc(n.kind)+' · '+esc(new Date(n.created_at).toLocaleString())+(!n.read_at?' <button class="wb-button" data-read="'+n.id+'">Mark read</button>':'')+'</p>').join('')+'</div>'+
  '<h3>Versions</h3><div class="cloud-list">'+versions.map(v=>'<article><strong>'+esc(v.summary)+'</strong><p>Revision '+v.revision+' · '+esc(v.status)+'</p><button class="wb-button" data-view="'+v.id+'">Review changes</button>'+(admin&&v.status==='submitted'?' <button class="wb-button" data-review="'+v.id+'" data-approve="true">Approve</button> <button class="wb-button" data-review="'+v.id+'" data-approve="false">Return</button>':'')+'</article>').join('')+'</div><div id="cloud-diff"></div>'+
  '' )+'<p role="status" aria-live="polite"></p>';
+ busyControls();
  if(!window.ComposerAuth.has('drafts.submit',game()))dialog.querySelector('#cloud-submit')?.remove();
  dialog.querySelector('[data-close]').onclick=()=>dialog.close();
  if($('#cloud-refresh'))$('#cloud-refresh').onclick=()=>run(refresh);
  $('#cloud-submit')?.addEventListener('submit',e=>{e.preventDefault();const summary=new FormData(e.target).get('summary');run(async()=>{if(!window.ComposerAuth.has('drafts.submit',game()))throw Error('Submit access denied');if(!canSwitch())throw Error('Save or cancel open edits before submitting');const d=await draft(game());await rpc('composer_submit',{p_game:game(),p_revision:d.revision,p_summary:summary});await refresh();message('Submitted. Administrators have been notified.')})});
  for(const b of dialog.querySelectorAll('[data-read]'))b.onclick=()=>run(async()=>{await rpc('composer_mark_read',{p_id:b.dataset.read});await refresh()});
  for(const b of dialog.querySelectorAll('[data-review]'))b.onclick=()=>run(async()=>{await rpc('composer_review',{p_version:b.dataset.review,p_approve:b.dataset.approve==='true',p_note:''});await refresh()});
- for(const b of dialog.querySelectorAll('[data-view]'))b.onclick=()=>run(async()=>{const v=versions.find(v=>v.id===b.dataset.view);const baseline=check(await client.from('composer_versions').select('payload').eq('game_id',v.game_id).eq('status','published').lt('revision',v.revision).order('revision',{ascending:false}).limit(1));const previous=baseline[0]?.payload.translations||{},next=v.payload.translations||{};const keys=[...new Set([...Object.keys(previous),...Object.keys(next)])].filter(k=>JSON.stringify(previous[k])!==JSON.stringify(next[k]));$('#cloud-diff').innerHTML='<h3>Changes from last published version</h3>'+keys.map(k=>'<article><strong>'+esc(k)+'</strong><pre>'+esc(JSON.stringify(previous[k]||{},null,2))+'</pre><pre>'+esc(JSON.stringify(next[k]||{},null,2))+'</pre></article>').join('')});
+ for(const b of dialog.querySelectorAll('[data-view]'))b.onclick=()=>run(async()=>{const v=versions.find(v=>v.id===b.dataset.view);const baseline=check(await client.from('composer_versions').select('payload').eq('game_id',v.game_id).eq('status','published').lt('revision',v.revision).order('revision',{ascending:false}).limit(1));const previous=baseline[0]?.payload||{},next=v.payload||{};const sections=['translations','design','audio'];$('#cloud-diff').innerHTML='<h3>Changes from last published version</h3>'+sections.map(section=>{const before=previous[section]||{},after=next[section]||{};const keys=[...new Set([...Object.keys(before),...Object.keys(after)])].filter(k=>JSON.stringify(before[k])!==JSON.stringify(after[k]));return keys.length?'<h4>'+({translations:'Translations',design:'Design',audio:'Sounds'})[section]+'</h4>'+keys.map(k=>'<article><strong>'+esc(k)+'</strong><p>Before</p><pre>'+esc(JSON.stringify(before[k]??null,null,2))+'</pre><p>After</p><pre>'+esc(JSON.stringify(after[k]??null,null,2))+'</pre></article>').join(''):''}).join('')});
 }
 button.onclick=()=>{render();dialog.showModal();run(refresh)};
 window.addEventListener('composer-target',()=>{if(dialog.open)run(refresh)});
