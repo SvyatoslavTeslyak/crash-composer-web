@@ -10,5 +10,5 @@
   "playerTransport": "direct-qa",
   "hopDurationMs": 160,
   "roundStartAudio": "demo-and-api",
-  "barrier": "synchronized-with-reservation"
+  "barrier": "close-only-after-confirmed-safe-step"
 }
