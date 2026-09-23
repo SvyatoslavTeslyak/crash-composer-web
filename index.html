@@ -3,23 +3,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Crash Composer</title>
-<script src="cloud-config.js?v=1790170358"></script>
-<script src="hosted.js"></script>
-<script type="module" src="roles.js?v=1790170358"></script>
-<script type="module" src="lotomobil.js?v=1790170358"></script>
-<script src="session.js?v=1790170358"></script>
-<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=1790170358">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1790170358">
-<link rel="stylesheet" href="crash-ui/tokens.css?v=1790170358">
-<link rel="stylesheet" href="inspector.css?v=1790170358">
-<link rel="stylesheet" href="workbench.css?v=1790170358">
-<link rel="stylesheet" href="translates.css?v=1790170358">
-<link rel="stylesheet" href="share.css?v=1790170358">
-<script src="crash-ui/tokens.js?v=1790170358"></script>
-<script src="icons.js?v=1790170358"></script>
-<script src="workbench.js?v=1790170358"></script>
-<link rel="stylesheet" href="math.css?v=1790170358">
-<link rel="stylesheet" href="sound.css?v=1790170358">
+<script src="cloud-config.js?v=1790171668"></script>
+<script src="hosted.js?v=1790171668784236000"></script>
+<script type="module" src="roles.js?v=1790171668"></script>
+<script type="module" src="lotomobil.js?v=1790171668"></script>
+<script src="session.js?v=1790171668"></script>
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=1790171668">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1790171668">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790171668">
+<link rel="stylesheet" href="inspector.css?v=1790171668">
+<link rel="stylesheet" href="workbench.css?v=1790171668">
+<link rel="stylesheet" href="translates.css?v=1790171668">
+<link rel="stylesheet" href="share.css?v=1790171668">
+<script src="crash-ui/tokens.js?v=1790171668"></script>
+<script src="icons.js?v=1790171668"></script>
+<script src="workbench.js?v=1790171668"></script>
+<link rel="stylesheet" href="math.css?v=1790171668">
+<link rel="stylesheet" href="sound.css?v=1790171668">
 <style>
 #lotomobil-section p{margin:0;color:var(--inspector-muted);font-size:12px;line-height:1.5}#lotomobil-section .wb-button{padding:10px}.lotomobil-mode{font-size:12px;color:var(--inspector-accent)}.share-dialog.lotomobil-dialog{width:min(420px,calc(100vw - 32px));padding:20px;border-radius:16px}.lotomobil-dialog h2{font-size:20px;margin:4px 0 12px}.lotomobil-dialog>p{margin:0 0 16px;font-size:13px}.lotomobil-dialog form{display:grid;gap:12px}.lotomobil-dialog label{margin:0;gap:6px;font-size:13px}.lotomobil-dialog input{padding:9px 10px}.lotomobil-dialog #lotomobil-error{margin:12px 0 0}.lotomobil-dialog #lotomobil-error:empty{display:none}.lotomobil-dialog [hidden]{display:none!important}.lotomobil-dialog button[type=submit]:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}.lotomobil-dialog button.is-loading{gap:8px}.lotomobil-dialog button.is-loading::before{content:"";width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:lotomobil-spin .8s linear infinite}@keyframes lotomobil-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.lotomobil-dialog button.is-loading::before{animation:none}}
 
@@ -252,7 +252,7 @@ aside#side{grid-column:2;grid-row:2}
 @media(max-width:640px){body{grid-template-columns:64px var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr)}}
 </style>
 <header class="appbar">
-<h1><img src="favicon-256.png?v=1790170358" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 23 Sep 2026, 02:07</small></span></h1>
+<h1><img src="favicon-256.png?v=1790171668" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 23 Sep 2026, 02:07</small></span></h1>
 <div id="picker" class="picker"></div><select id="language" aria-label="Preview language"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
 
 <span class="grow"></span>
@@ -394,15 +394,15 @@ for(const mode of Object.keys(workspaces))document.querySelector('#'+mode+'-tab'
  window.dispatchEvent(new CustomEvent('composer-workspace',{detail:mode}));
 };
 </script>
-<script src="target.js?v=1790170358"></script>
-<script src="live.js?v=1790170358"></script>
-<script src="look.js?v=1790170358"></script>
-<script src="library.js?v=1790170358"></script>
-<script type="module" src="math.js?v=1790170358"></script>
-<script src="sound.js?v=1790170358"></script>
-<script src="translation-table.js?v=1790170358"></script>
+<script src="target.js?v=1790171668"></script>
+<script src="live.js?v=1790171668"></script>
+<script src="look.js?v=1790171668"></script>
+<script src="library.js?v=1790171668"></script>
+<script type="module" src="math.js?v=1790171668"></script>
+<script src="sound.js?v=1790171668"></script>
+<script src="translation-table.js?v=1790171668"></script>
 
-<script type="module" src="cloud.js?v=1790170358"></script>
-<script src="translates.js?v=1790170358"></script>
-<script src="share.js?v=1790170358"></script>
+<script type="module" src="cloud.js?v=1790171668"></script>
+<script src="translates.js?v=1790171668"></script>
+<script src="share.js?v=1790171668"></script>
 </html>

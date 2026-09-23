@@ -68,7 +68,7 @@
   syncInspector();
   document.querySelector('#modal').closest('label').hidden=false;
   const url='games/'+engine()+'/'+game()+'/index.html';
-  try{const response=await fetch(url,{method:'HEAD'});if(request!==generation)return;if(!response.ok)throw Error('missing');frame.src=url+'?ui-kit=1&api='+((game()==='road'&&engine()==='pixi'&&window.Lotomobil?.connected&&!applied[game()])?'1':'0')+'&revision='+request+featureQuery()+(applied[game()]?'&difficulty=0#math='+encodeURIComponent(JSON.stringify(applied[game()])):'')}
+  try{const response=await fetch(url,{method:'HEAD'});if(request!==generation)return;if(!response.ok)throw Error('missing');frame.src=url+'?ui-kit=1&api='+((game()==='road'&&engine()==='pixi'&&window.Lotomobil?.connected&&!applied[game()])?'1':'0')+'&revision='+request+'&build='+encodeURIComponent(window.ComposerHosting?.revision||'local')+featureQuery()+(applied[game()]?'&difficulty=0#math='+encodeURIComponent(JSON.stringify(applied[game()])):'')}
   catch{if(request!==generation)return;frame.src='about:blank';status.textContent='No '+window.ComposerTarget.engineTitle()+' build for this game yet. Build it, then rebuild the preview.'}
  }
  window.ComposerMath={

@@ -2,7 +2,7 @@
 (()=>{
  const nativeFetch=window.fetch.bind(window),base=new URL('./',location.href);
  const json=(status,body)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
- window.ComposerHosting={mode:'pages',base:base.href,audioUrl:(source,file)=>new URL('data/audio/'+encodeURIComponent(source)+'/'+file.split('/').map(encodeURIComponent).join('/'),base).href};
+ window.ComposerHosting={mode:'pages',revision:typeof document==='undefined'?'test':new URL(document.currentScript.src).searchParams.get('v')||'initial',base:base.href,audioUrl:(source,file)=>new URL('data/audio/'+encodeURIComponent(source)+'/'+file.split('/').map(encodeURIComponent).join('/'),base).href};
  const explain=()=>{
   for(const id of ['look-controls','sound-controls','library-controls']){
    const panel=document.getElementById(id);if(!panel)continue;

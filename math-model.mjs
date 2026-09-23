@@ -2,7 +2,7 @@
 export const cents = x => Math.round((x + Number.EPSILON) * 100) / 100;
 const floor2 = x => Math.floor(x * 100 + 0.00001) / 100;
 export function defaults(base) {
- if(base.model==='runner')return {hazards:base.defaultHazardCount,steps:1,bet:base.defaultWager,bankroll:100000,liabilities:0,concurrent:10};
+ if(base.model==='runner')return {level:base.defaultLevel,steps:1,bet:base.defaultWager,bankroll:100000,liabilities:0,concurrent:10};
  return {rtp:base.targetReturn, risk:base.risks?.[1]??0.1, steps:base.maxSteps??20,
   goldChance:base.goldChance??0.15,goldBoost:base.goldBoost??3.5,
   maxPayout:base.maxPayout,minBet:base.minBet,maxBet:base.maxBet,bet:8,
@@ -11,9 +11,9 @@ export function defaults(base) {
 export function validate(c,base) {
  const errors=[];
  if(base.model==='runner'){
-  const option=base.payouts.find(p=>p.hazardCount===c.hazards);
-  if(!option)errors.push('Choose an available hazard count.');
-  if(!Number.isInteger(c.steps)||c.steps<1||c.steps>base.laneCount||!option?.multipliers.some(r=>r.step===c.steps))errors.push('Choose an available cashout step.');
+  const option=base.payouts.find(p=>p.level===c.level);
+  if(!option)errors.push('Choose an available difficulty level.');
+  if(!Number.isInteger(c.steps)||c.steps<1||c.steps>(option?.multipliers.length??1)-1||!option?.multipliers.some(r=>r.step===c.steps))errors.push('Choose an available cashout step.');
   if(!base.wagersAllowed.includes(c.bet))errors.push('Choose an allowed server stake: '+base.wagersAllowed.join(', ')+'.');
   for(const key of ['bankroll','liabilities'])if(!Number.isFinite(c[key])||c[key]<0||c[key]>1e12)errors.push(key+': invalid amount.');
   if(!Number.isInteger(c.concurrent)||c.concurrent<1||c.concurrent>100000)errors.push('concurrent: 1–100000.');
@@ -153,30 +153,27 @@ export function analyzeCatch(c,base) {
  return {errors:[],rows,selected,sides,combined:{stake:3*c.bet,mean:selected.mean+sideMean,rtp:(selected.mean+sideMean)/(3*c.bet)},exposure:{single,gross,available,shortfall:Math.max(0,c.liabilities+gross-c.bankroll),covered:Math.floor(available/single)}};
 }
 
-// Hazards are sampled without replacement. Use the published table, never synthesize odds.
+// The API publishes payout tables, but not per-step probability tables or RTP.
+// Do not infer probabilities from multipliers: admin generation parameters are absent.
 export function analyzeRunner(c,base) {
- const option=base.payouts.find(p=>p.hazardCount===c.hazards);
- let survival=1;
- const rows=[];
- for(let n=1;n<=c.steps;n++){
-  const remaining=base.laneCount-n+1;
-  const risk=Math.min(1,c.hazards/remaining);
-  survival*=1-risk;
-  const multiplier=option.multipliers.find(r=>r.step===n).multiplier;
-  const payout=cents(c.bet*multiplier);
-  rows.push({step:n,risk,nextRisk:n<base.laneCount?Math.min(1,c.hazards/(base.laneCount-n)):1,multiplier,payout,...summary([{probability:survival,payout}],c.bet)});
- }
- const reachable=option.multipliers.filter(r=>r.step>0&&r.step<=base.laneCount-c.hazards);
- const single=Math.max(0,...reachable.map(r=>cents(base.maxBet*r.multiplier)));
+ const option=base.payouts.find(p=>p.level===c.level);
+ const rows=option.multipliers.filter(r=>r.step>0&&r.step<=c.steps).map(r=>({step:r.step,multiplier:r.multiplier,payout:cents(c.bet*r.multiplier),risk:null,nextRisk:null,paid:null,rtp:null}));
+ const single=Math.max(0,...option.multipliers.filter(r=>r.step>0).map(r=>cents(base.maxBet*r.multiplier)));
  const gross=single*c.concurrent,available=Math.max(0,c.bankroll-c.liabilities);
  return {errors:[],rows,selected:rows.at(-1),exposure:{single,gross,available,shortfall:Math.max(0,gross-available)}};
 }
 export function runnerBase(config,mode='live'){
- if(!Number.isInteger(config?.laneCount)||config.laneCount<1||!Array.isArray(config.payouts))throw Error('Invalid Runner configuration.');
- const payouts=config.payouts.map(p=>({hazardCount:p.hazardCount,multipliers:[...p.multipliers].sort((a,b)=>a.step-b.step)})).sort((a,b)=>a.hazardCount-b.hazardCount);
- if(!payouts.length||payouts.some(p=>!Number.isInteger(p.hazardCount)||p.hazardCount<1||p.hazardCount>config.laneCount||p.multipliers.length!==config.laneCount+1||p.multipliers.some((r,i)=>r.step!==i||!Number.isFinite(r.multiplier)||r.multiplier<=0)))throw Error('Incomplete Runner payout table.');
- const wager=config.wagerConfigurations?.[0];const allowed=wager?.wagersAllowed;
+ const levels=['EASY','MEDIUM','HARD'];
+ if(!Array.isArray(config?.payouts)||!config.payouts.length)throw Error('Invalid Runner configuration.');
+ const payouts=config.payouts.map(p=>{
+  if(!levels.includes(p?.level)||!Array.isArray(p.multipliers))throw Error('Invalid Runner level.');
+  const multipliers=[...p.multipliers].sort((a,b)=>a?.step-b?.step);
+  if(multipliers.length<2||multipliers[0]?.multiplier!==1||multipliers.some((r,i)=>r?.step!==i||!Number.isFinite(r.multiplier)||r.multiplier<=0))throw Error('Incomplete Runner payout table.');
+  return {level:p.level,multipliers};
+ }).sort((a,b)=>levels.indexOf(a.level)-levels.indexOf(b.level));
+ if(new Set(payouts.map(p=>p.level)).size!==payouts.length)throw Error('Duplicate Runner level.');
+ const wager=config.wagerConfigurations?.[0],allowed=wager?.wagersAllowed;
  if(!Array.isArray(allowed)||!allowed.length||allowed.some(n=>!Number.isFinite(n)||n<=0))throw Error('Invalid Runner wagers.');
- const defaultHazardCount=payouts.some(p=>p.hazardCount===config.defaultHazardCount)?config.defaultHazardCount:payouts[0].hazardCount;
- return {name:'Goat Road',model:'runner',laneCount:config.laneCount,maxSteps:config.laneCount,payouts,defaultHazardCount,wagersAllowed:allowed,defaultWager:allowed.includes(wager.defaultWager)?wager.defaultWager:allowed[0],currency:wager.currency,minBet:Math.min(...allowed),maxBet:Math.max(...allowed),configurationId:config.id,apiMode:mode};
+ const defaultLevel=payouts.some(p=>p.level===config.defaultLevel)?config.defaultLevel:payouts[0].level;
+ return {name:'Goat Road',model:'runner',maxSteps:Math.max(...payouts.map(p=>p.multipliers.length-1)),payouts,defaultLevel,wagersAllowed:allowed,defaultWager:allowed.includes(wager.defaultWager)?wager.defaultWager:allowed[0],currency:wager.currency,minBet:Math.min(...allowed),maxBet:Math.max(...allowed),configurationId:config.id,apiMode:mode};
 }

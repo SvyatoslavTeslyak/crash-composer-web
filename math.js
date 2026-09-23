@@ -3,7 +3,7 @@ const $=s=>document.querySelector(s);
 const snapshot=await fetch(new URL('math-baseline.json',import.meta.url),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Math snapshot unavailable');return r.json()});
 
 let runnerError='';
-const offlineRoad=structuredClone(snapshot.games.road);
+const offlineRoad=structuredClone(snapshot.games.road);offlineRoad.risks=offlineRoad.risks.slice(0,3);snapshot.games.road=structuredClone(offlineRoad);
 async function refreshRunner(){
  snapshot.games.road=structuredClone(offlineRoad);
  try{
@@ -44,14 +44,15 @@ for(const [key,label,min,max,step] of fields){
 }
 function fill(){
  const runner=base().model==='runner';
- $('#math-risk-preset').innerHTML=runner?base().payouts.map(p=>`<option value="${p.hazardCount}">${p.hazardCount} hazards</option>`).join(''):'<option value="0">Easy</option><option value="1">Normal</option><option value="2">Hard</option><option value="3">Expert</option><option value="custom">Custom</option>';
+ $('#math-risk-preset').innerHTML=runner?base().payouts.map(p=>`<option value="${p.level}">${p.level[0]+p.level.slice(1).toLowerCase()}</option>`).join(''):'<option value="0">Easy</option><option value="1">Normal</option><option value="2">Hard</option><option value="3">Expert</option><option value="custom">Custom</option>';
+ if(!runner&&game.value==='road')$('#math-risk-preset').innerHTML='<option value="0">Easy</option><option value="1">Medium</option><option value="2">Hard</option><option value="custom">Custom</option>';
  if(runner){
   $('#math-mode-note').textContent=(base().apiMode==='mock'?'Local Runner mock':'Runner API')+' configuration · analysis uses published multipliers. Inputs do not change server rules.';
   for(const row of controls.querySelectorAll('[data-math-field]')){const key=row.dataset.mathField;row.hidden=!['bet','steps','bankroll','liabilities','concurrent'].includes(key);row.querySelector('input').disabled=false;}
   for(const input of controls.querySelectorAll('[data-math]'))if(Number.isFinite(draft[input.dataset.math]))input.value=draft[input.dataset.math];
-  controls.querySelector('[data-math=steps]').max=base().laneCount;
+  controls.querySelector('[data-math=steps]').max=base().payouts.find(p=>p.level===draft.level).multipliers.length-1;
   controls.querySelector('[data-math=bet]').min=base().minBet;controls.querySelector('[data-math=bet]').max=base().maxBet;
-  $('#math-risk-preset').value=String(draft.hazards);
+  $('#math-risk-preset').value=draft.level;
   $('#math-kind-row').hidden=true;$('#math-mechanics').hidden=false;$('#math-apply').hidden=true;$('#math-source').hidden=true;
   return;
  }
@@ -87,9 +88,9 @@ function renderRunner(){
  if(result.errors.length){report.innerHTML='<div class="math-card"><h2>Invalid configuration</h2><p>'+result.errors.join(' ')+'</p></div>';return;}
  saved[game.value]={...draft};try{localStorage.setItem(storeKey,JSON.stringify(saved))}catch{}
  const {selected:r,rows,exposure:e}=result;
- report.innerHTML=`<div class="math-card"><span class="math-tag">${base().apiMode==='mock'?'LOCAL MOCK':'RUNNER API'} · CONFIG ${base().configurationId}</span><h2>Goat Road — Runner mathematics</h2><p>${base().laneCount} lanes, ${draft.hazards} hazards. Hazards are drawn without replacement. Published multipliers are used exactly. Allowed stakes: ${base().wagersAllowed.join(', ')} ${base().currency||''}.</p><div class="math-grid">${metric('RTP at selected step',pct(r.rtp))}${metric('Payout chance',pct(r.paid))}${metric('Gross payout on success',money(r.payout))}${metric('Next step risk after survival',pct(r.nextRisk))}</div></div>
- <div class="math-card"><h3>Cashout by step</h3><div class="math-scroll"><table class="math-table"><thead><tr><th>Step</th><th>Step risk</th><th>Survival</th><th>Multiplier</th><th>Payout</th><th>RTP</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.step}</td><td>${pct(r.risk)}</td><td>${pct(r.paid)}</td><td>${r.multiplier.toFixed(2)}×</td><td>${money(r.payout)}</td><td>${pct(r.rtp)}</td></tr>`).join('')}</tbody></table></div><p>Fixed cashout step, conditional risks ${draft.hazards} / remaining lanes. A step beyond the safe-lane count has zero survival probability. Gross payouts round to cents. The API configuration does not publish a payout cap; none is assumed here.</p></div>
- <div class="math-card"><h3>Payout exposure</h3><div class="math-grid">${metric('Maximum reachable payout · selected hazards',money(e.single))}${metric('Concurrent gross payouts',money(e.gross))}${metric('Available funds',money(e.available))}${metric('Shortfall',money(e.shortfall))}</div><p>Uses maximum allowed stake and reachable table rows for this hazard count.</p></div>`;
+ report.innerHTML=`<div class="math-card"><span class="math-tag">${base().apiMode==='mock'?'LOCAL MOCK':'RUNNER API'} · CONFIG ${base().configurationId}</span><h2>Goat Road — Runner mathematics</h2><p>${draft.level} · published multiplier table. Allowed stakes: ${base().wagersAllowed.join(', ')} ${base().currency||''}.</p><div class="math-grid">${metric('Gross payout at selected step',money(r.payout))}${metric('Multiplier',r.multiplier.toFixed(2)+'×')}</div><p>Failure probabilities and RTP are not included in the configuration response. They cannot be calculated from the payout table alone. During play, the server provides nextFailureProbability for the next step.</p></div>
+ <div class="math-card"><h3>Cashout by step</h3><div class="math-scroll"><table class="math-table"><thead><tr><th>Step</th><th>Multiplier</th><th>Payout</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.step}</td><td>${r.multiplier.toFixed(2)}×</td><td>${money(r.payout)}</td></tr>`).join('')}</tbody></table></div></div>
+ <div class="math-card"><h3>Payout exposure bound</h3><div class="math-grid">${metric('Maximum table payout · selected level',money(e.single))}${metric('Concurrent gross payouts',money(e.gross))}${metric('Available funds',money(e.available))}${metric('Shortfall',money(e.shortfall))}</div><p>Uses maximum allowed stake and the selected level’s published table, assuming every concurrent round wins. This is a bound, not an expected loss or payout probability.</p></div>`;
 }
 function renderCatch(result){
  const {selected,sides,rows,combined,exposure:e}=result;
@@ -130,7 +131,7 @@ function render(){
  <div class="math-card"><h3>Liquidity stress bound</h3><div class="math-grid">${metric('Maximum single gross payout bound',money(e.single))}${metric('Concurrent gross payout bound',money(e.gross))}${metric('Available after other liabilities',money(e.available))}${metric('Additional funds to cover this bound',money(e.shortfall))}</div><p>${e.covered} maximum-payout rounds covered by the available funds. Assumes every open round pays its maximum, so this bound also covers correlated outcomes. Other liabilities exclude the open-round payouts counted here. No future deposits or unreceived stakes are counted.</p><p class="math-note">For step games this bound uses all ${base().maxSteps??"available"} allowed steps, not the selected exit. It covers the selected risk configuration; a different difficulty or rule set requires its own assessment. This is not VaR, a ruin probability, a solvency assessment or a recommended reserve.</p></div>
  <div class="math-card"><h3>Source audit & production gaps</h3><ul><li>Current models execute and settle in the client using Godot RNG and local profiles.</li><li>All four source targets are 95%; actual return depends on rounding, caps and strategy.</li><li>Fish Master / Goat Gold: continuous crash thresholds remove the former extra edge from the 0.01 crash grid.</li><li>Explosive Fruits: hidden types depend on wave progression. Mixed-wave and adaptive-strategy analysis remains outstanding.</li><li>Real-money readiness requires server settlement, a durable wallet ledger, recoverable rounds, controlled versioned releases, RNG review and independent jurisdiction-specific testing.</li></ul><p>Audit scope: round formulas, start/cashout paths, local persistence and fruit type selection. No claim of complete security or certification audit.</p><details><summary>Source fingerprints</summary><p>Snapshot check: ${snapshot.sourceVerification??"source-files"}.</p><p>Fingerprints describe source files at the last composer build; they do not verify that a live web export was rebuilt from those files.</p>${base().sources.map(s=>`<p><code>${s.path}</code><br><small>${s.sha256}</small></p>`).join('')}</details><p>Reference: <a href="https://www.gamblingcommission.gov.uk/manual/guidance-to-licensing-authorities/rts-7-generation-of-random-outcomes" target="_blank" rel="noopener">UKGC random outcomes</a> · <a href="https://www.gamblingcommission.gov.uk/strategy/testing-strategy-for-compliance-with-remote-gambling-and-software-technical/5-live-rtp-monitoring" target="_blank" rel="noopener">RTP monitoring</a>. Requirements depend on the target jurisdiction.</p></div>`;
 }
-$('#math-risk-preset').onchange=e=>{if(base().model==='runner'){draft.hazards=Number(e.target.value);render();return;}if(e.target.value==='custom')return;draft.risk=base().risks[Number(e.target.value)];fill();render()};
+$('#math-risk-preset').onchange=e=>{if(base().model==='runner'){draft.level=e.target.value;draft.steps=Math.min(draft.steps,base().payouts.find(p=>p.level===draft.level).multipliers.length-1);fill();render();return;}if(e.target.value==='custom')return;draft.risk=base().risks[Number(e.target.value)];fill();render()};
 $('#math-apply').onclick=()=>{
  try{
   if(['catch','runner'].includes(base().model)||validate(draft,base()).length)return;
