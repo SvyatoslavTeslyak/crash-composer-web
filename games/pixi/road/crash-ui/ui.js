@@ -138,7 +138,7 @@ class TabbedControls {
   for(const b of this.q('.difficulty-row').children){const on=Number(b.dataset.value)===s.difficulty;b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-checked',String(on));b.disabled=!s.canBet}
   this.text('tbBet',money(s.bet));for(const a of ['min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
   const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);
-  const nextLane=s.game==='road'&&s.showCash;this.text('tbGoAmount',s.goSubtitle||money(s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',nextLane?'GO':s.goTitle||'BET');this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
+  const nextLane=s.game==='road'&&s.showCash;this.text('tbGoAmount',s.goSubtitle||money(s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',s.goTitle||(nextLane?'GO':'BET'));this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
   const cash=this.q('[data-action=cash]');if(s.game==='road'&&cash.nextElementSibling===go)cash.parentElement.append(cash);cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win;this.text('tbCash',money(s.cash));for(const key of ['tbCash','tbGoAmount'])this.slots[key].classList.toggle('long-amount',this.slots[key].textContent.length>8);
   for(const t of this.tabs.children)t.disabled=!!s.win;
  }

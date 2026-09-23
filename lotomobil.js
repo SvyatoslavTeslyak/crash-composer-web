@@ -1,6 +1,8 @@
 await window.ComposerAuth.ready;
 const section=document.querySelector('#lotomobil-section');
 const key='composer-lotomobil-session-v1';
+const playerBase=window.ComposerCloudConfig?.lotomobilBaseUrl;
+const playerUrl=path=>playerBase?new URL(path.replace(/^(auth|api)\//,''),playerBase).href:path;
 let session=null,mode=null,busy=false,phase='',authToken='',phone='',verificationStatus=null;
 try{session=JSON.parse(sessionStorage.getItem(key)||'null')}catch{}
 if(!session?.auth||!session?.otp||session.owner!==window.ComposerAuth.session?.user.id){session=null;sessionStorage.removeItem(key)}
@@ -28,11 +30,11 @@ const activeRound=()=>{try{return !!document.querySelector('#frame').contentWind
 function notify(){render();window.dispatchEvent(new Event('lotomobil-session'))}
 function clear(){session=null;sessionStorage.removeItem(key);notify()}
 async function json(path,options={}){
- let response;try{response=await fetch(path,{...options,cache:'no-store',signal:AbortSignal.timeout(20000)})}catch{throw Error('Connection lost. Please try again.')}
+ let response;try{response=await fetch(playerUrl(path),{...options,credentials:'omit',redirect:'error',cache:'no-store',signal:AbortSignal.timeout(20000)})}catch{throw Error('Connection lost. Please try again.')}
  let data;try{data=await response.json()}catch{throw Error('The service returned an invalid response.')}
  if(!response.ok){const error=Error(response.status===401||response.status===403?(path==='auth/login/otp'&&options.method==='POST'?'The code was not accepted. Check it and try again.':path==='auth/login/player'?'Phone number or PIN was not accepted. Please try again.':'Your Lotomobil session expired. Please log in again.'):response.status===429?'Too many attempts. Wait before trying again.':data.message||data.code||'The service is unavailable.');error.status=response.status;throw error}return data;
 }
-async function discover(){const [a,b]=await Promise.all([json('auth/_mode'),json('api/_mode')]);mode={auth:a.mode,api:b.mode,target:b.target};render()}
+async function discover(){if(playerBase){mode={auth:'live',api:'live',target:new URL(playerBase).host};render();return}const [a,b]=await Promise.all([json('auth/_mode'),json('api/_mode')]);mode={auth:a.mode,api:b.mode,target:b.target};render()}
 function render(){if(!section)return;section.hidden=!supported();if(section.hidden)return;const connected=!!session,unavailable=mode?.auth==='unconfigured';section.innerHTML=`<strong>Game connection</strong><span class="lotomobil-mode">${supported()&&connected?'Lotomobil · '+(mode?.api==='mock'?'test server':'QA API'):'Demo · no API'}</span><p>${supported()?(connected?'Goat Road uses your Lotomobil account and server results.':(unavailable?'Lotomobil login has not been connected yet. You can keep playing in demo.':'You are playing with simulated data. Log in to your Lotomobil account to use server data.')):'This game runs with simulated data. Lotomobil gameplay is currently available for Goat Road (Pixi).'}</p><button class="wb-button" type="button" id="lotomobil-connect" ${unavailable&&!connected?'disabled':''}>${unavailable&&!connected?'Lotomobil login unavailable':connected?'Disconnect · use demo':'Log in to Lotomobil'}</button><small>${mode?.api==='live'?'QA environment':mode?.api==='mock'?'Local test server · simulated data':''}</small>`;
  section.querySelector('button').onclick=()=>{if(connected){if(activeRound()){section.querySelector('p').textContent='Finish or recover the Lotomobil round before disconnecting.';return}clear()}else open()};
 }
