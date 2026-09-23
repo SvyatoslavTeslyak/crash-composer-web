@@ -37,3 +37,5 @@
 @media(max-width:480px){.share-dialog{--dialog-inset:16px}}
 
 .review-sent>summary,.review-sent-version>summary{flex-wrap:wrap}.review-sent-version>summary{display:flex;align-items:center;gap:10px}.review-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid;border-radius:999px;font-size:12px;font-weight:600;line-height:1.4;white-space:nowrap}.review-status:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}.review-status.awaiting{color:#ffe0a3;background:#352b19;border-color:#705a30}.review-status.accepted{color:#bce8cc;background:#15251f;border-color:#31443c}
+
+.review-heading{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px}.review-heading h2{margin:6px 0}.cloud-dialog>header>div{min-width:0}
