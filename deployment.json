@@ -7,5 +7,6 @@
   "firstClick": "bet-and-move-new-and-accepted",
   "traffic": "prepare-following-lane",
   "firstClickFraming": "stable-risk-slot-preserve-start",
-  "playerTransport": "direct-qa"
+  "playerTransport": "direct-qa",
+  "hopDurationMs": 140
 }
