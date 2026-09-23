@@ -183,7 +183,7 @@ async function savePending(){
  }
  flagDirty();
  if(dirty.size){await savePending();return}
- if(window.ComposerDraftEditors?.enabled){message('Saved to private draft. Submit it in Cloud drafts for review.');return}
+ if(window.ComposerDraftEditors?.enabled){message('Saved to private draft. Submit it in Changes & review for review.');return}
  message('Saved'+(isGame()&&pending.includes(targetId())?'. Rebuild web-dev to hear it in the game.':'.'));
 }
 

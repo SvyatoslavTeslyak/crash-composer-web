@@ -36,7 +36,14 @@
   }
   return manifest;
  }
- window.ComposerDraftEditors={get enabled(){return enabled()},selection:()=>snapshots.get(key(game(),'design'))?.payload.design?.selection,applyAudio};
+ async function baseline(payload,g){
+  const out={translations:{},design:{brands:{},selection:{brand:'default',theme:''}},audio:{},_labels:{translations:{},brands:{},events:{}}};
+  if(payload.translations){const data=await original('translations?game='+encodeURIComponent(g));out.translations=data.overrides||{};for(const [id,values] of Object.entries(payload.translations)){const entry=data.catalog.entries[id];if(entry){out._labels.translations[id]=entry.source;out.translations[id]={...Object.fromEntries(Object.keys(values).map(lang=>[lang,entry[lang]||entry.source])),...out.translations[id]}}}}
+  if(payload.design){const data=await original('brands/');for(const id of Object.keys(payload.design.brands||{}))if(data.brands[id]){out.design.brands[id]=editableBrand(data.brands[id]);out._labels.brands[id]=data.brands[id].title}}
+  if(payload.audio){const data=await original('studio/catalog?engine=pixi');for(const [id,patch] of Object.entries(payload.audio)){const m=data.sources.find(s=>s.id===id)?.manifest;if(m){out._labels.events[id]=Object.fromEntries(m.events.map(e=>[e.id,e.label||e.id]));out.audio[id]={events:patch.events.map(c=>m.events.find(e=>e.id===c.id)).filter(Boolean).map(e=>({id:e.id,volume_db:e.volume_db??null,pitch_jitter:e.pitch_jitter||0,...('prompt' in e?{prompt:e.prompt}:{}),takes:e.takes.map(t=>({enabled:t.enabled!==false}))}))}}}}
+  return out;
+ }
+ window.ComposerDraftEditors={get enabled(){return enabled()},baseline,selection:()=>snapshots.get(key(game(),'design'))?.payload.design?.selection,applyAudio};
  window.fetch=async(input,options={})=>{
   const url=new URL(input instanceof Request?input.url:input,location.href),path=url.pathname.slice(base.pathname.length),method=(options.method||'GET').toUpperCase();
   if(url.origin!==base.origin||!url.pathname.startsWith(base.pathname)||!(/^(brands\/|studio\/(catalog|save|restore|upload))/.test(path)))return nativeFetch(input,options);
