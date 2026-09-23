@@ -36,7 +36,8 @@ class BettingSound {
   const round=state.game+':'+state.rounds;
   const onThePress=performance.now()-this.pressedGo<BettingSound.PRESS_WINDOW_MS;
   if(this.game===state.game&&this.cashReady===false&&active&&this.chimedRound!==round){
-   if(!onThePress)this.play('cash-ready');
+   // Road readiness follows landing, even when a fast API and hop take under 400ms.
+   if(state.game==='road'||!onThePress)this.play('cash-ready');
    this.chimedRound=round;
   }
   this.game=state.game;this.cashReady=active;
