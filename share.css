@@ -9,3 +9,5 @@
 
 #cloud-configurations{display:inline-flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap}
 #cloud-configurations .changes-badge{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;min-width:23px;height:23px;box-sizing:border-box;padding:0 6px;border-radius:999px;background:#d92d43;color:#fff;font:700 12px/1 var(--inspector-sans,sans-serif);font-variant-numeric:tabular-nums;box-shadow:0 0 0 2px #ffffff12,inset 0 1px 0 #ffffff24}
+
+.cloud-dialog .discard-changes{color:#ffb4b4;border-color:#98434f;background:#43232c}.cloud-dialog .discard-changes:hover:not(:disabled){background:#592934}

@@ -78,7 +78,8 @@ function diffHTML(payload,baseline){
 }
 function message(text){const status=dialog.querySelector('[role=status]');if(status)status.textContent=text}
 function canSubmit(){return !loadError&&!!currentDraft&&!dirty()&&draftChanges().some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision))&&ComposerAuth.has('drafts.submit',game())}
-function busyControls(){for(const b of dialog.querySelectorAll('button:not([data-close])'))b.disabled=busy;renderProgress()}
+function canDiscard(){return ComposerAuth.member?.role==='admin'&&!!currentDraft&&(dirty()||draftChanges().some(g=>g.rows.length)||versions.some(v=>['submitted','approved'].includes(v.status)))}
+function busyControls(){for(const b of dialog.querySelectorAll('button:not([data-close])'))b.disabled=busy;const discard=$('#cloud-discard');if(discard)discard.disabled=busy||!canDiscard();renderProgress()}
 async function run(fn){if(busy)return;busy=true;busyControls();try{await fn()}catch(e){message(e.message);notify(e.message)}finally{busy=false;busyControls();renderProgress()}}
 async function refresh(){
  const request=++refreshId,id=game();if(!client||ComposerAuth.local)return;
@@ -97,10 +98,12 @@ function render(){
  renderProgress();if(!isReviewer()){if(dialog.open)dialog.close();return}
  const pending=versions.filter(v=>v.status==='submitted');
  dialog.innerHTML='<header><div><small>'+esc(ComposerTarget.entry().title)+'</small><h2 id="cloud-title">Changes</h2></div><button class="wb-button" data-close aria-label="Close">✕</button></header><button class="wb-button" id="cloud-refresh">Refresh</button>'+
+ (ComposerAuth.member?.role==='admin'?' <button class="wb-button discard-changes" id="cloud-discard">Discard all changes</button>':'')+
  '<div id="draft-changes">'+diffHTML(currentDraft?.payload,{...basePayload,...published?.payload})+'</div>'+
  (pending.length?'<h3>Sent for approval</h3><div class="cloud-list">'+pending.map(v=>'<article><strong>'+esc(v.summary)+'</strong><p>'+esc(new Date(v.submitted_at).toLocaleString())+'</p><button class="wb-button" data-view="'+esc(v.id)+'">View sent changes</button> <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="true">Approve</button> <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="false">Return</button></article>').join('')+'</div>':'')+
  '<div id="cloud-diff"></div><p role="status" aria-live="polite"></p>';
  dialog.querySelector('[data-close]').onclick=()=>dialog.close();$('#cloud-refresh').onclick=()=>run(refresh);
+ $('#cloud-discard')?.addEventListener('click',()=>{if(!canDiscard()||busy)return;const id=game(),revision=currentDraft.revision;if(!confirm('Discard all unpublished changes for '+ComposerTarget.entry().title+'? This includes shared draft edits, open edits in this window, and sent or approved versions. The published game stays unchanged.'))return;run(async()=>{await rpc('composer_discard_changes',{p_game:id,p_revision:revision});location.reload()})});
  for(const b of dialog.querySelectorAll('[data-review]'))b.onclick=()=>run(async()=>{const approve=b.dataset.approve==='true';await rpc('composer_review',{p_version:b.dataset.review,p_approve:approve,p_note:''});await refresh();message(approve?'Approved.':'Returned.');notify(approve?'Changes approved':'Changes returned')});
  for(const b of dialog.querySelectorAll('[data-view]'))b.onclick=()=>run(async()=>{const v=versions.find(v=>v.id===b.dataset.view);const rows=check(await client.from('composer_versions').select('payload').eq('game_id',v.game_id).eq('status','published').lt('revision',v.revision).order('revision',{ascending:false}).limit(1));const base=await ComposerDraftEditors.baseline(v.payload,v.game_id);$('#cloud-diff').innerHTML='<h3>Sent changes</h3>'+diffHTML(v.payload,{...base,...rows[0]?.payload});$('#cloud-diff').scrollIntoView({block:'start',behavior:'smooth'})});
  busyControls();
