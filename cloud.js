@@ -57,7 +57,9 @@ function draftChanges(){return changes(currentDraft?.payload,{...basePayload,...
 function renderProgress(){
  const review=isReviewer(),pending=versions.filter(v=>v.status==='submitted').length;
  const unsent=canSubmit()?1:0;
- button.textContent=review?'Changes'+(pending+unsent?' · '+(pending+unsent):''):'Send changes';
+ const count=pending+unsent;
+ button.innerHTML='<span>'+(review?'Changes':'Send changes')+'</span>'+(review&&count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'');
+ button.setAttribute('aria-label',review?'Changes'+(count?', '+count+' to review':''):'Send changes');
  button.disabled=busy||(!review&&!canSubmit());
  button.title=review?'View saved changes':dirty()?'Save your open edits first':canSubmit()?'Send saved changes to Admin':'No new saved changes to send';
  button.hidden=!review&&!ComposerAuth.has('drafts.submit',game());

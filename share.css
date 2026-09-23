@@ -6,3 +6,6 @@
 #changes-feedback{max-width:240px;color:#a1afbf;font-size:12px;line-height:1.4}#changes-feedback:empty{display:none}
 .cloud-dialog{width:min(900px,calc(100vw - 32px))}.cloud-dialog button:disabled{opacity:.45;cursor:default}
 .review-changes{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}.review-changes th,.review-changes td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid #394451;overflow-wrap:anywhere;white-space:pre-wrap}.review-changes thead{color:#a1afbf}.review-changes tbody th{font-weight:500;width:40%}.review-changes td:last-child{color:#bce8cc}.review-section h3 small{font-size:12px;font-weight:400}.review-section{overflow:auto}
+
+#cloud-configurations{display:inline-flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap}
+#cloud-configurations .changes-badge{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;min-width:23px;height:23px;box-sizing:border-box;padding:0 6px;border-radius:999px;background:#d92d43;color:#fff;font:700 12px/1 var(--inspector-sans,sans-serif);font-variant-numeric:tabular-nums;box-shadow:0 0 0 2px #ffffff12,inset 0 1px 0 #ffffff24}
