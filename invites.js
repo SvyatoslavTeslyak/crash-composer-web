@@ -18,7 +18,7 @@ if(document.querySelector('#access-root[data-page=people]')){
  const form=dialog.querySelector('form'),status=dialog.querySelector('#invite-status'),result=dialog.querySelector('#invite-result'),link=dialog.querySelector('#invite-link'),submit=form.querySelector('[type=submit]');
  let busy=false;
  const reset=()=>{result.hidden=true;link.value='';status.textContent=''};
- form.elements.workspace.value=new URL('login.html',location.href).href;
+ form.elements.workspace.value=new URL('login.html',window.ComposerCloudConfig?.workspaceUrl||location.href).href;
  const addressNote=()=>{let host='';try{host=new URL(form.elements.workspace.value).hostname}catch{}
  dialog.querySelector('#invite-address-note').textContent=['localhost','127.0.0.1','[::1]'].includes(host)?'This address only works on this computer. For someone elsewhere, use a hosted Composer address they can open.':'Use the Composer address the invited person can open.'};
  addressNote();form.elements.workspace.addEventListener('input',addressNote);
