@@ -130,7 +130,7 @@ class TabbedControls {
  text(key,value){if(this.slots[key].textContent!==String(value))this.slots[key].textContent=value}
  /** One flat state object per frame, the same one the standard controls read. */
  sync(s,features){
-  const risk=this.q('.risk');const hasRisk=typeof s.risk==='number';risk.hidden=!hasRisk;
+  const risk=this.q('.risk');const hasRisk=typeof s.risk==='number';risk.hidden=!hasRisk&&s.game!=='road';risk.style.visibility=hasRisk?'':'hidden';
   if(hasRisk){const pct=Math.round(Math.min(1,Math.max(0,s.risk))*100);this.text('riskPct',pct+' %');const lit=Math.round(pct/10);[...this.q('.risk-meter').children].forEach((seg,i)=>{seg.className=i<lit?'on tier-'+(i<3?'low':i<6?'mid':'high'):''})}
   const names=s.difficulties||[];const key=JSON.stringify(names);
   if(key!==this.lastDifficulties){this.lastDifficulties=key;this.q('.difficulty-row').innerHTML=names.map((n,i)=>'<button type="button" class="button" role="radio" data-action="pickDifficulty" data-value="'+i+'">'+esc(n)+'</button>').join('')}

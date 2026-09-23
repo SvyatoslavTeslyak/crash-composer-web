@@ -5,5 +5,6 @@
   "bytes": 171869219,
   "runnerApi": "named-levels-v2",
   "firstClick": "bet-and-move-new-and-accepted",
-  "traffic": "reserve-during-request-clear-before-hop"
+  "traffic": "reserve-during-request-clear-before-hop",
+  "firstClickFraming": "stable-risk-slot-preserve-start"
 }
