@@ -3,7 +3,13 @@
 'use strict';
 const langs=['en','fr','ht'],headers=['game','preset','key','area','section','source','EN','FR','CR'];
 const context=(entry,game)=>({...entry,usage:entry.usageByGame?.[game]||entry.usage,group:entry.groupByGame?.[game]||entry.group,presets:entry.presetsByGame?.[game]||entry.presets});
-const applicable=(entry,game,preset)=> !entry.developerOnly&&entry.previewWindow!=='dev'&&(preset==='all'||!context(entry,game).presets||context(entry,game).presets.includes(preset))&&!entry.usage?.includes('unused')&&(!entry.games?.length||game==='kit'||entry.games.includes(game));
+const roadWindows=new Set(['','menu','account','rules','topbets','mybets','betDetails','topBetDetails','win']);
+const windowAllowed=(game,kind)=>game!=='road'||roadWindows.has(kind||'');
+const obsoleteRoadText=new Set(['Normal','Expert','Extreme','Insane','Reduce motion']);
+const applicable=(entry,game,preset)=>{
+ const scoped=context(entry,game),activePreset=game==='road'?'tabbed-shell-v1':preset;
+ return windowAllowed(game,entry.previewWindow)&&(game!=='road'||!obsoleteRoadText.has(entry.source))&&!entry.developerOnly&&entry.previewWindow!=='dev'&&(activePreset==='all'||!scoped.presets||scoped.presets.includes(activePreset))&&!scoped.usage?.includes('unused')&&(!entry.games?.length||game==='kit'||entry.games.includes(game));
+};
 const effective=(data,key)=>({...data.catalog.entries[key],...data.overrides[key]});
 // An apostrophe prevents spreadsheet formula execution and is removed on import.
 const protect=value=>/^[\s]*[=+\-@]|^[\t\r\n']/.test(value)?"'"+value:value;
@@ -40,5 +46,5 @@ function review(text,data,game,preset='all'){
  }
  return changes;
 }
-root.TranslationTable={encode,parse,review,applicable,context};
+root.TranslationTable={encode,parse,review,applicable,context,windowAllowed};
 })(globalThis);

@@ -14,6 +14,12 @@
  let amountOverride=null;
  function syncInspector(){
   const road=game()==='road';
+  const modalSelect=document.querySelector('#modal'),selected=modalSelect.value;
+  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets']]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
+  if(modalSelect.dataset.game!==game()){
+   modalSelect.replaceChildren(...modalOptions.map(([value,label])=>new Option(label,value)));modalSelect.dataset.game=game();modalSelect.value=modalOptions.some(([value])=>value===selected)?selected:'';
+  }
+  const winOption=modalSelect.querySelector('[value=win]');if(winOption)winOption.disabled=live();
   const standard=presetSelect.querySelector('[value=standard]');
   if(road){standard?.remove();presetSelect.value='tabbed-shell-v1'}
   else if(!standard){const option=document.createElement('option');option.value='standard';option.textContent='Game default';presetSelect.prepend(option);presetSelect.value=savedPreset()}
@@ -48,12 +54,12 @@
  // hidden on phones, visible on larger screens. Only an override adds presets=0/1.
  const featureQuery=()=>[...document.querySelectorAll('[data-feature]')].filter(n=>n!==amountPresets||amountOverride!==null).map(n=>'&'+n.dataset.feature+'='+(n.checked?'1':'0')).join('');
  function flags(){if(!live()){sendFlags();return}const ui=instance();if(ui)document.querySelectorAll('[data-flag]').forEach(n=>ui.send('flag',{key:n.dataset.flag,value:n.checked}))}
- function modal(){const kind=document.querySelector('#modal').value;if(!live()){demo({modal:kind});return}const ui=instance();if(!ui)return;if(kind)ui.open(kind);else ui.close()}
+ function modal(){const kind=document.querySelector('#modal').value;if(!TranslationTable.windowAllowed(game(),kind))return;if(!live()){demo({modal:kind});return}const ui=instance();if(!ui)return;if(kind){if(game()==='road'&&kind==='rules')ui.rulesFrom='tab';ui.open(kind)}else ui.close()}
  async function load(){
   clearInterval(timer);const request=++generation;
   presetSelect.value=savedPreset();presetSelect.disabled=live();syncInspector();
   document.querySelectorAll('[data-placeholder-only]').forEach(row=>row.hidden=live());
-  document.querySelector('#modal option[value=win]').disabled=live();
+
   document.querySelector('#modal').value='';
   if(!live()){
    syncInspector();

@@ -38,7 +38,7 @@ function syncPreviewWindows(){
  select.value=allowed.has(selected)?selected:'';
 }
 function previewWindow(kind){
- if(kind==='dev')kind='';
+ if(kind==='dev'||!TranslationTable.windowAllowed(target,kind))kind='';
  if(kind&&![...$('#translation-preview-view').options].some(option=>option.value===kind))kind='';
  try{const ui=frame.contentWindow.CrashUI?.instance;if(!ui)return;
  const focused=document.activeElement;
@@ -62,7 +62,7 @@ function ensureHistoryPreview(){
  const samples=[1.13,2.04,1.00,3.41,1.61,5.20,1.35,2.78].map((multiplier,index)=>({multiplier,cashed_out:index!==2}));
  ui.update=function(state){
   if(!stateInspection)preview.latest=state;
-  const bets=[{name:'You',time:Date.now()-60000,wager:3,payout:4.83,multiplier:1.61,details:[{label:'RESULT',value:'Cashed out'},{label:'DIFFICULTY',value:'Normal'},{label:'LANES CROSSED',value:'3 / 20'}]},{name:'You',time:Date.now()-3600000,wager:2,payout:0,multiplier:0,details:[{label:'RESULT',value:'Crashed'},{label:'DIFFICULTY',value:'Hard'},{label:'LANES CROSSED',value:'0 / 20'}]}];
+  const bets=[{name:'You',time:Date.now()-60000,wager:3,payout:4.83,multiplier:1.61,details:[{label:'RESULT',value:'Cashed out'},{label:'DIFFICULTY',value:'Medium'},{label:'LANES CROSSED',value:'3 / 20'}]},{name:'You',time:Date.now()-3600000,wager:2,payout:0,multiplier:0,details:[{label:'RESULT',value:'Crashed'},{label:'DIFFICULTY',value:'Hard'},{label:'LANES CROSSED',value:'0 / 20'}]}];
   const data={...state,history:state.history?.length?state.history:samples};
   if(state.game==='road')Object.assign(data,{bets:stateInspection?state.bets:state.bets?.length?state.bets:bets,rounds:state.rounds||2,roundWins:state.roundWins||1,bestMultiplier:state.bestMultiplier||1.61,personal:state.personal||4.83});
   return preview.update.call(this,data)
@@ -81,20 +81,19 @@ function inspectAction(source,entry){
  const active=['GO','CASH OUT','SELL FUEL','NEXT LANE','NEXT FRUIT'].includes(source),idle=['PLAY','SLICE'].includes(source);
  const notification=entry?.previewState==='notification',winTransfer=entry?.previewState==='win-transfer';
  const betPreview=['betDetails','topBetDetails'].includes(entry?.previewWindow);
- const extraDifficulty=ui.state.game==='road'&&['Extreme','Insane'].includes(source),emptyBets=source==='No bets yet.',winPreview=entry?.previewWindow==='win';
- if(!active&&!idle&&!notification&&!winTransfer&&!betPreview&&!extraDifficulty&&!emptyBets&&!winPreview)return;
+ const emptyBets=source==='No bets yet.',winPreview=entry?.previewWindow==='win';
+ if(!active&&!idle&&!notification&&!winTransfer&&!betPreview&&!emptyBets&&!winPreview)return;
  const inspection={ui,update:ui.update,send:ui.send,latest:historyPreview?.ui===ui?historyPreview.latest:ui.state};stateInspection=inspection;
  ui.send=()=>{};
  ui.update=function(state){
   inspection.latest=state;if(historyPreview?.ui===ui)historyPreview.latest=state;const preview=structuredClone(state),stepped=['road','fruits','market_stack'].includes(state.game);
   Object.assign(preview,{win:false,auto:false,canBet:!active,canGo:true,canCash:active,showCash:active&&stepped,cash:Math.max(Number(state.cash)||0,Number(state.bet)||1),toast:''});
-  if(extraDifficulty){preview.difficulties=['Easy','Normal','Hard','Expert','Extreme','Insane'];preview.difficulty=preview.difficulties.indexOf(source)}
   if(emptyBets)preview.bets=[];
   if(winPreview){preview.winAmount=12.45;preview.win=true}
   if(notification)preview.toast=source;if(winTransfer){preview.win=true;preview.winAmount=preview.cash;preview.winSubtitle=source}
   if(betPreview){
    const lost=source==='Lost'||source==='Crashed',sample={name:'You',time:Date.now(),wager:3,payout:lost?0:4.5,multiplier:lost?0:1.5};
-   if(state.game==='road')sample.details=[{label:'DIFFICULTY',value:'Normal'},{label:'LANES CROSSED',value:'3 / 20'},{label:'RESULT',value:lost?'Crashed':'Cashed out'}];
+   if(state.game==='road')sample.details=[{label:'DIFFICULTY',value:'Medium'},{label:'LANES CROSSED',value:'3 / 20'},{label:'RESULT',value:lost?'Crashed':'Cashed out'}];
    preview.bets=[sample];preview.topBets=[{...sample,name:'Lucky Leo'}];
   }
   preview.settings={...preview.settings,sound:false,music:false,reduced_motion:true};
