@@ -115,7 +115,7 @@ function jsonView(payload,title='View JSON'){return '<details class="review-json
 const localRelease=()=>!window.ComposerHosting&&['127.0.0.1','localhost'].includes(location.hostname);
 function releaseActions(v){
  const can=ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game());
- return (can&&localRelease()?'<button class="wb-button primary" data-apply="'+esc(v.id)+'">Apply locally</button>':can?'<small class="review-local-note">Open local Composer to apply this version, then commit and push.</small>':'')+(v.status==='submitted'?' <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="false">Return</button>':'');
+ return (can&&localRelease()?'<button class="wb-button primary" data-apply="'+esc(v.id)+'">Apply locally</button>':'')+(v.status==='submitted'?' <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="false">Return</button>':'');
 }
 function render(){
  renderProgress();if(!isReviewer()&&!ComposerAuth.has('drafts.submit',game())){if(dialog.open)dialog.close();return}
@@ -125,6 +125,7 @@ function render(){
  const pending=versions.filter(v=>['submitted','approved'].includes(v.status));
  dialog.innerHTML='<header><div><small>'+esc(ComposerTarget.entry().title)+'</small><h2 id="cloud-title">Changes</h2></div><button class="wb-button" data-close aria-label="Close">✕</button></header><button class="wb-button" id="cloud-refresh">Refresh</button>'+
  (ComposerAuth.member?.role==='admin'?' <button class="wb-button discard-changes" id="cloud-discard">Discard all changes</button>':'')+
+ (ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game())&&!localRelease()?'<aside class="review-local-note" aria-label="Publishing changes"><strong>Publish from local Composer</strong><p>You can review changes here. To publish them, open local Composer and sign in with the same Admin account. In Changes, find the sent version and click <b>Apply locally</b>, then commit and push the configuration file. GitHub will update Composer web and Showcase automatically.</p></aside>':'')+
  (!isReviewer()?'<p class="review-intro">Review your saved changes, then send them to Admin. This game draft is shared with your team.</p>':'')+
  '<div id="draft-changes">'+(isReviewer()?diffHTML(currentDraft?.payload,{...basePayload,...published?.payload}):
  (newCount?'<h3 class="review-new-title">'+(returnedVersion()?'Returned for changes':'New changes')+' <span class="review-count">'+newCount+'</span></h3>'+diffHTML({...basePayload,...currentDraft?.payload},editingBaseline()):'<div class="review-empty"><strong>'+(sent.length?'All changes sent':'No new changes')+'</strong><p>'+(sent.length?'Your changes are with Admin. You can keep editing; only new edits will appear here.':'Saved edits will appear here when you change texts, design or sounds.')+'</p></div>'))+'</div>'+

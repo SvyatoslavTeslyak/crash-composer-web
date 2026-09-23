@@ -20,4 +20,4 @@
 
 .review-send{flex-wrap:wrap}.review-send p{flex-basis:100%;margin:0}.review-send .discard-changes{margin-right:auto}.review-send:has(button[hidden]):has(p:empty){display:flex}
 
-.review-json{margin:16px 0;border-top:1px solid #35404c;padding-top:12px}.review-json summary{cursor:pointer;color:#a1afbf;font-size:13px}.review-json pre{max-height:360px;overflow:auto;padding:14px;background:#0e151e;border-radius:8px;font:12px/1.6 monospace;white-space:pre-wrap;overflow-wrap:anywhere}.review-local-note{display:block;color:#a1afbf;margin:10px 0}
+.review-json{margin:16px 0;border-top:1px solid #35404c;padding-top:12px}.review-json summary{cursor:pointer;color:#a1afbf;font-size:13px}.review-json pre{max-height:360px;overflow:auto;padding:14px;background:#0e151e;border-radius:8px;font:12px/1.6 monospace;white-space:pre-wrap;overflow-wrap:anywhere}.review-local-note{margin:20px 0;padding:16px 18px;border:1px solid #475566;border-left:3px solid #6cccff;border-radius:12px;background:#0e151e}.review-local-note strong{display:block;color:#6cccff;font-size:16px}.review-local-note p{margin:8px 0 0;color:#e2e7ee;font-size:14px;line-height:1.6}
