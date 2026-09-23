@@ -812,7 +812,7 @@
 .crash-ui .tabbed-controls .actions .action .money:not(.is-label):not(.long-amount),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label):not(.long-amount){font-size:var(--type-28)}
 
 /* GO has the same typographic emphasis as the cash-out amount. */
-.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title.go-label{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-28)}
+.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title.go-label{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-24)}
 
 /* Embedded games can be narrower than a phone's full viewport. */
 @media(max-width:360px){
@@ -826,3 +826,7 @@
  .crash-ui .tabbed-controls .risk-meter{flex:1;width:auto}
  .crash-ui .tabbed-controls .difficulty-row .button{min-width:0;padding-inline:var(--space-4);font-size:var(--type-14)}
 }
+
+/* Slightly smaller cash-out amount, including long values. */
+.crash-ui .tabbed-controls .actions .action.cash{--amount-max-size:var(--type-24)}
+.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action.cash .money:not(.is-label):not(.long-amount){font-size:var(--type-24)}

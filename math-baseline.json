@@ -210,5 +210,5 @@
       ]
     }
   },
-  "sourceVerification": "source-files"
+  "sourceVerification": "bundled-snapshot-only"
 }

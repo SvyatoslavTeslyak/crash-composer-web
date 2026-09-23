@@ -21,7 +21,8 @@ window.fetch=async(input,options={})=>{
  const route=url.pathname.startsWith(basePath)?'/'+url.pathname.slice(basePath.length):url.pathname;
  if(url.origin===location.origin&&!['GET','HEAD','OPTIONS'].includes(method)&&!/^\/(auth\/login\/(player|otp)|api\/v[12]\/betting\/runner\/)/.test(route)){
   let permission=null,game=null;
-  if(route.startsWith('/brands/'))permission='design.edit';
+  if(route==='/release/apply'){permission='releases.publish';game=window.ComposerTarget?.value;if(state.member?.role!=='admin')throw Error('Admin access required');}
+  else if(route.startsWith('/brands/'))permission='design.edit';
   else if(route.startsWith('/studio/')){
    permission=route==='/studio/rebuild'?'build.preview':'audio.edit';
    if(['/studio/save','/studio/rebuild'].includes(route)){let body;try{body=JSON.parse(input instanceof Request?await input.clone().text():options.body)}catch{throw Error('Invalid editor request')};game=body.source}else game=url.searchParams.get('source');

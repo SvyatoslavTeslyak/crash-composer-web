@@ -48,3 +48,6 @@ color-scheme:dark;
 --inspector-entry-width:400px;
 }
 @media(pointer:coarse){:root{--inspector-control:var(--tap-min)}}
+
+/* Workspace controls and player login sizing. */
+:root{--inspector-size-420:420px;--inspector-size-9:9px;--inspector-loading-duration:.8s;--inspector-size-76:76px;--inspector-size-30:30px;--inspector-overlay-shadow:#0005;}

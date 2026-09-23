@@ -26,6 +26,6 @@ input:disabled,button:disabled{opacity:.6;cursor:not-allowed}
 button.link{width:auto;min-height:0;padding:var(--space-4) 0;border:0;background:none;color:var(--inspector-muted);font:500 var(--inspector-type-base) var(--inspector-sans);text-decoration:underline}
 button.link:hover{background:none;color:var(--text)}
 
-[hidden]{display:none!important}#email{margin-bottom:24px}.entry> .hint{margin-bottom:24px}#local-workspace{margin:24px auto 0}
+[hidden]{display:none!important}#email{margin-bottom:var(--space-24)}.entry> .hint{margin-bottom:var(--space-24)}#local-workspace{margin:var(--space-24) auto 0}
 
-#confirm-field{margin-top:20px}#cancel-setup{margin-top:20px}
+#confirm-field{margin-top:var(--type-20)}#cancel-setup{margin-top:var(--type-20)}

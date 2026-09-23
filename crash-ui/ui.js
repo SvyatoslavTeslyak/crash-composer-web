@@ -10,7 +10,8 @@ let currency='';
 // How high a multiplier reads: the same four tiers colour the live badge and the history.
 const tintFor=m=>Number(m)>=10?'gold':Number(m)>=5?'purple':Number(m)>=2?'success':'cyan';
 const goIsCash=s=>s.goCash!==undefined?!!s.goCash:s.goTitle==='CASH OUT';
-const money=v=>window.CrashI18n?.locale==='fr'?window.CrashI18n.number(Number(v||0),{minimumFractionDigits:2,maximumFractionDigits:2})+' '+(currency||'$'):currency?Number(v||0).toFixed(2)+' '+currency:'$'+Number(v||0).toFixed(2);
+const money=(v,digits=2)=>window.CrashI18n?.locale==='fr'?window.CrashI18n.number(Number(v||0),{minimumFractionDigits:digits,maximumFractionDigits:digits})+' '+(currency||'$'):currency?Number(v||0).toFixed(digits)+' '+currency:'$'+Number(v||0).toFixed(digits);
+const wager=v=>money(v,Number.isInteger(Number(v||0))?0:2);
 const icon=(name)=>'<img class="icon" alt="" src="'+base+'assets/icons/'+name+(name==='play.svg'?'?v=ink-5':'')+'">';
 // Pixel crop origins of the six painted circles in the 1536 x 1024 atlas.
 // The artwork is not an evenly spaced 3 x 2 grid; its second row sits higher.
@@ -36,7 +37,8 @@ class BettingSound {
   const round=state.game+':'+state.rounds;
   const onThePress=performance.now()-this.pressedGo<BettingSound.PRESS_WINDOW_MS;
   if(this.game===state.game&&this.cashReady===false&&active&&this.chimedRound!==round){
-   if(!onThePress)this.play('cash-ready');
+   // Road readiness follows landing, even when a fast API and hop take under 400ms.
+   if(state.game==='road'||!onThePress)this.play('cash-ready');
    this.chimedRound=round;
   }
   this.game=state.game;this.cashReady=active;
@@ -130,15 +132,15 @@ class TabbedControls {
  text(key,value){if(this.slots[key].textContent!==String(value))this.slots[key].textContent=value}
  /** One flat state object per frame, the same one the standard controls read. */
  sync(s,features){
-  const risk=this.q('.risk');const hasRisk=typeof s.risk==='number';risk.hidden=!hasRisk;
+  const risk=this.q('.risk');const hasRisk=typeof s.risk==='number';risk.hidden=!hasRisk&&s.game!=='road';risk.style.visibility=hasRisk?'':'hidden';
   if(hasRisk){const pct=Math.round(Math.min(1,Math.max(0,s.risk))*100);this.text('riskPct',pct+' %');const lit=Math.round(pct/10);[...this.q('.risk-meter').children].forEach((seg,i)=>{seg.className=i<lit?'on tier-'+(i<3?'low':i<6?'mid':'high'):''})}
   const names=s.difficulties||[];const key=JSON.stringify(names);
   if(key!==this.lastDifficulties){this.lastDifficulties=key;this.q('.difficulty-row').innerHTML=names.map((n,i)=>'<button type="button" class="button" role="radio" data-action="pickDifficulty" data-value="'+i+'">'+esc(n)+'</button>').join('')}
   this.q('.difficulty-row').hidden=!features.difficulty||names.length===0;
   for(const b of this.q('.difficulty-row').children){const on=Number(b.dataset.value)===s.difficulty;b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-checked',String(on));b.disabled=!s.canBet}
-  this.text('tbBet',money(s.bet));for(const a of ['min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
+  this.text('tbBet',wager(s.bet));for(const a of ['min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
   const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);
-  const nextLane=s.game==='road'&&s.showCash;this.text('tbGoAmount',s.goSubtitle||money(s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',nextLane?'GO':s.goTitle||'BET');this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
+  const nextLane=s.game==='road'&&s.showCash;this.text('tbGoAmount',(s.game==='road'&&!s.showCash?wager(s.bet):s.goSubtitle)||wager(s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',s.goTitle||(nextLane?'GO':'BET'));this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
   const cash=this.q('[data-action=cash]');if(s.game==='road'&&cash.nextElementSibling===go)cash.parentElement.append(cash);cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win;this.text('tbCash',money(s.cash));for(const key of ['tbCash','tbGoAmount'])this.slots[key].classList.toggle('long-amount',this.slots[key].textContent.length>8);
   for(const t of this.tabs.children)t.disabled=!!s.win;
  }
@@ -148,7 +150,7 @@ class MultiBetControls {
   this.element=document.createElement('section');this.element.className='controls panel multi-bet-controls';this.element.setAttribute('aria-label','Three position betting controls');this.cards={};
   for(const [key,name,amount] of [['left','LEFT WINS',5],['main','MAIN CATCH',8],['right','RIGHT WINS',5]]){
    const el=document.createElement('section');el.className='multi-bet';el.setAttribute('aria-label',name);
-   el.innerHTML='<div class="bet-quote">'+name+'<strong>1.00×</strong></div><div class="bet-receipt">Choose your stake</div><div class="stake bet-wager"><button type="button" class="button bet-step" data-step="-1" aria-label="Decrease '+name+' stake">−</button><input class="bet-amount money" aria-label="'+name+' stake in dollars" type="number" inputmode="numeric" min="1" max="1000" step="1" value="'+amount+'"><button type="button" class="button bet-step" data-step="1" aria-label="Increase '+name+' stake">+</button></div><button type="button" class="button action bet-action"><span class="action-title">BET</span><span class="money">'+money(amount)+'</span></button>';
+   el.innerHTML='<div class="bet-quote">'+name+'<strong>1.00×</strong></div><div class="bet-receipt">Choose your stake</div><div class="stake bet-wager"><button type="button" class="button bet-step" data-step="-1" aria-label="Decrease '+name+' stake">−</button><input class="bet-amount money" aria-label="'+name+' stake in dollars" type="number" inputmode="numeric" min="1" max="1000" step="1" value="'+amount+'"><button type="button" class="button bet-step" data-step="1" aria-label="Increase '+name+' stake">+</button></div><button type="button" class="button action bet-action"><span class="action-title">BET</span><span class="money">'+wager(amount)+'</span></button>';
    this.element.append(el);this.cards[key]={el,input:el.querySelector('input'),button:el.querySelector('.bet-action')};
   }
  }
@@ -240,16 +242,16 @@ class GameUI {
   this.bettingSound.setEnabled(s.settings?.sound===true);
   this.bettingSound.updateCashReady(s);
   this.state=s;currency=typeof s.currency==='string'?s.currency:'';this.host.hidden=false;this.host.classList.toggle('reduced',!!s.settings?.reduced_motion);
-  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',s.balanceKnown===false?'—':money(s.balance));this.text('bet',money(s.bet));
+  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',s.balanceKnown===false?'—':money(s.balance));this.text('bet',wager(s.bet));
 
   this.text('personal',money(s.personal));this.text('top',money(s.record?.payout));this.text('owner',s.record?.name||'');this.q('.record-top').title=[s.record?.name,s.record?.date].filter(Boolean).join(' · ');
   const signature=JSON.stringify([s.players,s.record?.name]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players)}
-  this.text('difficulty',s.difficulties?.[s.difficulty]||'Normal');this.text('cash',money(s.cash));this.text('goTitle',s.goTitle||'PLAY');this.text('goSubtitle',s.goSubtitle||money(s.bet));this.text('online',(s.online||6)+' ONLINE');
+  this.text('difficulty',s.difficulties?.[s.difficulty]||'Normal');this.text('cash',money(s.cash));this.text('goTitle',s.goTitle||'PLAY');this.text('goSubtitle',(s.game==='road'&&!s.showCash?wager(s.bet):s.goSubtitle)||wager(s.bet));this.text('online',(s.online||6)+' ONLINE');
   this.q('[data-action=auto]').setAttribute('aria-pressed',String(!!s.auto));
   for(const a of ['auto','difficulty','min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
   const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);this.slots.playIcon.hidden=asCash;
   const cash=this.q('[data-action=cash]');if(s.game==='road'&&cash.nextElementSibling===go)cash.parentElement.append(cash);cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win; // Button visibility never changes the shared control layout.
-  const presets=s.presets||[2,3,8,20];const presetKey=JSON.stringify(presets);if(presetKey!==this.lastPresets){this.lastPresets=presetKey;this.q('.presets').innerHTML=presets.map(v=>'<button class="button" data-action="preset" data-value="'+Number(v)+'">'+esc(money(v).replace('.00',''))+'</button>').join('')}
+  const presets=s.presets||[2,3,8,20];const presetKey=JSON.stringify(presets);if(presetKey!==this.lastPresets){this.lastPresets=presetKey;this.q('.presets').innerHTML=presets.map(v=>'<button class="button" data-action="preset" data-value="'+Number(v)+'">'+esc(wager(v))+'</button>').join('')}
   for(const b of this.q('.presets').children){b.disabled=!s.canBet;b.setAttribute('aria-pressed',String(Number(b.dataset.value)===s.bet))}
   const flags=s.flags||{};this.q('.personal').hidden=false;this.q('.record-top').hidden=false;this.q('.records').hidden=!!this.tabbed||flags.personal_record===false;
   this.q('.winners').hidden=!!this.tabbed||flags.leaderboard===false;this.q('.history').hidden=flags.history===false;this.q('.online').hidden=flags.online_count===false;this.q('.dev').hidden=true;
@@ -321,15 +323,15 @@ class GameUI {
   const top=kind==='topbets',s=this.state;
   const rows=top?[...(s.topBets||s.wins||[])].sort((a,b)=>b.payout-a.payout).slice(0,25):[...(s.bets||[])].sort((a,b)=>b.time-a.time);
   this.betRows=rows.map(v=>({...v}));
-  const amount=v=>Number.isFinite(v)?esc(money(v)):'—';
+  const amount=(v,stake=false)=>Number.isFinite(v)?esc(stake?wager(v):money(v)):'—';
   let day='';
   const body=rows.map((v,i)=>{
    const row='<tr class="bet-selectable" data-action="betDetails" data-value="'+i+'">';
    const trigger='<button type="button" class="bet-row-open" data-action="betDetails" data-value="'+i+'" aria-label="View bet details'+(top?' for '+esc(v.name):'')+'">';
-   if(top)return row+'<td>'+trigger+'<span class="bet-player">'+avatar(v.name,s.players)+'<span title="'+esc(v.name)+'">'+esc(v.name)+'</span></span></button></td><td>'+amount(v.wager)+'</td><td>'+esc(Number(v.multiplier).toFixed(2))+'×</td><td class="bet-prize">'+amount(v.payout)+'</td></tr>';
+   if(top)return row+'<td>'+trigger+'<span class="bet-player">'+avatar(v.name,s.players)+'<span title="'+esc(v.name)+'">'+esc(v.name)+'</span></span></button></td><td>'+amount(v.wager,true)+'</td><td>'+esc(Number(v.multiplier).toFixed(2))+'×</td><td class="bet-prize">'+amount(v.payout)+'</td></tr>';
    const date=new Date(v.time),key=date.toDateString();let heading='';
    if(key!==day){day=key;heading='<tr class="bet-day"><th colspan="3" scope="rowgroup">'+'<time data-date-only datetime="'+date.toISOString()+'">'+esc(date.toLocaleDateString(window.CrashI18n?.locale==='fr'?'fr-FR':'en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}))+'</time>'+'</th></tr>'}
-   return heading+row+'<td>'+trigger+'<time datetime="'+date.toISOString()+'">'+esc(date.toLocaleTimeString(window.CrashI18n?.locale==='fr'?'fr-FR':'en-US',{hour:'numeric',minute:'2-digit'}))+'</time></button></td><td>'+amount(v.wager)+'</td><td class="bet-prize">'+(v.payout>0?amount(v.payout):'—')+'</td></tr>';
+   return heading+row+'<td>'+trigger+'<time datetime="'+date.toISOString()+'">'+esc(date.toLocaleTimeString(window.CrashI18n?.locale==='fr'?'fr-FR':'en-US',{hour:'numeric',minute:'2-digit'}))+'</time></button></td><td>'+amount(v.wager,true)+'</td><td class="bet-prize">'+(v.payout>0?amount(v.payout):'—')+'</td></tr>';
   }).join('');
   return '<table class="bets-table '+(top?'top-bets':'my-bets')+'"><caption class="bet-caption">'+(top?'Top 25':'My bets')+'</caption><thead><tr><th scope="col">'+(top?'Players':'Time')+'</th><th scope="col">Wager</th>'+(top?'<th scope="col">X</th>':'')+'<th scope="col">Prize</th></tr></thead><tbody>'+body+'</tbody></table>'+(!rows.length?'<p class="bets-empty">No bets yet.</p>':'');
  }
@@ -338,7 +340,7 @@ class GameUI {
   if(this.state.win||!['topbets','mybets'].includes(this.modal)||!this.betRows?.[index]||this.betDetail)return;
   const entry={...this.betRows[index]},body=this.q('.modal-body');
   this.betDetail={html:body.innerHTML,scroll:body.scrollTop,title:this.q('.modal h2').textContent,index};
-  const name=entry.name||'You',value=n=>Number.isFinite(n)?esc(money(n)):'—';
+  const name=entry.name||'You',value=(n,stake=false)=>Number.isFinite(n)?esc(stake?wager(n):money(n)):'—';
   const multiplier=Number.isFinite(entry.multiplier)?entry.multiplier:entry.payout>0&&entry.wager>0?entry.payout/entry.wager:null;
   const date=new Date(entry.time),hasDate=Number.isFinite(entry.time)&&!Number.isNaN(date.getTime());
   const card=(label,text)=>'<div class="bet-detail-card"><strong>'+text+'</strong><span>'+label+'</span></div>';
@@ -346,7 +348,7 @@ class GameUI {
   const back=document.createElement('button');back.type='button';back.className='icon-button bet-detail-back';back.dataset.action='betsBack';back.setAttribute('aria-label','Back to '+this.betDetail.title);
   back.innerHTML='<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H4m7-7-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   this.q('.modal header').prepend(back);
-  body.innerHTML='<div class="bet-detail-hero"><div class="bet-detail-avatar">'+avatar(name,this.state.players)+(entry.payout>0?'<span class="bet-detail-trophy">'+icon('trophy.svg')+'</span>':'')+'</div></div><div class="bet-detail-divider"><span>'+esc(name)+'</span></div>'+(hasDate?'<p class="bet-detail-date"><time datetime="'+date.toISOString()+'">'+esc(date.toLocaleString(window.CrashI18n?.locale==='fr'?'fr-FR':'en-GB',{weekday:'long',day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'}))+'</time></p>':'')+'<div class="bet-detail-grid">'+card('WAGER',value(entry.wager))+card('X',multiplier!==null?esc(multiplier.toFixed(2)):'—')+card('PRIZE',value(entry.payout))+'</div><div class="bet-detail-extras">'+(entry.details?.length?entry.details:[{label:'RESULT',value:entry.payout>0?'Won':'Lost'}]).map(detail=>card(esc(detail.label),esc(detail.value))).join('')+'</div>';
+  body.innerHTML='<div class="bet-detail-hero"><div class="bet-detail-avatar">'+avatar(name,this.state.players)+(entry.payout>0?'<span class="bet-detail-trophy">'+icon('trophy.svg')+'</span>':'')+'</div></div><div class="bet-detail-divider"><span>'+esc(name)+'</span></div>'+(hasDate?'<p class="bet-detail-date"><time datetime="'+date.toISOString()+'">'+esc(date.toLocaleString(window.CrashI18n?.locale==='fr'?'fr-FR':'en-GB',{weekday:'long',day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'}))+'</time></p>':'')+'<div class="bet-detail-grid">'+card('WAGER',value(entry.wager,true))+card('X',multiplier!==null?esc(multiplier.toFixed(2)):'—')+card('PRIZE',value(entry.payout))+'</div><div class="bet-detail-extras">'+(entry.details?.length?entry.details:[{label:'RESULT',value:entry.payout>0?'Won':'Lost'}]).map(detail=>card(esc(detail.label),esc(detail.value))).join('')+'</div>';
   body.scrollTop=0;back.focus();
  }
  backToBets(){

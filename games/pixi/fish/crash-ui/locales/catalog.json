@@ -3203,10 +3203,10 @@
       ]
     },
     "road_rules_document": {
-      "source": "Guide the goat across the road one lane at a time. Every lane you clear raises the multiplier.\n\nPress **CASH OUT** at any lane to bank the current multiplier on your stake.\n\nSome lanes carry traffic. Step into one and the round ends with nothing.\n\nHigher difficulties put more hazards on the road and pay more for each lane cleared. The meter above the difficulty row shows the share of lanes with a hazard.",
-      "en": "Guide the goat across the road one lane at a time. Every lane you clear raises the multiplier.\n\nPress **CASH OUT** at any lane to bank the current multiplier on your stake.\n\nSome lanes carry traffic. Step into one and the round ends with nothing.\n\nHigher difficulties put more hazards on the road and pay more for each lane cleared. The meter above the difficulty row shows the share of lanes with a hazard.",
-      "fr": "Guidez la chèvre sur la route, une voie à la fois. Chaque voie franchie augmente le multiplicateur.\n\nAppuyez sur **ENCAISSER** à n’importe quelle voie pour encaisser votre mise au multiplicateur actuel.\n\nDes véhicules circulent sur certaines voies. Si vous en heurtez un, la manche se termine sans gain.\n\nLes difficultés élevées ajoutent des dangers et augmentent le gain par voie franchie. La jauge au-dessus des difficultés indique la proportion de voies dangereuses.",
-      "ht": "Ede kabrit la travèse wout la yon liy alafwa. Chak liy ou travèse ogmante miltiplikatè a.\n\nPeze **PRAN LAJAN** nan nenpòt liy pou pran gany miz ou a dapre miltiplikatè aktyèl la.\n\nGen liy kote machin ap pase. Si ou antre nan youn, tou a fini san ou pa genyen anyen.\n\nNivo ki pi difisil yo mete plis danje sou wout la epi yo peye plis pou chak liy ou travèse. Ba ki anlè nivo difikilte yo montre pousantaj liy ki gen danje.",
+      "source": "Guide the goat across the road one lane at a time. Every lane you clear raises the multiplier.\n\nPress **CASH OUT** at any lane to bank the current multiplier on your stake.\n\nSome lanes carry traffic. Step into one and the round ends with nothing.\n\nChoose Easy, Medium or Hard. Higher difficulty increases risk and reward. The risk meter shows the failure probability of the next step; in API mode it appears when the server supplies that probability.",
+      "en": "Guide the goat across the road one lane at a time. Every lane you clear raises the multiplier.\n\nPress **CASH OUT** at any lane to bank the current multiplier on your stake.\n\nSome lanes carry traffic. Step into one and the round ends with nothing.\n\nChoose Easy, Medium or Hard. Higher difficulty increases risk and reward. The risk meter shows the failure probability of the next step; in API mode it appears when the server supplies that probability.",
+      "fr": "Guidez la chèvre sur la route, une voie à la fois. Chaque voie franchie augmente le multiplicateur.\n\nAppuyez sur **ENCAISSER** à n’importe quelle voie pour encaisser votre mise au multiplicateur actuel.\n\nDes véhicules circulent sur certaines voies. Si vous en heurtez un, la manche se termine sans gain.\n\nChoisissez Facile, Moyen ou Difficile. Une difficulté plus élevée augmente le risque et le gain. La jauge indique la probabilité d’échec du prochain pas ; en mode API, elle apparaît lorsque le serveur fournit cette probabilité.",
+      "ht": "Ede kabrit la travèse wout la yon liy alafwa. Chak liy ou travèse ogmante miltiplikatè a.\n\nPeze **PRAN LAJAN** nan nenpòt liy pou pran gany miz ou a dapre miltiplikatè aktyèl la.\n\nGen liy kote machin ap pase. Si ou antre nan youn, tou a fini san ou pa genyen anyen.\n\nChwazi Fasil, Mwayen oswa Difisil. Plis nivo a difisil, se plis risk la ak rekonpans lan ogmante. Ba risk la montre pwobabilite pou pwochen pa a echwe; nan mòd API, li parèt lè sèvè a bay pwobabilite sa a.",
       "label": "How to play · Content",
       "format": "markdown",
       "group": "Rules",
@@ -3217,6 +3217,19 @@
         "text"
       ],
       "previewWindow": "rules"
+    },
+    "medium_d40496": {
+      "source": "Medium",
+      "en": "Medium",
+      "fr": "Moyen",
+      "ht": "Mwayen",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ]
     }
   }
 }

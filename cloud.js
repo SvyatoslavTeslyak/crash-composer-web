@@ -54,32 +54,49 @@ function changes(payload,baseline){
  });
 }
 function draftChanges(){return changes(currentDraft?.payload,{...basePayload,...published?.payload})}
+function sentVersions(){return versions.filter(v=>['submitted','approved'].includes(v.status)&&Number(v.revision)>Number(published?.revision||0)).sort((a,b)=>Number(b.revision)-Number(a.revision))}
+function editingBaseline(){return {...basePayload,...published?.payload,...sentVersions()[0]?.payload}}
+function newChanges(){return changes({...basePayload,...currentDraft?.payload},editingBaseline())}
+function returnedVersion(){return versions.find(v=>v.status==='rejected'&&Number(v.revision)===Number(currentDraft?.revision))}
 function renderProgress(){
  const review=isReviewer(),pending=versions.filter(v=>v.status==='submitted').length;
  const unsent=canSubmit()?1:0;
- const count=pending+unsent;
- button.innerHTML='<span>'+(review?'Changes':'Send changes')+'</span>'+(review&&count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'');
- button.setAttribute('aria-label',review?'Changes'+(count?', '+count+' to review':''):'Send changes');
- button.disabled=busy||(!review&&!canSubmit());
- button.title=review?'View saved changes':dirty()?'Save your open edits first':canSubmit()?'Send saved changes to Admin':'No new saved changes to send';
+ const count=review?pending+unsent:newChanges().reduce((sum,g)=>sum+g.rows.length,0);
+ button.innerHTML='<span>Changes</span>'+(count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'');
+ button.setAttribute('aria-label','Changes'+(count?', '+count+(review?' to review':' saved changes'):''));
+ button.disabled=busy;
+ button.title='View saved changes';
  button.hidden=!review&&!ComposerAuth.has('drafts.submit',game());
 }
 const showValue=v=>v===undefined?'Not set':v===null?'Default':v===true?'On':v===false?'Off':String(v);
-function settingLabel(section,path,labels){
- const parts=path.split('/').filter(Boolean),pretty=v=>String(v).replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
- if(section==='translations')return (labels?.translations?.[parts[0]]||parts[0])+' · '+({en:'English',fr:'French',ht:'Creole'}[parts[1]]||parts[1]);
- if(section==='design'){if(parts[0]==='selection')return 'Selected '+pretty(parts[1]);return [labels?.brands?.[parts[1]]||pretty(parts[1]),...parts.slice(2).filter(v=>!['roles','overrides'].includes(v)).map(pretty)].join(' · ')}
- if(section==='audio')return [parts[0]==='kit'?'Interface sounds':'Scene sounds',labels?.events?.[parts[0]]?.[parts[2]]||pretty(parts[2]),...parts.slice(3).map(v=>({volume_db:'Volume (dB)',pitch_jitter:'Pitch variation',takes:'Take',enabled:'Enabled'})[v]||pretty(v))].join(' · ');
- return path;
+function reviewGroup(section,row,payload,baseline){
+ const p=row.path.split('/').filter(Boolean),labels=baseline?._labels;
+ const pretty=v=>String(v||'Setting').replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[_-]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+ if(section==='translations')return {key:p[0],title:labels?.translations?.[p[0]]||p[0],category:'Languages',label:({en:'English',fr:'French',ht:'Creole'}[p[1]]||p[1])};
+ if(section==='audio')return {key:p.slice(0,3).join('/'),title:(p[0]==='kit'?'Interface sounds':'Scene sounds')+' · '+(labels?.events?.[p[0]]?.[p[2]]||pretty(p[2])),category:'Sound settings',label:p.slice(3).map(v=>({volume_db:'Volume (dB)',pitch_jitter:'Pitch variation',takes:'Take',enabled:'Enabled'})[v]||pretty(v)).join(' · ')};
+ if(p[0]==='selection')return {key:'selection',title:'Active appearance',category:'Selection',label:pretty(p[1])};
+ const brand=payload?.design?.brands?.[p[1]]||baseline?.design?.brands?.[p[1]],title=brand?.title||labels?.brands?.[p[1]]||pretty(p[1]);
+ const theme=p[2]==='themes',tail=p.slice(theme?4:2),themeId=p[3];
+ const category=({roles:'Colors',overrides:'Component styles',fonts:'Fonts'})[tail[0]]||'General';
+ return {key:p.slice(0,theme?4:2).join('/'),title:title+(theme?' · '+(brand?.themes?.[themeId]?.title||baseline?.design?.brands?.[p[1]]?.themes?.[themeId]?.title||pretty(themeId)):' · Brand'),category,label:tail.slice(['roles','overrides','fonts'].includes(tail[0])?1:0).map(pretty).join(' · ')||'Brand'};
+}
+function reviewValue(value){
+ const swatch=typeof value==='string'&&/^#[0-9a-f]{3,8}$/i.test(value)?'<span class="review-swatch" style="background:'+value+'" aria-hidden="true"></span>':'';
+ return swatch+esc(showValue(value));
 }
 function diffHTML(payload,baseline){
- const groups=changes(payload,baseline).filter(g=>g.rows.length);
- return groups.map(g=>'<section class="review-section"><h3>'+sectionNames[g.section]+' <small>'+g.rows.length+' changes</small></h3><table class="review-changes"><thead><tr><th>Changed setting</th><th>Before</th><th>After</th></tr></thead><tbody>'+g.rows.map(r=>'<tr><th>'+esc(settingLabel(g.section,r.path,baseline?._labels))+'</th><td>'+esc(showValue(r.before))+'</td><td>'+esc(showValue(r.after))+'</td></tr>').join('')+'</tbody></table></section>').join('')||'<p>No saved changes compared with the published version.</p>';
+ const sections=changes(payload,baseline).filter(g=>g.rows.length);
+ return sections.map(section=>{
+  const groups=new Map();
+  for(const row of section.rows){const info=reviewGroup(section.section,row,payload,baseline);if(!groups.has(info.key))groups.set(info.key,{title:info.title,count:0,categories:new Map()});const group=groups.get(info.key);group.count++;if(!group.categories.has(info.category))group.categories.set(info.category,[]);group.categories.get(info.category).push({...row,label:info.label})}
+  return '<section class="review-section"><h3>'+sectionNames[section.section]+' <small>'+section.rows.length+' changes</small></h3>'+[...groups].map(([key,g])=>'<details class="review-group" data-review-group="'+esc(section.section+'/'+key)+'" open><summary><span>'+esc(g.title)+'</span><span class="review-count">'+g.count+'</span></summary>'+[...g.categories].map(([category,rows])=>'<div class="review-category"><h4>'+esc(category)+'</h4><table class="review-changes"><thead><tr><th>Setting</th><th>Before</th><th>After</th></tr></thead><tbody>'+rows.map(r=>'<tr><th>'+esc(r.label)+'</th><td>'+reviewValue(r.before)+'</td><td>'+reviewValue(r.after)+'</td></tr>').join('')+'</tbody></table></div>').join('')+'</details>').join('')+'</section>';
+ }).join('')||'<p>No saved changes compared with the published version.</p>';
 }
+
 function message(text){const status=dialog.querySelector('[role=status]');if(status)status.textContent=text}
-function canSubmit(){return !loadError&&!!currentDraft&&!dirty()&&draftChanges().some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision))&&ComposerAuth.has('drafts.submit',game())}
+function canSubmit(){return !loadError&&!!currentDraft&&!dirty()&&newChanges().some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision))&&ComposerAuth.has('drafts.submit',game())}
 function canDiscard(){return ComposerAuth.member?.role==='admin'&&!!currentDraft&&(dirty()||draftChanges().some(g=>g.rows.length)||versions.some(v=>['submitted','approved'].includes(v.status)))}
-function busyControls(){for(const b of dialog.querySelectorAll('button:not([data-close])'))b.disabled=busy;const discard=$('#cloud-discard');if(discard)discard.disabled=busy||!canDiscard();renderProgress()}
+function busyControls(){const hint=$('#cloud-save-hint');if(hint)hint.textContent=dirty()?'Save your open edits to include them in this list.':!canSubmit()&&versions.some(v=>Number(v.revision)===Number(currentDraft?.revision))?returnedVersion()?'Returned by Admin. Make your corrections and save before sending again.':'':'';const submit=$('#cloud-submit');if(submit){submit.disabled=busy||!canSubmit();submit.title=dirty()?'Save your open edits first':canSubmit()?'Send saved changes to Admin':'No new saved changes to send'}for(const b of dialog.querySelectorAll('button:not([data-close]):not(#cloud-submit)'))b.disabled=busy;const ownDiscard=$('#cloud-discard-unsent');if(ownDiscard)ownDiscard.disabled=busy||(!dirty()&&!newChanges().some(g=>g.rows.length));const discard=$('#cloud-discard');if(discard)discard.disabled=busy||!canDiscard();renderProgress()}
 async function run(fn){if(busy)return;busy=true;busyControls();try{await fn()}catch(e){message(e.message);notify(e.message)}finally{busy=false;busyControls();renderProgress()}}
 async function refresh(){
  const request=++refreshId,id=game();if(!client||ComposerAuth.local)return;
@@ -94,27 +111,51 @@ async function refresh(){
  }else{versions=[];notices=[];currentDraft=null}
  render();
 }
+function jsonView(payload,title='View JSON'){return '<details class="review-json"><summary>'+esc(title)+'</summary><pre tabindex="0">'+esc(JSON.stringify(payload,null,2))+'</pre></details>'}
+const localRelease=()=>!window.ComposerHosting&&['127.0.0.1','localhost'].includes(location.hostname);
+function releaseActions(v){
+ const can=ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game());
+ return (can&&localRelease()?'<button class="wb-button primary" data-apply="'+esc(v.id)+'">Apply locally</button>':can?'<small class="review-local-note">Open local Composer to apply this version, then commit and push.</small>':'')+(v.status==='submitted'?' <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="false">Return</button>':'');
+}
 function render(){
- renderProgress();if(!isReviewer()){if(dialog.open)dialog.close();return}
- const pending=versions.filter(v=>v.status==='submitted');
+ renderProgress();if(!isReviewer()&&!ComposerAuth.has('drafts.submit',game())){if(dialog.open)dialog.close();return}
+ const collapsed=new Set([...dialog.querySelectorAll('[data-review-group]:not([open])')].map(el=>el.dataset.reviewGroup));
+ const sentExpanded=dialog.querySelector('.review-sent')?.open;
+ const sent=sentVersions(),newCount=newChanges().reduce((sum,g)=>sum+g.rows.length,0);
+ const pending=versions.filter(v=>['submitted','approved'].includes(v.status));
  dialog.innerHTML='<header><div><small>'+esc(ComposerTarget.entry().title)+'</small><h2 id="cloud-title">Changes</h2></div><button class="wb-button" data-close aria-label="Close">✕</button></header><button class="wb-button" id="cloud-refresh">Refresh</button>'+
  (ComposerAuth.member?.role==='admin'?' <button class="wb-button discard-changes" id="cloud-discard">Discard all changes</button>':'')+
- '<div id="draft-changes">'+diffHTML(currentDraft?.payload,{...basePayload,...published?.payload})+'</div>'+
- (pending.length?'<h3>Sent for approval</h3><div class="cloud-list">'+pending.map(v=>'<article><strong>'+esc(v.summary)+'</strong><p>'+esc(new Date(v.submitted_at).toLocaleString())+'</p><button class="wb-button" data-view="'+esc(v.id)+'">View sent changes</button> <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="true">Approve</button> <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="false">Return</button></article>').join('')+'</div>':'')+
- '<div id="cloud-diff"></div><p role="status" aria-live="polite"></p>';
+ (!isReviewer()?'<p class="review-intro">Review your saved changes, then send them to Admin. This game draft is shared with your team.</p>':'')+
+ '<div id="draft-changes">'+(isReviewer()?diffHTML(currentDraft?.payload,{...basePayload,...published?.payload}):
+ (newCount?'<h3 class="review-new-title">'+(returnedVersion()?'Returned for changes':'New changes')+' <span class="review-count">'+newCount+'</span></h3>'+diffHTML({...basePayload,...currentDraft?.payload},editingBaseline()):'<div class="review-empty"><strong>'+(sent.length?'All changes sent':'No new changes')+'</strong><p>'+(sent.length?'Your changes are with Admin. You can keep editing; only new edits will appear here.':'Saved edits will appear here when you change texts, design or sounds.')+'</p></div>'))+'</div>'+
+ (isReviewer()&&pending.length?'<h3>Sent versions</h3><div class="cloud-list">'+pending.map(v=>'<article><strong>'+esc(v.summary)+'</strong><p>'+esc(new Date(v.submitted_at).toLocaleString())+'</p><button class="wb-button" data-view="'+esc(v.id)+'">View sent changes</button> '+releaseActions(v)+jsonView({schema_version:1,game_id:v.game_id,version_id:v.id,revision:v.revision,payload:v.payload})+'</article>').join('')+'</div>':'')+
+ (!isReviewer()?'<div class="review-send"><p id="cloud-save-hint"></p><button class="wb-button discard-changes" id="cloud-discard-unsent">Discard unsent changes</button><button class="wb-button primary" id="cloud-submit"'+(!newCount?' hidden':'')+'>Send changes</button></div>'+ (sent.length?'<details class="review-sent"><summary><span>Sent to Admin</span><span class="review-count">'+sent.length+'</span></summary><p>Already sent. These changes are not included in your red counter.</p>'+sent.map(v=>'<details class="review-sent-version"><summary>'+esc(new Date(v.submitted_at).toLocaleString())+'</summary>'+diffHTML(v.payload,{...basePayload,...published?.payload})+jsonView(v.payload)+'</details>').join('')+'</details>':''):'')+
+ jsonView(currentDraft?.payload||{},'Draft JSON')+'<div id="cloud-diff"></div><p role="status" aria-live="polite"></p>';
+ if(sentExpanded&&dialog.querySelector('.review-sent'))dialog.querySelector('.review-sent').open=true;
+ for(const group of dialog.querySelectorAll('[data-review-group]'))if(collapsed.has(group.dataset.reviewGroup))group.open=false;
  dialog.querySelector('[data-close]').onclick=()=>dialog.close();$('#cloud-refresh').onclick=()=>run(refresh);
  $('#cloud-discard')?.addEventListener('click',()=>{if(!canDiscard()||busy)return;const id=game(),revision=currentDraft.revision;if(!confirm('Discard all unpublished changes for '+ComposerTarget.entry().title+'? This includes shared draft edits, open edits in this window, and sent or approved versions. The published game stays unchanged.'))return;run(async()=>{await rpc('composer_discard_changes',{p_game:id,p_revision:revision});location.reload()})});
  for(const b of dialog.querySelectorAll('[data-review]'))b.onclick=()=>run(async()=>{const approve=b.dataset.approve==='true';await rpc('composer_review',{p_version:b.dataset.review,p_approve:approve,p_note:''});await refresh();message(approve?'Approved.':'Returned.');notify(approve?'Changes approved':'Changes returned')});
- for(const b of dialog.querySelectorAll('[data-view]'))b.onclick=()=>run(async()=>{const v=versions.find(v=>v.id===b.dataset.view);const rows=check(await client.from('composer_versions').select('payload').eq('game_id',v.game_id).eq('status','published').lt('revision',v.revision).order('revision',{ascending:false}).limit(1));const base=await ComposerDraftEditors.baseline(v.payload,v.game_id);$('#cloud-diff').innerHTML='<h3>Sent changes</h3>'+diffHTML(v.payload,{...base,...rows[0]?.payload});$('#cloud-diff').scrollIntoView({block:'start',behavior:'smooth'})});
+ for(const b of dialog.querySelectorAll('[data-view]'))b.onclick=()=>run(async()=>{const v=versions.find(v=>v.id===b.dataset.view);const rows=check(await client.from('composer_versions').select('payload').eq('game_id',v.game_id).eq('status','published').lt('revision',v.revision).order('revision',{ascending:false}).limit(1));const base=await ComposerDraftEditors.baseline(v.payload,v.game_id);$('#cloud-diff').innerHTML='<h3>Sent changes</h3>'+diffHTML(v.payload,{...base,...rows[0]?.payload})+jsonView(v.payload);$('#cloud-diff').scrollIntoView({block:'start',behavior:'smooth'})});
+ $('#cloud-discard-unsent')?.addEventListener('click',()=>{
+  if(busy)return;
+  if(!confirm('Discard your unsent edits for '+ComposerTarget.entry().title+'? Your tracked edits and unsaved edits in this window will be reset. Sent versions and other people’s changes will stay. Older edits without authorship history will be preserved.'))return;
+  run(async()=>{if(!newChanges().some(g=>g.rows.length)&&dirty()){location.reload();return}await rpc('composer_discard_unsent',{p_game:game(),p_revision:currentDraft.revision});location.reload()});
+ });
+ for(const b of dialog.querySelectorAll('[data-apply]'))b.onclick=()=>{
+  if(!confirm('Apply this sent version to the local game configuration? Review the file, then commit and push to publish.'))return;
+  run(async()=>{const auth=check(await client.auth.getSession());const response=await fetch('release/apply',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({version_id:b.dataset.apply})});const data=await response.json();if(!response.ok)throw Error(data.message||'Could not apply configuration');await refresh();message('Applied locally: '+data.path+'. Review, commit and push to publish.');notify('Configuration ready to commit')});
+ };
+ $('#cloud-submit')?.addEventListener('click',sendChanges);
  busyControls();
 }
 function open(){render();if(!dialog.open)dialog.showModal();run(refresh)}
-button.onclick=()=>{
- if(isReviewer()){open();return}
+button.onclick=open;
+function sendChanges(){
  run(async()=>{
   if(!canSubmit())throw Error('Save your changes first.');
   const id=game(),revision=currentDraft.revision;
-  const sections=draftChanges().filter(g=>g.rows.length).map(g=>sectionNames[g.section]).join(', ');
+  const sections=newChanges().filter(g=>g.rows.length).map(g=>sectionNames[g.section]).join(', ');
   await rpc('composer_submit',{p_game:id,p_revision:revision,p_summary:ComposerTarget.entry().title+' · '+sections});
   await refresh();notify('Changes sent to Admin');
  });
@@ -125,6 +166,6 @@ window.addEventListener('composer-target',()=>{++refreshId;currentDraft=null;pub
 window.addEventListener('composer-draft-saved',schedule);
 window.addEventListener('focus',()=>{if(!dialog.open)schedule()});
 let lastDirty=false;setInterval(()=>{const d=dirty();if(d!==lastDirty){lastDirty=d;renderProgress();busyControls()}},500);
-setInterval(()=>{if(isReviewer()&&!busy&&!dialog.contains(document.activeElement))schedule()},15000);
+setInterval(()=>{if((isReviewer()||ComposerAuth.has('drafts.submit',game()))&&!busy&&!dialog.contains(document.activeElement))schedule()},15000);
 if(cloudMode)run(async()=>{try{await refresh();window.dispatchEvent(new Event('composer-storage'))}catch(e){loadError=e.message;renderProgress();throw e}});
 if(ComposerAuth.local)window.dispatchEvent(new Event('composer-storage'));

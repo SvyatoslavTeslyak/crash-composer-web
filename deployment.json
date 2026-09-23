@@ -1,19 +1,11 @@
 {
   "backend": "supabase",
   "fileEditorReady": false,
-  "files": 2509,
-  "bytes": 171869219,
-  "runnerApi": "named-levels-v2",
-  "firstClick": "checkout-rolls-step-one",
-  "traffic": "accelerate-requested-crossing",
-  "firstClickFraming": "stable-risk-slot-preserve-start",
-  "playerTransport": "direct-qa",
-  "hopDurationMs": 160,
-  "roundStartAudio": "demo-and-api",
-  "barrier": "close-only-after-confirmed-safe-step",
   "cloudDraftSections": [
     "translations",
     "design",
     "audio"
-  ]
+  ],
+  "files": 2511,
+  "bytes": 172158912
 }
