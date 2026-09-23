@@ -118,6 +118,10 @@ function setupAccountMenu(){
  const avatar=document.querySelector('#workspace-avatar'),menu=document.querySelector('#workspace-account-menu'),logout=document.querySelector('#workspace-logout'),errorBox=document.querySelector('#workspace-account-error');
  const user=state.session?.user,metadata=user?.user_metadata||{};
  const name=[metadata.full_name,metadata.name,user?.email].find(value=>typeof value==='string'&&value.trim())?.trim()||'User';
+ // Stable per account, including after a display-name change or on another device.
+ const identity=String(user?.id||user?.email?.trim().toLowerCase()||name);
+ let colourHash=2166136261;for(const char of identity)colourHash=Math.imul(colourHash^char.codePointAt(0),16777619);
+ avatar.style.setProperty('--avatar-hue',String((colourHash>>>0)%360));
  avatar.textContent=Array.from(name)[0].toLocaleUpperCase();avatar.setAttribute('aria-label','Account menu: '+name);avatar.title=name;
  document.querySelector('#workspace-account-name').textContent=user?.email||name;
  document.querySelector('#workspace-password')?.addEventListener('click',()=>location.assign('login.html?mode=password'));

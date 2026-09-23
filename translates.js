@@ -16,7 +16,7 @@ function usageMarkup(entry){
  if(entry.usage?.includes('unused'))return '<div class="translation-usage"><span>Unused · Not rendered</span></div><p class="translation-usage-note">'+esc(entry.unusedReason)+'</p>';
  const usage=entry.usage||[],attribute=usage.filter(x=>!['text','scene'].includes(x)),onlyAttribute=attribute.length&&!usage.includes('text');
  const description=onlyAttribute?'Accessibility · '+attribute.join(', '):attribute.length?'Text + accessibility':entry.group==='Scene'?'Scene text':'UI text';
- return '<details class="translation-meta"><summary>Text details</summary><div class="translation-usage"><span>'+esc(description)+'</span>'+(entry.previewWindow?'<span>Window · '+esc(windowNames[entry.previewWindow]||entry.previewWindow)+'</span>':'')+(entry.presets?'<span>Preset · '+entry.presets.map(p=>p==='standard'?'Standard':'Tabbed shell').join(', ')+'</span>':'')+(entry.previewState?'<span>State · '+(entry.previewState==='API difficulty'?'API difficulty':entry.previewState==='ready'?'Ready':entry.previewState==='win-transfer'?'Win transfer':entry.previewState==='notification'?'Notification':'Round-dependent')+'</span>':'')+'</div>'+(onlyAttribute?'<p class="translation-usage-note">Not a visible caption. This label describes a control to screen readers; the control is outlined in the preview.</p>':'')+'</details>';
+ return '<details class="translation-meta"><summary>Text details</summary><div class="translation-usage"><span>'+esc(description)+'</span>'+(entry.previewWindow?'<span>Window · '+esc(windowNames[entry.previewWindow]||entry.previewWindow)+'</span>':'')+(entry.presets?'<span>Preset · '+entry.presets.map(p=>p==='standard'?'Standard':p==='menu-drawer-v1'?'Menu tabs':'Bottom tabs').join(', ')+'</span>':'')+(entry.previewState?'<span>State · '+(entry.previewState==='API difficulty'?'API difficulty':entry.previewState==='ready'?'Ready':entry.previewState==='win-transfer'?'Win transfer':entry.previewState==='notification'?'Notification':'Round-dependent')+'</span>':'')+'</div>'+(onlyAttribute?'<p class="translation-usage-note">Not a visible caption. This label describes a control to screen readers; the control is outlined in the preview.</p>':'')+'</details>';
 }
 function highlightText(){
  const api=frame.contentWindow?.CrashI18n,entry=current()?.catalog.entries[activeKey];
@@ -70,7 +70,7 @@ function ensureHistoryPreview(){
  ui.update(preview.latest);
 }
 let stateInspection=null;
-function currentPreset(){const ui=frame.contentWindow?.CrashUI?.instance;return ui?.state?.game===target?(ui.tabbed?'tabbed-shell-v1':'standard'):$('#presentation-preset').value==='tabbed-shell-v1'?'tabbed-shell-v1':'standard'}
+function currentPreset(){const ui=frame.contentWindow?.CrashUI?.instance;if(ui?.config?.presentationPreset==='menu-drawer-v1'||$('#presentation-preset').value==='menu-drawer-v1')return 'menu-drawer-v1';return ui?.state?.game===target?(ui.tabbed?'tabbed-shell-v1':'standard'):$('#presentation-preset').value==='tabbed-shell-v1'?'tabbed-shell-v1':'standard'}
 function stopStateInspection(){
  const inspection=stateInspection;if(!inspection)return;stateInspection=null;
  const {ui,update,send,latest}=inspection;ui.update=update;
@@ -189,7 +189,7 @@ function typeNavigation(){
 function rows(){const d=current();if(!d)return;typeNavigation();
  const entries=available().filter(([key,e])=>areaOf(e)===area&&(category==='all'||e.group===category)&&matchesType(e,textType)&&(!missing||!(d.overrides[key]?.[language.value]??e[language.value]))&&[key,e.source,d.overrides[key]?.[language.value]??e[language.value]??''].some(v=>v.toLowerCase().includes(query.toLowerCase())));
  const groups=new Map();for(const row of entries){const group=row[1].group;if(!groups.has(group))groups.set(group,[]);groups.get(group).push(row)}
- const title=category!=='all'?category:area==='scene'?'Scene texts':'UI texts',description=area==='scene'?'Hints, pop-ups and messages drawn inside the game scene.':'Texts used by this game’s '+(currentPreset()==='tabbed-shell-v1'?'Tabbed shell':'Standard')+' preset.';
+ const title=category!=='all'?category:area==='scene'?'Scene texts':'UI texts',description=area==='scene'?'Hints, pop-ups and messages drawn inside the game scene.':'Texts used by this game’s '+(currentPreset()==='menu-drawer-v1'?'Menu tabs':currentPreset()==='tabbed-shell-v1'?'Bottom tabs':'Standard')+' preset.';
  report.innerHTML=importMarkup()+'<div class="translations-heading"><div><span class="translation-eyebrow">TEXTS / '+(area==='scene'?'SCENE':'INTERFACE')+'</span><h2>'+title+'</h2><p>'+description+'</p></div><span class="translation-total">'+entries.length+' texts</span></div>'+
  (!entries.length?'<div class="translation-empty"><h3>'+(query||missing||textType!=='all'||category!=='all'?'No matching texts':'No scene texts for this game')+'</h3><p>'+(query||missing||textType!=='all'||category!=='all'?'Try another text type, section or search.':'This game uses the UI for its messages. Decorative text painted into artwork is not a text label.')+'</p></div>':'')+
  [...groups].map(([group,list])=>'<section class="translation-group"><header class="translation-group-heading"><h3>'+esc(group)+'</h3><span>'+list.length+'</span></header><div class="translation-group-rows">'+list.map(([key,e])=>{

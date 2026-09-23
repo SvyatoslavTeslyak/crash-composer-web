@@ -1,26 +1,26 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<meta name="composer-version" content="ux-20260923.1-f035a3123988">
+<meta name="composer-version" content="ux-20260923.1-e52e25824bc4">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Crash Composer</title>
-<script src="cloud-config.js?v=1790195347"></script>
-<script src="hosted.js?v=ux-20260923.1-f035a3123988"></script>
-<script type="module" src="roles.js?v=1790195347"></script>
-<script type="module" src="lotomobil.js?v=1790195347"></script>
-<script src="session.js?v=1790195347"></script>
-<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=1790195347">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1790195347">
-<link rel="stylesheet" href="crash-ui/tokens.css?v=1790195347">
-<link rel="stylesheet" href="inspector.css?v=1790195347">
-<link rel="stylesheet" href="workbench.css?v=1790195347">
-<link rel="stylesheet" href="translates.css?v=1790195347">
-<link rel="stylesheet" href="share.css?v=1790195347">
-<script src="crash-ui/tokens.js?v=1790195347"></script>
-<script src="icons.js?v=1790195347"></script>
-<script src="workbench.js?v=1790195347"></script>
-<link rel="stylesheet" href="math.css?v=1790195347">
-<link rel="stylesheet" href="sound.css?v=1790195347">
+<script src="cloud-config.js?v=1790207568"></script>
+<script src="hosted.js?v=1790207569015671805"></script>
+<script type="module" src="roles.js?v=1790207568"></script>
+<script type="module" src="lotomobil.js?v=1790207568"></script>
+<script src="session.js?v=1790207568"></script>
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=1790207568">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1790207568">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790207568">
+<link rel="stylesheet" href="inspector.css?v=1790207568">
+<link rel="stylesheet" href="workbench.css?v=1790207568">
+<link rel="stylesheet" href="translates.css?v=1790207568">
+<link rel="stylesheet" href="share.css?v=1790207568">
+<script src="crash-ui/tokens.js?v=1790207568"></script>
+<script src="icons.js?v=1790207568"></script>
+<script src="workbench.js?v=1790207568"></script>
+<link rel="stylesheet" href="math.css?v=1790207568">
+<link rel="stylesheet" href="sound.css?v=1790207568">
 <style>
 #lotomobil-section p{margin:0;color:var(--inspector-muted);font-size:var(--inspector-type-base);line-height:1.5}#lotomobil-section .wb-button{padding:var(--inspector-type-xs)}.lotomobil-mode{font-size:var(--inspector-type-base);color:var(--inspector-accent)}.share-dialog.lotomobil-dialog{width:min(var(--inspector-size-420),calc(100vw - var(--space-32)));padding:var(--type-20);border-radius:var(--space-16)}.lotomobil-dialog h2{font-size:var(--type-20);margin:var(--space-4) 0 var(--inspector-type-base)}.lotomobil-dialog>p{margin:0 0 var(--space-16);font-size:var(--inspector-type-md)}.lotomobil-dialog form{display:grid;gap:var(--inspector-type-base)}.lotomobil-dialog label{margin:0;gap:var(--space-6);font-size:var(--inspector-type-md)}.lotomobil-dialog input{padding:var(--inspector-size-9) var(--inspector-type-xs)}.lotomobil-dialog #lotomobil-error{margin:var(--inspector-type-base) 0 0}.lotomobil-dialog #lotomobil-error:empty{display:none}.lotomobil-dialog [hidden]{display:none!important}.lotomobil-dialog button[type=submit]:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}.lotomobil-dialog button.is-loading{gap:var(--space-8)}.lotomobil-dialog button.is-loading::before{content:"";width:var(--type-14);height:var(--type-14);border:var(--stroke-2) solid currentColor;border-right-color:transparent;border-radius:50%;animation:lotomobil-spin var(--inspector-loading-duration) linear infinite}@keyframes lotomobil-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.lotomobil-dialog button.is-loading::before{animation:none}}
 
@@ -34,6 +34,8 @@ h1 span{min-width:0}h1 small{display:block;font-size:var(--inspector-type-xs);fo
 .toolbar,#side .wb-section,#look-controls .wb-section,#library-controls .wb-section{display:grid;gap:var(--space-8);padding:var(--space-12) 0 var(--space-16)}
 .toolbar>small,.wb-section>small{color:var(--inspector-muted);font-size:var(--inspector-type-xs);margin-top:calc(-1 * var(--space-4))}
 .toolbar>strong,#side .wb-section>h2,#look-controls .wb-section>h2,#library-controls .wb-section>h2{font-size:var(--inspector-type-xs);font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--inspector-muted);margin:0 0 var(--space-4)}
+.preview-navigation.property{grid-template-columns:minmax(0,1fr);gap:var(--space-8)}
+.preview-navigation select{width:100%;min-width:0}
 .property{display:grid;grid-template-columns:var(--space-48) minmax(0,1fr);align-items:center;gap:var(--space-8);color:var(--inspector-muted)}
 button,input,select{font:inherit;color:var(--inspector-text);background:var(--inspector-surface);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card);padding:var(--space-4) var(--space-8);min-height:var(--inspector-control);min-width:0;max-width:100%}
 select{appearance:none;-webkit-appearance:none;padding-right:var(--space-40);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%23c7d0dc' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right var(--space-12) center;background-size:var(--space-12) var(--space-12)}
@@ -243,8 +245,9 @@ aside#side{grid-column:2;grid-row:2}
 .rail-tooltip{position:absolute;left:calc(100% + var(--inspector-type-base));top:50%;transform:translateY(-50%);padding:var(--space-8) var(--inspector-type-base);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--space-8);background:var(--inspector-surface);color:var(--inspector-text);font-size:var(--inspector-type-md);line-height:1.4;white-space:nowrap;box-shadow:0 var(--space-4) var(--space-16) var(--inspector-overlay-shadow);visibility:hidden;opacity:0;pointer-events:none}
 .workspace-rail button:hover .rail-tooltip,.workspace-rail button:focus-visible .rail-tooltip{visibility:visible;opacity:1}
 .workspace-account{margin-top:auto;position:relative;flex:none;padding-top:var(--space-16)}
-#workspace-avatar{display:grid;place-items:center;width:var(--space-40);height:var(--space-40);min-height:var(--space-40);padding:0;border-radius:50%;background:var(--inspector-surface-selected);color:var(--inspector-accent);border:var(--stroke-1) solid var(--inspector-border);font-size:var(--space-16);font-weight:600}
-#workspace-avatar:hover,#workspace-avatar[aria-expanded=true]{border-color:var(--inspector-accent);background:var(--inspector-surface-hover)}
+#workspace-avatar{display:grid;place-items:center;width:var(--tap-min);height:var(--tap-min);min-height:var(--tap-min);padding:0;border-radius:50%;--avatar-hue:200;background:var(--avatar-bg);color:var(--avatar-fg);border:var(--stroke-1) solid var(--avatar-border);font-size:var(--space-16);font-weight:600}
+#workspace-avatar:hover,#workspace-avatar[aria-expanded=true]{border-color:var(--avatar-fg);background:var(--avatar-hover)}
+#workspace-avatar:focus-visible{outline:var(--stroke-2) solid var(--avatar-fg);outline-offset:var(--stroke-2)}
 #workspace-account-menu{position:absolute;bottom:calc(100% + var(--space-8));left:0;width:var(--web-dev-top-phone);padding:var(--space-8);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-type-base);background:var(--inspector-bg);box-shadow:0 var(--space-8) var(--space-32) var(--inspector-overlay-shadow)}
 #workspace-account-name{display:block;padding:var(--space-8);color:var(--inspector-muted);font-size:var(--inspector-type-sm);overflow-wrap:anywhere}
 #workspace-people,#workspace-roles,#workspace-password,#workspace-logout{display:flex;align-items:center;gap:var(--inspector-type-xs);width:100%;min-height:var(--space-40);padding:var(--space-8);border:0;background:transparent;text-align:left}
@@ -254,9 +257,9 @@ aside#side{grid-column:2;grid-row:2}
 .workspace-rail .workspace-dirty::after{content:"";position:absolute;top:var(--space-6);right:var(--space-6);width:var(--space-6);height:var(--space-6);border-radius:50%;background:var(--inspector-warning)}
 @media(max-width:640px){body{grid-template-columns:var(--radius-64) var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr)}}
 </style>
-<link rel="stylesheet" href="ux.css?v=1790195347">
+<link rel="stylesheet" href="ux.css?v=1790207568">
 <header class="appbar">
-<h1><img src="favicon-256.png?v=1790195347" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 23 Sep 2026, 18:00</small></span></h1>
+<h1><img src="favicon-256.png?v=1790207568" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 24 Sep 2026, 00:45</small></span></h1>
 <div id="picker" class="picker"></div><select id="language" aria-label="Preview language"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
 
 <span class="grow"></span>
@@ -268,7 +271,7 @@ aside#side{grid-column:2;grid-row:2}
 <button class="wb-button" id="layout-tab" type="button" aria-label="Game" aria-pressed="true"><i data-icon="game"></i><span class="rail-tooltip" aria-hidden="true">Game</span></button>
 <button class="wb-button" id="look-tab" type="button" aria-label="Brands" aria-pressed="false"><i data-icon="brands"></i><span class="rail-tooltip" aria-hidden="true">Brands</span></button>
 <button class="wb-button" id="library-tab" type="button" aria-label="Library" aria-pressed="false"><i data-icon="library"></i><span class="rail-tooltip" aria-hidden="true">Library</span></button>
-<button class="wb-button" id="math-tab" type="button" aria-label="Math" aria-pressed="false"><i data-icon="math"></i><span class="rail-tooltip" aria-hidden="true">Math</span></button>
+<button class="wb-button" id="math-tab" hidden disabled type="button" aria-label="Math" aria-pressed="false"><i data-icon="math"></i><span class="rail-tooltip" aria-hidden="true">Math</span></button>
 <button class="wb-button" id="sound-tab" type="button" aria-label="Sound effects" aria-pressed="false"><i data-icon="sound"></i><span class="rail-tooltip" aria-hidden="true">Sound effects</span></button>
 <button class="wb-button" id="translates-tab" type="button" aria-label="Translates" aria-pressed="false"><i data-icon="translates"></i><span class="rail-tooltip" aria-hidden="true">Translates</span></button>
 <div class="workspace-account" id="workspace-account">
@@ -303,8 +306,9 @@ aside#side{grid-column:2;grid-row:2}
 <span id="size"></span>
 </div>
 <div class="toolbar" aria-label="Look" hidden><strong>Look</strong><div id="look"></div><small>Brands and seasonal themes restyle the panels and controls only; the game scene is the game's.</small></div>
-<div class="toolbar" aria-label="Game configuration"><strong>Temporary preview controls</strong><small>Only affects this preview. Not included in Send changes or published configuration.</small>
-<label class="property">Header &amp; tabs <select id="presentation-preset"><option value="standard">Game default</option><option value="tabbed-shell-v1">Tabbed shell · v1</option></select></label>
+<div class="toolbar" aria-label="Game configuration"><strong>Preview controls</strong>
+<div class="property preview-navigation"><span id="navigation-label">Navigation</span><div id="navigation-presets" class="look-row" role="group" aria-labelledby="navigation-label" aria-describedby="presentation-note"></div><select id="presentation-preset" hidden aria-label="Navigation"><option value="standard">Game default</option><option value="tabbed-shell-v1">Bottom tabs</option><option value="menu-drawer-v1">Menu tabs</option></select></div>
+<small id="presentation-note" role="status" hidden></small>
 <label class="property" data-placeholder-only>Bet panel <select id="control-variant"><option value="standard">Standard</option><option value="tabbed">Two columns · Goat Road</option><option value="three-position">Three positions · Catch Clash</option></select></label>
 <em class="subhead" data-visibility-heading>Panels the player sees</em>
 <label class="switch visibility-option" hidden><input type="checkbox" data-flag="multiplier_ladder" checked>Multiplier ladder</label>
@@ -389,6 +393,7 @@ syncPicker();
 // Each workspace owns its sidebar controls and main view; the preview frame belongs to Layout.
 const workspaces={layout:['#layout-controls','#fit','#frame'],look:['#look-controls','#fit','#frame'],library:['#library-controls','#library-report'],math:['#math-controls','#math-report'],sound:['#sound-controls','#sound-report'],translates:['#translates-controls','#translates-report','#fit','#frame','#translation-live-tools']};
 for(const mode of Object.keys(workspaces))document.querySelector('#'+mode+'-tab').onclick=()=>{
+ if(document.querySelector('#'+mode+'-tab').disabled)return;
  // Nodes shared by two workspaces (the stage belongs to Layout and Look) stay visible when either is active.
  for(const nodes of Object.values(workspaces))for(const node of nodes)document.querySelector(node).hidden=true;
  for(const node of workspaces[mode])document.querySelector(node).hidden=false;
@@ -398,18 +403,18 @@ for(const mode of Object.keys(workspaces))document.querySelector('#'+mode+'-tab'
  window.dispatchEvent(new CustomEvent('composer-workspace',{detail:mode}));
 };
 </script>
-<script src="draft-editors.js?v=1790195347"></script>
-<script src="target.js?v=1790195347"></script>
-<script src="translation-table.js?v=1790195347"></script>
-<script src="live.js?v=1790195347"></script>
-<script src="look.js?v=1790195347"></script>
-<script src="library.js?v=1790195347"></script>
-<script type="module" src="math.js?v=1790195347"></script>
-<script src="sound.js?v=1790195347"></script>
+<script src="draft-editors.js?v=1790207568"></script>
+<script src="target.js?v=1790207568"></script>
+<script src="translation-table.js?v=1790207568"></script>
+<script src="live.js?v=1790207568"></script>
+<script src="look.js?v=1790207568"></script>
+<script src="library.js?v=1790207568"></script>
+<script type="module" src="math.js?v=1790207568"></script>
+<script src="sound.js?v=1790207568"></script>
 
-<script type="module" src="cloud.js?v=1790195347"></script>
-<script src="translates.js?v=1790195347"></script>
-<script src="share.js?v=1790195347"></script>
+<script type="module" src="cloud.js?v=1790207568"></script>
+<script src="translates.js?v=1790207568"></script>
+<script src="share.js?v=1790207568"></script>
 </html>
 
-<script src="ux.js?v=1790195347"></script>
+<script src="ux.js?v=1790207568"></script>

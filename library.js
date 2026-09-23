@@ -53,9 +53,10 @@ function flushFaces(){
 const head=(title,about,aside='')=>`<div class="lib-head"><div><h2>${title}</h2><p>${about}</p></div>${aside}</div>`;
 const card=(title,body,sub='')=>`<article class="lib-card">${title?`<h3>${title}</h3>`:''}${sub}${body}</article>`;
 const ORIGIN={google:'Google Fonts',kit:'Kit artwork',uploaded:'Uploaded'};
+const TYPE_ROLES={12:'Secondary labels · compact mobile tables',14:'Compact tables · navigation · supporting text',16:'Body · settings · controls · compact values',20:'Emphasized values · profile · balance',24:'Panel and dialog headings',32:'Prominent headings · compact win totals',48:'Win totals',64:'Large totals · spacious layouts',72:'Largest totals · spacious layouts'};
 function typographySection(){
  faces=[];
- const t=CrashTokens,steps=Object.keys(t).filter(k=>/^TYPE_\d+$/.test(k)).map(k=>t[k]).sort((a,b)=>a-b);
+ const t=CrashTokens,steps=Object.keys(t).filter(k=>/^TYPE_\d+$/.test(k)&&Number(k.slice(5))===t[k]).map(k=>t[k]).sort((a,b)=>a-b);
  const brandFonts=catalog.brands[brand].fonts;
  const applied={};
  const cards=['body','numbers'].map(role=>{
@@ -93,7 +94,8 @@ function typographySection(){
 </select>${remove}</span></div>`;
  }).join('');
  flushFaces();
- return head('Typography','Choose fonts for the selected game and brand. Existing resources are below; library management is a separate section.')
+ return head('Typography','Choose body and number fonts. The size scale is shared by every brand and both navigation presets.')
++card('UI type scale',`<p class="lib-sub">${steps.map(px=>px+' px').join(' · ')}</p><details><summary>Size roles & responsive rules</summary><table class="lib-table"><thead><tr><th>Size</th><th>Use</th></tr></thead><tbody>${steps.map(px=>`<tr><th scope="row">${px} px</th><td>${TYPE_ROLES[px]||''}</td></tr>`).join('')}</tbody></table><p class="lib-note">Use the same size for the same content in both presets. On smaller screens, switch between scale steps; keep text at least 12 px. All highlighted values in a card group use the same size.</p></details>`)
 +card('Font library',`<div class="font-list">${rows||'<p class="lib-note">Nothing matches.</p>'}</div>`,`<p class="lib-sub">Body is every label; numbers is amounts, multipliers and the action totals. Use as body, Use as numbers and Use for both write to ${esc(catalog.brands[brand].title)}. A family a brand holds cannot be removed.</p>`)
 +'<details class="asset-management"><summary>Manage library · add fonts</summary>'+card('Add a font',`<div class="add-font">
  <div class="add-way"><b>From Google Fonts</b><p>Open the family on fonts.google.com and paste the link. Its latin cut and licence land in the kit.</p>
@@ -129,7 +131,7 @@ function scaleBlocks(){
  const bar=(k,v,style)=>`<div class="scale-row"><span class="scale-name">${esc(nice(k))}</span><span class="scale-draw">${style}</span><span class="scale-value">${v}</span></div>`;
  const space=pick(/^SPACE_\d/).map(k=>bar(k,t[k]+'px',`<i style="width:${t[k]}px;height:var(--space-16);background:var(--inspector-accent)"></i>`)).join('');
  const radius=pick(/^RADIUS_\d/).concat('RADIUS_PILL').map(k=>bar(k,t[k]+'px',`<i style="width:var(--space-48);height:var(--space-32);border-radius:${t[k]}px;background:var(--inspector-surface-hover)"></i>`)).join('');
- const type=pick(/^TYPE_\d/).map(k=>bar(k,t[k]+'px',`<i class="scale-type" style="font-size:${t[k]}px">Ag 123</i>`)).join('');
+ const type=pick(/^TYPE_\d/).filter(k=>Number(k.slice(5))===t[k]).map(k=>bar(k,t[k]+'px',`<i class="scale-type" style="font-size:${t[k]}px">Ag 123</i>`)).join('');
  const stroke=pick(/^STROKE_\d/).map(k=>bar(k,t[k]+'px',`<i style="width:var(--space-48);height:${t[k]}px;background:var(--inspector-text)"></i>`)).join('');
  const alpha=Object.keys(t).filter(k=>/^ALPHA_/.test(k)).map(k=>bar(k,t[k],`<i style="width:var(--space-48);height:var(--space-24);background:color-mix(in srgb,var(--inspector-text) ${t[k]*100}%,transparent)"></i>`)).join('');
  const elevation=['panel','sheet','modal'].map(n=>bar('elevation '+n,t['WEB_ELEVATION_'+n.toUpperCase()+'_Y']+'px / '+t['WEB_ELEVATION_'+n.toUpperCase()+'_BLUR']+'px',`<i style="width:var(--space-48);height:var(--space-32);border-radius:var(--inspector-radius);background:var(--inspector-card);box-shadow:var(--elevation-${n})"></i>`)).join('');

@@ -40,16 +40,16 @@
     },
     {
       "id": "win",
-      "label": "Win popup",
-      "trigger": "The win popup opens.",
+      "label": "Win popup \u00b7 paper pop",
+      "trigger": "The win popup opens with confetti.",
       "volume_db": -7.13,
       "pitch_jitter": 0,
       "generator": "ElevenLabs eleven_text_to_sound_v2",
-      "flow_url": "https://elevenlabs.io/app/flows/6jxGdrR9AP3ZcRaHjT42",
-      "prompt": "A small handful of coins dropping into a metal cash tray, bright satisfying brief jingling clinks settling, close mic, under one second, no voices or music.",
+      "flow_url": "https://elevenlabs.io/app/flows/QZDp8zzXUhtra4FrhbF2",
+      "prompt": "One natural handheld paper party popper. A satisfying rounded cork-like pop immediately followed by a soft short puff of air and delicate falling paper rustle. Warm, playful and dry, close microphone. Total duration 0.6 seconds. No firework crackling, no explosion boom, no metallic sounds, no coins, no bells, no music or voices.",
       "takes": [
         {
-          "file": "web/assets/audio/win.ogg",
+          "file": "web/assets/audio/win-paper-pop.ogg",
           "enabled": true,
           "source": "elevenlabs"
         }
@@ -58,7 +58,7 @@
     {
       "id": "win_transfer",
       "label": "Win transfer",
-      "trigger": "Coins fly into the balance (same file, played 12% faster).",
+      "trigger": "Coins fly into the balance, played 12% faster.",
       "volume_db": -13.98,
       "pitch_jitter": 0,
       "generator": "ElevenLabs eleven_text_to_sound_v2",

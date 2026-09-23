@@ -62,7 +62,7 @@ function render(){
   +'</div></div>'
   +'<div class="toolbar"><strong>Saved sounds</strong><button id="sound-refresh" title="Reload the shared sound draft">Refresh</button>'
    +'<button id="sound-reset" title="Put every event of this manifest back to the sounds it shipped with">Reset to default</button></div>'
-  +'<div class="toolbar"><label>Find a sound<input id="sound-search" type="search" placeholder="Event name or description"></label><small>Changes autosave to the shared draft. Use Play to audition; game audio updates after publication.</small>'+(window.ComposerDraftEditors?.enabled?'<small>Choose existing sounds. New asset uploads are not available for shared drafts.</small>':catalog().generation.available?'<small>Sound generation available.</small>':'')+'</div>'
+  +'<div class="toolbar"><label>Find a sound<input id="sound-search" type="search" placeholder="Event name or description"></label><small>You are hearing draft sounds here. The game beside this editor uses its built / published sounds. Changes autosave; Send changes → Apply locally → publish updates the game.</small>'+(window.ComposerDraftEditors?.enabled?'<small>Choose existing sounds. New asset uploads are not available for shared drafts.</small>':catalog().generation.available?'<small>Sound generation available.</small>':'')+'</div>'
   +'<div class="toolbar"><small id="sound-message" role="status"></small></div>';
  if(!kit&&!own){report.innerHTML='<div class="sound-empty"><h2>'+esc(window.ComposerTarget.entry().title)+'</h2><p>No manifest to show yet. Start Composer with tools/preview.py so the shared kit is copied in.</p></div>';return}
  const title=game?window.ComposerTarget.entry().title:(kit?.title||'Shared UI sounds');
@@ -82,10 +82,11 @@ function sections(game,own){
  const indexed=sid=>events(sid).map((event,index)=>[event,index]);
  if(group==='scene'){
   if(!own)return '<p class="sound-note">This game has no assets/audio/sounds.json yet. Add one in the Explosive Fruits format, point LocalFeedback.play_event at SOUNDS.EVENTS, then reload.</p>';
-  return grid(targetId(),indexed(targetId()));
+  return grid(targetId(),indexed(targetId()).filter(([e])=>e.group!=='interface'&&!e.runtime_unused));
  }
- const kit=indexed(KIT),named=kit.filter(([e])=>e.fallback),base=kit.filter(([e])=>!e.fallback);
- return grid(KIT,named.concat(base));
+ const overrides=indexed(targetId()).filter(([e])=>e.group==='interface'),ids=new Set(overrides.map(([e])=>e.id));
+ const kit=indexed(KIT).filter(([e])=>!ids.has(e.id)),named=kit.filter(([e])=>e.fallback),base=kit.filter(([e])=>!e.fallback);
+ return grid(targetId(),overrides)+grid(KIT,named.concat(base));
 }
 
 // The take list an event actually sounds like: its own, or its base sound's.
@@ -93,7 +94,6 @@ const voice=(event,sid)=>event.takes.length?event:(events(sid).find(e=>e.id===ev
 // An event with no level of its own is played at the level of the sound it falls back to.
 function level(event,sid){
  let node=event,hops=0;
- if(event.fallback&&!event.takes.some(t=>t.enabled!==false))node=events(sid).find(e=>e.id===event.fallback)||event;
  while(node&&(node.volume_db===null||node.volume_db===undefined)&&node.fallback&&hops++<4)node=events(sid).find(e=>e.id===node.fallback);
  return Number(node?.volume_db??0);
 }
@@ -150,18 +150,21 @@ function pump(){
  }
 }
 
-let playingButton=null;
+let playingButton=null,auditionContext=null;
 function stop(){
+ if(auditionContext){void auditionContext.close();auditionContext=null}
  if(playingButton){playingButton.textContent='▶';playingButton.setAttribute('aria-pressed','false');playingButton.setAttribute('aria-label',playingButton.dataset.playLabel||'Play');playingButton.setAttribute('aria-pressed','false');playingButton=null}
  if(player){player.onended=null;player.pause();player=null}
 }
-function play(event,take,sid,button){
+function play(event,take,sid,button,trigger=event){
  stop();
  if(button){playingButton=button;button.textContent='■';button.setAttribute('aria-label','Stop');button.setAttribute('aria-pressed','true')}
  player=new Audio(audioUrl(event.takes[take].file,sid));
- player.volume=gain(level(event,sid));
- const jitter=Number(event.pitch_jitter||0);
- player.preservesPitch=false;player.playbackRate=1+(Math.random()*2-1)*jitter;
+ const db=level(trigger,sid);player.volume=gain(db);
+ if(sid!==KIT&&event.group!=='interface'&&db>0){auditionContext=new AudioContext();const source=auditionContext.createMediaElementSource(player),boost=auditionContext.createGain();boost.gain.value=Math.pow(10,db/20);source.connect(boost).connect(auditionContext.destination);void auditionContext.resume()}
+ const jitter=Number(trigger.pitch_jitter??(sid===KIT?0:0.02));
+ const baseRate=trigger.id==='win_transfer'?1.12:event.takes[take].file.endsWith('/click.ogg')&&trigger.id==='stake_minus'?0.92:event.takes[take].file.endsWith('/click.ogg')&&trigger.id==='stake_plus'?1.08:1;
+ player.preservesPitch=false;player.playbackRate=baseRate*(1+(Math.random()*2-1)*jitter);
  player.onended=()=>stop();
  player.play().catch(error=>{stop();message('Playback failed: '+error.message,true)});
 }
@@ -225,7 +228,7 @@ report.addEventListener('click',event=>{
  if(button.dataset.takePlay!==undefined){
   if(button===playingButton)return stop();
   const t=Number(button.dataset.takePlay);
-  if(t<0){const base=events(sid).find(e=>e.id===sound.fallback);const at=base?base.takes.findIndex(x=>x.enabled!==false):-1;if(base)play(base,at<0?0:at,sid,button)}
+  if(t<0){const base=events(sid).find(e=>e.id===sound.fallback);const at=base?base.takes.findIndex(x=>x.enabled!==false):-1;if(base)play(base,at<0?0:at,sid,button,sound)}
   else play(sound,t,sid,button)}
  if('copy' in button.dataset)navigator.clipboard?.writeText(sound.prompt||'').then(()=>message('Prompt copied.'),()=>message('Copy failed.',true));
 });

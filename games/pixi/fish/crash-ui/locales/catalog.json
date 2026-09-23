@@ -110,7 +110,8 @@
       "games": [],
       "ht": "Pi gwo miz yo",
       "usage": [
-        "aria-label"
+        "aria-label",
+        "text"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -140,7 +141,8 @@
       "games": [],
       "ht": "Règ",
       "usage": [
-        "aria-label"
+        "aria-label",
+        "text"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -3229,6 +3231,21 @@
       ],
       "usage": [
         "text"
+      ]
+    },
+    "settings_menu_drawer": {
+      "source": "Settings",
+      "en": "Settings",
+      "fr": "Réglages",
+      "ht": "Anviwònman",
+      "group": "Tabs & windows",
+      "games": [],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "menu",
+      "presets": [
+        "menu-drawer-v1"
       ]
     }
   }

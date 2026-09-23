@@ -20,14 +20,14 @@ const avatar=(name,players=[])=>{const i=name==='You'?2:players.indexOf(name),[x
 const button=(action,text,cls='')=>'<button type="button" class="button '+cls+'" data-action="'+action+'">'+text+'</button>';
 // Betting feedback belongs to the UI; the cashout-ready tone plays once per round, not on every re-enable between steps.
 class BettingSound {
- constructor(){this.enabled=false;this.last=-Infinity;this.next=0;this.pools={};this.plan={};
+ constructor(overrides={}){this.enabled=false;this.last=-Infinity;this.next=0;this.pools={};this.plan={...overrides};
   for(const [name,volume] of [['click.ogg',0.14],['confirm.ogg',0.12]])this.pool(name,volume);
-  this.pressedGo=-1e9;soundLevels.then(plan=>{this.plan=plan;for(const spec of Object.values(plan))if(spec.file)this.pool(spec.file,spec.volume)});}
+  this.pressedGo=-1e9;soundLevels.then(plan=>{this.plan={...plan,...overrides};for(const spec of Object.values(this.plan))if(spec.file)this.pool(spec.file,spec.volume)});}
  // One pool per file, so eleven events that share a take share four clips rather than forty.
  pool(file,volume){
   const have=this.pools[file];
-  if(have){if(Number.isFinite(volume))for(const clip of have)clip.volume=volume;return have}
-  return this.pools[file]=Array.from({length:4},()=>{const clip=new Audio(base+'assets/audio/'+file);clip.preload='auto';clip.preservesPitch=false;clip.volume=Number.isFinite(volume)?volume:0.14;return clip});
+  if(have)return have
+  return this.pools[file]=Array.from({length:4},()=>{const clip=new Audio(/^https?:/.test(file)?file:base+'assets/audio/'+file);clip.preload='auto';clip.preservesPitch=false;clip.volume=Number.isFinite(volume)?volume:0.14;return clip});
  }
  // Games differ in when cashing out becomes possible: after the first hop in Goat Road, at
  // once in Fish Master. When it arrives on the press itself the chime would only double the
@@ -58,7 +58,7 @@ class BettingSound {
   const file=spec&&spec.file?spec.file:(ready?'confirm.ogg':'click.ogg');
   if(spec&&spec.volume===0)return;
   const pool=this.pool(file,spec&&Number.isFinite(spec.volume)?spec.volume:undefined);
-  const clip=pool[this.next++%4];clip.currentTime=0;
+  const clip=pool[this.next++%4];clip.currentTime=0;if(spec&&Number.isFinite(spec.volume))clip.volume=spec.volume;
   // Without a take of their own the steps keep the pitch that told them apart.
   const own=spec&&spec.file&&spec.file!=='click.ogg';
   const spread=1+(Math.random()*2-1)*(spec&&spec.jitter||0);
@@ -67,9 +67,9 @@ class BettingSound {
  }
  destroy(){this.setEnabled(false);for(const pool of Object.values(this.pools))for(const clip of pool){clip.removeAttribute('src');clip.load()}}
 }
-// Popup and wallet transfer have separate voices using one shared coin asset.
+// Confetti announces the popup; coin clinks belong only to the wallet transfer.
 class WinSound {
- constructor(){this.clip=new Audio(base+'assets/audio/win.ogg');this.clip.preload='auto';this.clip.volume=0.44;this.transferClip=new Audio(base+'assets/audio/win.ogg');this.transferClip.preload='auto';this.transferClip.volume=0.20;this.enabled=false;this.active=false;this.jitter={};this.clip.preservesPitch=false;soundLevels.then(plan=>{const pick=(id,clip,fallback)=>{const spec=plan[id];if(!spec)return;if(spec.file&&spec.file!==fallback)clip.src=base+'assets/audio/'+spec.file;if(Number.isFinite(spec.volume))clip.volume=spec.volume;this.jitter[id]=spec.jitter||0};pick('win',this.clip,'win.ogg');pick('win_transfer',this.transferClip,'win.ogg')})}
+ constructor(){this.clip=new Audio(base+'assets/audio/win-paper-pop.ogg');this.clip.preload='auto';this.clip.volume=0.44;this.transferClip=new Audio(base+'assets/audio/win.ogg');this.transferClip.preload='auto';this.transferClip.volume=0.20;this.enabled=false;this.active=false;this.jitter={};this.clip.preservesPitch=false;soundLevels.then(plan=>{const pick=(id,clip,fallback)=>{const spec=plan[id];if(!spec)return;if(spec.file&&spec.file!==fallback)clip.src=base+'assets/audio/'+spec.file;if(Number.isFinite(spec.volume))clip.volume=spec.volume;this.jitter[id]=spec.jitter||0};pick('win',this.clip,'win-paper-pop.ogg');pick('win_transfer',this.transferClip,'win.ogg')})}
  update(state){this.enabled=state.settings?.sound===true;if(!this.enabled){this.clip.pause();this.transferClip.pause()}const active=!!state.win;if(this.game===state.game&&active&&(!this.active||(state.winId!==undefined&&state.winId!==this.winId)))this.play();this.game=state.game;this.active=active;this.winId=state.winId}
  spread(id){const j=this.jitter[id]||0;return 1+(Math.random()*2-1)*j}
  play(){if(!this.enabled||document.hidden)return;this.clip.currentTime=0;this.clip.playbackRate=this.spread('win');this.clip.play().catch(()=>{})}
@@ -84,14 +84,13 @@ function soundPlan(manifest){
  const events=Object.fromEntries((manifest.events||[]).map(e=>[e.id,e]));
  const take=e=>(e&&(e.takes||[]).find(t=>t.enabled!==false))||null;
  const level=e=>e&&e.volume_db!==null&&e.volume_db!==undefined&&Number.isFinite(Number(e.volume_db))?Math.min(1,Math.pow(10,Number(e.volume_db)/20)):null;
- // The level follows the take: a borrowed base sound plays at the base sound's level,
- // and an own file with no level of its own still plays at the level it falls back to.
+ // An event owns its level even with a borrowed take; only null inherits the fallback level.
  const inherited=e=>{let n=e,hops=0,v=level(e);while(v===null&&n&&n.fallback&&hops++<4){n=events[n.fallback];v=level(n)}return v};
  const plan={};
  for(const e of manifest.events||[]){
   let own=e,hops=0,found=take(e);
   while(!found&&own&&own.fallback&&hops++<4){own=events[own.fallback];found=take(own)}
-  plan[e.id]={file:found?found.file.split('/').pop():null,volume:found?(inherited(own)??1):0,jitter:Math.min(0.3,Math.max(0,Number(e.pitch_jitter)||0))};
+  plan[e.id]={file:found?found.file.split('/').pop():null,volume:found?(inherited(e)??1):0,jitter:Math.min(0.3,Math.max(0,Number(e.pitch_jitter)||0))};
  }
  return plan;
 }
@@ -132,8 +131,8 @@ class TabbedControls {
  text(key,value){if(this.slots[key].textContent!==String(value))this.slots[key].textContent=value}
  /** One flat state object per frame, the same one the standard controls read. */
  sync(s,features){
-  const risk=this.q('.risk');const hasRisk=typeof s.risk==='number';risk.hidden=!hasRisk&&s.game!=='road';risk.style.visibility=hasRisk?'':'hidden';
-  if(hasRisk){const pct=Math.round(Math.min(1,Math.max(0,s.risk))*100);this.text('riskPct',pct+' %');const lit=Math.round(pct/10);[...this.q('.risk-meter').children].forEach((seg,i)=>{seg.className=i<lit?'on tier-'+(i<3?'low':i<6?'mid':'high'):''})}
+  const risk=this.q('.risk');const hasRisk=typeof s.risk==='number'&&Number.isFinite(s.risk);risk.hidden=!hasRisk&&s.game!=='road';risk.style.visibility='';
+  if(hasRisk){const pct=Math.round(Math.min(1,Math.max(0,s.risk))*100);this.text('riskPct',pct+' %');const lit=Math.round(pct/10);[...this.q('.risk-meter').children].forEach((seg,i)=>{seg.className=i<lit?'on tier-'+(i<3?'low':i<6?'mid':'high'):''})}else{this.text('riskPct','0 %');for(const seg of this.q('.risk-meter').children)seg.className=''}
   const names=s.difficulties||[];const key=JSON.stringify(names);
   if(key!==this.lastDifficulties){this.lastDifficulties=key;this.q('.difficulty-row').innerHTML=names.map((n,i)=>'<button type="button" class="button" role="radio" data-action="pickDifficulty" data-value="'+i+'">'+esc(n)+'</button>').join('')}
   this.q('.difficulty-row').hidden=!features.difficulty||names.length===0;
@@ -165,7 +164,7 @@ class GameUI {
  static setTheme(name){if(!(name in GameUI.themes))name='';if(name)document.documentElement.dataset.theme=name;else delete document.documentElement.dataset.theme;return name}
  static get theme(){return document.documentElement.dataset.theme||''}
  constructor(host,send,config={}){
-  this.host=host;this.send=send;this.config=config;GameUI.setBrand(config.brand||new URLSearchParams(location.search).get('brand')||document.documentElement.dataset.brand||'default');GameUI.setTheme(config.theme||new URLSearchParams(location.search).get('theme')||document.documentElement.dataset.theme||'');this.state={};this.modal='';this.lastFocus=null;this.lastWins='';this.lastHistory='';this.bettingSound=new BettingSound();this.winSound=new WinSound();
+  this.host=host;this.send=send;this.config=config;GameUI.setBrand(config.brand||new URLSearchParams(location.search).get('brand')||document.documentElement.dataset.brand||'default');GameUI.setTheme(config.theme||new URLSearchParams(location.search).get('theme')||document.documentElement.dataset.theme||'');this.state={};this.modal='';this.lastFocus=null;this.lastWins='';this.lastHistory='';this.bettingSound=new BettingSound(config.soundOverrides);this.winSound=new WinSound();
   if(!instance&&!config.demo)instance=this;
   host.className='crash-ui';host.innerHTML='<div class="top"><section class="account panel" aria-label="Player and records"><div class="profile"><button class="identity" data-action="account"><span data-slot="avatar"></span><span><strong>You</strong><span class="level" data-slot="level"></span></span></button><div class="balance">'+icon('coin.png')+'<span class="money" data-slot="balance"></span></div><button class="icon-button" data-action="menu" aria-label="Menu">'+icon('menu.svg')+'</button></div><section class="records"><div class="records-heading">'+icon('trophy.svg')+'<span>Your best</span></div><div class="records-line"><span class="money record-value personal" data-slot="personal"></span><div class="record-top"><span class="record-summary-label">Top</span><span class="money record-value" data-slot="top"></span><span class="record-by">by</span><span class="owner-name" data-slot="owner"></span></div></div></section><div class="history" aria-label="Round history"></div></section><section class="winners panel"><div class="wins-head"><strong>Live Wins</strong><span class="online"><span class="dot"></span><span data-slot="online"></span></span><button class="text-button" data-action="wins">See all ›</button></div><div class="wins-list"></div></section></div><div class="bottom"><div class="multiplier"></div><section class="controls panel" aria-label="Bet controls"><div class="settings-row">'+button('auto','<span class="knob" aria-hidden="true"></span><span class="auto-label">Auto</span>','auto')+button('difficulty','<span data-slot="difficulty"></span><svg class="chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 10 8 6 12 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')+'</div><div class="stake" aria-label="Bet amount">'+button('min','MIN')+button('minus','−')+'<output class="money" data-slot="bet"></output>'+button('plus','+')+button('max','MAX')+'</div><div class="presets"></div><div class="actions">'+button('cash','<span class="action-title">CASH OUT</span><span class="money" data-slot="cash"></span>','action cash')+button('go','<span class="action-title"><span data-slot="playIcon"><svg class="icon" viewBox="0 0 44 44" aria-hidden="true"><path d="M14 7.5 C9.5 5 6 7 6 12 V32 C6 37 9.5 39 14 36.5 L34 25.5 C38.5 23 38.5 21 34 18.5 Z" fill="currentColor"/></svg></span><span data-slot="goTitle"></span></span><span class="money" data-slot="goSubtitle"></span>','action go')+'</div></section></div><button class="dev" data-action="dev" hidden>DEV · UI</button><div class="toast" role="status" hidden></div><div class="modal-layer" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="crash-modal-title"><header><h2 id="crash-modal-title"></h2><button class="icon-button" data-action="close" aria-label="Close">'+icon('close.svg')+'</button></header><div class="modal-body"></div></section></div>';
   // A game whose round climbs a fixed table of steps shows them beside the scene. It is the
@@ -179,7 +178,7 @@ class GameUI {
   host.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b&&!b.disabled)this.action(b.dataset.action,b.dataset.value);else {const control=e.target.closest('.bet-step,.bet-action');if(control&&!control.disabled)this.bettingSound.play(control.dataset.step==='-1'?'minus':control.dataset.step?'plus':'go')}});
   host.addEventListener('change',e=>{if(e.target.dataset.setting==='sound')this.bettingSound.setEnabled(e.target.checked);if(e.target.dataset.setting)this.send('setting',{key:e.target.dataset.setting,value:e.target.type==='checkbox'?e.target.checked:Number(e.target.value)});if(e.target.dataset.flag)this.send('flag',{key:e.target.dataset.flag,value:e.target.checked})});
   host.querySelector('.modal-layer').addEventListener('click',e=>{if(e.target===e.currentTarget&&this.modal!=='win')this.close()});
-  this.keyHandler=e=>{if(!this.modal)return;if(['ArrowDown','ArrowUp','ArrowLeft','ArrowRight','Home','End'].includes(e.key)&&e.target.matches('[role=radio]')){e.preventDefault();const items=[...e.target.parentElement.querySelectorAll('[role=radio]')];let index=items.indexOf(e.target);index=e.key==='Home'?0:e.key==='End'?items.length-1:(index+(e.key==='ArrowDown'||e.key==='ArrowRight'?1:-1)+items.length)%items.length;items[index].focus();return;}if(e.key==='Escape'&&this.modal!=='win'){e.preventDefault();if(this.betDetail)this.backToBets();else if(this.modal.startsWith('limit:'))this.open('menu');else this.close()}if(e.key==='Tab'&&!this.contextPanel){const items=[...host.querySelectorAll('.modal-layer button,.modal-layer input,.modal-layer select')].filter(n=>!n.disabled&&!n.hidden&&n.getClientRects().length);if(!items.length){e.preventDefault();return}const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}};
+  this.keyHandler=e=>{if(!this.modal)return;if(e.target.matches?.('[data-action=drawerTab]')&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const tabs=[...e.target.parentElement.children],index=tabs.indexOf(e.target),next=e.key==='Home'?0:e.key==='End'?tabs.length-1:(index+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;this.action('drawerTab',tabs[next].dataset.value);return;}if(['ArrowDown','ArrowUp','ArrowLeft','ArrowRight','Home','End'].includes(e.key)&&e.target.matches('[role=radio]')){e.preventDefault();const items=[...e.target.parentElement.querySelectorAll('[role=radio]')];let index=items.indexOf(e.target);index=e.key==='Home'?0:e.key==='End'?items.length-1:(index+(e.key==='ArrowDown'||e.key==='ArrowRight'?1:-1)+items.length)%items.length;items[index].focus();return;}if(e.key==='Escape'&&this.modal!=='win'){e.preventDefault();if(this.betDetail)this.backToBets();else if(this.modal.startsWith('limit:'))this.open('menu');else this.close()}if(e.key==='Tab'&&!this.contextPanel){const items=[...host.querySelectorAll('.modal-layer button,.modal-layer input,.modal-layer select')].filter(n=>!n.disabled&&!n.hidden&&n.getClientRects().length);if(!items.length){e.preventDefault();return}const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}};
   document.addEventListener('keydown',this.keyHandler);
   this.outsideMenu=e=>{if(['menu','account'].includes(this.modal)&&this.tabbed&&!this.q('.modal').contains(e.target)&&!this.q('.profile [data-action='+this.modal+']').contains(e.target))this.close(false)};
   document.addEventListener('pointerdown',this.outsideMenu,true);
@@ -187,7 +186,7 @@ class GameUI {
   this.resize=new ResizeObserver(()=>this.layout());this.resize.observe(host);this.resize.observe(host.querySelector('.account'));this.resize.observe(column);this.resize.observe(host.querySelector('.controls'));if(this.multiBet)this.resize.observe(this.multiBet.element);
  }
  setPresentationPreset(name='standard'){
-  if(!['standard','tabbed-shell-v1'].includes(name))throw new Error('Unknown presentation preset: '+name);
+  if(!['standard','tabbed-shell-v1','menu-drawer-v1'].includes(name))throw new Error('Unknown presentation preset: '+name);
   if(this.modal)this.close(false);
   this.config.presentationPreset=name;this.setControlsVariant(this.controlsVariant);
   if(this.state.game)this.update(this.state);
@@ -195,8 +194,9 @@ class GameUI {
  setControlsVariant(variant='standard'){
   if(this.modal)this.close(false);
   this.controlsVariant=variant;
-  const tabbed=variant==='tabbed'||this.config.presentationPreset==='tabbed-shell-v1';
+  const tabbed=variant==='tabbed'||['tabbed-shell-v1','menu-drawer-v1'].includes(this.config.presentationPreset);
   this.host.classList.toggle('has-tabbed-controls',tabbed);
+  this.host.classList.toggle('has-menu-drawer',this.config.presentationPreset==='menu-drawer-v1');
   this.q('.account').setAttribute('aria-label',tabbed?'Player account':'Player and records');
   let back=this.q('.game-back');
   if(tabbed&&!back){back=document.createElement('button');back.type='button';back.className='icon-button game-back';back.dataset.action='leave';back.setAttribute('aria-label','Back to previous page');back.innerHTML='<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H4m7-7-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';this.q('.profile').prepend(back)}
@@ -217,6 +217,8 @@ class GameUI {
  text(key,value){if(this.slots[key].textContent!==String(value))this.slots[key].textContent=value}
  action(action,value){
   this.bettingSound.play(action);
+  if(action==='drawerTab'){this.rulesFrom='tab';this.open(value);return}
+  if(action==='menu'&&this.config.presentationPreset==='menu-drawer-v1'){if(this.q('.modal-layer').classList.contains('is-menu-drawer')&&this.modal)this.close();else this.open(this.drawerSelection||'topbets');return}
   if(action==='betDetails'){this.showBetDetails(Number(value));return}
   if(action==='betsBack'){this.backToBets();return}
   if(['menu','account'].includes(action)&&this.tabbed&&this.modal===action){this.close();return}
@@ -242,7 +244,7 @@ class GameUI {
   this.bettingSound.setEnabled(s.settings?.sound===true);
   this.bettingSound.updateCashReady(s);
   this.state=s;currency=typeof s.currency==='string'?s.currency:'';this.host.hidden=false;this.host.classList.toggle('reduced',!!s.settings?.reduced_motion);
-  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',s.balanceKnown===false?'—':money(s.balance));this.text('bet',wager(s.bet));
+  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',s.balanceKnown===false?'—':window.CrashI18n?.locale==='fr'?window.CrashI18n.number(Number(s.balance||0),{minimumFractionDigits:2,maximumFractionDigits:2}):Number(s.balance||0).toFixed(2));this.text('bet',wager(s.bet));
 
   this.text('personal',money(s.personal));this.text('top',money(s.record?.payout));this.text('owner',s.record?.name||'');this.q('.record-top').title=[s.record?.name,s.record?.date].filter(Boolean).join(' · ');
   const signature=JSON.stringify([s.players,s.record?.name]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players)}
@@ -290,19 +292,21 @@ class GameUI {
   if(!source||!target)return;
   const layer=document.createElement('div');layer.className='win-coin-flight';layer.setAttribute('aria-hidden','true');this.host.append(layer);this.coinLayer=layer;
   const coins=Array.from({length:CrashTokens.WEB_WIN_COIN_COUNT},()=>{const coin=document.createElement('img');coin.src=base+'assets/icons/coin.png';coin.alt='';layer.append(coin);return coin});
+  const speed=Math.max(0.5,Math.min(2,Number(this.config.winCoinSpeed)||1));
+  const duration=CrashTokens.WEB_WIN_COIN_DURATION_MS/speed,stagger=CrashTokens.WEB_WIN_COIN_STAGGER_MS/speed;
   const start=performance.now();
   const tick=now=>{
    if(!source.isConnected||this.modal!=='win'||this.state.settings?.reduced_motion||matchMedia('(prefers-reduced-motion: reduce)').matches){this.clearWinCoins();return}
    const a=source.getBoundingClientRect(),b=target.getBoundingClientRect();
    coins.forEach((coin,i)=>{
-    const p=Math.max(0,Math.min(1,(now-start-i*CrashTokens.WEB_WIN_COIN_STAGGER_MS)/CrashTokens.WEB_WIN_COIN_DURATION_MS));
+    const p=Math.max(0,Math.min(1,(now-start-i*stagger)/duration));
     const t=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
     const arc=Math.sin(t*Math.PI),x=a.x+a.width/2+(b.x+b.width/2-a.x-a.width/2)*t+85*Math.sin(i*1.8)*arc;
     const y=a.y+a.height/2+(b.y+b.height/2-a.y-a.height/2)*t-100*arc;
     coin.style.opacity=String(Math.min(t*10,1)*Math.min((1-t)*10,1));
     coin.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) rotate(${arc*(i%2===0?.5:-.5)}rad) scale(${.8+.4*arc})`;
    });
-   if(now-start<CrashTokens.WEB_WIN_COIN_DURATION_MS+(coins.length-1)*CrashTokens.WEB_WIN_COIN_STAGGER_MS)this.coinFrame=requestAnimationFrame(tick);else this.clearWinCoins();
+   if(now-start<duration+(coins.length-1)*stagger)this.coinFrame=requestAnimationFrame(tick);else this.clearWinCoins();
   };
   this.coinFrame=requestAnimationFrame(tick);
  }
@@ -358,12 +362,13 @@ class GameUI {
  }
  open(kind){
   const s=this.state,f=this.features();if(kind==='difficulty'&&(!s.canBet||!f.difficulty))return;if(kind.startsWith('limit:auto')&&!f.auto)return;if(s.win&&kind!=='win')return;
+  const drawer=this.config.presentationPreset==='menu-drawer-v1'&&['menu','topbets','mybets','rules'].includes(kind);if(drawer){this.drawerSelection=kind;this.rulesFrom='tab'}
   this.clearBetDetails();
   if(!this.modal)this.lastFocus=document.activeElement;this.modal=kind;this.send('modal',{open:true});
-  const layer=this.q('.modal-layer');layer.hidden=false;layer.classList.toggle('is-win',kind==='win');layer.classList.toggle('is-menu-popover',['menu','account'].includes(kind)&&!!this.tabbed);layer.classList.toggle('is-account-popover',kind==='account'&&!!this.tabbed);
+  const layer=this.q('.modal-layer');layer.hidden=false;layer.classList.toggle('is-win',kind==='win');layer.classList.toggle('is-menu-drawer',drawer);layer.classList.toggle('is-menu-popover',!drawer&&['menu','account'].includes(kind)&&!!this.tabbed);layer.classList.toggle('is-account-popover',kind==='account'&&!!this.tabbed);
   // From the tabbed variant's side buttons these open as a sheet from the right on a wide
   // screen (the CSS decides the breakpoint); the same modal from the menu stays a popup.
-  layer.classList.toggle('is-sheet',!!this.tabbed&&(kind==='topbets'||kind==='mybets'||(kind==='rules'&&this.rulesFrom==='tab')));this.q('.modal').classList.toggle('win-modal',kind==='win');
+  layer.classList.toggle('is-sheet',!drawer&&!!this.tabbed&&(kind==='topbets'||kind==='mybets'||(kind==='rules'&&this.rulesFrom==='tab')));this.q('.modal').classList.toggle('win-modal',kind==='win');
   this.q('.modal h2').textContent={menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:'Choose difficulty',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top 25',mybets:'My bets'}[kind];
   this.q('[data-action=close]').hidden=kind==='win'&&!this.config.demo;
   const body=this.q('.modal-body');body.classList.toggle('rules-content',kind==='rules');
@@ -371,7 +376,7 @@ class GameUI {
    const content=s.difficultyContent||{};
    body.innerHTML='<p class="modal-description">'+esc(content.description||'Higher risk. Bigger rewards.')+'</p><p class="modal-note">'+esc(content.limits||'')+'</p><div class="option-list" role="radiogroup" aria-label="Difficulty">'+(content.options||[]).map((v,i)=>this.radioOption('chooseDifficulty',i,i===s.difficulty,v.title,v.description,v.reward,v.rewardLabel)).join('')+'</div>';
   }
-  if(kind==='menu'&&this.tabbed){body.innerHTML=['sound','music','haptics'].map(k=>'<label class="setting">'+({sound:'Sound',music:'Music',haptics:'Vibration'}[k])+'<input class="switch" type="checkbox" role="switch" data-setting="'+k+'" '+(s.settings?.[k]?'checked':'')+'></label>').join('')+button('refill','Refill to $1,000','flat-button')}
+  if(kind==='menu'&&this.tabbed){body.innerHTML=(this.config.menuSettings||['sound','music','haptics']).map(k=>'<label class="setting">'+({sound:'Sound',music:'Music',haptics:'Vibration'}[k])+'<input class="switch" type="checkbox" role="switch" data-setting="'+k+'" '+(s.settings?.[k]?'checked':'')+'></label>').join('')+button('refill','Refill to $1,000','flat-button')}
   if(kind==='menu'&&!this.tabbed){
    body.innerHTML=(this.config.menuSettings||['sound','music','haptics']).map(k=>'<label class="setting">'+({sound:'Sound',music:'Music',haptics:'Vibration',reduced_motion:'Reduce motion'}[k])+'<input class="switch" type="checkbox" role="switch" data-setting="'+k+'" '+(s.settings?.[k]?'checked':'')+'></label>').join('');
    const limits=this.limitOptions();
@@ -397,6 +402,11 @@ class GameUI {
    if(this.tabbed)body.innerHTML='';
    const row=(k,v,tone='',monetary=false)=>'<div class="setting"><span>'+esc(k)+'</span><strong class="account-stat '+tone+'">'+esc(v)+(this.tabbed&&monetary?icon('coin.png'):'')+'</strong></div>';
    body.innerHTML+=row('Balance',s.balanceKnown===false?'Not provided by API':money(s.balance),'',true)+row('Personal record',money(s.personal),'gold',true)+'<h3 class="modal-section-title">This session</h3>'+row('Completed rounds',s.rounds||0)+row('Successful cash outs',s.roundWins||0,'success')+row('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold');
+   if(this.tabbed){
+    const stat=(label,value,tone='',wide=false)=>'<div class="account-session-stat'+(wide?' account-session-wide':'')+'"><span>'+label+'</span><strong class="'+tone+'">'+esc(value)+'</strong></div>';
+    body.innerHTML='<div class="account-record-card"><span class="account-record-label"><span>Personal record</span></span><strong>'+esc(money(s.personal))+icon('coin.png')+'</strong></div><h3 class="modal-section-title">This session</h3><div class="account-session-grid">'+stat('Completed rounds',s.rounds||0)+stat('Successful cash outs',s.roundWins||0,'success')+stat('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold',true)+'</div>';
+   }
+
   }
   if(kind==='wins')body.innerHTML=this.winRows(s.wins||[])||'<p class=muted>No wins yet.</p>';
   if(kind==='dev')body.innerHTML=Object.entries({leaderboard:'Leaderboard / live wins',history:'Round history',personal_record:'My record',online_count:'Online count',...(s.game==='market_stack'?{multiplier_ladder:'Multiplier ladder'}:{})}).map(([k,v])=>'<label class="setting">'+v+'<input class="switch" type="checkbox" role="switch" data-flag="'+k+'" '+(s.flags?.[k]!==false?'checked':'')+'></label>').join('');
@@ -404,7 +414,16 @@ class GameUI {
    body.innerHTML=(this.tabbed?'<div class="win-emblem" aria-hidden="true"><span class="win-spark win-spark-left">✦</span>':'')+'<img class="win-coin" src="'+base+'assets/icons/coin.png" alt="">'+(this.tabbed?'<span class="win-spark win-spark-right">✦</span></div>':'')+'<div class="win-total">'+money(s.winAmount)+'</div>'+(this.tabbed?'':'<div class="win-subtitle">'+esc(s.winSubtitle||'Well played!')+'</div>');
    if(!s.settings?.reduced_motion){const fx=document.createElement('div');fx.className='confetti';fx.innerHTML=Array.from({length:32},(_,i)=>'<i style="--angle:'+i*13+'deg;--x:'+((Math.random()-.5)*600)+'px;--y:'+(Math.random()*400-240)+'px"></i>').join('');layer.append(fx);setTimeout(()=>fx.remove(),2000)}
   }
-  const tabView=!!this.tabbed&&['topbets','mybets','rules'].includes(kind)&&(kind!=='rules'||this.rulesFrom==='tab');
+  this.q('.drawer-tabs')?.remove();
+  this.q('[data-action=close]').innerHTML=icon('close.svg');
+  if(this.tabbed){this.q('[data-action=close]').innerHTML='<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m4 4 16 16M20 4 4 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';}
+  const drawerBody=this.q('.modal-body');drawerBody.removeAttribute('role');drawerBody.removeAttribute('aria-labelledby');drawerBody.removeAttribute('id');
+  if(drawer){
+   const nav=document.createElement('div');nav.className='drawer-tabs';nav.setAttribute('role','tablist');nav.setAttribute('aria-label','Menu sections');
+   nav.innerHTML=[['topbets','Top bets'],['mybets','My bets'],['rules','Rules'],['menu','Settings']].map(([id,label])=>'<button type="button" class="drawer-tab" role="tab" id="drawer-tab-'+id+'" aria-controls="drawer-panel" aria-selected="'+(kind===id)+'" tabindex="'+(kind===id?'0':'-1')+'" data-action="drawerTab" data-value="'+id+'">'+label+'</button>').join('');
+   drawerBody.before(nav);drawerBody.id='drawer-panel';drawerBody.setAttribute('role','tabpanel');drawerBody.setAttribute('aria-labelledby','drawer-tab-'+kind);this.q('.modal h2').textContent=kind==='menu'?'Settings':kind==='rules'?'Rules':kind==='topbets'?'Top bets':'My bets';
+  }
+  const tabView=!drawer&&!!this.tabbed&&['topbets','mybets','rules'].includes(kind)&&(kind!=='rules'||this.rulesFrom==='tab');
   layer.classList.toggle('is-tab-view',tabView);
   const dialog=this.q('.modal');
   for(const node of [layer,dialog]){node.removeAttribute('role');node.removeAttribute('aria-modal');node.removeAttribute('aria-labelledby')}
@@ -418,7 +437,7 @@ class GameUI {
    layer.append(tabs);
   }
   this.tabPresentation();
-  requestAnimationFrame(()=>{const target=layer.querySelector('button:not([hidden]),input,select');if(target)target.focus();else{this.q('.modal').tabIndex=-1;this.q('.modal').focus()}});
+  requestAnimationFrame(()=>{const target=drawer?layer.querySelector('[role=tab][aria-selected=true]'):layer.querySelector('button:not([hidden]),input,select');if(target)target.focus({preventScroll:true});else{this.q('.modal').tabIndex=-1;this.q('.modal').focus()}});
  }
  tabPresentation(){
   const layer=this.q('.modal-layer');
@@ -426,7 +445,8 @@ class GameUI {
   const menuPopover=!!this.modal&&layer.classList.contains('is-menu-popover');
   this.contextPanel=contextual||menuPopover;layer.classList.toggle('is-context-panel',contextual);
   const menu=this.q('.profile [data-action=menu]');
-  menu.setAttribute('aria-expanded',String(this.modal==='menu'));menu.setAttribute('aria-haspopup','dialog');
+  menu.setAttribute('aria-expanded',String(this.modal==='menu'||!!this.modal&&layer.classList.contains('is-menu-drawer')));menu.setAttribute('aria-haspopup','dialog');
+  if(layer.classList.contains('is-menu-drawer')){const rect=menu.getBoundingClientRect();layer.style.setProperty('--drawer-menu-top',rect.top+'px');layer.style.setProperty('--drawer-menu-right',(innerWidth-rect.right)+'px')}
   const account=this.q('.profile [data-action=account]');account.setAttribute('aria-expanded',String(this.modal==='account'));account.setAttribute('aria-haspopup','dialog');
   if(menuPopover){
    const rect=(this.modal==='account'?account:menu).getBoundingClientRect();
@@ -455,9 +475,8 @@ class GameUI {
    const bottom=fitsBeside?innerHeight-edge:Math.min(innerHeight-edge,actions.top-gap);
    // One height cap across desktop and intermediate layouts; scroll the content.
    const height=Math.min(preferred+2*token('--space-48'),bottom-edge);
-   // Keep the panel and navigation on one center, even when space clamps the panel.
+   // Clamp the window independently; the navigation stays at the viewport centre.
    const top=Math.max(edge,Math.min((innerHeight-height)/2,bottom-height));
-   layer.style.setProperty('--tab-window-center',(top+height/2)+'px');
    for(const [key,value] of Object.entries({left,top,width,height}))layer.style.setProperty('--tab-window-'+key,value+'px');
   }
 
@@ -500,5 +519,5 @@ class GameUI {
  destroy(){this.winSound.destroy();this.bettingSound.destroy();this.clearWinCoins();this.resize.disconnect();document.removeEventListener('keydown',this.keyHandler);document.removeEventListener('pointerdown',this.outsideMenu,true);this.host.remove()}
 }
 let callback=null,instance=null;
-window.CrashUI={presentationPresets:Object.freeze({'tabbed-shell-v1':Object.freeze({id:'tabbed-shell-v1',title:'Tabbed shell',version:1,scope:'header-navigation-windows'})}),GameUI,MultiBetControls,connect(fn){callback=fn;if(!instance){const host=document.createElement('div');host.hidden=true;document.body.append(host);instance=new GameUI(host,(action,data)=>callback?.(JSON.stringify({action,...data})));}return true},receive(state){instance?.update(typeof state==='string'?JSON.parse(state):state)},get instance(){return instance}};
+window.CrashUI={presentationPresets:Object.freeze({'menu-drawer-v1':Object.freeze({id:'menu-drawer-v1',title:'Menu tabs',version:1,scope:'header-navigation-windows'}),'tabbed-shell-v1':Object.freeze({id:'tabbed-shell-v1',title:'Bottom tabs',version:1,scope:'header-navigation-windows'})}),GameUI,MultiBetControls,connect(fn){callback=fn;if(!instance){const host=document.createElement('div');host.hidden=true;document.body.append(host);instance=new GameUI(host,(action,data)=>callback?.(JSON.stringify({action,...data})));}return true},receive(state){instance?.update(typeof state==='string'?JSON.parse(state):state)},get instance(){return instance}};
 })();

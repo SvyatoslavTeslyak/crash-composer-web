@@ -31,7 +31,7 @@ function notify(){render();window.dispatchEvent(new Event('lotomobil-session'))}
 function clear(){session=null;sessionStorage.removeItem(key);notify()}
 async function json(path,options={}){
  let response;try{response=await fetch(playerUrl(path),{...options,credentials:'omit',redirect:'error',cache:'no-store',signal:AbortSignal.timeout(20000)})}catch{throw Error('Connection lost. Please try again.')}
- let data;try{data=await response.json()}catch{throw Error('The service returned an invalid response.')}
+ let data;try{data=await response.json()}catch{if(response.ok)throw Error('The service returned an invalid response.');data={}}
  if(!response.ok){const error=Error(response.status===401||response.status===403?(path==='auth/login/otp'&&options.method==='POST'?'The code was not accepted. Check it and try again.':path==='auth/login/player'?'Phone number or PIN was not accepted. Please try again.':'Your Lotomobil session expired. Please log in again.'):response.status===429?'Too many attempts. Wait before trying again.':data.message||data.code||'The service is unavailable.');error.status=response.status;throw error}return data;
 }
 async function discover(){if(playerBase){mode={auth:'live',api:'live',target:new URL(playerBase).host};render();return}const [a,b]=await Promise.all([json('auth/_mode'),json('api/_mode')]);mode={auth:a.mode,api:b.mode,target:b.target};render()}
@@ -69,7 +69,18 @@ window.Lotomobil={
  get verificationStatus(){return verificationStatus?{...verificationStatus}:null},
  get connected(){return !!session},get player(){return session?.phone||''},get mode(){return mode?.api||'live'},
  headers(){return session?{Authentication:session.auth,'OTP-Authentication':session.otp}:{}},
- async request(path,options={}){if(!session)throw Error('Log in to Lotomobil first.');if(!/^\/v[12]\/betting\/runner\//.test(path))throw Error('Unsupported game endpoint.');try{return await json('api'+path,{...options,headers:{...options.headers,...this.headers()}})}catch(error){if(error.status===401||error.status===403){section.querySelector('p').textContent='Lotomobil session expired. Log in again to recover your round.';section.querySelector('button').textContent='Log in again';section.querySelector('button').onclick=open}throw error}}
+ async request(path,options={}){
+  if(!session)throw Error('Log in to Lotomobil first.');
+  if(!/^\/v[12]\/betting\/runner\//.test(path))throw Error('Unsupported game endpoint.');
+  const requestSession=session;
+  try{return await json('api'+path,{...options,headers:{...options.headers,...this.headers()}})}
+  catch(error){
+   // Expiry switches the iframe to demo through the existing session event.
+   // An old in-flight request must not disconnect a newly authenticated player.
+   if((error.status===401||error.status===403)&&session===requestSession){clear();error.message='Lotomobil session ended. Switched to demo.'}
+   throw error;
+  }
+ }
 };
 window.crashAuth={headers:()=>window.Lotomobil.headers()};
 window.addEventListener('composer-target',render);window.addEventListener('composer-engine',render);

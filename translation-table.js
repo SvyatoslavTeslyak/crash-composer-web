@@ -7,8 +7,8 @@ const roadWindows=new Set(['','menu','account','rules','topbets','mybets','betDe
 const windowAllowed=(game,kind)=>game!=='road'||roadWindows.has(kind||'');
 const obsoleteRoadText=new Set(['Normal','Expert','Extreme','Insane','Reduce motion']);
 const applicable=(entry,game,preset)=>{
- const scoped=context(entry,game),activePreset=game==='road'?'tabbed-shell-v1':preset;
- return windowAllowed(game,entry.previewWindow)&&(game!=='road'||!obsoleteRoadText.has(entry.source))&&!entry.developerOnly&&entry.previewWindow!=='dev'&&(activePreset==='all'||!scoped.presets||scoped.presets.includes(activePreset))&&!scoped.usage?.includes('unused')&&(!entry.games?.length||game==='kit'||entry.games.includes(game));
+ const scoped=context(entry,game),activePreset=game==='road'&&preset!=='menu-drawer-v1'?'tabbed-shell-v1':preset;
+ return windowAllowed(game,entry.previewWindow)&&(game!=='road'||!obsoleteRoadText.has(entry.source))&&!entry.developerOnly&&entry.previewWindow!=='dev'&&(activePreset==='all'||!scoped.presets||scoped.presets.includes(activePreset)||(activePreset==='menu-drawer-v1'&&scoped.presets.includes('tabbed-shell-v1')))&&!scoped.usage?.includes('unused')&&(!entry.games?.length||game==='kit'||entry.games.includes(game));
 };
 const effective=(data,key)=>({...data.catalog.entries[key],...data.overrides[key]});
 // An apostrophe prevents spreadsheet formula execution and is removed on import.

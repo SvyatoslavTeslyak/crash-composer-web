@@ -114,6 +114,7 @@ showAll.onchange=()=>{store.set(KEYS.all,showAll.checked?'1':'0');options()};
 window.addEventListener('composer-workspace',event=>{workspace=event.detail;$('#workspace-title').textContent=({layout:'Game',look:'Brands',library:'Library',math:'Math',sound:'Sound effects',translates:'Translates'})[workspace]||'Game';options();writeHash()});
 window.addEventListener('hashchange',()=>{
  const opened=hash();
+ if(opened.tab==='math')opened.tab='layout';
  if(opened.game)set(opened.game);
  if(opened.engine)setEngine(opened.engine);
  if(['layout','look','library','math','sound'].includes(opened.tab)&&opened.tab!==workspace)$('#'+opened.tab+'-tab').click();
@@ -134,7 +135,7 @@ window.ComposerTarget={
 
 // Restore the workspace only once every tab module has subscribed.
 window.addEventListener('DOMContentLoaded',()=>{
- if(['look','library','math','sound'].includes(opening.tab))$('#'+opening.tab+'-tab').click();else writeHash();
+ if(['look','library','sound'].includes(opening.tab))$('#'+opening.tab+'-tab').click();else writeHash();
  refresh().catch(error=>say(error.message+' — start Composer with tools/preview.py so studio/ routes are available.',true));
 });
 window.ComposerAuth.ready.then(()=>{const permitted=TARGETS.filter(t=>window.ComposerAuth.canRead(t.id));if(permitted.length&&!window.ComposerAuth.canRead(value))set(permitted[0].id);options()});

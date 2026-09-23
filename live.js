@@ -9,6 +9,17 @@
  let timer,generation=0;
  const applied={};
  const presetSelect=document.querySelector('#presentation-preset');
+ const presetTags=document.querySelector('#navigation-presets');
+ function syncPresetTags(){
+  const options=Array.from(presetSelect.options);
+  for(const button of presetTags.children)if(!options.some(o=>o.value===button.dataset.preset))button.remove();
+  for(const option of options){
+   let button=Array.from(presetTags.children).find(b=>b.dataset.preset===option.value);
+   if(!button){button=document.createElement('button');button.type='button';button.className='wb-button';button.dataset.preset=option.value;button.onclick=()=>{presetSelect.value=button.dataset.preset;presetSelect.dispatchEvent(new Event('change'));syncPresetTags()};presetTags.append(button)}
+   button.textContent=option.textContent;button.disabled=presetSelect.disabled||option.disabled;button.setAttribute('aria-pressed',String(option.value===presetSelect.value));
+  }
+ }
+ new MutationObserver(syncPresetTags).observe(presetSelect,{childList:true,attributes:true,subtree:true});
  const nativePresets=new WeakMap();
  const amountPresets=document.querySelector('[data-feature=presets]');
  let amountOverride=null;
@@ -21,20 +32,22 @@
   }
   const winOption=modalSelect.querySelector('[value=win]');if(winOption)winOption.disabled=live();
   const standard=presetSelect.querySelector('[value=standard]');
-  if(road){standard?.remove();presetSelect.value='tabbed-shell-v1'}
+  if(road){standard?.remove();if(presetSelect.value!=='menu-drawer-v1')presetSelect.value='tabbed-shell-v1'}
   else if(!standard){const option=document.createElement('option');option.value='standard';option.textContent='Game default';presetSelect.prepend(option);presetSelect.value=savedPreset()}
-  const shell=presetSelect.value==='tabbed-shell-v1';
-  document.querySelectorAll('[data-visibility-heading]').forEach(n=>n.hidden=shell&&n.dataset.visibilityHeading!=='features');
+  const shell=['tabbed-shell-v1','menu-drawer-v1'].includes(presetSelect.value);
+  const noAmountPresets=(road&&engine()==='pixi')||document.querySelector('#control-variant').value==='tabbed';
+  document.querySelectorAll('[data-visibility-heading]').forEach(n=>n.hidden=shell&&(n.dataset.visibilityHeading!=='features'||noAmountPresets));
   document.querySelectorAll('.visibility-option').forEach(label=>{
    const input=label.querySelector('input');
-   label.hidden=(shell&&input!==amountPresets)||(input.dataset.flag==='multiplier_ladder'&&game()!=='market_stack')||(live()&&game()==='catch'&&!!input.dataset.feature)||(live()&&game()==='market_stack'&&['auto','difficulty'].includes(input.dataset.feature));
+   label.hidden=(input===amountPresets&&noAmountPresets)||(shell&&input!==amountPresets)||(input.dataset.flag==='multiplier_ladder'&&game()!=='market_stack')||(live()&&game()==='catch'&&!!input.dataset.feature)||(live()&&game()==='market_stack'&&['auto','difficulty'].includes(input.dataset.feature));
   });
   if(amountOverride===null)amountPresets.checked=frame.clientWidth>=600;
+  syncPresetTags();
  }
  new ResizeObserver(()=>{syncInspector();if(!live())sendFeatures()}).observe(frame);
 
  const presetKey=()=> 'crash-composer-presentation:'+engine()+':'+game();
- const savedPreset=()=>{if(game()==='road')return 'tabbed-shell-v1';try{return localStorage.getItem(presetKey())==='tabbed-shell-v1'?'tabbed-shell-v1':'standard'}catch{return 'standard'}};
+ const savedPreset=()=>{try{const saved=localStorage.getItem(presetKey());if(['tabbed-shell-v1','menu-drawer-v1'].includes(saved))return saved}catch{}return game()==='road'?'tabbed-shell-v1':'standard'};
  function applyPresentation(){
   syncInspector();
   if(!live()){demo({presentationPreset:presetSelect.value});return true}
@@ -110,11 +123,12 @@ window.addEventListener('composer-target',()=>{amountOverride=null;follow()});
   status.textContent='Unloaded while you work elsewhere · reloads when you return to Layout.';
  });
  presetSelect.onchange=()=>{
-  if(live()&&inRound()){presetSelect.value=savedPreset();status.textContent='Finish the round before changing the UI preset.';return}
-  if(!applyPresentation()){status.textContent='This build does not support presentation presets. Rebuild the Composer preview.';return}
+  const note=document.querySelector('#presentation-note');note.hidden=true;note.textContent='';
+  if(live()&&instance()?.state.win){presetSelect.value=instance().config.presentationPreset||savedPreset();note.textContent='Wait for the win animation to finish.';note.hidden=false;syncPresetTags();return}
+  if(!applyPresentation()){note.textContent='Preview is not ready. Reload the game.';note.hidden=false;return}
   try{localStorage.setItem(presetKey(),presetSelect.value)}catch{}
  };
- document.querySelector('#control-variant').onchange=()=>demo({controlsVariant:document.querySelector('#control-variant').value});
+ document.querySelector('#control-variant').onchange=()=>{syncInspector();demo({controlsVariant:document.querySelector('#control-variant').value})};
  document.querySelector('#modal').onchange=modal;
  document.querySelectorAll('[data-flag]').forEach(n=>n.onchange=flags);
  document.querySelectorAll('[data-feature]').forEach(n=>n.onchange=()=>{if(n===amountPresets)amountOverride=n.checked;return live()?load():sendFeatures()});

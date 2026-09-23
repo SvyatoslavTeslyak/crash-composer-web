@@ -1,4 +1,4 @@
-.crash-ui,.crash-ui *{box-sizing:border-box}.crash-ui{font:var(--body-type-px)/var(--leading-body) var(--font-body),sans-serif;font-synthesis:none;color:var(--text);position:fixed;inset:0;z-index:10;pointer-events:none;--edge:var(--space-16);--gap:var(--space-16);--button-radius:var(--radius-24);--panel-radius:var(--web-panel-radius);--control-h:var(--web-control-comfort-height)}.crash-ui button,.crash-ui input,.crash-ui select{font:inherit}.crash-ui button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.crash-ui button:focus-visible,.crash-ui input:focus-visible,.crash-ui select:focus-visible{outline:var(--stroke-3) solid var(--focus);outline-offset:var(--stroke-3)}.crash-ui [hidden]{display:none!important}.crash-ui .panel{background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--panel-radius);padding:var(--space-16);box-shadow:var(--elevation-panel);pointer-events:auto}.crash-ui .button{display:flex;align-items:center;justify-content:center;gap:var(--space-8);min-height:var(--control-h);min-width:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--button-radius);border:var(--stroke-2) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-button-depth) 0 var(--button-shadow);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms);white-space:nowrap}.crash-ui .button:hover:not(:disabled){filter:brightness(1.12)}.crash-ui .button:active:not(:disabled){transform:translateY(var(--web-button-depth));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}.crash-ui button:disabled{cursor:default}.crash-ui .button:disabled{background:var(--button-disabled);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .button[aria-pressed=true]{border-color:var(--focus)}.crash-ui .icon{width:var(--web-icon-md);height:var(--web-icon-md);object-fit:contain;flex:none}.crash-ui .chevron{display:block;width:var(--space-16);height:var(--space-16);flex:0 0 var(--space-16)}.crash-ui .money{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-24);font-variant-numeric:tabular-nums}.crash-ui .muted{color:var(--text-muted);font-size:var(--type-12)}.crash-ui .avatar{--index:5;width:var(--web-avatar-xl);height:var(--web-avatar-xl);flex:none;border-radius:50%;border:var(--stroke-1) solid var(--gold);background-image:url('assets/avatars/players.png');background-size:calc(100% * 1536 / 464) calc(100% * 1024 / 464);background-repeat:no-repeat;background-position:var(--avatar-x,100%) var(--avatar-y,100%)}.crash-ui .top{position:absolute;left:var(--edge);right:var(--edge);top:max(var(--edge),env(safe-area-inset-top));display:flex;gap:var(--space-16);align-items:flex-start;pointer-events:none}.crash-ui .account{width:100%;min-width:0}.crash-ui .profile{display:flex;align-items:center;gap:var(--space-12)}.crash-ui .identity{display:flex;align-items:center;gap:var(--space-12);border:0;background:none;color:inherit;text-align:left;padding:0;min-height:var(--tap-min)}.crash-ui .identity strong{display:block;font-size:var(--type-20)}.crash-ui .level{color:var(--gold);font-size:var(--type-12)}.crash-ui .balance{margin-left:auto;display:flex;gap:var(--space-8);align-items:center;min-width:0}.crash-ui .balance .money{font-size:clamp(var(--type-20),5vw,var(--type-28))}.crash-ui .icon-button{width:var(--tap-min);height:var(--tap-min);border:0;background:none;color:inherit;padding:var(--space-8);flex:none}.crash-ui .records{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:var(--space-16);padding:var(--space-12);margin-top:var(--space-12);background:var(--surface-inset);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24)}.crash-ui .record{display:flex;gap:var(--space-8);align-items:flex-start;min-width:0}.crash-ui .record .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .record-title{font-size:var(--type-12);color:var(--text-muted)}.crash-ui .record-value{font-size:var(--type-20);color:var(--success)}.crash-ui .record-top{display:flex;gap:var(--space-16);flex-wrap:wrap;align-items:center;min-width:0}.crash-ui .record-top .record-value{color:var(--gold)}.crash-ui .owner{display:flex;gap:var(--space-8);align-items:center;min-width:0;flex:1 1 var(--web-owner-min-width)}.crash-ui .owner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md)}.crash-ui .owner-name{font-size:var(--type-12);overflow-wrap:anywhere}.crash-ui .owner-date{font:var(--type-12) var(--font-body),sans-serif;color:var(--text-muted);white-space:nowrap}.crash-ui .winners{width:100%;margin-top:var(--space-12)}.crash-ui .wins-head{display:flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-12);font-size:var(--type-14)}.crash-ui .online{font-size:var(--type-12);color:var(--switch-on);display:flex;align-items:center;gap:var(--space-6);white-space:nowrap}.crash-ui .dot{width:var(--web-status-dot);height:var(--web-status-dot);border-radius:50%;background:currentColor}.crash-ui .text-button{border:0;background:none;color:var(--text-muted);min-height:var(--tap-min);padding:0 var(--space-4);margin-left:auto;font-size:var(--type-12)}.crash-ui .wins-list{display:flex;gap:var(--space-8);overflow-x:auto;scrollbar-width:none}.crash-ui .winner{display:grid;align-items:center;grid-template-columns:var(--web-avatar-md) minmax(var(--web-winner-name-min-width),auto);gap:var(--space-4) var(--space-8);flex:1 0 var(--web-win-card-width);padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16)}.crash-ui .winner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md);grid-row:span 2;align-self:center}.crash-ui .winner-name{font-size:var(--type-12);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.crash-ui .winner .money{color:var(--success);white-space:nowrap}.crash-ui .win-multiple{display:none}.crash-ui .history{display:flex;gap:var(--space-8);overflow:auto;scrollbar-width:none;margin-top:var(--space-12)}.crash-ui .pill{border:var(--stroke-1) solid color-mix(in srgb,currentColor calc(var(--alpha-soft) * 100%),var(--border));border-radius:var(--radius-24);background:var(--surface-raised);color:var(--pill-cyan);padding:var(--space-6) var(--space-8);font-family:var(--font-numbers),var(--font-body),sans-serif;white-space:nowrap}.crash-ui .pill.tier-success{color:var(--pill-success)}.crash-ui .pill.tier-purple{color:var(--pill-purple)}.crash-ui .pill.tier-gold{color:var(--pill-gold)}.crash-ui .bottom{position:absolute;left:var(--edge);right:var(--edge);bottom:max(var(--edge),env(safe-area-inset-bottom));pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:var(--space-12)}/* The steps of a climbing round, beside the scene: the kit's panel, so a brand restyles it
+.crash-ui,.crash-ui *{box-sizing:border-box}.crash-ui{font:var(--body-type-px)/var(--leading-body) var(--font-body),sans-serif;font-synthesis:none;color:var(--text);position:fixed;inset:0;z-index:10;pointer-events:none;--edge:var(--space-16);--gap:var(--space-16);--button-radius:var(--radius-24);--panel-radius:var(--web-panel-radius);--control-h:var(--web-control-comfort-height)}.crash-ui button,.crash-ui input,.crash-ui select{font:inherit}.crash-ui button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.crash-ui button:focus-visible,.crash-ui input:focus-visible,.crash-ui select:focus-visible{outline:var(--stroke-3) solid var(--focus);outline-offset:var(--stroke-3)}.crash-ui [hidden]{display:none!important}.crash-ui .panel{background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--panel-radius);padding:var(--space-16);box-shadow:var(--elevation-panel);pointer-events:auto}.crash-ui .button{display:flex;align-items:center;justify-content:center;gap:var(--space-8);min-height:var(--control-h);min-width:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--button-radius);border:var(--stroke-2) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-button-depth) 0 var(--button-shadow);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms);white-space:nowrap}.crash-ui .button:hover:not(:disabled){filter:brightness(1.12)}.crash-ui .button:active:not(:disabled){transform:translateY(var(--web-button-depth));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}.crash-ui button:disabled{cursor:default}.crash-ui .button:disabled{background:var(--button-disabled);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .button[aria-pressed=true]{border-color:var(--focus)}.crash-ui .icon{width:var(--web-icon-md);height:var(--web-icon-md);object-fit:contain;flex:none}.crash-ui .chevron{display:block;width:var(--space-16);height:var(--space-16);flex:0 0 var(--space-16)}.crash-ui .money{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-24);font-variant-numeric:tabular-nums}.crash-ui .muted{color:var(--text-muted);font-size:var(--type-12)}.crash-ui .avatar{--index:5;width:var(--web-avatar-xl);height:var(--web-avatar-xl);flex:none;border-radius:50%;border:var(--stroke-1) solid var(--gold);background-image:url('assets/avatars/players.png');background-size:calc(100% * 1536 / 464) calc(100% * 1024 / 464);background-repeat:no-repeat;background-position:var(--avatar-x,100%) var(--avatar-y,100%)}.crash-ui .top{position:absolute;left:var(--edge);right:var(--edge);top:max(var(--edge),env(safe-area-inset-top));display:flex;gap:var(--space-16);align-items:flex-start;pointer-events:none}.crash-ui .account{width:100%;min-width:0}.crash-ui .profile{display:flex;align-items:center;gap:var(--space-12)}.crash-ui .identity{display:flex;align-items:center;gap:var(--space-12);border:0;background:none;color:inherit;text-align:left;padding:0;min-height:var(--tap-min)}.crash-ui .identity strong{display:block;font-size:var(--type-24)}.crash-ui .level{color:var(--gold);font-size:var(--type-12)}.crash-ui .balance{margin-left:auto;display:flex;gap:var(--space-8);align-items:center;min-width:0}.crash-ui .balance .money{font-size:clamp(var(--type-24),5vw,var(--type-32))}.crash-ui .icon-button{width:var(--tap-min);height:var(--tap-min);border:0;background:none;color:inherit;padding:var(--space-8);flex:none}.crash-ui .records{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:var(--space-16);padding:var(--space-12);margin-top:var(--space-12);background:var(--surface-inset);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24)}.crash-ui .record{display:flex;gap:var(--space-8);align-items:flex-start;min-width:0}.crash-ui .record .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .record-title{font-size:var(--type-12);color:var(--text-muted)}.crash-ui .record-value{font-size:var(--type-24);color:var(--success)}.crash-ui .record-top{display:flex;gap:var(--space-16);flex-wrap:wrap;align-items:center;min-width:0}.crash-ui .record-top .record-value{color:var(--gold)}.crash-ui .owner{display:flex;gap:var(--space-8);align-items:center;min-width:0;flex:1 1 var(--web-owner-min-width)}.crash-ui .owner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md)}.crash-ui .owner-name{font-size:var(--type-12);overflow-wrap:anywhere}.crash-ui .owner-date{font:var(--type-12) var(--font-body),sans-serif;color:var(--text-muted);white-space:nowrap}.crash-ui .winners{width:100%;margin-top:var(--space-12)}.crash-ui .wins-head{display:flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-12);font-size:var(--type-16)}.crash-ui .online{font-size:var(--type-12);color:var(--switch-on);display:flex;align-items:center;gap:var(--space-6);white-space:nowrap}.crash-ui .dot{width:var(--web-status-dot);height:var(--web-status-dot);border-radius:50%;background:currentColor}.crash-ui .text-button{border:0;background:none;color:var(--text-muted);min-height:var(--tap-min);padding:0 var(--space-4);margin-left:auto;font-size:var(--type-12)}.crash-ui .wins-list{display:flex;gap:var(--space-8);overflow-x:auto;scrollbar-width:none}.crash-ui .winner{display:grid;align-items:center;grid-template-columns:var(--web-avatar-md) minmax(var(--web-winner-name-min-width),auto);gap:var(--space-4) var(--space-8);flex:1 0 var(--web-win-card-width);padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16)}.crash-ui .winner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md);grid-row:span 2;align-self:center}.crash-ui .winner-name{font-size:var(--type-12);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.crash-ui .winner .money{color:var(--success);white-space:nowrap}.crash-ui .win-multiple{display:none}.crash-ui .history{display:flex;gap:var(--space-8);overflow:auto;scrollbar-width:none;margin-top:var(--space-12)}.crash-ui .pill{border:var(--stroke-1) solid color-mix(in srgb,currentColor calc(var(--alpha-soft) * 100%),var(--border));border-radius:var(--radius-24);background:var(--surface-raised);color:var(--pill-cyan);padding:var(--space-6) var(--space-8);font-family:var(--font-numbers),var(--font-body),sans-serif;white-space:nowrap}.crash-ui .pill.tier-success{color:var(--pill-success)}.crash-ui .pill.tier-purple{color:var(--pill-purple)}.crash-ui .pill.tier-gold{color:var(--pill-gold)}.crash-ui .bottom{position:absolute;left:var(--edge);right:var(--edge);bottom:max(var(--edge),env(safe-area-inset-bottom));pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:var(--space-12)}/* The steps of a climbing round, beside the scene: the kit's panel, so a brand restyles it
    with everything else. It stands in the band the scene was given, clear of both panels. */
 .crash-ui .ladder{position:absolute;left:var(--edge);top:var(--scene-top,0);height:calc(var(--scene-bottom,100%) - var(--scene-top,0));display:flex;align-items:center;pointer-events:none}
 .crash-ui .ladder-list{list-style:none;margin:0;padding:var(--space-16) var(--space-12);display:grid;gap:var(--space-8);background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24);box-shadow:var(--elevation-panel,none)}
@@ -20,21 +20,21 @@
    are square, and the border it would draw along it is gone. */
 @media(max-width:599px){.crash-ui .ladder{left:0}
 .crash-ui .ladder-list{border-top-left-radius:0;border-bottom-left-radius:0;border-left:0}}
-.crash-ui .multiplier{min-width:var(--web-multiplier-min-width);border:var(--stroke-2) solid var(--multiplier-color,var(--cyan));border-radius:var(--radius-32);background:var(--surface);text-align:center;font:var(--type-28) var(--font-numbers),var(--font-body),sans-serif;color:var(--multiplier-color,var(--cyan));padding:var(--space-4) var(--space-24)}.crash-ui .controls{width:100%;max-width:var(--web-control-max-width);display:grid;gap:var(--space-16)}.crash-ui .settings-row{display:grid;grid-template-columns:var(--web-settings-column-width) 1fr;gap:var(--space-12)}.crash-ui .auto{background:var(--switch-off);border-radius:var(--radius-pill);padding:var(--space-6) var(--space-8) var(--space-6) var(--space-6);justify-content:flex-start}.crash-ui .knob{height:var(--web-knob-size);width:var(--web-knob-size);border-radius:50%;background:var(--knob);flex:none}.crash-ui .auto[aria-pressed=true]{background:var(--switch-on);color:var(--on-success)}.crash-ui .stake{display:grid;grid-template-columns:var(--tap-min) var(--tap-min) minmax(var(--web-winner-name-min-width),1fr) var(--tap-min) var(--tap-min);gap:var(--space-8);align-items:center}.crash-ui .stake .money{text-align:center;font-size:var(--type-24);min-width:0}.crash-ui .stake .button{padding:var(--space-4);font-size:var(--type-14)}.crash-ui .presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-8)}.crash-ui .presets .button{min-width:0}.crash-ui .actions{display:flex;gap:var(--space-12);min-width:0}.crash-ui .action{flex:1;min-width:0;min-height:var(--web-control-action-height);flex-direction:column;gap:var(--space-4);font-size:var(--type-24);border-radius:var(--radius-32);color:var(--on-go);border-color:var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--action-go-shadow)}.crash-ui .action.cash{background:linear-gradient(var(--action-cash-top),var(--action-cash-bottom));border-color:var(--action-cash-edge);color:var(--on-cash);box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-cash-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--cash-shadow)}
-.crash-ui .action:disabled,.crash-ui .action.cash:disabled{background:var(--button-disabled);border-color:var(--border);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .action-title{display:flex;align-items:center;justify-content:center;gap:var(--space-8)}.crash-ui .action .money,.crash-ui .action small{font-size:var(--type-18);line-height:var(--leading-tight)}.crash-ui .action .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .modal-layer{position:fixed;inset:0;z-index:30;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:var(--space-16);pointer-events:auto;touch-action:pan-y}.crash-ui .modal{width:min(100%,var(--modal-max-width-px));max-height:calc(100dvh - var(--space-32));overflow:auto;overscroll-behavior:contain;padding:var(--space-24);background:var(--surface);border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-modal)}.crash-ui .modal header{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);margin-bottom:var(--space-16)}.crash-ui .modal h2{font-size:var(--type-24);margin:0}.crash-ui .modal-body{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16)}.crash-ui .modal .button{min-height:var(--web-control-comfort-height)}.crash-ui .setting{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);min-height:var(--web-control-comfort-height)}.crash-ui .setting input[type=checkbox]{width:var(--space-24);height:var(--space-24);accent-color:var(--switch-on)}.crash-ui select{background:var(--button);color:var(--text);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16);padding:var(--space-12);max-width:55%}.crash-ui .win-modal{text-align:center}.crash-ui .win-modal .win-coin{width:var(--web-win-coin-hero);height:var(--web-win-coin-hero);display:block;margin:auto}.crash-ui .win-total{font:var(--type-48) var(--font-numbers),var(--font-body),sans-serif;color:var(--gold)}.crash-ui .toast{position:absolute;top:45%;left:50%;transform:translateX(-50%);padding:var(--space-12) var(--space-24);border-radius:var(--radius-24);background:var(--surface);border:var(--stroke-1) solid var(--border);pointer-events:none;text-align:center;max-width:90%}.crash-ui .dev{position:absolute;right:var(--space-16);top:var(--dev-top,var(--web-dev-top));pointer-events:auto;min-height:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--radius-16);background:var(--surface-scrim);border:var(--stroke-1) solid var(--border);color:var(--text)}.crash-ui .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}.crash-ui .confetti i{position:absolute;left:50%;top:45%;width:var(--space-8);height:var(--space-12);background:var(--gold);animation:celebrate var(--motion-celebrate-ms) ease-out forwards;transform:rotate(var(--angle));border-radius:var(--radius-4)}.crash-ui .confetti i:nth-child(3n){background:var(--success)}.crash-ui .confetti i:nth-child(3n + 1){background:var(--cyan)}@keyframes celebrate{to{transform:translate(var(--x),var(--y)) rotate(480deg);opacity:0}}.crash-ui.reduced *{animation:none!important;transition:none!important}
-@media(max-width:599px){.crash-ui{--edge:var(--space-8)}.crash-ui .panel{padding:var(--space-12)}.crash-ui .modal-layer:not(.is-win){align-items:flex-end}.crash-ui .account .records{gap:var(--space-8);padding:var(--space-8)}.crash-ui .record .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}.crash-ui .record-value{font-size:var(--type-18)}.crash-ui .record-title{font-size:var(--type-12)}.crash-ui .modal{padding:var(--space-24)}.crash-ui .stake .money{font-size:var(--type-20)}.crash-ui .balance .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}}
-@media(min-width:600px){.crash-ui .settings-row,.crash-ui .actions{grid-column:1/-1}.crash-ui .record-top{flex-wrap:nowrap}.crash-ui .record-title,.crash-ui .owner-name{font-size:var(--type-14)}.crash-ui .record-value{font-size:var(--type-24)}.crash-ui .winners{max-width:100%}}
-@media(min-width:960px){.crash-ui .winner:last-child{border:0}.crash-ui .winner .avatar{grid-row:auto}.crash-ui .win-multiple{display:block;font-family:var(--font-numbers),var(--font-body),sans-serif}.crash-ui .winner .money{text-align:right}.crash-ui .controls{display:flex;align-items:center;flex-wrap:wrap}.crash-ui .action{min-height:var(--web-action-compact-height);font-size:var(--type-20)}.crash-ui .controls{gap:var(--space-16)}.crash-ui .history{max-width:var(--web-history-max-width)}.crash-ui .online{font-size:var(--type-12)}.crash-ui .record-title,.crash-ui .owner-name{font-size:var(--type-14)}}
+.crash-ui .multiplier{min-width:var(--web-multiplier-min-width);border:var(--stroke-2) solid var(--multiplier-color,var(--cyan));border-radius:var(--radius-32);background:var(--surface);text-align:center;font:var(--type-32) var(--font-numbers),var(--font-body),sans-serif;color:var(--multiplier-color,var(--cyan));padding:var(--space-4) var(--space-24)}.crash-ui .controls{width:100%;max-width:var(--web-control-max-width);display:grid;gap:var(--space-16)}.crash-ui .settings-row{display:grid;grid-template-columns:var(--web-settings-column-width) 1fr;gap:var(--space-12)}.crash-ui .auto{background:var(--switch-off);border-radius:var(--radius-pill);padding:var(--space-6) var(--space-8) var(--space-6) var(--space-6);justify-content:flex-start}.crash-ui .knob{height:var(--web-knob-size);width:var(--web-knob-size);border-radius:50%;background:var(--knob);flex:none}.crash-ui .auto[aria-pressed=true]{background:var(--switch-on);color:var(--on-success)}.crash-ui .stake{display:grid;grid-template-columns:var(--tap-min) var(--tap-min) minmax(var(--web-winner-name-min-width),1fr) var(--tap-min) var(--tap-min);gap:var(--space-8);align-items:center}.crash-ui .stake .money{text-align:center;font-size:var(--type-24);min-width:0}.crash-ui .stake .button{padding:var(--space-4);font-size:var(--type-16)}.crash-ui .presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-8)}.crash-ui .presets .button{min-width:0}.crash-ui .actions{display:flex;gap:var(--space-12);min-width:0}.crash-ui .action{flex:1;min-width:0;min-height:var(--web-control-action-height);flex-direction:column;gap:var(--space-4);font-size:var(--type-24);border-radius:var(--radius-32);color:var(--on-go);border-color:var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--action-go-shadow)}.crash-ui .action.cash{background:linear-gradient(var(--action-cash-top),var(--action-cash-bottom));border-color:var(--action-cash-edge);color:var(--on-cash);box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-cash-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--cash-shadow)}
+.crash-ui .action:disabled,.crash-ui .action.cash:disabled{background:var(--button-disabled);border-color:var(--border);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .action-title{display:flex;align-items:center;justify-content:center;gap:var(--space-8)}.crash-ui .action .money,.crash-ui .action small{font-size:var(--type-16);line-height:var(--leading-tight)}.crash-ui .action .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .modal-layer{position:fixed;inset:0;z-index:30;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:var(--space-16);pointer-events:auto;touch-action:pan-y}.crash-ui .modal{width:min(100%,var(--modal-max-width-px));max-height:calc(100dvh - var(--space-32));overflow:auto;overscroll-behavior:contain;padding:var(--space-24);background:var(--surface);border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-modal)}.crash-ui .modal header{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);margin-bottom:var(--space-16)}.crash-ui .modal h2{font-size:var(--type-24);margin:0}.crash-ui .modal-body{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16)}.crash-ui .modal .button{min-height:var(--web-control-comfort-height)}.crash-ui .setting{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);min-height:var(--web-control-comfort-height)}.crash-ui .setting input[type=checkbox]{width:var(--space-24);height:var(--space-24);accent-color:var(--switch-on)}.crash-ui select{background:var(--button);color:var(--text);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16);padding:var(--space-12);max-width:55%}.crash-ui .win-modal{text-align:center}.crash-ui .win-modal .win-coin{width:var(--web-win-coin-hero);height:var(--web-win-coin-hero);display:block;margin:auto}.crash-ui .win-total{font:var(--type-48) var(--font-numbers),var(--font-body),sans-serif;color:var(--gold)}.crash-ui .toast{position:absolute;top:45%;left:50%;transform:translateX(-50%);padding:var(--space-12) var(--space-24);border-radius:var(--radius-24);background:var(--surface);border:var(--stroke-1) solid var(--border);pointer-events:none;text-align:center;max-width:90%}.crash-ui .dev{position:absolute;right:var(--space-16);top:var(--dev-top,var(--web-dev-top));pointer-events:auto;min-height:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--radius-16);background:var(--surface-scrim);border:var(--stroke-1) solid var(--border);color:var(--text)}.crash-ui .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}.crash-ui .confetti i{position:absolute;left:50%;top:45%;width:var(--space-8);height:var(--space-12);background:var(--gold);animation:celebrate var(--motion-celebrate-ms) ease-out forwards;transform:rotate(var(--angle));border-radius:var(--radius-4)}.crash-ui .confetti i:nth-child(3n){background:var(--success)}.crash-ui .confetti i:nth-child(3n + 1){background:var(--cyan)}@keyframes celebrate{to{transform:translate(var(--x),var(--y)) rotate(480deg);opacity:0}}.crash-ui.reduced *{animation:none!important;transition:none!important}
+@media(max-width:599px){.crash-ui{--edge:var(--space-8)}.crash-ui .panel{padding:var(--space-12)}.crash-ui .modal-layer:not(.is-win){align-items:flex-end}.crash-ui .account .records{gap:var(--space-8);padding:var(--space-8)}.crash-ui .record .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}.crash-ui .record-value{font-size:var(--type-16)}.crash-ui .record-title{font-size:var(--type-12)}.crash-ui .modal{padding:var(--space-24)}.crash-ui .stake .money{font-size:var(--type-24)}.crash-ui .balance .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}}
+@media(min-width:600px){.crash-ui .settings-row,.crash-ui .actions{grid-column:1/-1}.crash-ui .record-top{flex-wrap:nowrap}.crash-ui .record-title,.crash-ui .owner-name{font-size:var(--type-16)}.crash-ui .record-value{font-size:var(--type-24)}.crash-ui .winners{max-width:100%}}
+@media(min-width:960px){.crash-ui .winner:last-child{border:0}.crash-ui .winner .avatar{grid-row:auto}.crash-ui .win-multiple{display:block;font-family:var(--font-numbers),var(--font-body),sans-serif}.crash-ui .winner .money{text-align:right}.crash-ui .controls{display:flex;align-items:center;flex-wrap:wrap}.crash-ui .action{min-height:var(--web-action-compact-height);font-size:var(--type-24)}.crash-ui .controls{gap:var(--space-16)}.crash-ui .history{max-width:var(--web-history-max-width)}.crash-ui .online{font-size:var(--type-12)}.crash-ui .record-title,.crash-ui .owner-name{font-size:var(--type-16)}}
 @media(prefers-reduced-motion:reduce){.crash-ui *{animation:none!important;transition:none!important}}
 /* A narrow phone that is also short: the live wins strip is what pushes the account
    panel over half the screen, and the game has to have somewhere to be drawn. */
-@media(max-width:599px) and (max-height:700px){.crash-ui .winners{display:none}}@media(min-width:600px) and (max-height:720px){.crash-ui .winners,.crash-ui .records{display:none}.crash-ui .top{right:auto;max-width:65%}.crash-ui .controls{gap:var(--space-8);padding:var(--space-8)}.crash-ui .action{min-height:var(--tap-min);font-size:var(--type-20)}.crash-ui .multiplier{font-size:var(--type-24)}.crash-ui .settings-row{grid-template-columns:var(--web-settings-column-compact-width) 1fr}.crash-ui .controls{grid-template-columns:minmax(var(--web-short-stake-min-width),1fr) minmax(var(--web-short-presets-min-width),.8fr)}.crash-ui .settings-row{grid-column:1}.crash-ui .stake{grid-column:1;grid-row:2}.crash-ui .presets{grid-column:2;grid-row:1}.crash-ui .actions{grid-column:2;grid-row:2}.crash-ui .dev{top:var(--space-16)}}
+@media(max-width:599px) and (max-height:700px){.crash-ui .winners{display:none}}@media(min-width:600px) and (max-height:720px){.crash-ui .winners,.crash-ui .records{display:none}.crash-ui .top{right:auto;max-width:65%}.crash-ui .controls{gap:var(--space-8);padding:var(--space-8)}.crash-ui .action{min-height:var(--tap-min);font-size:var(--type-24)}.crash-ui .multiplier{font-size:var(--type-24)}.crash-ui .settings-row{grid-template-columns:var(--web-settings-column-compact-width) 1fr}.crash-ui .controls{grid-template-columns:minmax(var(--web-short-stake-min-width),1fr) minmax(var(--web-short-presets-min-width),.8fr)}.crash-ui .settings-row{grid-column:1}.crash-ui .stake{grid-column:1;grid-row:2}.crash-ui .presets{grid-column:2;grid-row:1}.crash-ui .actions{grid-column:2;grid-row:2}.crash-ui .dev{top:var(--space-16)}}
 /* Typography and surfaces follow the shipped HUD tokens. */
 .crash-ui .avatar{display:inline-block;vertical-align:middle}
 .crash-ui .records{background:var(--surface)}
 .crash-ui .action{position:relative;overflow:hidden}
 .crash-ui .action::before{content:"";position:absolute;left:var(--space-6);top:var(--space-6);width:var(--web-gloss-width);height:var(--web-gloss-height);border-top:var(--web-gloss-stroke) solid var(--gloss-ink);border-left:var(--web-gloss-stroke) solid var(--gloss-ink);border-top-left-radius:var(--radius-32);pointer-events:none}
-@media(min-width:960px){.crash-ui .identity strong{font-size:var(--type-24)}.crash-ui .balance .money{font-size:var(--type-32)}.crash-ui .level{font-size:var(--type-14)}.crash-ui .wins-head{font-size:var(--type-24)}.crash-ui .owner-date{font-size:var(--type-14)}.crash-ui .record-top{gap:var(--space-24)}.crash-ui .records{padding:var(--space-16)}.crash-ui .record{gap:var(--space-12)}}
+@media(min-width:960px){.crash-ui .identity strong{font-size:var(--type-24)}.crash-ui .balance .money{font-size:var(--type-32)}.crash-ui .level{font-size:var(--type-16)}.crash-ui .wins-head{font-size:var(--type-24)}.crash-ui .owner-date{font-size:var(--type-16)}.crash-ui .record-top{gap:var(--space-24)}.crash-ui .records{padding:var(--space-16)}.crash-ui .record{gap:var(--space-12)}}
 /* Modal rows use the original flat surfaces, radio artwork and nested radii. */
 .crash-ui .modal{--modal-padding:var(--space-24);--modal-radius:var(--radius-48);padding:var(--modal-padding);border-radius:var(--modal-radius);max-width:var(--modal-max-width-px)}
 .crash-ui .modal-body{gap:var(--space-12)}
@@ -97,8 +97,8 @@
  background:var(--surface-inset);
  min-width:0;
 }
-.crash-ui .controls .stake .button{min-width:var(--tap-min);font-size:var(--type-14);padding:var(--space-4)}
-.crash-ui .controls .stake .money{font-size:var(--type-20)}
+.crash-ui .controls .stake .button{min-width:var(--tap-min);font-size:var(--type-16);padding:var(--space-4)}
+.crash-ui .controls .stake .money{font-size:var(--type-24)}
 .crash-ui .controls .settings-row,.crash-ui .controls .actions{gap:var(--web-control-gap)}
 .crash-ui .controls .presets{gap:var(--space-8);min-width:0}
 .crash-ui .controls .action{
@@ -118,7 +118,7 @@
    breakpoint rules that reshape `.controls` into flex or a two-column grid. */
 .crash-ui .controls.tabbed-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16);align-items:stretch}
 .crash-ui .tabbed-controls .risk{display:flex;align-items:center;justify-content:center;gap:var(--space-16)}
-.crash-ui .tabbed-controls .risk-label{flex-shrink:0;white-space:nowrap;font:var(--type-14) var(--font-numbers),var(--font-body),sans-serif;letter-spacing:0.08em;color:var(--text)}
+.crash-ui .tabbed-controls .risk-label{flex-shrink:0;white-space:nowrap;font:var(--type-16) var(--font-numbers),var(--font-body),sans-serif;letter-spacing:0.08em;color:var(--text)}
 .crash-ui .tabbed-controls .risk-label [data-slot="riskPct"]{display:inline-block;width:5ch;text-align:right;font-variant-numeric:tabular-nums}
 .crash-ui .tabbed-controls .risk-meter{display:grid;width:calc(10 * var(--space-16) + 9 * var(--space-4));min-width:0;grid-template-columns:repeat(10,minmax(0,1fr));gap:var(--space-4)}
 .crash-ui .tabbed-controls .risk-meter i{display:block;height:var(--space-16);border-radius:var(--radius-4);background:var(--surface-inset)}
@@ -126,7 +126,7 @@
 .crash-ui .tabbed-controls .risk-meter i.on.tier-mid{background:var(--warning)}
 .crash-ui .tabbed-controls .risk-meter i.on.tier-high{background:var(--success)}
 .crash-ui .tabbed-controls .difficulty-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:var(--space-8)}
-.crash-ui .tabbed-controls .difficulty-row .button{min-height:var(--control-h);font-size:var(--type-20)}
+.crash-ui .tabbed-controls .difficulty-row .button{min-height:var(--control-h);font-size:var(--type-24)}
 .crash-ui .tabbed-controls .difficulty-row .button[aria-pressed=true]{background:var(--gold);color:var(--on-go);outline:0}
 /* The wager and the action buttons take a row each. Side by side they put three things
    across one row — stepper, cash, go — which crowds the stake and leaves the buttons
@@ -134,8 +134,8 @@
 .crash-ui .tabbed-controls .bet-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16)}
 .crash-ui .tabbed-controls .wager{display:grid;gap:var(--space-8);align-content:start;padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24);background:var(--surface-inset);min-width:0}
 .crash-ui .tabbed-controls .wager .stake{display:grid;grid-template-columns:minmax(var(--tap-min),1fr) var(--control-h) minmax(0,1.5fr) var(--control-h) minmax(var(--tap-min),1fr);gap:var(--space-4);padding:0;border:0;background:none;align-items:center}
-.crash-ui .tabbed-controls .wager .stake .button{min-height:var(--control-h);font-size:var(--type-14);padding:0}
-.crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{font-size:var(--type-28)}
+.crash-ui .tabbed-controls .wager .stake .button{min-height:var(--control-h);font-size:var(--type-16);padding:0}
+.crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{font-size:var(--type-32)}
 .crash-ui .tabbed-controls .wager-amount{display:grid;justify-items:center;line-height:var(--leading-tight);min-width:0}
 .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-24)}
 /* Pinned explicitly: the kit's breakpoint rules move `.actions` around the standard
@@ -157,19 +157,19 @@
 .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action{white-space:normal;text-align:center;padding-inline:var(--space-8)}
 .crash-ui .tabbed-controls .actions .action{min-height:100%;flex-direction:column;gap:var(--space-4)}
 .crash-ui .tabbed-controls .actions .action .money{font-size:var(--type-32)}
-.crash-ui .tabbed-controls .actions .action .action-title{font-size:var(--type-20)}
+.crash-ui .tabbed-controls .actions .action .action-title{font-size:var(--type-24)}
 .crash-ui .tabbed-controls .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
 .crash-ui .tabbed-controls .tab{min-height:var(--web-control-height);border-radius:var(--radius-24);color:var(--text-muted)}
 .crash-ui .tabbed-controls .tab .icon{width:var(--web-icon-md);height:var(--web-icon-md)}
 .crash-ui .bet-list{display:grid;gap:var(--space-8)}
 .crash-ui .bet-row{display:flex;justify-content:space-between;align-items:center;gap:var(--space-12);padding:var(--space-8) var(--space-12);border-radius:var(--radius-16);background:var(--surface-inset)}
-.crash-ui .bet-row .bet-result{font-size:var(--type-14);color:var(--text-muted)}
+.crash-ui .bet-row .bet-result{font-size:var(--type-16);color:var(--text-muted)}
 .crash-ui .bet-row.won .bet-result{color:var(--success)}
 .crash-ui .bet-row.lost .bet-result{color:var(--danger)}
 .crash-ui .tabbed-controls .tabbed-main{display:grid;gap:var(--space-16);min-width:0}
 @media(max-width:599px){
  .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-16)}
- .crash-ui .tabbed-controls .actions .action .money{font-size:var(--type-28)}
+ .crash-ui .tabbed-controls .actions .action .money{font-size:var(--type-32)}
 }
 /* Anything but a phone: the tab bar leaves the bottom panel and becomes a vertical
    column on the left edge, centred on the screen's height. The threshold is the one where
@@ -247,7 +247,7 @@
 .crash-ui .account-column .history{margin:0;padding:0 var(--space-8);background:none;border:0;box-shadow:none;max-width:100%;pointer-events:auto}
 .crash-ui .pill,.crash-ui .ladder-step{font-size:var(--web-hud-meta-size)}
 .crash-ui .identity strong{font-size:var(--web-hud-profile-size)}
-.crash-ui .balance .money{font-size:clamp(var(--type-20),5vw,var(--type-24))}
+.crash-ui .balance .money{font-size:var(--type-24)}
 .crash-ui .wins-head{font-size:var(--body-type-px)}
 .crash-ui .level,.crash-ui .owner-date,.crash-ui .online{font-size:var(--web-hud-meta-size)}
 @media(min-width:960px){
@@ -344,7 +344,7 @@
 .crash-ui .profile .identity>span:last-child{display:grid;gap:var(--space-4)}
 .crash-ui .profile .identity strong,.crash-ui .profile .level{line-height:var(--leading-tight)}
 .crash-ui .profile .level{display:block}
-.crash-ui .account .wins-head{min-height:var(--type-20);line-height:var(--type-20);margin-bottom:var(--space-12)}
+.crash-ui .account .wins-head{min-height:var(--type-24);line-height:var(--type-24);margin-bottom:var(--space-12)}
 
 /* Operator features: disabled groups release their grid tracks instead of leaving gaps. */
 .crash-ui .controls.auto-only .settings-row{grid-template-columns:var(--web-settings-column-width);justify-content:start}
@@ -374,12 +374,12 @@
 
 /* Paired phone actions need more breathing room than a full-width CTA. */
 @media(max-width:599px){
- .crash-ui .controls .actions:has(>[data-action=cash]:not([hidden])) .action-title{font-size:var(--type-20);gap:var(--space-8)}
+ .crash-ui .controls .actions:has(>[data-action=cash]:not([hidden])) .action-title{font-size:var(--type-24);gap:var(--space-8)}
  .crash-ui .controls .actions:has(>[data-action=cash]:not([hidden])) .action .money{font-size:var(--type-16)}
 }
 
 /* Action symbols retain their size in single/paired and desktop/mobile layouts. */
-.crash-ui .controls .action-title .icon{width:var(--type-28);height:var(--type-28)}
+.crash-ui .controls .action-title .icon{width:var(--type-32);height:var(--type-32)}
 
 /* Three independent positions share the standard panel, stake and raised actions. */
 .crash-ui .controls.multi-bet-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--web-control-gap);align-items:start}
@@ -388,10 +388,10 @@
 .crash-ui .bet-quote strong{display:block;font:var(--type-24)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;color:var(--text)}
 .crash-ui .bet-receipt{color:var(--text-muted);font-size:var(--web-hud-meta-size);text-align:center;min-height:var(--space-32);display:flex;align-items:center;justify-content:center}
 .crash-ui .controls .bet-wager{grid-template-columns:var(--control-h) minmax(0,1fr) var(--control-h);gap:var(--space-4)}
-.crash-ui .bet-amount{width:100%;min-width:0;appearance:textfield;background:transparent;border:0;color:var(--text);padding:0;text-align:center;font:var(--type-20) var(--font-numbers),var(--font-body),sans-serif}
+.crash-ui .bet-amount{width:100%;min-width:0;appearance:textfield;background:transparent;border:0;color:var(--text);padding:0;text-align:center;font:var(--type-24) var(--font-numbers),var(--font-body),sans-serif}
 .crash-ui .bet-amount::-webkit-inner-spin-button{appearance:none}
 .crash-ui .controls .bet-wager .bet-step{min-width:var(--tap-min);height:var(--control-h);padding:0;font-size:var(--web-control-step-icon-size);line-height:var(--leading-none)}
-.crash-ui .controls .bet-action{width:100%;min-width:0;white-space:normal;font-size:var(--type-20);line-height:var(--leading-tight)}
+.crash-ui .controls .bet-action{width:100%;min-width:0;white-space:normal;font-size:var(--type-24);line-height:var(--leading-tight)}
 .crash-ui .bet-action .action-title{font-size:inherit}
 .crash-ui .bet-action .money{font-size:var(--body-type-px);line-height:var(--leading-tight)}
 .crash-ui .bet-action.bet-info{background:var(--surface-inset);color:var(--text-muted);border-color:var(--border);box-shadow:none;font-size:var(--web-card-title-size)}
@@ -404,7 +404,7 @@
  .crash-ui .controls .bet-wager{padding:var(--space-4);padding-bottom:calc(var(--space-4) + var(--web-control-depth));grid-template-columns:repeat(2,minmax(var(--tap-min),1fr));gap:var(--space-4)}
  .crash-ui .bet-amount{grid-column:1/-1;grid-row:1;min-height:var(--space-32);font-size:var(--body-type-px)}
  .crash-ui .controls .bet-wager .bet-step{height:var(--tap-min)}
- .crash-ui .bet-quote strong{font-size:var(--type-20)}
+ .crash-ui .bet-quote strong{font-size:var(--type-24)}
  .crash-ui .controls .bet-action{font-size:var(--body-type-px)}
 }
 
@@ -428,7 +428,7 @@
  .crash-ui .win-multiple{display:block;font-family:var(--font-numbers),var(--font-body),sans-serif}
  .crash-ui .winner .money{text-align:right}
  .crash-ui .panel{padding:var(--space-12)}
- .crash-ui .identity strong{font-size:var(--type-18)}
+ .crash-ui .identity strong{font-size:var(--type-16)}
  .crash-ui .identity{min-height:var(--web-compact-row-height);gap:var(--space-8)}
  .crash-ui .identity .avatar{width:var(--web-avatar-lg);height:var(--web-avatar-lg)}
  .crash-ui .level{font-size:var(--type-12)}
@@ -448,7 +448,7 @@
  .crash-ui .winner{grid-template-columns:var(--web-avatar-sm) minmax(var(--web-winner-name-min-width),1fr) var(--tap-min) minmax(var(--web-winner-payout-min-width),auto);padding:var(--space-6) 0;gap:var(--space-6)}
  .crash-ui .winner .avatar{width:var(--web-avatar-sm);height:var(--web-avatar-sm)}
  .crash-ui .winner-name{font-size:var(--type-12)}
- .crash-ui .winner .money,.crash-ui .win-multiple{font-size:var(--type-14)}
+ .crash-ui .winner .money,.crash-ui .win-multiple{font-size:var(--type-16)}
  .crash-ui .history{margin-top:var(--space-8)}
 }
 /* Phone: the top and bottom panels run edge to edge and everything inside sits a little tighter. */
@@ -462,7 +462,7 @@
  .crash-ui .top .identity strong{font-size:var(--type-16)}
  .crash-ui .top .identity{min-height:var(--web-compact-row-height)}
  .crash-ui .top .identity .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md)}
- .crash-ui .top .balance .money{font-size:var(--type-20)}
+ .crash-ui .top .balance .money{font-size:var(--type-24)}
  .crash-ui .icon-button{width:var(--web-compact-row-height);height:var(--web-compact-row-height);padding:var(--space-6)}
  .crash-ui .wins-head{min-height:var(--space-24);margin-bottom:var(--space-4)}
  .crash-ui .account .wins-head{margin-bottom:var(--space-4)}
@@ -470,7 +470,7 @@
  .crash-ui .top .account .winner{padding:var(--space-4) var(--space-8)}
  .crash-ui .winner-name,.crash-ui .winner .money{font-size:var(--type-12)}
  .crash-ui .account .winners.panel,.crash-ui .account .records{margin-top:var(--space-6);padding-top:var(--space-6)}
- .crash-ui .top .records-line .record-value{font-size:var(--type-14)}
+ .crash-ui .top .records-line .record-value{font-size:var(--type-16)}
  .crash-ui .history{margin-top:var(--space-6)}
  .crash-ui .pill{padding:var(--space-4) var(--space-8);font-size:var(--type-12)}
  .crash-ui .ladder-step{font-size:var(--type-12)}
@@ -478,13 +478,13 @@
  .crash-ui .auto,.crash-ui .settings-row>.button{min-height:var(--tap-min)}
  .crash-ui .auto .knob{height:var(--web-knob-compact-size);width:var(--web-knob-compact-size)}
  .crash-ui .stake .button{min-height:var(--tap-min)}
- .crash-ui .stake .money{font-size:var(--type-20)}
+ .crash-ui .stake .money{font-size:var(--type-24)}
  .crash-ui .presets .button{min-height:var(--tap-min);padding:var(--space-4) var(--space-8);font-size:var(--type-16)}
- .crash-ui .action{min-height:var(--web-action-compact-height);font-size:var(--type-20)}
+ .crash-ui .action{min-height:var(--web-action-compact-height);font-size:var(--type-24)}
  .crash-ui .action .money,.crash-ui .action small{font-size:var(--type-16)}
  .crash-ui .controls .bet-action{height:var(--web-action-compact-height);min-height:var(--web-action-compact-height)}
  .crash-ui .bet-quote{font-size:var(--type-12)}
- .crash-ui .bet-quote strong{font-size:var(--type-18)}
+ .crash-ui .bet-quote strong{font-size:var(--type-16)}
  .crash-ui .bet-receipt{min-height:var(--space-24)}
  .crash-ui .controls.multi-bet-controls{padding:var(--space-8) var(--space-8) calc(var(--space-8) + var(--web-control-depth) + env(safe-area-inset-bottom))}
  .crash-ui .dev{top:var(--dev-top,var(--web-dev-top-phone))}
@@ -493,18 +493,19 @@
 /* Bet tab pages: the reference's table hierarchy in the active brand's tokens. */
 .crash-ui .modal-layer.is-tab-view .modal{display:flex;flex-direction:column;overflow:hidden;height:100%;max-height:100%;gap:var(--space-16)}
 .crash-ui .is-tab-view .modal header{flex:none;position:relative;min-height:var(--tap-min);justify-content:center;padding-inline:var(--tap-min)}
-.crash-ui .is-tab-view .modal h2{color:var(--gold);font-size:var(--type-28);text-align:center}
+.crash-ui .is-tab-view .modal h2{color:var(--gold);font-size:var(--type-24);text-align:center}
 .crash-ui .is-tab-view .modal header .icon-button{position:absolute;right:0;top:0;border-radius:var(--radius-pill)}
 .crash-ui .is-tab-view .modal-body{display:block;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
 .crash-ui .bets-table{width:100%;table-layout:fixed;border-collapse:collapse;font-family:var(--font-body),sans-serif;font-size:var(--type-14);font-variant-numeric:tabular-nums}
 .crash-ui .bet-caption{position:absolute;width:0;height:0;overflow:hidden}
-.crash-ui .bets-table th,.crash-ui .bets-table td{padding:var(--space-16) var(--space-4);text-align:right;white-space:nowrap}
+.crash-ui .bets-table th,.crash-ui .bets-table td{padding:var(--space-12) var(--space-8);text-align:right;vertical-align:middle;line-height:1.4;white-space:nowrap}
+.crash-ui .bets-table tbody td{padding-block:var(--space-4)}
 .crash-ui .bets-table th:first-child,.crash-ui .bets-table td:first-child{text-align:left}
 .crash-ui .bets-table thead th{position:sticky;top:0;z-index:1;background:var(--surface);color:var(--text-muted);font-weight:inherit;border-bottom:var(--stroke-1) solid var(--border)}
-.crash-ui .top-bets th:first-child{width:36%}
-.crash-ui .top-bets th:nth-child(2){width:23%}
-.crash-ui .top-bets th:nth-child(3){width:16%}
-.crash-ui .top-bets th:nth-child(4){width:25%}
+.crash-ui .top-bets th:first-child{width:30%}
+.crash-ui .top-bets th:nth-child(2){width:22%}
+.crash-ui .top-bets th:nth-child(3){width:18%}
+.crash-ui .top-bets th:nth-child(4){width:30%}
 .crash-ui .bet-player{display:flex;align-items:center;gap:var(--space-12);min-width:0}
 .crash-ui .bet-player>span:last-child{overflow:hidden;text-overflow:ellipsis}
 .crash-ui .bet-player .avatar{width:var(--web-avatar-sm);height:var(--web-avatar-sm)}
@@ -557,7 +558,7 @@
 }
 
 @media(min-width:600px){
- .crash-ui .modal-layer.is-context-panel>.modal-footer{top:var(--tab-window-center);transform:translateY(-50%)}
+ .crash-ui .modal-layer.is-context-panel>.modal-footer{top:50%;transform:translateY(-50%)}
  .crash-ui .modal-layer.is-context-panel .modal{left:var(--tab-window-left);top:var(--tab-window-top);bottom:auto;width:var(--tab-window-width);height:var(--tab-window-height);container-type:inline-size}
 }
 @container(max-width:599px){
@@ -585,15 +586,19 @@
 .crash-ui .bet-detail-trophy{position:absolute;left:calc(-1 * var(--space-16));top:var(--space-16);display:grid;place-items:center;width:var(--web-avatar-hero);height:var(--web-avatar-hero);border-radius:var(--radius-pill);background:var(--surface-inset);border:var(--stroke-2) solid var(--border)}
 .crash-ui .bet-detail-divider{display:flex;align-items:center;gap:var(--space-8);margin-block:var(--space-16)}
 .crash-ui .bet-detail-divider:before,.crash-ui .bet-detail-divider:after{content:'';height:var(--stroke-1);background:var(--border);flex:1}
-.crash-ui .bet-detail-divider span{min-width:0;max-width:100%;overflow-wrap:anywhere;text-align:center;padding:var(--space-8) var(--space-16);border-radius:var(--radius-8);background:var(--surface-raised);font-size:var(--type-20)}
-.crash-ui .bet-detail-date{text-align:center;color:var(--text-muted);font-size:var(--type-14);line-height:var(--leading-relaxed);margin:0 0 var(--space-24)}
-.crash-ui .bet-detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
-.crash-ui .bet-detail-card{display:grid;align-content:center;justify-items:center;gap:var(--space-8);min-width:0;padding:var(--space-16) var(--space-8);border-radius:var(--radius-16);background:var(--surface-raised);text-align:center;overflow-wrap:anywhere}
-.crash-ui .bet-detail-card strong{color:var(--gold);font:var(--type-20)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;max-width:100%}
+.crash-ui .bet-detail-divider span{min-width:0;max-width:100%;overflow-wrap:anywhere;text-align:center;padding:var(--space-8) var(--space-16);border-radius:var(--radius-8);background:var(--surface-raised);font-size:var(--type-24)}
+.crash-ui .bet-detail-date{text-align:center;color:var(--text-muted);font-size:var(--type-16);line-height:var(--leading-relaxed);margin:0 0 var(--space-24)}
+.crash-ui .bet-detail-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.72fr) minmax(0,1.28fr);gap:var(--space-8)}
+.crash-ui .bet-detail-card{display:grid;align-content:center;justify-items:center;gap:var(--space-8);min-width:0;padding:var(--space-16);border-radius:var(--radius-16);background:var(--surface-raised);text-align:center;overflow-wrap:anywhere}
+.crash-ui .bet-detail-card strong{color:var(--gold);font:var(--type-24)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;max-width:100%}
+.crash-ui .bet-detail-grid,.crash-ui .bet-detail-extras{container-type:inline-size}
+.crash-ui .bet-detail-card strong{font-size:var(--type-16)}
+@media(max-width:389px){.crash-ui .bet-detail-card strong{font-size:var(--type-14)}}
+@media(max-width:359px){.crash-ui .bet-detail-card strong{font-size:var(--type-12)}}
+.crash-ui .bet-detail-grid .bet-detail-card strong{white-space:nowrap;overflow-wrap:normal}
 .crash-ui .bet-detail-card>span{font-size:var(--type-12);color:var(--text-muted)}
 .crash-ui .bet-detail-extras{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-8);margin-top:var(--space-8)}
 .crash-ui .bet-detail-extras .bet-detail-card:first-child{grid-column:1/-1}
-.crash-ui .bet-detail-extras .bet-detail-card strong{font-size:var(--type-20)}
 
 
 /* The tabbed configuration keeps records in its tabs and uses an edge-to-edge header. */
@@ -612,7 +617,7 @@
 .crash-ui.has-tabbed-controls :is(.profile,.account-summary) .identity .avatar{display:block;width:var(--space-32);height:var(--space-32);border:0}
 .crash-ui.has-tabbed-controls :is(.profile,.account-summary) .identity .level{font-size:var(--type-20);color:var(--on-go);line-height:var(--leading-tight);white-space:nowrap}
 .crash-ui.has-tabbed-controls .profile>.balance{justify-self:end;display:flex;align-items:center;min-width:0;max-width:100%;min-height:var(--tap-min);margin:0;padding:var(--space-8) var(--space-12);gap:var(--space-8);border-radius:var(--radius-pill);background:var(--surface)}
-.crash-ui.has-tabbed-controls .profile .balance>.icon{order:2;width:var(--space-24);height:var(--space-24)}
+.crash-ui.has-tabbed-controls .profile .balance>.icon{order:0;width:var(--space-24);height:var(--space-24)}
 .crash-ui.has-tabbed-controls .profile .balance .money{font-size:var(--type-20);white-space:nowrap;min-width:0}
 @media(max-width:599px){
  .crash-ui.has-tabbed-controls .account.panel{padding-inline:var(--space-8);padding-left:max(var(--space-8),env(safe-area-inset-left));padding-right:max(var(--space-8),env(safe-area-inset-right))}
@@ -627,12 +632,12 @@
 .crash-ui .is-menu-popover .modal .flat-button{min-height:var(--tap-min);border-radius:var(--radius-16);padding:var(--space-12) var(--space-16);white-space:nowrap}
 
 /* Text labels share one size; currency retains the Play amount size in both states. */
-.crash-ui .tabbed-controls .actions .action .money.is-label{font-size:var(--type-20)}
+.crash-ui .tabbed-controls .actions .action .money.is-label{font-size:var(--type-24)}
 
 .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money{font-size:var(--type-32)}
-.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--type-20)}
+.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--type-24)}
 @media(max-width:599px){
- .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label){font-size:var(--type-28)}
+ .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label){font-size:var(--type-32)}
 }
 
 @media(min-width:600px){
@@ -671,12 +676,12 @@
  .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-16)}
  .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--tap-min),1fr) var(--tap-min) minmax(0,1.5fr) var(--tap-min) minmax(var(--tap-min),1fr)}
  .crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{width:var(--tap-min)}
- .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-20)}
+ .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-24)}
  .crash-ui .tabbed-controls .actions .action{min-height:var(--web-control-height)}
 }
 @media(min-width:960px){
  .crash-ui .tabbed-controls .bet-grid>.actions{grid-template-columns:repeat(2,minmax(0,1fr))}
- .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-20)}
+ .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-24)}
 }
 
 @media(min-width:600px){
@@ -684,7 +689,7 @@
  .crash-ui .tabbed-controls .actions{container-type:inline-size}
 }
 @container(max-width:200px){
- .crash-ui .tabbed-controls .actions .action .money,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money{font-size:var(--type-20)}
+ .crash-ui .tabbed-controls .actions .action .money,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money{font-size:var(--type-24)}
 }
 
 /* The shell can wrap another game's betting controls without replacing them. */
@@ -715,9 +720,9 @@
 
 .crash-ui .modal-layer.is-account-popover .modal{left:var(--account-anchor-left);right:auto;width:min(calc(var(--modal-max-width-px) / 2 + var(--space-48)),100% - 2 * var(--space-8));padding:var(--space-16)}
 .crash-ui .is-account-popover .modal-body{gap:var(--space-8)}
-.crash-ui .is-account-popover .setting{gap:var(--space-16);padding:0;font-size:var(--type-14)}
+.crash-ui .is-account-popover .setting{gap:var(--space-16);padding:0;font-size:var(--type-16)}
 .crash-ui .is-account-popover .account-stat{white-space:nowrap}
-.crash-ui .is-account-popover .modal-section-title{margin:var(--space-8) 0 0;font-size:var(--type-14);color:var(--text-muted)}
+.crash-ui .is-account-popover .modal-section-title{margin:var(--space-8) 0 0;font-size:var(--type-16);color:var(--text-muted)}
 
 /* Full-width table surfaces; only cell content receives horizontal insets. */
 .crash-ui .is-tab-view .modal:has(.bets-table){--table-inset:var(--space-24);padding-inline:0;padding-bottom:0}
@@ -736,11 +741,11 @@
 
 /* Long monetary values fit their actual cell, including narrow split actions. */
 .crash-ui .tabbed-controls .wager-amount{container-type:inline-size;width:100%}
-.crash-ui .tabbed-controls .wager-amount .money{font-size:clamp(var(--type-14),18cqi,var(--type-24));white-space:nowrap}
+.crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-24);white-space:nowrap}
 .crash-ui .tabbed-controls .actions .action{container-type:inline-size;--amount-max-size:var(--type-32)}
-.crash-ui .tabbed-controls .actions .action .money:not(.is-label),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label){font-size:clamp(var(--type-20),18cqi,var(--amount-max-size))}
+.crash-ui .tabbed-controls .actions .action .money:not(.is-label),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label){font-size:var(--type-24)}
 @media(max-width:599px){
- .crash-ui .tabbed-controls .actions .action{--amount-max-size:var(--type-28)}
+ .crash-ui .tabbed-controls .actions .action{--amount-max-size:var(--type-32)}
 }
 
 /* A single header/content gap; paragraph margins must not add another inset. */
@@ -780,15 +785,15 @@
 }
 .crash-ui.has-tabbed-controls .win-modal header{position:relative;justify-content:center;margin:var(--space-8) 0 var(--space-16);padding-inline:var(--space-32)}
 .crash-ui.has-tabbed-controls .win-modal header .icon-button{position:absolute;right:0;top:0}
-.crash-ui.has-tabbed-controls .win-modal h2{font-size:clamp(var(--type-24),8cqi,var(--type-32));color:var(--action-go-edge);letter-spacing:0.04em;text-shadow:0 var(--stroke-2) 0 var(--action-go-shadow)}
+.crash-ui.has-tabbed-controls .win-modal h2{font-size:var(--type-32);color:var(--action-go-edge);letter-spacing:0.04em;text-shadow:0 var(--stroke-2) 0 var(--action-go-shadow)}
 .crash-ui.has-tabbed-controls .win-modal .modal-body{gap:var(--space-16)}
 .crash-ui.has-tabbed-controls .win-emblem{position:relative;display:grid;place-items:center;height:calc(var(--web-win-coin-hero) + var(--space-48));margin-inline:auto;width:100%}
-.crash-ui.has-tabbed-controls .win-emblem::before{content:"";position:absolute;inset:0;margin:auto;width:calc(var(--web-win-coin-hero) + var(--space-48));border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0deg 20deg,color-mix(in srgb,var(--gold) 18%,transparent) 20deg 30deg);mask-image:radial-gradient(circle,black 20%,transparent 72%)}
+.crash-ui.has-tabbed-controls .win-emblem::before{content:"";position:absolute;inset:0;margin:auto;width:calc(var(--web-win-coin-hero) + var(--space-48));border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0deg 20deg,color-mix(in srgb,var(--gold) 18%,transparent) 20deg 30deg);mask-image:radial-gradient(circle,black 20%,transparent 72%);animation:win-halo-spin var(--motion-win-halo-ms) linear infinite;transform-origin:center;pointer-events:none}
 .crash-ui.has-tabbed-controls .win-modal .win-coin{position:relative;width:calc(var(--web-win-coin-hero) + var(--space-16));height:calc(var(--web-win-coin-hero) + var(--space-16));filter:drop-shadow(0 var(--space-4) var(--space-12) color-mix(in srgb,var(--gold) 45%,transparent));animation:win-coin-arrive var(--motion-celebrate-ms) ease-out both}
 .crash-ui.has-tabbed-controls .win-spark{position:absolute;color:var(--action-go-edge);font-size:var(--type-32);line-height:var(--leading-none)}
 .crash-ui.has-tabbed-controls .win-spark-left{left:20%;top:var(--space-16);transform:rotate(-12deg)}
 .crash-ui.has-tabbed-controls .win-spark-right{right:20%;bottom:var(--space-16);font-size:var(--type-24);transform:rotate(12deg)}
-.crash-ui.has-tabbed-controls .win-total{padding:var(--space-8) 0 var(--space-16);border:0;border-radius:0;background:none;color:var(--action-go-edge);font-size:clamp(var(--type-24),13cqi,var(--type-52));font-weight:700;line-height:var(--leading-tight);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;box-shadow:none;text-shadow:0 var(--stroke-2) 0 var(--action-go-shadow),0 0 var(--space-24) color-mix(in srgb,var(--gold) 25%,transparent)}
+.crash-ui.has-tabbed-controls .win-total{padding:var(--space-8) 0 var(--space-16);border:0;border-radius:0;background:none;color:var(--action-go-edge);font-size:var(--type-48);font-weight:700;line-height:var(--leading-tight);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;box-shadow:none;text-shadow:0 var(--stroke-2) 0 var(--action-go-shadow),0 0 var(--space-24) color-mix(in srgb,var(--gold) 25%,transparent)}
 @keyframes win-plaque-in{from{opacity:0;transform:translateY(var(--space-12)) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes win-coin-arrive{0%{transform:scale(.8) rotate(-12deg)}25%{transform:scale(1.08) rotate(5deg)}45%,100%{transform:scale(1) rotate(0deg)}}
 
@@ -808,8 +813,8 @@
 }
 
 /* Stable action typography across idle, playing and viewport sizes. */
-.crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions .action .money.is-label,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--type-18)}
-.crash-ui .tabbed-controls .actions .action .money:not(.is-label):not(.long-amount),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label):not(.long-amount){font-size:var(--type-28)}
+.crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions .action .money.is-label,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--type-16)}
+.crash-ui .tabbed-controls .actions .action .money:not(.is-label):not(.long-amount),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label):not(.long-amount){font-size:var(--type-32)}
 
 /* GO has the same typographic emphasis as the cash-out amount. */
 .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title.go-label{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-24)}
@@ -820,13 +825,95 @@
  .crash-ui.has-tabbed-controls .profile>.identity{padding-right:var(--space-8);gap:var(--space-4)}
  .crash-ui.has-tabbed-controls .profile .identity .avatar{width:var(--space-24);height:var(--space-24)}
  .crash-ui.has-tabbed-controls .profile>.balance{padding-inline:var(--space-8);gap:var(--space-4)}
- .crash-ui.has-tabbed-controls .profile .balance .money{font-size:var(--type-14)}
+ .crash-ui.has-tabbed-controls .profile .balance .money{font-size:var(--type-16)}
  .crash-ui.has-tabbed-controls .profile .balance>.icon{width:calc(var(--space-16) + var(--space-4));height:calc(var(--space-16) + var(--space-4));flex-shrink:0}
  .crash-ui .tabbed-controls .risk{min-width:0;gap:var(--space-8)}
  .crash-ui .tabbed-controls .risk-meter{flex:1;width:auto}
- .crash-ui .tabbed-controls .difficulty-row .button{min-width:0;padding-inline:var(--space-4);font-size:var(--type-14)}
+ .crash-ui .tabbed-controls .difficulty-row .button{min-width:0;padding-inline:var(--space-4);font-size:var(--type-16)}
 }
 
 /* Slightly smaller cash-out amount, including long values. */
 .crash-ui .tabbed-controls .actions .action.cash{--amount-max-size:var(--type-24)}
 .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action.cash .money:not(.is-label):not(.long-amount){font-size:var(--type-24)}
+
+/* Optional menu drawer: navigation moves out of the betting controls. */
+.crash-ui.has-menu-drawer .tabbed-controls>.tabs{display:none}
+.crash-ui.has-menu-drawer .tabbed-controls.navigation-only{display:none}
+.crash-ui.has-menu-drawer .modal-layer.is-menu-drawer{display:flex;align-items:stretch;justify-content:flex-end;padding:var(--space-4);pointer-events:auto;background:var(--scrim)}
+.crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal{display:flex;flex-direction:column;gap:var(--space-16);width:min(100%,calc(var(--modal-max-width-px) - var(--space-48) - var(--space-32)));max-width:none;min-height:0;height:100%;max-height:100%;margin:0;border-radius:var(--radius-24);border:var(--stroke-1) solid color-mix(in srgb,var(--text) 16%,transparent);padding:var(--space-24);background:linear-gradient(160deg,color-mix(in srgb,var(--text) 5%,var(--surface)),var(--surface) 45%);box-shadow:var(--elevation-modal);overflow:hidden;animation:crash-sheet-in var(--motion-ms) ease-out}
+.crash-ui.has-menu-drawer .is-menu-drawer .modal>header{flex:none;margin:0;gap:var(--space-16)}
+.crash-ui.has-menu-drawer .is-menu-drawer .modal h2{font-size:var(--type-24);line-height:var(--leading-tight)}
+.crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button{display:grid;place-items:center;padding:0;line-height:0;flex:none;width:var(--tap-min);height:var(--tap-min);border-radius:var(--radius-pill);border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms)}
+.crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button:hover{filter:brightness(1.12)}
+.crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button:active{transform:translateY(var(--web-control-depth));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}
+.crash-ui.has-tabbed-controls .modal-layer .modal>header .icon{display:block;width:calc(var(--space-16) + var(--space-4));height:calc(var(--space-16) + var(--space-4))}
+.crash-ui.has-menu-drawer .is-menu-drawer .modal-body{display:block;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding-bottom:env(safe-area-inset-bottom);scrollbar-gutter:stable}
+.crash-ui.has-menu-drawer .drawer-tabs{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr);gap:var(--space-4);flex:none;padding:var(--space-4);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-pill);background:color-mix(in srgb,var(--text) 4%,var(--surface))}
+.crash-ui.has-menu-drawer .modal.is-bet-detail .drawer-tabs{display:none}
+.crash-ui.has-menu-drawer .drawer-tab{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:var(--tap-min);padding:var(--space-8) var(--space-4);font-size:var(--type-12);line-height:var(--leading-tight);white-space:normal;overflow-wrap:normal;appearance:none;border:0;border-radius:var(--radius-pill);background:transparent;color:var(--text-muted);box-shadow:none;transition:background var(--motion-fast-ms),color var(--motion-fast-ms)}
+.crash-ui.has-menu-drawer .drawer-tab:hover{background:color-mix(in srgb,var(--text) 6%,transparent);color:var(--text)}
+.crash-ui.has-menu-drawer .drawer-tab[aria-selected=true]{background:color-mix(in srgb,var(--action-go) 14%,var(--surface));color:var(--action-go)}
+.crash-ui.has-menu-drawer .drawer-tab:focus-visible{outline-offset:calc(-1 * var(--stroke-3))}
+.crash-ui.has-menu-drawer .is-menu-drawer .modal-body>.button[data-action=refill]{width:100%;margin-top:var(--space-16)}
+@media(max-width:599px){.crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal{width:100%;padding:var(--space-16) max(var(--space-16),env(safe-area-inset-right)) max(var(--space-16),env(safe-area-inset-bottom)) max(var(--space-16),env(safe-area-inset-left))}}
+.crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal:has(.bets-table){--table-inset:var(--space-24)}
+.crash-ui.has-menu-drawer .is-menu-drawer .modal-body:has(>.bets-table){margin-inline:calc(-1 * var(--table-inset));scrollbar-gutter:auto}
+@media(max-width:599px){.crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal:has(.bets-table){--table-inset:var(--space-16)}}
+.crash-ui.has-menu-drawer .is-menu-drawer .bets-table td{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:599px){.crash-ui.has-tabbed-controls .bets-table{font-size:var(--type-12)}.crash-ui.has-menu-drawer .is-menu-drawer .bet-player{gap:var(--space-4)}}
+
+/* Close occupies the same screen position as the menu trigger. */
+.crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal{position:relative;padding-top:calc(var(--drawer-menu-top,var(--space-12)) - var(--space-4) - var(--stroke-1))}
+.crash-ui.has-menu-drawer .is-menu-drawer .modal>header{min-height:var(--tap-min);padding-right:var(--tap-min)}
+.crash-ui.has-menu-drawer .is-menu-drawer .modal>header [data-action=close]{position:absolute;top:calc(var(--drawer-menu-top,var(--space-12)) - var(--space-4) - var(--stroke-1));right:calc(var(--drawer-menu-right,var(--space-8)) - var(--space-4) - var(--stroke-1))}
+
+/* Compact account dropdown: aligned values and one session divider. */
+.crash-ui .modal-layer.is-account-popover .modal{width:min(var(--web-account-popover-width),calc(100% - 2 * var(--space-8)));padding:var(--space-16);border-radius:var(--radius-16);background:var(--surface);border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-modal)}
+.crash-ui .is-account-popover .modal-body{gap:var(--space-4)}
+.crash-ui .account-balance-card,.crash-ui .account-record-card,.crash-ui .account-session-stat{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--space-12);min-height:var(--space-40);font-size:var(--type-16)}
+.crash-ui .account-balance-card>span,.crash-ui .account-record-label,.crash-ui .account-session-stat>span{color:var(--text-muted);line-height:var(--leading-body)}
+.crash-ui .account-balance-value,.crash-ui .account-record-card strong{display:flex;align-items:center;justify-content:flex-end;gap:var(--space-6)}
+.crash-ui .account-balance-value,.crash-ui .account-unavailable,.crash-ui .account-record-card strong,.crash-ui .account-session-stat>strong{font:var(--type-16)/var(--leading-tight) var(--font-numbers),sans-serif;text-align:right;overflow-wrap:anywhere}
+.crash-ui .account-balance-card .icon,.crash-ui .account-record-card .icon{width:var(--space-16);height:var(--space-16)}
+.crash-ui .account-record-card strong,.crash-ui .account-session-stat .gold{color:var(--gold)}
+.crash-ui .account-session-stat .success{color:var(--success)}
+.crash-ui .account-session-grid{display:grid;gap:var(--space-6);padding-top:var(--space-4)}
+.crash-ui .account-session-stat{min-height:var(--space-32)}
+.crash-ui .is-account-popover .modal-section-title{margin:var(--space-8) 0 0;padding-top:var(--space-12);border-top:var(--stroke-1) solid var(--border);font-size:var(--type-12);font-weight:500;color:var(--text-muted)}
+
+@keyframes win-halo-spin{to{transform:rotate(360deg)}}
+.crash-ui.reduced .win-emblem::before{animation:none!important}
+@media(prefers-reduced-motion:reduce){.crash-ui .win-emblem::before{animation:none!important}}
+
+/* Circular controls keep their raised edge inside the circle, not below it. */
+.crash-ui.has-tabbed-controls .profile>.icon-button,
+.crash-ui.has-tabbed-controls .modal>header .icon-button{
+ flex-shrink:0;min-width:var(--tap-min);min-height:var(--tap-min);aspect-ratio:1;border-radius:50%;
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),inset 0 calc(-1 * var(--web-control-depth)) 0 var(--button-shadow);
+}
+.crash-ui.has-tabbed-controls .profile>.icon-button:active,
+.crash-ui.has-tabbed-controls .modal>header .icon-button:active{
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),inset 0 calc(-1 * var(--stroke-1)) 0 var(--button-shadow);
+}
+.crash-ui [data-action=betDetails],.crash-ui [data-action=back],.crash-ui .flat-button{min-width:var(--tap-min);min-height:var(--tap-min)}
+
+/* Centre icon artwork independently of text baselines and native button padding. */
+.crash-ui .icon-button{display:grid;place-items:center;line-height:0}
+.crash-ui .icon-button>.icon{display:block;align-self:center;justify-self:center}
+.crash-ui.has-tabbed-controls .modal>header .icon-button{padding:0}
+
+/* Navigation presets share content typography. */
+.crash-ui.has-tabbed-controls .modal:not(.win-modal) h2{font-size:var(--type-24);line-height:var(--leading-tight)}
+
+/* Discrete responsive type sizes; never interpolate between scale steps. */
+@media(max-width:389px){
+ .crash-ui.has-tabbed-controls .win-total{font-size:var(--type-32)}
+ .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-16)}
+}
+.crash-ui .tabbed-controls .actions .action .money.long-amount{font-size:var(--type-16)}
+
+/* Keep short monetary values together on narrow phones. */
+@media(max-width:389px){
+ .crash-ui .top-bets th:first-child{width:28%}
+ .crash-ui .top-bets th:nth-child(4){width:32%}
+}

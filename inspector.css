@@ -30,12 +30,12 @@ color-scheme:dark;
 --inspector-radius-card:var(--radius-8);
 --inspector-radius-panel:var(--radius-16);
 --inspector-control:var(--space-32);
---inspector-type-xs:10px;
---inspector-type-sm:11px;
+--inspector-type-xs:12px;
+--inspector-type-sm:12px;
 --inspector-type-base:12px;
---inspector-type-md:13px;
---inspector-type-lg:15px;
---inspector-type-xl:23px;
+--inspector-type-md:14px;
+--inspector-type-lg:16px;
+--inspector-type-xl:24px;
 --inspector-mono:ui-monospace,SFMono-Regular,Consolas,monospace;
 --inspector-sans:system-ui,sans-serif;
 --inspector-sidebar-width:280px;
@@ -51,3 +51,5 @@ color-scheme:dark;
 
 /* Workspace controls and player login sizing. */
 :root{--inspector-size-420:420px;--inspector-size-9:9px;--inspector-loading-duration:.8s;--inspector-size-76:76px;--inspector-size-30:30px;--inspector-overlay-shadow:#0005;}
+
+#workspace-avatar{--avatar-bg:hsl(var(--avatar-hue) 32% 19%);--avatar-fg:hsl(var(--avatar-hue) 75% 78%);--avatar-border:hsl(var(--avatar-hue) 55% 56%);--avatar-hover:hsl(var(--avatar-hue) 35% 25%)}
