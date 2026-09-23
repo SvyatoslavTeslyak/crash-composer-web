@@ -4,11 +4,6 @@
  const state={phase:'',error:'',lastSaved:null},names={layout:'Game',look:'Design',library:'Assets',sound:'Sounds',translates:'Texts',math:'Math Lab'};
  const dirty=()=>!!window.ComposerLook?.dirty||!!$('.workspace-dirty');
  window.ComposerUX={dirty,status(phase,error=''){state.phase=phase;state.error=error;update()},published:null};
- const nav=$('.workspace-rail'),toggle=document.createElement('button');toggle.className='wb-button';toggle.id='navigation-toggle';toggle.type='button';toggle.textContent='☰';toggle.setAttribute('aria-label','Show navigation labels');nav.prepend(toggle);
- const navOpen=value=>{document.body.classList.toggle('navigation-expanded',value);toggle.setAttribute('aria-expanded',String(value));toggle.setAttribute('aria-label',value?'Hide navigation labels':'Show navigation labels');try{localStorage.setItem('composer-navigation-expanded',String(value))}catch{}};
- toggle.onclick=()=>navOpen(!document.body.classList.contains('navigation-expanded'));
- try{navOpen(localStorage.getItem('composer-navigation-expanded')==='true')}catch{}
- for(const [id,title] of Object.entries(names)){const b=$('#'+id+'-tab');b.setAttribute('aria-label',title);set(b.querySelector('.rail-tooltip'),title);const label=document.createElement('span');label.className='navigation-label';label.textContent=title;b.append(label)}
  const bar=document.createElement('div');bar.className='workspace-context';bar.innerHTML='<span id="preview-context"></span><span id="save-context" role="status" aria-live="polite"></span><a id="published-preview" target="_blank" rel="noopener">Open published version ↗</a>';
  $('#room').prepend(bar);
  const about=document.createElement('button');about.type='button';about.textContent='About Composer';$('#workspace-account-menu').append(about);
