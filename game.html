@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="inspection.css?v=1790170358">
+<title>Crash UI — shared component preview</title>
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790170358"><link rel="stylesheet" href="crash-ui/ui.css?v=1790170358">
+<style>html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 50% 50%,#1c5261,#071824);color:#e8eef3}#scene{position:absolute;inset:40% 0 auto;text-align:center;font:16px system-ui;opacity:.5;pointer-events:none}
+#scene{inset:35% 16px 25%;display:flex;align-items:center;justify-content:center;border:1px dashed #71d5ff55;border-radius:16px;background:repeating-linear-gradient(45deg,transparent,transparent 24px,#ffffff03 24px,#ffffff03 48px);font:14px/1.5 system-ui;opacity:1;color:#a4b8c8}
+</style>
+<div id="scene">Game scene placeholder · no game engine</div><div id="ui"></div>
+<script src="crash-ui/tokens.js?v=1790170358"></script><script src="crash-ui/ui.js?v=1790170358"></script>
+<script>
+const state={game:'road',debug:false,balance:1000,level:'LVL 10',bet:8,presets:[2,3,8,20],difficulty:1,difficulties:['Easy','Normal','Hard','Expert'],auto:false,canBet:true,canGo:true,canCash:false,showCash:false,cash:8,goTitle:'PLAY',goSubtitle:'$8.00',personal:23.43,personalTitle:'Your road best',topTitle:'Top road win',record:{name:'RoadRunner',payout:2487.94,date:'2026-09-15'},players:['Harlequin Sun','Maya','RoadRunner','Lucky Leo','Nina','Golden Goat'],wins:[{name:'RoadRunner',payout:2487.94,multiplier:2.13},{name:'Maya',payout:123.45,multiplier:1.54},{name:'Nina',payout:61.1,multiplier:1.22},{name:'Lucky Leo',payout:319.6,multiplier:3.41},{name:'Golden Goat',payout:68.2,multiplier:1.08}],history:[{multiplier:1.38},{multiplier:2.15}],settings:{sound:true,haptics:true,reduced_motion:false,auto_steps:0,auto_cashout:0},flags:{},features:{auto:true,difficulty:true,presets:true},online:6,win:false,multiplier:1};
+let round=false,winTimer,transferTimer;
+function reset(){clearTimeout(transferTimer);state.multiCollected=false;round=false;state.win=false;state.winSubtitle="";state.canBet=state.canGo=true;state.showCash=state.canCash=false;state.goTitle=state.game==='fruits'?'SLICE':'PLAY';state.goSubtitle='$'+state.bet.toFixed(2);state.multiplier=1}
+function settle(){if(state.win||state.multiCollected)return;state.canCash=false;if(ui.multiBet){state.multiCollected=true;state.cash=Math.round(Number(state.multiBets?.main||state.bet)*state.multiplier*100)/100;}clearTimeout(transferTimer);transferTimer=setTimeout(()=>{state.winTransferId=(state.winTransferId||0)+1;state.winSubtitle="Adding to your balance…";ui.update(state)},1580);state.balance+=state.cash;state.personal=Math.max(state.personal,state.cash);state.win=true;state.winAmount=state.cash;state.canGo=false;state.auto=false;clearTimeout(winTimer);winTimer=setTimeout(()=>{reset();state.multiBets={};ui.update(state);syncMultiPreview()},3500)}
+function act(action,data={}){
+ if(action==='layout'){const scene=document.querySelector('#scene'),sceneBottom=data.bottom-CrashTokens.SPACE_8;scene.style.top=data.top+'px';scene.style.bottom=Math.max(0,data.height-sceneBottom)+'px';scene.textContent='Game scene placeholder · '+data.width+' × '+Math.max(0,sceneBottom-data.top)+' px';return}
+ if(action==='modal')return;
+ if(action==='go'){if(round&&!stepped(state.game))settle();else {if(!round&&!ui.multiBet)state.balance-=state.bet;round=true;state.canBet=false;state.canCash=true;state.showCash=stepped(state.game);state.multiplier+=.23;state.cash=state.bet*state.multiplier;state.goTitle=state.game==='road'?'GO':state.game==='fruits'?'SLICE':'CASH OUT';state.goSubtitle=state.game==='road'?'NEXT LANE':state.game==='fruits'?'NEXT FRUIT':'$'+state.cash.toFixed(2)}}
+ if(action==='cash')settle();
+ if(action==='auto'&&state.features.auto)state.auto=!state.auto;
+ if(action==='difficulty'&&state.features.difficulty)state.difficulty=data.index;
+ if(['min','max','minus','plus','bet'].includes(action)&&(action!=='bet'||state.features.presets)){state.bet=Math.min(1000,Math.max(1,action==='min'?1:action==='max'?1000:action==='minus'?state.bet-1:action==='plus'?state.bet+1:data.value));state.goSubtitle='$'+state.bet.toFixed(2)}
+ if(action==='setting')state.settings[data.key]=data.value;
+ if(action==='flag')state.flags[data.key]=data.value;
+ if(action==='refill')state.balance=1000;
+ ui.update(state);
+}
+function syncMultiPreview(){
+ if(!ui.multiBet)return;
+ for(const [key,c] of Object.entries(ui.multiBet.cards)){
+  const placed=!!state.multiBets?.[key],collect=round&&key==='main'&&placed&&state.canCash;
+  c.el.querySelector('strong').textContent=(key==='main'?state.multiplier:1.90).toFixed(2)+'×';
+  c.input.disabled=!state.canBet||placed;
+  c.el.querySelectorAll('[data-step]').forEach(b=>b.disabled=c.input.disabled);
+  c.el.querySelector('.bet-receipt')?.remove();
+  c.button.textContent=key==='main'&&state.multiCollected?'CASHED OUT':collect?'CASHOUT':state.canBet?(placed?'CANCEL':'BET'):placed?'BET ACCEPTED':'BETTING CLOSED';
+  if(key==='main'&&state.multiCollected)c.button.innerHTML=`<span class="action-title">CASHED OUT</span><span class="money">$${state.winAmount.toFixed(2)}</span>`;
+  c.button.disabled=!state.canBet&&!collect;c.button.classList.toggle('action',state.canBet&&!placed||collect);c.button.classList.toggle('cash',collect);c.button.classList.toggle('bet-cancel',state.canBet&&placed);
+ }
+}
+function stepped(game){return game==='road'||game==='fruits'}
+function difficultyContent(){const road=stepped(state.game);return {description:'Higher risk. Bigger rewards.',limits:(road?(state.game==='fruits'?'25 slices max':'20 steps max'):'Continuous round')+' · Payout up to $1,000,000',options:state.difficulties.map((title,i)=>({title,description:road?[6,10,16,24][i]+'% crash risk / step':['Gentle','Steady','Fast','Very fast'][i]+' growth',reward:road?'×'+[1.01,1.06,1.13,1.25][i].toFixed(2):[.09,.13,.18,.24][i].toFixed(2),rewardLabel:road?'FIRST STEP':'GROWTH / SEC'}))}}
+state.difficultyContent=difficultyContent();
+const ui=new CrashUI.GameUI(document.querySelector('#ui'),act,{demo:true});ui.update(state);
+window.addEventListener('message',e=>{
+ if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='crash-preview')return;
+ const d=e.data;
+ if(d.presentationPreset)ui.setPresentationPreset(d.presentationPreset);
+ if(d.controlsVariant){ui.setControlsVariant(d.controlsVariant);state.game=d.controlsVariant==='three-position'?'catch':'road';reset();state.multiBets={};if(ui.multiBet){for(const [key,c] of Object.entries(ui.multiBet.cards)){c.el.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{c.input.value=Math.max(1,Math.min(1000,Number(c.input.value)+Number(b.dataset.step)))});c.button.onclick=()=>{if(round&&key==='main'&&state.multiBets[key]&&state.canCash){settle();}else if(state.canBet){const amount=state.multiBets[key]||Math.max(1,Math.min(1000,Number(c.input.value)||1));if(state.multiBets[key]){state.balance+=amount;delete state.multiBets[key];}else if(state.balance>=amount){state.multiBets[key]=amount;state.balance-=amount;}}ui.update(state);syncMultiPreview();};}}}
+
+ if(d.flags)for(const key of ['leaderboard','history','personal_record','online_count'])if(typeof d.flags[key]==='boolean')state.flags[key]=d.flags[key];
+ if(d.features){for(const key of ['auto','difficulty','presets'])if(typeof d.features[key]==='boolean')state.features[key]=d.features[key];if(!state.features.auto)state.auto=false;if(!state.features.difficulty)state.difficulty=1}
+ if(d.game){clearTimeout(winTimer);state.game=d.game;reset();delete state.settings.theme;state.difficultyContent=difficultyContent();state.personalTitle={road:'Your road best',fish:'Your best catch',gold:'Your best haul',fruits:'Your best slice'}[d.game];state.topTitle={road:'Top road win',fish:'Top catch',gold:'Top haul',fruits:'Top slice'}[d.game]}
+ if(d.state==='disabled')state.canBet=state.canGo=state.canCash=false;
+ if(d.state==='ready')reset();
+ if(d.state==='active'){reset();act('go')}
+ if(d.state==='win')settle();
+ if(d.state==='long'){state.balance=999999.99;state.record.name='Captain Alexander RoadRunner';state.record.payout=123456.78}
+ if(d.state==='reset'){location.reload();return}
+ if(d.view){document.body.dataset.view=d.view;ui.close()}
+ if(Object.hasOwn(d,'modal')){clearTimeout(winTimer);clearTimeout(transferTimer);state.win=d.modal==='win';if(state.win){state.winAmount=state.cash;state.winSubtitle='Preview'}else ui.close()}
+ ui.update(state);syncMultiPreview();
+ if(d.modal)ui.open(d.modal);
+});
+</script>
+</html>

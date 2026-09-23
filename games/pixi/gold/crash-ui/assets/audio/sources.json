@@ -1,0 +1,43 @@
+{
+  "generated_date": "2026-09-17",
+  "effects": [
+    {
+      "file": "click.ogg",
+      "provider": "ElevenLabs",
+      "model": "eleven_text_to_sound_v2",
+      "generation_id": "icBkOjVwZZjHDhiKgLMf",
+      "flow_url": "https://elevenlabs.io/app/flows/2pwPAIIJxdLNQAWbgSRh",
+      "prompt": "A single soft tactile interface button click, warm muted pop with a tiny crisp tick, very short and dry, no music or voices.",
+      "processing": "Trimmed, mono 24 kHz Vorbis quality 2, fades; confirm sped up 1.7x",
+      "revision": "Softened existing audio locally: lower volume and low-pass filter; no new generation credits."
+    },
+    {
+      "file": "confirm.ogg",
+      "provider": "ElevenLabs",
+      "model": "eleven_text_to_sound_v2",
+      "generation_id": "NtMcPAKXgiYdzfKYOmmZ",
+      "flow_url": "https://elevenlabs.io/app/flows/SbZFM9DLX8KmmmoArqSt",
+      "prompt": "A brief soft two-note interface confirmation chime, warm rounded plucked tones rising gently, dry, no voices or background music.",
+      "processing": "Trimmed, mono 24 kHz Vorbis quality 2, fades; confirm sped up 1.7x",
+      "revision": "Softened existing audio locally: lower volume and low-pass filter; no new generation credits."
+    },
+    {
+      "file": "win.ogg",
+      "provider": "ElevenLabs",
+      "model": "eleven_text_to_sound_v2",
+      "generation_id": "logFNe9aFB1ydMFnlWId",
+      "flow_url": "https://elevenlabs.io/app/flows/6jxGdrR9AP3ZcRaHjT42",
+      "prompt": "A small handful of coins dropping into a metal cash tray, bright satisfying brief jingling clinks settling, close mic, under one second, no voices or music.",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 24000,
+        "codec": "Vorbis",
+        "quality": 2,
+        "trimmed": true,
+        "fade_edges": true,
+        "tempo": 1
+      },
+      "role": "Unified game Win presentation sound"
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "fish_yellowtail": {
+    "frames": 8,
+    "frame_width": 128,
+    "frame_height": 72,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 512,
+    "atlas_height": 144
+  },
+  "net_tow": {
+    "frames": 12,
+    "frame_width": 384,
+    "frame_height": 384,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 1536,
+    "atlas_height": 1152
+  },
+  "net_rupture": {
+    "frames": 16,
+    "frame_width": 384,
+    "frame_height": 384,
+    "columns": 4,
+    "fps": 20,
+    "loop": false,
+    "atlas_width": 1536,
+    "atlas_height": 1536
+  },
+  "fish_silver": {
+    "frames": 8,
+    "frame_width": 128,
+    "frame_height": 72,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 512,
+    "atlas_height": 144
+  },
+  "fish_snapper": {
+    "frames": 8,
+    "frame_width": 128,
+    "frame_height": 72,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 512,
+    "atlas_height": 144
+  },
+  "fish_tuna": {
+    "frames": 8,
+    "frame_width": 128,
+    "frame_height": 72,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 512,
+    "atlas_height": 144
+  },
+  "fisherman_idle": {
+    "frames": 12,
+    "frame_width": 160,
+    "frame_height": 160,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 640,
+    "atlas_height": 480
+  },
+  "fisherman_strain": {
+    "frames": 16,
+    "frame_width": 160,
+    "frame_height": 160,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 640,
+    "atlas_height": 640
+  },
+  "fisherman_heavy": {
+    "frames": 16,
+    "frame_width": 160,
+    "frame_height": 160,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 640,
+    "atlas_height": 640
+  },
+  "fisherman_haul": {
+    "frames": 1,
+    "frame_width": 160,
+    "frame_height": 160,
+    "columns": 1,
+    "fps": 16,
+    "loop": false,
+    "atlas_width": 160,
+    "atlas_height": 160
+  },
+  "fisherman_react": {
+    "frames": 12,
+    "frame_width": 160,
+    "frame_height": 160,
+    "columns": 4,
+    "fps": 12,
+    "loop": false,
+    "atlas_width": 640,
+    "atlas_height": 480
+  },
+  "wake": {
+    "frames": 12,
+    "frame_width": 384,
+    "frame_height": 216,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 1536,
+    "atlas_height": 648
+  },
+  "splash": {
+    "frames": 12,
+    "frame_width": 384,
+    "frame_height": 216,
+    "columns": 4,
+    "fps": 12,
+    "loop": false,
+    "atlas_width": 1536,
+    "atlas_height": 648
+  },
+  "waves": {
+    "frames": 12,
+    "frame_width": 384,
+    "frame_height": 216,
+    "columns": 4,
+    "fps": 12,
+    "loop": true,
+    "atlas_width": 1536,
+    "atlas_height": 648
+  }
+}

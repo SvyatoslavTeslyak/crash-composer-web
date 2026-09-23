@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "game": "fuel",
+  "title": "Fuel Run",
+  "owner": "LocalFeedback (scripts/systems/local_feedback.gd)",
+  "events": [
+    {
+      "id": "start",
+      "label": "Engine start",
+      "trigger": "The ride begins.",
+      "volume_db": -9.0,
+      "pitch_jitter": 0.03,
+      "takes": [
+        {
+          "file": "assets/audio/fuel/eleven/start_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/wFhZCcQuY7BHK5Da6hQw",
+      "prompt": "Motorcycle kick start, starter whirs then the engine catches and revs once, close-mic"
+    },
+    {
+      "id": "ride",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/wFhZCcQuY7BHK5Da6hQw",
+      "label": "Engine ride",
+      "trigger": "Loops on its own voice from the round start until the round ends.",
+      "volume_db": -27.0,
+      "pitch_jitter": 0.0,
+      "prompt": "Onboard recording of a small motorcycle holding one constant cruising speed, steady even engine drone, no revving, no gear changes, no acceleration, continuous and unchanging",
+      "takes": [
+        {
+          "file": "assets/audio/fuel/eleven/ride_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "sale",
+      "label": "Buyer pays",
+      "trigger": "A buyer pays and the multiplier steps up one notch.",
+      "volume_db": -6.0,
+      "pitch_jitter": 0.0,
+      "takes": [
+        {
+          "file": "assets/audio/fuel/eleven/sale_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/wFhZCcQuY7BHK5Da6hQw",
+      "prompt": "Mechanical counter wheel clicking over one notch, single dry ratchet click, tight and short, no ring, no music"
+    },
+    {
+      "id": "milestone",
+      "label": "Whole multiplier",
+      "trigger": "The multiplier crosses a whole number.",
+      "volume_db": -11.0,
+      "pitch_jitter": 0.0,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/wFhZCcQuY7BHK5Da6hQw",
+      "prompt": "Two clean bell notes rising a step, bright and confident, short, dry, no music",
+      "takes": [
+        {
+          "file": "assets/audio/fuel/eleven/milestone_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "big_sale",
+      "label": "Big buyer",
+      "trigger": "A buyer hands over several bundles: still a step, so it clicks like one.",
+      "volume_db": -6.0,
+      "pitch_jitter": 0.0,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/wFhZCcQuY7BHK5Da6hQw",
+      "prompt": "Mechanical counter wheel clicking over one notch, single dry ratchet click, tight and short, no ring, no music",
+      "takes": [
+        {
+          "file": "assets/audio/fuel/eleven/sale_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "spill",
+      "label": "Fuel spills",
+      "trigger": "The strap slips and the can lurches: part of the run is lost.",
+      "volume_db": -9.0,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/wFhZCcQuY7BHK5Da6hQw",
+      "prompt": "Fuel sloshing and splashing out of a metal jerrycan onto asphalt, wet glug, short",
+      "takes": [
+        {
+          "file": "assets/audio/fuel/eleven/spill_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fuel/eleven/spill_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "burst",
+      "label": "Cans lost",
+      "trigger": "Both cans fly off the bike and empty across the road.",
+      "volume_db": -6.0,
+      "pitch_jitter": 0.03,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/wFhZCcQuY7BHK5Da6hQw",
+      "prompt": "Metal jerrycan clangs off a bike and bursts open, liquid gushing across asphalt",
+      "takes": [
+        {
+          "file": "assets/audio/fuel/eleven/burst_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "dog",
+      "label": "Roadside dog",
+      "trigger": "Now and then while the courier rides past the village.",
+      "volume_db": -20.0,
+      "pitch_jitter": 0.06,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/wFhZCcQuY7BHK5Da6hQw",
+      "prompt": "A street dog barking twice at a passing motorbike, mid-sized dog, outdoors at a distance, short, dry",
+      "takes": [
+        {
+          "file": "assets/audio/fuel/eleven/dog_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fuel/eleven/dog_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "label": "Background music",
+      "trigger": "Loops in the background while Sound is on.",
+      "volume_db": -20.0,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_music_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/CZwW5NkVgbVXqRSZL9WF",
+      "prompt": "Calm looping background music bed for a casual mobile fruit-slicing game set in a sunny tropical bazaar: warm steel drums and soft marimba with light hand percussion, breezy and relaxed, mid tempo, no vocals, no build-up, no climax, seamless 30 second loop, consistent from start to end, instrumental only",
+      "takes": [
+        {
+          "file": "assets/audio/music/theme.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    }
+  ]
+}

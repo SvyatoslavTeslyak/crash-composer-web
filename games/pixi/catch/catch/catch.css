@@ -1,0 +1,15 @@
+/* Catch-specific behavior; shared HUD and three-position controls are owned by UI kit. */
+.catch-ui .catch-dialog{color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:var(--panel-radius);width:min(520px,calc(100% - 24px));max-height:85dvh;overflow:auto;padding:var(--space-24);pointer-events:auto}
+.catch-ui .catch-dialog::backdrop{background:#0009}
+.catch-ui .catch-dialog p{line-height:1.6}
+.catch-ui .catch-dialog .button{width:100%}
+
+.catch-ui .catch-bet-pulse{position:fixed;z-index:20;color:var(--gold);font:24px CrashNumbers,CrashBody,sans-serif;text-shadow:0 2px 5px #061622;pointer-events:none;white-space:nowrap}
+
+.catch-ui .multiplier.catch-countdown{background:transparent;border-color:transparent;box-shadow:none;color:var(--text);font-size:56px;line-height:1.1;font-variant-numeric:tabular-nums}
+
+.catch-ui .catch-bet-pulse{display:flex;align-items:center;gap:7px}
+.catch-ui .catch-bet-pulse .avatar{width:32px;height:32px;border:1px solid var(--gold)}
+.catch-ui .bet-quote{border-radius:16px}
+
+.catch-ui .catch-multiplier-slot{height:74px;flex:0 0 74px;display:flex;align-items:center;justify-content:center}

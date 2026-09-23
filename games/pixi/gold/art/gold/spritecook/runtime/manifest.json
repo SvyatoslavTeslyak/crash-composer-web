@@ -1,0 +1,134 @@
+{
+	"bag_patch_rupture": {
+		"asset_id": "e415e1d5-d0b7-4309-b565-1d1766fdbfc2",
+		"columns": 4,
+		"file": "runtime/bag_patch_rupture.png",
+		"fps": 8.0,
+		"frame_height": 384,
+		"frame_width": 384,
+		"frames": 16.0,
+		"group": "bag",
+		"loop": false
+	},
+	"bag_patch_strain": {
+		"asset_id": "8932a718-32b7-4bb6-bd0a-0b885930ca08",
+		"columns": 4,
+		"file": "runtime/bag_patch_strain.png",
+		"fps": 8.0,
+		"frame_height": 384,
+		"frame_width": 384,
+		"frames": 16.0,
+		"group": "bag",
+		"loop": true
+	},
+	"banknote_spin": {
+		"asset_id": "3144d1c9-bcc7-4582-9a07-61ac146f9463",
+		"columns": 4,
+		"file": "runtime/banknote_spin.png",
+		"fps": 8.0,
+		"frame_height": 96,
+		"frame_width": 128,
+		"frames": 12.0,
+		"group": "items",
+		"loop": true
+	},
+	"coin_spin": {
+		"asset_id": "37857b33-3ede-43dc-a756-9accdbe29c3a",
+		"columns": 4,
+		"file": "runtime/coin_spin.png",
+		"fps": 8.0,
+		"frame_height": 128,
+		"frame_width": 128,
+		"frames": 12.0,
+		"group": "items",
+		"loop": true
+	},
+	"diamond_spin": {
+		"asset_id": "29a5df20-ac39-4d70-8cfa-bc68b6b0e97d",
+		"columns": 4,
+		"file": "runtime/diamond_spin.png",
+		"fps": 8.0,
+		"frame_height": 109,
+		"frame_width": 128,
+		"frames": 12.0,
+		"group": "items",
+		"loop": true
+	},
+	"emerald_spin": {
+		"asset_id": "162fe5f1-a549-41a2-a8fe-748393c602fd",
+		"columns": 4,
+		"file": "runtime/emerald_spin.png",
+		"fps": 8.0,
+		"frame_height": 135,
+		"frame_width": 128,
+		"frames": 12.0,
+		"group": "items",
+		"loop": true
+	},
+	"environment_ambient": {
+		"asset_id": "98cea0d0-8c73-4b19-8318-c81e84635a9d",
+		"columns": 4,
+		"file": "runtime/environment_ambient.png",
+		"fps": 8.0,
+		"frame_height": 512,
+		"frame_width": 512,
+		"frames": 16.0,
+		"group": "environment",
+		"loop": true
+	},
+	"goat_cashout": {
+		"asset_id": "2745d430-2530-4fde-a414-f4b8fb46ae87",
+		"columns": 4,
+		"file": "runtime/goat_cashout.png",
+		"fps": 8.0,
+		"frame_height": 188,
+		"frame_width": 384,
+		"frames": 16.0,
+		"group": "goat",
+		"loop": false
+	},
+	"goat_crash": {
+		"asset_id": "bc210d90-12ba-4ea8-8c55-4a01db29ec5e",
+		"columns": 4,
+		"file": "runtime/goat_crash.png",
+		"fps": 8.0,
+		"frame_height": 188,
+		"frame_width": 384,
+		"frames": 16.0,
+		"group": "goat",
+		"loop": false
+	},
+	"goat_idle": {
+		"asset_id": "c0487551-014d-4a0c-9853-9e5e5f280fd2",
+		"columns": 4,
+		"file": "runtime/goat_idle.png",
+		"fps": 8.0,
+		"frame_height": 188,
+		"frame_width": 384,
+		"frames": 16.0,
+		"group": "goat",
+		"loop": true
+	},
+	"ingot_spin": {
+		"asset_id": "b8c8fe2b-fc81-4b6f-8dbd-20215ca81253",
+		"columns": 4,
+		"file": "runtime/ingot_spin.png",
+		"fps": 8.0,
+		"frame_height": 109,
+		"frame_width": 128,
+		"frames": 12.0,
+		"group": "items",
+		"loop": true
+	},
+	"ruby_spin": {
+		"asset_id": "89609f2e-52ff-46e2-8c98-e47aeec34e21",
+		"columns": 4,
+		"file": "runtime/ruby_spin.png",
+		"fps": 8.0,
+		"frame_height": 122,
+		"frame_width": 128,
+		"frames": 12.0,
+		"group": "items",
+		"loop": true
+	}
+}

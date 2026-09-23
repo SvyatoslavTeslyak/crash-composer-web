@@ -1,0 +1,16 @@
+{
+  "author": "Kenney",
+  "pack": "Impact Sounds 1.0",
+  "url": "https://kenney.nl/assets/impact-sounds",
+  "license": "CC0-1.0",
+  "files": [
+    "impactWood_heavy_000",
+    "impactWood_heavy_001",
+    "impactWood_heavy_002",
+    "impactWood_medium_000",
+    "impactWood_medium_001",
+    "impactPlank_medium_000",
+    "impactPlank_medium_001",
+    "impactPlank_medium_002"
+  ]
+}

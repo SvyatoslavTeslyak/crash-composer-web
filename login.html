@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Composer · Sign in</title>
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=1790170358">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1790170358">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790170358">
+<link rel="stylesheet" href="inspector.css?v=1790170358">
+<link rel="stylesheet" href="login.css?v=1790170358">
+<script src="cloud-config.js?v=1790170358"></script>
+<script src="hosted.js"></script>
+<script defer src="session.js?v=1790170358"></script>
+</head>
+<body>
+<main>
+<section class="entry" aria-labelledby="entry-title">
+ <img class="entry-icon" src="favicon-256.png?v=1790170358" alt="" width="44" height="44">
+ <h1 id="entry-title">Sign in to Composer</h1>
+ <p class="hint" id="entry-hint">Use your email and password to open your workspace.</p>
+ <form id="login-form">
+  <div id="email-field"><label for="email">Email</label>
+  <input id="email" name="email" type="email" autocomplete="username" required></div>
+  <label for="password">Password</label>
+  <input id="password" name="password" type="password" autocomplete="current-password" required>
+  <p id="password-hint" class="hint" hidden>Use at least 10 characters.</p>
+  <div id="confirm-field" hidden><label for="confirm">Confirm password</label><input id="confirm" name="confirm" type="password" autocomplete="new-password"></div>
+  <p id="entry-error" role="alert"></p>
+  <button type="submit">Sign in <span aria-hidden="true">→</span></button>
+  <p id="entry-status" class="hint" role="status" aria-live="polite"></p>
+ </form>
+ <button id="cancel-setup" class="link" type="button" hidden>Back to sign in</button>
+</section>
+</main>
+</body>
+</html>

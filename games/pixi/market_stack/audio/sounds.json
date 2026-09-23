@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "game": "market_stack",
+  "title": "Market Stack",
+  "owner": "LocalFeedback (scripts/systems/local_feedback.gd)",
+  "events": [
+    {
+      "id": "hit",
+      "label": "Crate lands",
+      "trigger": "A crate is placed on the stack.",
+      "volume_db": -10.0,
+      "pitch_jitter": 0.03,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/QY7oxjLHYIDWItpUw1Pr",
+      "prompt": "A light slatted fruit crate landing on another crate: thin hollow wooden slats clacking with a short dry rattle and a soft muffled thud of fruit shifting inside, light not heavy, brief and clean, close mic, 0.4 seconds, no deep boom, no timber beam, no crack, no music, no voice",
+      "takes": [
+        {
+          "file": "assets/audio/elevenlabs/crate_land.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "collapse",
+      "label": "Tower collapses",
+      "trigger": "The stack topples and the round is lost.",
+      "volume_db": -7.0,
+      "pitch_jitter": 0.02,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/QY7oxjLHYIDWItpUw1Pr",
+      "prompt": "A tall stack of light slatted fruit crates toppling over: a quick burst of thin hollow wooden clacks and slat rattle with fruit tumbling out, light and clattery, collapsing fast and stopping within half a second, close mic, 0.6 seconds total, no deep boom, no heavy timber, no glass, no debris tail, no music, no voice",
+      "takes": [
+        {
+          "file": "assets/audio/elevenlabs/collapse.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "win",
+      "label": "Payout",
+      "trigger": "Cash out is collected (native builds; the browser UI plays its own jingle).",
+      "volume_db": -7.0,
+      "pitch_jitter": 0.0,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "prompt": "A small handful of coins dropping into a metal cash tray, bright satisfying brief jingling clinks settling, close mic, under one second, no voices or music.",
+      "takes": [
+        {
+          "file": "assets/audio/elevenlabs/payout.ogg",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "splash",
+      "label": "Splash",
+      "trigger": "A crate falls into the water.",
+      "volume_db": -7.0,
+      "pitch_jitter": 0.02,
+      "generator": "local",
+      "prompt": "Short water splash for a dropped crate.",
+      "takes": [
+        {
+          "file": "assets/audio/splash.wav",
+          "enabled": true,
+          "source": "local"
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "label": "Background loop",
+      "trigger": "Loops in the background while Music is on.",
+      "volume_db": -26.0,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_music_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/IBTIyyCS8vkbu5rQQVVU",
+      "prompt": "Calm looping background music bed for a casual mobile market game: gentle warm marimba and soft acoustic guitar plucks over a light shaker groove, sunny and relaxed, mid tempo, no drums build, no vocals, no melody climax, stays in the background, seamless 30 second loop, consistent from start to end",
+      "takes": [
+        {
+          "file": "assets/audio/market/bazaar_loop.ogg",
+          "enabled": true,
+          "source": "kenney"
+        },
+        {
+          "file": "assets/audio/music/theme.wav",
+          "enabled": false,
+          "source": "elevenlabs"
+        }
+      ]
+    }
+  ]
+}

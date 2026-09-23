@@ -1,0 +1,214 @@
+{
+  "version": 1,
+  "game": "fish",
+  "title": "FishMaster",
+  "owner": "LocalFeedback (scripts/systems/local_feedback.gd)",
+  "events": [
+    {
+      "id": "motor",
+      "label": "Boat motor (loop)",
+      "trigger": "Loops while the boat moves; volume and pitch follow speed and load. Volume here is an offset.",
+      "volume_db": -4,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/vZ6Q1X2AxNWAqqAja4ci",
+      "prompt": "Small wooden fishing boat outboard motor running steadily at low speed, soft putt-putt engine hum with light water lapping, seamless loop, no voices",
+      "takes": [
+        {
+          "file": "assets/audio/fishing/eleven/motor_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/motor_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/motor_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "winch",
+      "label": "Winch (loop)",
+      "trigger": "Loops while the net is hauled after Cash Out.",
+      "volume_db": -19.0,
+      "pitch_jitter": 0.0,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/vZ6Q1X2AxNWAqqAja4ci",
+      "prompt": "Hand winch hauling a wet fishing net rope onto a boat, steady ratchet clicks with rope strain and dripping water, seamless loop, no voices",
+      "takes": [
+        {
+          "file": "assets/audio/fishing/eleven/winch_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/winch_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/winch_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "start",
+      "label": "Net cast",
+      "trigger": "A paid round starts: the net goes into the water.",
+      "volume_db": -9,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/vZ6Q1X2AxNWAqqAja4ci",
+      "prompt": "Fishing net thrown from a boat landing on calm sea water, soft rope whoosh then a light splash, short, close-mic",
+      "takes": [
+        {
+          "file": "assets/audio/fishing/eleven/start_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/start_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/start_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "fish_in",
+      "label": "Fish into net",
+      "trigger": "A fish swims into the net, at most one sound per 0.35 s.",
+      "volume_db": -14,
+      "pitch_jitter": 0.08,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/vZ6Q1X2AxNWAqqAja4ci",
+      "prompt": "A single small fish flopping into a wet fishing net underwater, quick soft slap with a tiny bubbly splash, very short, close-mic",
+      "takes": [
+        {
+          "file": "assets/audio/fishing/eleven/fish_in_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/fish_in_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/fish_in_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "creak",
+      "label": "Boat creak",
+      "trigger": "Every 3.5–6 s once the multiplier reaches 5×.",
+      "volume_db": -12,
+      "pitch_jitter": 0.06,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/vZ6Q1X2AxNWAqqAja4ci",
+      "prompt": "Wooden fishing boat and heavy wet rope creaking under strain, single short low creak, close-mic, dry",
+      "takes": [
+        {
+          "file": "assets/audio/fishing/eleven/creak_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/creak_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/creak_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "haul_splash",
+      "label": "Net breaks surface",
+      "trigger": "After Cash Out, when the full net comes out of the water.",
+      "volume_db": -15.0,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/vZ6Q1X2AxNWAqqAja4ci",
+      "prompt": "A heavy net full of fish pulled up out of the sea, big water surge and splash with flapping fish and dripping water, short, close-mic",
+      "takes": [
+        {
+          "file": "assets/audio/fishing/eleven/haul_splash_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/haul_splash_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/haul_splash_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "net_rip",
+      "label": "Net rips",
+      "trigger": "The round is lost and the net tears.",
+      "volume_db": -7,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/vZ6Q1X2AxNWAqqAja4ci",
+      "prompt": "Fishing net ropes snapping and tearing underwater, quick rip with a burst of bubbles and a water whoosh, short, close-mic",
+      "takes": [
+        {
+          "file": "assets/audio/fishing/eleven/net_rip_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/net_rip_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fishing/eleven/net_rip_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "label": "Background music",
+      "trigger": "Loops in the background while Sound is on.",
+      "volume_db": -20.0,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_music_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/ftzvDSo9i615NZTc3HrA",
+      "prompt": "Calm looping background music bed for a casual mobile fishing game: soft acoustic guitar and mellow flute over slow gentle waves of warm pads, seaside and easygoing, slow tempo, no vocals, no build-up, no climax, seamless 30 second loop, consistent from start to end, instrumental only",
+      "takes": [
+        {
+          "file": "assets/audio/music/theme.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    }
+  ]
+}

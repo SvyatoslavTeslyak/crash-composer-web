@@ -1,0 +1,828 @@
+.crash-ui,.crash-ui *{box-sizing:border-box}.crash-ui{font:var(--body-type-px)/var(--leading-body) var(--font-body),sans-serif;font-synthesis:none;color:var(--text);position:fixed;inset:0;z-index:10;pointer-events:none;--edge:var(--space-16);--gap:var(--space-16);--button-radius:var(--radius-24);--panel-radius:var(--web-panel-radius);--control-h:var(--web-control-comfort-height)}.crash-ui button,.crash-ui input,.crash-ui select{font:inherit}.crash-ui button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.crash-ui button:focus-visible,.crash-ui input:focus-visible,.crash-ui select:focus-visible{outline:var(--stroke-3) solid var(--focus);outline-offset:var(--stroke-3)}.crash-ui [hidden]{display:none!important}.crash-ui .panel{background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--panel-radius);padding:var(--space-16);box-shadow:var(--elevation-panel);pointer-events:auto}.crash-ui .button{display:flex;align-items:center;justify-content:center;gap:var(--space-8);min-height:var(--control-h);min-width:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--button-radius);border:var(--stroke-2) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-button-depth) 0 var(--button-shadow);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms);white-space:nowrap}.crash-ui .button:hover:not(:disabled){filter:brightness(1.12)}.crash-ui .button:active:not(:disabled){transform:translateY(var(--web-button-depth));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}.crash-ui button:disabled{cursor:default}.crash-ui .button:disabled{background:var(--button-disabled);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .button[aria-pressed=true]{border-color:var(--focus)}.crash-ui .icon{width:var(--web-icon-md);height:var(--web-icon-md);object-fit:contain;flex:none}.crash-ui .chevron{display:block;width:var(--space-16);height:var(--space-16);flex:0 0 var(--space-16)}.crash-ui .money{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-24);font-variant-numeric:tabular-nums}.crash-ui .muted{color:var(--text-muted);font-size:var(--type-12)}.crash-ui .avatar{--index:5;width:var(--web-avatar-xl);height:var(--web-avatar-xl);flex:none;border-radius:50%;border:var(--stroke-1) solid var(--gold);background-image:url('assets/avatars/players.png');background-size:calc(100% * 1536 / 464) calc(100% * 1024 / 464);background-repeat:no-repeat;background-position:var(--avatar-x,100%) var(--avatar-y,100%)}.crash-ui .top{position:absolute;left:var(--edge);right:var(--edge);top:max(var(--edge),env(safe-area-inset-top));display:flex;gap:var(--space-16);align-items:flex-start;pointer-events:none}.crash-ui .account{width:100%;min-width:0}.crash-ui .profile{display:flex;align-items:center;gap:var(--space-12)}.crash-ui .identity{display:flex;align-items:center;gap:var(--space-12);border:0;background:none;color:inherit;text-align:left;padding:0;min-height:var(--tap-min)}.crash-ui .identity strong{display:block;font-size:var(--type-20)}.crash-ui .level{color:var(--gold);font-size:var(--type-12)}.crash-ui .balance{margin-left:auto;display:flex;gap:var(--space-8);align-items:center;min-width:0}.crash-ui .balance .money{font-size:clamp(var(--type-20),5vw,var(--type-28))}.crash-ui .icon-button{width:var(--tap-min);height:var(--tap-min);border:0;background:none;color:inherit;padding:var(--space-8);flex:none}.crash-ui .records{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:var(--space-16);padding:var(--space-12);margin-top:var(--space-12);background:var(--surface-inset);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24)}.crash-ui .record{display:flex;gap:var(--space-8);align-items:flex-start;min-width:0}.crash-ui .record .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .record-title{font-size:var(--type-12);color:var(--text-muted)}.crash-ui .record-value{font-size:var(--type-20);color:var(--success)}.crash-ui .record-top{display:flex;gap:var(--space-16);flex-wrap:wrap;align-items:center;min-width:0}.crash-ui .record-top .record-value{color:var(--gold)}.crash-ui .owner{display:flex;gap:var(--space-8);align-items:center;min-width:0;flex:1 1 var(--web-owner-min-width)}.crash-ui .owner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md)}.crash-ui .owner-name{font-size:var(--type-12);overflow-wrap:anywhere}.crash-ui .owner-date{font:var(--type-12) var(--font-body),sans-serif;color:var(--text-muted);white-space:nowrap}.crash-ui .winners{width:100%;margin-top:var(--space-12)}.crash-ui .wins-head{display:flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-12);font-size:var(--type-14)}.crash-ui .online{font-size:var(--type-12);color:var(--switch-on);display:flex;align-items:center;gap:var(--space-6);white-space:nowrap}.crash-ui .dot{width:var(--web-status-dot);height:var(--web-status-dot);border-radius:50%;background:currentColor}.crash-ui .text-button{border:0;background:none;color:var(--text-muted);min-height:var(--tap-min);padding:0 var(--space-4);margin-left:auto;font-size:var(--type-12)}.crash-ui .wins-list{display:flex;gap:var(--space-8);overflow-x:auto;scrollbar-width:none}.crash-ui .winner{display:grid;align-items:center;grid-template-columns:var(--web-avatar-md) minmax(var(--web-winner-name-min-width),auto);gap:var(--space-4) var(--space-8);flex:1 0 var(--web-win-card-width);padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16)}.crash-ui .winner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md);grid-row:span 2;align-self:center}.crash-ui .winner-name{font-size:var(--type-12);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.crash-ui .winner .money{color:var(--success);white-space:nowrap}.crash-ui .win-multiple{display:none}.crash-ui .history{display:flex;gap:var(--space-8);overflow:auto;scrollbar-width:none;margin-top:var(--space-12)}.crash-ui .pill{border:var(--stroke-1) solid color-mix(in srgb,currentColor calc(var(--alpha-soft) * 100%),var(--border));border-radius:var(--radius-24);background:var(--surface-raised);color:var(--pill-cyan);padding:var(--space-6) var(--space-8);font-family:var(--font-numbers),var(--font-body),sans-serif;white-space:nowrap}.crash-ui .pill.tier-success{color:var(--pill-success)}.crash-ui .pill.tier-purple{color:var(--pill-purple)}.crash-ui .pill.tier-gold{color:var(--pill-gold)}.crash-ui .bottom{position:absolute;left:var(--edge);right:var(--edge);bottom:max(var(--edge),env(safe-area-inset-bottom));pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:var(--space-12)}/* The steps of a climbing round, beside the scene: the kit's panel, so a brand restyles it
+   with everything else. It stands in the band the scene was given, clear of both panels. */
+.crash-ui .ladder{position:absolute;left:var(--edge);top:var(--scene-top,0);height:calc(var(--scene-bottom,100%) - var(--scene-top,0));display:flex;align-items:center;pointer-events:none}
+.crash-ui .ladder-list{list-style:none;margin:0;padding:var(--space-16) var(--space-12);display:grid;gap:var(--space-8);background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24);box-shadow:var(--elevation-panel,none)}
+.crash-ui .ladder-step{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:var(--space-8);position:relative;padding:var(--space-4) var(--space-8);border-radius:var(--radius-16);font-family:var(--font-numbers),var(--font-body),sans-serif;color:var(--text-muted)}
+/* One rail behind the dots, drawn by the steps themselves so it never needs measuring. */
+.crash-ui .ladder-step::before{content:"";position:absolute;left:calc(var(--space-8) + var(--space-4));top:50%;width:var(--stroke-2);height:calc(100% + var(--space-8));background:var(--border)}
+.crash-ui .ladder-step:last-child::before{display:none}
+/* The rail runs between the dots, never across the step that is marked: it stops at the
+   pill above it and picks up again under it. */
+.crash-ui .ladder-step.is-before::before{height:calc(50% + var(--space-8))}
+.crash-ui .ladder-step.is-current::before{top:100%;height:var(--space-8)}
+.crash-ui .ladder-dot{width:var(--space-8);height:var(--space-8);border-radius:50%;background:var(--text-muted);position:relative;z-index:1}
+.crash-ui .ladder-value{text-align:right}
+.crash-ui .ladder-step.is-won{color:var(--text)}
+.crash-ui .ladder-step.is-won .ladder-dot,.crash-ui .ladder-step.is-won::before{background:var(--gold)}
+.crash-ui .ladder-step.is-current{background:var(--gold);color:var(--on-go)}
+.crash-ui .ladder-step.is-current .ladder-dot{background:var(--on-go)}
+/* On a phone it sits against the edge of the screen: the two corners that meet the edge
+   are square, and the border it would draw along it is gone. */
+@media(max-width:599px){.crash-ui .ladder{left:0}
+.crash-ui .ladder-list{border-top-left-radius:0;border-bottom-left-radius:0;border-left:0}}
+.crash-ui .multiplier{min-width:var(--web-multiplier-min-width);border:var(--stroke-2) solid var(--multiplier-color,var(--cyan));border-radius:var(--radius-32);background:var(--surface);text-align:center;font:var(--type-28) var(--font-numbers),var(--font-body),sans-serif;color:var(--multiplier-color,var(--cyan));padding:var(--space-4) var(--space-24)}.crash-ui .controls{width:100%;max-width:var(--web-control-max-width);display:grid;gap:var(--space-16)}.crash-ui .settings-row{display:grid;grid-template-columns:var(--web-settings-column-width) 1fr;gap:var(--space-12)}.crash-ui .auto{background:var(--switch-off);border-radius:var(--radius-pill);padding:var(--space-6) var(--space-8) var(--space-6) var(--space-6);justify-content:flex-start}.crash-ui .knob{height:var(--web-knob-size);width:var(--web-knob-size);border-radius:50%;background:var(--knob);flex:none}.crash-ui .auto[aria-pressed=true]{background:var(--switch-on);color:var(--on-success)}.crash-ui .stake{display:grid;grid-template-columns:var(--tap-min) var(--tap-min) minmax(var(--web-winner-name-min-width),1fr) var(--tap-min) var(--tap-min);gap:var(--space-8);align-items:center}.crash-ui .stake .money{text-align:center;font-size:var(--type-24);min-width:0}.crash-ui .stake .button{padding:var(--space-4);font-size:var(--type-14)}.crash-ui .presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-8)}.crash-ui .presets .button{min-width:0}.crash-ui .actions{display:flex;gap:var(--space-12);min-width:0}.crash-ui .action{flex:1;min-width:0;min-height:var(--web-control-action-height);flex-direction:column;gap:var(--space-4);font-size:var(--type-24);border-radius:var(--radius-32);color:var(--on-go);border-color:var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--action-go-shadow)}.crash-ui .action.cash{background:linear-gradient(var(--action-cash-top),var(--action-cash-bottom));border-color:var(--action-cash-edge);color:var(--on-cash);box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-cash-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--cash-shadow)}
+.crash-ui .action:disabled,.crash-ui .action.cash:disabled{background:var(--button-disabled);border-color:var(--border);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .action-title{display:flex;align-items:center;justify-content:center;gap:var(--space-8)}.crash-ui .action .money,.crash-ui .action small{font-size:var(--type-18);line-height:var(--leading-tight)}.crash-ui .action .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .modal-layer{position:fixed;inset:0;z-index:30;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:var(--space-16);pointer-events:auto;touch-action:pan-y}.crash-ui .modal{width:min(100%,var(--modal-max-width-px));max-height:calc(100dvh - var(--space-32));overflow:auto;overscroll-behavior:contain;padding:var(--space-24);background:var(--surface);border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-modal)}.crash-ui .modal header{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);margin-bottom:var(--space-16)}.crash-ui .modal h2{font-size:var(--type-24);margin:0}.crash-ui .modal-body{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16)}.crash-ui .modal .button{min-height:var(--web-control-comfort-height)}.crash-ui .setting{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);min-height:var(--web-control-comfort-height)}.crash-ui .setting input[type=checkbox]{width:var(--space-24);height:var(--space-24);accent-color:var(--switch-on)}.crash-ui select{background:var(--button);color:var(--text);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16);padding:var(--space-12);max-width:55%}.crash-ui .win-modal{text-align:center}.crash-ui .win-modal .win-coin{width:var(--web-win-coin-hero);height:var(--web-win-coin-hero);display:block;margin:auto}.crash-ui .win-total{font:var(--type-48) var(--font-numbers),var(--font-body),sans-serif;color:var(--gold)}.crash-ui .toast{position:absolute;top:45%;left:50%;transform:translateX(-50%);padding:var(--space-12) var(--space-24);border-radius:var(--radius-24);background:var(--surface);border:var(--stroke-1) solid var(--border);pointer-events:none;text-align:center;max-width:90%}.crash-ui .dev{position:absolute;right:var(--space-16);top:var(--dev-top,var(--web-dev-top));pointer-events:auto;min-height:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--radius-16);background:var(--surface-scrim);border:var(--stroke-1) solid var(--border);color:var(--text)}.crash-ui .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}.crash-ui .confetti i{position:absolute;left:50%;top:45%;width:var(--space-8);height:var(--space-12);background:var(--gold);animation:celebrate var(--motion-celebrate-ms) ease-out forwards;transform:rotate(var(--angle));border-radius:var(--radius-4)}.crash-ui .confetti i:nth-child(3n){background:var(--success)}.crash-ui .confetti i:nth-child(3n + 1){background:var(--cyan)}@keyframes celebrate{to{transform:translate(var(--x),var(--y)) rotate(480deg);opacity:0}}.crash-ui.reduced *{animation:none!important;transition:none!important}
+@media(max-width:599px){.crash-ui{--edge:var(--space-8)}.crash-ui .panel{padding:var(--space-12)}.crash-ui .modal-layer:not(.is-win){align-items:flex-end}.crash-ui .account .records{gap:var(--space-8);padding:var(--space-8)}.crash-ui .record .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}.crash-ui .record-value{font-size:var(--type-18)}.crash-ui .record-title{font-size:var(--type-12)}.crash-ui .modal{padding:var(--space-24)}.crash-ui .stake .money{font-size:var(--type-20)}.crash-ui .balance .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}}
+@media(min-width:600px){.crash-ui .settings-row,.crash-ui .actions{grid-column:1/-1}.crash-ui .record-top{flex-wrap:nowrap}.crash-ui .record-title,.crash-ui .owner-name{font-size:var(--type-14)}.crash-ui .record-value{font-size:var(--type-24)}.crash-ui .winners{max-width:100%}}
+@media(min-width:960px){.crash-ui .winner:last-child{border:0}.crash-ui .winner .avatar{grid-row:auto}.crash-ui .win-multiple{display:block;font-family:var(--font-numbers),var(--font-body),sans-serif}.crash-ui .winner .money{text-align:right}.crash-ui .controls{display:flex;align-items:center;flex-wrap:wrap}.crash-ui .action{min-height:var(--web-action-compact-height);font-size:var(--type-20)}.crash-ui .controls{gap:var(--space-16)}.crash-ui .history{max-width:var(--web-history-max-width)}.crash-ui .online{font-size:var(--type-12)}.crash-ui .record-title,.crash-ui .owner-name{font-size:var(--type-14)}}
+@media(prefers-reduced-motion:reduce){.crash-ui *{animation:none!important;transition:none!important}}
+/* A narrow phone that is also short: the live wins strip is what pushes the account
+   panel over half the screen, and the game has to have somewhere to be drawn. */
+@media(max-width:599px) and (max-height:700px){.crash-ui .winners{display:none}}@media(min-width:600px) and (max-height:720px){.crash-ui .winners,.crash-ui .records{display:none}.crash-ui .top{right:auto;max-width:65%}.crash-ui .controls{gap:var(--space-8);padding:var(--space-8)}.crash-ui .action{min-height:var(--tap-min);font-size:var(--type-20)}.crash-ui .multiplier{font-size:var(--type-24)}.crash-ui .settings-row{grid-template-columns:var(--web-settings-column-compact-width) 1fr}.crash-ui .controls{grid-template-columns:minmax(var(--web-short-stake-min-width),1fr) minmax(var(--web-short-presets-min-width),.8fr)}.crash-ui .settings-row{grid-column:1}.crash-ui .stake{grid-column:1;grid-row:2}.crash-ui .presets{grid-column:2;grid-row:1}.crash-ui .actions{grid-column:2;grid-row:2}.crash-ui .dev{top:var(--space-16)}}
+/* Typography and surfaces follow the shipped HUD tokens. */
+.crash-ui .avatar{display:inline-block;vertical-align:middle}
+.crash-ui .records{background:var(--surface)}
+.crash-ui .action{position:relative;overflow:hidden}
+.crash-ui .action::before{content:"";position:absolute;left:var(--space-6);top:var(--space-6);width:var(--web-gloss-width);height:var(--web-gloss-height);border-top:var(--web-gloss-stroke) solid var(--gloss-ink);border-left:var(--web-gloss-stroke) solid var(--gloss-ink);border-top-left-radius:var(--radius-32);pointer-events:none}
+@media(min-width:960px){.crash-ui .identity strong{font-size:var(--type-24)}.crash-ui .balance .money{font-size:var(--type-32)}.crash-ui .level{font-size:var(--type-14)}.crash-ui .wins-head{font-size:var(--type-24)}.crash-ui .owner-date{font-size:var(--type-14)}.crash-ui .record-top{gap:var(--space-24)}.crash-ui .records{padding:var(--space-16)}.crash-ui .record{gap:var(--space-12)}}
+/* Modal rows use the original flat surfaces, radio artwork and nested radii. */
+.crash-ui .modal{--modal-padding:var(--space-24);--modal-radius:var(--radius-48);padding:var(--modal-padding);border-radius:var(--modal-radius);max-width:var(--modal-max-width-px)}
+.crash-ui .modal-body{gap:var(--space-12)}
+.crash-ui .modal h2{font-size:var(--type-24)}
+.crash-ui .modal-description,.crash-ui .modal-note{margin:0;color:var(--text-muted);font-size:var(--body-type-px);line-height:var(--leading-relaxed)}
+.crash-ui .modal-note{font-size:var(--type-12)}
+.crash-ui .modal-section-title{font-size:var(--body-type-px);margin:var(--space-8) 0 0}
+.crash-ui .centered{text-align:center}
+.crash-ui .option-list{display:grid;gap:var(--space-8)}
+.crash-ui .radio-option{display:flex;align-items:center;gap:var(--space-16);width:100%;min-height:var(--web-action-compact-height);padding:var(--space-12) var(--space-16);border:0;border-radius:max(0px,calc(var(--modal-radius) - var(--modal-padding)));background:transparent;color:var(--text);text-align:left}
+.crash-ui .radio-option[aria-checked=true]{background:var(--surface-hover-soft)}
+.crash-ui .radio-option:hover{background:var(--surface-hover-medium)}
+.crash-ui .radio-option:active{background:var(--surface-pressed)}
+.crash-ui .radio-marker{width:var(--web-radio-marker);height:var(--web-radio-marker);flex:none;border-radius:50%;border:var(--stroke-3) solid var(--border);transition:border-color var(--motion-fast-ms),background var(--motion-fast-ms)}
+.crash-ui .radio-option[aria-checked=true] .radio-marker{border-color:var(--focus);background:radial-gradient(circle at 50% 50%,var(--focus) 0 45%,transparent 46%)}
+.crash-ui .option-details{display:grid;gap:var(--space-4);min-width:0;flex:1}
+.crash-ui .option-title{font-size:var(--body-type-px)}
+.crash-ui .option-description,.crash-ui .option-caption{font-size:var(--type-12);color:var(--text-muted)}
+.crash-ui .option-reward{display:grid;gap:var(--space-4);text-align:right;flex:none}
+.crash-ui .option-reward .money{font-size:var(--type-24);color:var(--gold)}
+.crash-ui .option-caption{font-size:var(--type-12)}
+.crash-ui .modal .flat-button{border:var(--stroke-1) solid var(--border);background:var(--surface-raised);border-radius:max(0px,calc(var(--modal-radius) - var(--modal-padding)));box-shadow:none;white-space:normal}
+.crash-ui .modal .flat-button:hover{border-color:var(--focus);filter:none}
+.crash-ui .modal .flat-button:active{background:var(--surface-pressed);transform:none;box-shadow:none}
+.crash-ui .setting .flat-button{min-width:var(--web-compact-control-width);max-width:50%}
+.crash-ui .setting input.switch{appearance:none;position:relative;width:var(--web-switch-width);height:var(--tap-min);margin:0;flex:none;border:0;background:none;cursor:pointer}
+.crash-ui .setting input.switch::before{content:"";position:absolute;left:0;top:50%;width:var(--web-switch-width);height:var(--space-32);transform:translateY(-50%);border:var(--stroke-1) solid var(--switch-border);border-radius:var(--radius-pill);background:var(--switch-off);transition:background var(--motion-fast-ms),border-color var(--motion-fast-ms)}
+/* The thumb keeps an even gap inside the track, so the travel is the width less the thumb and both insets. */
+.crash-ui .setting input.switch::after{content:"";position:absolute;left:var(--space-4);top:50%;width:var(--space-24);height:var(--space-24);margin-top:calc(-1 * var(--space-24) / 2);border-radius:50%;background:var(--knob);transition:transform var(--motion-fast-ms)}
+.crash-ui .setting input.switch:checked::before{background:var(--switch-on);border-color:var(--switch-on)}
+.crash-ui .setting input.switch:checked::after{transform:translateX(calc(var(--web-switch-width) - var(--space-24) - 2 * var(--space-4)))}
+.crash-ui .back-button{margin:0;text-align:left;color:var(--text)}
+@media(max-width:599px){.crash-ui .modal{--modal-padding:var(--space-16);--modal-radius:var(--radius-32)}.crash-ui .radio-option{padding:var(--space-12) var(--space-8);gap:var(--space-12)}}
+
+.crash-ui .win-modal{background:var(--surface-raised);border:var(--stroke-2) solid var(--gold)}.crash-ui .win-modal header{justify-content:center}.crash-ui .win-modal h2{color:var(--gold);font-size:var(--type-32)}.crash-ui .account-summary{display:flex;align-items:center;gap:var(--space-16)}.crash-ui .account-summary .avatar{width:var(--web-avatar-hero);height:var(--web-avatar-hero)}.crash-ui .account-summary p{margin:0}.crash-ui .account-stat{color:var(--text)}.crash-ui .account-stat.success{color:var(--success)}.crash-ui .account-stat.gold{color:var(--gold)}
+
+/* Control geometry: compact, nested shapes rather than uniformly pill-shaped buttons. */
+.crash-ui .controls{
+ --panel-radius:var(--web-panel-radius);
+ --control-h:var(--web-control-height);
+ --control-padding:var(--web-control-padding);
+ --button-radius:max(0px,calc(var(--panel-radius) - var(--control-padding)));
+ padding:var(--control-padding);
+ gap:var(--web-control-gap);
+ max-width:var(--web-control-max-width);
+}
+.crash-ui .controls .button{
+ border-radius:var(--button-radius);
+ border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow);
+}
+.crash-ui .controls .button[aria-pressed=true]{outline:var(--stroke-2) solid var(--focus);outline-offset:calc(-1 * var(--stroke-2))}
+.crash-ui .controls .auto{border-radius:var(--radius-pill);padding-block:var(--space-4)}
+.crash-ui .controls .stake{
+ grid-template-columns:minmax(var(--tap-min),1fr) var(--control-h) minmax(var(--web-control-amount-width),1.5fr) var(--control-h) minmax(var(--tap-min),1fr);
+ gap:var(--space-4);
+ padding:var(--space-8);
+ border:var(--stroke-1) solid var(--border);
+ border-radius:var(--radius-24);
+ background:var(--surface-inset);
+ min-width:0;
+}
+.crash-ui .controls .stake .button{min-width:var(--tap-min);font-size:var(--type-14);padding:var(--space-4)}
+.crash-ui .controls .stake .money{font-size:var(--type-20)}
+.crash-ui .controls .settings-row,.crash-ui .controls .actions{gap:var(--web-control-gap)}
+.crash-ui .controls .presets{gap:var(--space-8);min-width:0}
+.crash-ui .controls .action{
+ min-height:var(--web-control-action-height);
+ border-radius:max(0px,calc(var(--panel-radius) - var(--control-padding)));
+ border-color:var(--action-go-edge);
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-medium) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow);
+ gap:var(--space-4);
+}
+.crash-ui .controls .action.cash{border-color:var(--action-cash-edge);box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-cash-edge) calc(var(--alpha-medium) * 100%),transparent),0 var(--web-control-depth) 0 var(--cash-shadow)}
+.crash-ui .controls .button:active:not(:disabled){transform:translateY(var(--web-control-depth));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent)}
+.crash-ui .controls .button:disabled{box-shadow:inset 0 var(--web-control-depth) 0 var(--button-shadow)}
+.crash-ui .controls .action-title{line-height:var(--leading-tight)}
+.crash-ui .controls [data-slot=playIcon]{display:flex;align-items:center}
+/* The tabbed controls (config.controlsVariant='tabbed'). Every value is a token: the
+   reference mock is a layout, not a palette. `.controls.tabbed-controls` outranks the
+   breakpoint rules that reshape `.controls` into flex or a two-column grid. */
+.crash-ui .controls.tabbed-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16);align-items:stretch}
+.crash-ui .tabbed-controls .risk{display:flex;align-items:center;justify-content:center;gap:var(--space-16)}
+.crash-ui .tabbed-controls .risk-label{flex-shrink:0;white-space:nowrap;font:var(--type-14) var(--font-numbers),var(--font-body),sans-serif;letter-spacing:0.08em;color:var(--text)}
+.crash-ui .tabbed-controls .risk-label [data-slot="riskPct"]{display:inline-block;width:5ch;text-align:right;font-variant-numeric:tabular-nums}
+.crash-ui .tabbed-controls .risk-meter{display:grid;width:calc(10 * var(--space-16) + 9 * var(--space-4));min-width:0;grid-template-columns:repeat(10,minmax(0,1fr));gap:var(--space-4)}
+.crash-ui .tabbed-controls .risk-meter i{display:block;height:var(--space-16);border-radius:var(--radius-4);background:var(--surface-inset)}
+.crash-ui .tabbed-controls .risk-meter i.on.tier-low{background:var(--danger)}
+.crash-ui .tabbed-controls .risk-meter i.on.tier-mid{background:var(--warning)}
+.crash-ui .tabbed-controls .risk-meter i.on.tier-high{background:var(--success)}
+.crash-ui .tabbed-controls .difficulty-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:var(--space-8)}
+.crash-ui .tabbed-controls .difficulty-row .button{min-height:var(--control-h);font-size:var(--type-20)}
+.crash-ui .tabbed-controls .difficulty-row .button[aria-pressed=true]{background:var(--gold);color:var(--on-go);outline:0}
+/* The wager and the action buttons take a row each. Side by side they put three things
+   across one row — stepper, cash, go — which crowds the stake and leaves the buttons
+   narrow enough that their labels wrap. */
+.crash-ui .tabbed-controls .bet-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16)}
+.crash-ui .tabbed-controls .wager{display:grid;gap:var(--space-8);align-content:start;padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24);background:var(--surface-inset);min-width:0}
+.crash-ui .tabbed-controls .wager .stake{display:grid;grid-template-columns:minmax(var(--tap-min),1fr) var(--control-h) minmax(0,1.5fr) var(--control-h) minmax(var(--tap-min),1fr);gap:var(--space-4);padding:0;border:0;background:none;align-items:center}
+.crash-ui .tabbed-controls .wager .stake .button{min-height:var(--control-h);font-size:var(--type-14);padding:0}
+.crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{font-size:var(--type-28)}
+.crash-ui .tabbed-controls .wager-amount{display:grid;justify-items:center;line-height:var(--leading-tight);min-width:0}
+.crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-24)}
+/* Pinned explicitly: the kit's breakpoint rules move `.actions` around the standard
+   grid (`grid-column:2;grid-row:2` on short viewports, `1/-1` on medium), and on a wide
+   screen that pushed this one into a third, implicit column with an empty track beside
+   it. Four-class specificity outranks all of those. */
+.crash-ui .tabbed-controls .bet-grid>.wager{grid-column:1;grid-row:1}
+.crash-ui .tabbed-controls .bet-grid>.actions{grid-column:1;grid-row:2}
+/* Two slots, always. Before the round CASH OUT is absent and PLAY spans both, so the row
+   is the same height whether or not the round is running: the panel never changes size,
+   and the scene it reports its bounds to never re-lays out under the player. The row is
+   given its own height rather than taking one from its content. Typography stays
+   consistent whether one or two buttons are visible. */
+.crash-ui .tabbed-controls .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-8);min-width:0;min-height:calc(var(--web-control-action-height) + var(--space-16))}
+.crash-ui .tabbed-controls .actions:not(:has(>[data-action=cash]:not([hidden])))>[data-action=go]{grid-column:1/-1}
+.crash-ui .tabbed-controls .actions .action{min-height:var(--web-control-action-height)}
+/* Sharing the row mid-round, each button is half as wide, so a wordy label such as
+   NEXT LANE wraps rather than running into the edges. */
+.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action{white-space:normal;text-align:center;padding-inline:var(--space-8)}
+.crash-ui .tabbed-controls .actions .action{min-height:100%;flex-direction:column;gap:var(--space-4)}
+.crash-ui .tabbed-controls .actions .action .money{font-size:var(--type-32)}
+.crash-ui .tabbed-controls .actions .action .action-title{font-size:var(--type-20)}
+.crash-ui .tabbed-controls .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
+.crash-ui .tabbed-controls .tab{min-height:var(--web-control-height);border-radius:var(--radius-24);color:var(--text-muted)}
+.crash-ui .tabbed-controls .tab .icon{width:var(--web-icon-md);height:var(--web-icon-md)}
+.crash-ui .bet-list{display:grid;gap:var(--space-8)}
+.crash-ui .bet-row{display:flex;justify-content:space-between;align-items:center;gap:var(--space-12);padding:var(--space-8) var(--space-12);border-radius:var(--radius-16);background:var(--surface-inset)}
+.crash-ui .bet-row .bet-result{font-size:var(--type-14);color:var(--text-muted)}
+.crash-ui .bet-row.won .bet-result{color:var(--success)}
+.crash-ui .bet-row.lost .bet-result{color:var(--danger)}
+.crash-ui .tabbed-controls .tabbed-main{display:grid;gap:var(--space-16);min-width:0}
+@media(max-width:599px){
+ .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-16)}
+ .crash-ui .tabbed-controls .actions .action .money{font-size:var(--type-28)}
+}
+/* Anything but a phone: the tab bar leaves the bottom panel and becomes a vertical
+   column on the left edge, centred on the screen's height. The threshold is the one where
+   the panel gets its margins back — below it the panel is full-bleed against the screen
+   edges and there is no room beside it, so the bar stays where it is, along the bottom.
+   It must be `fixed`, not `absolute`: the tabs sit inside `.bottom`, which is positioned,
+   so an absolute `top:50%` would centre them in the bottom strip. `.crash-ui` carries no
+   transform, so `fixed` measures the viewport. */
+@media(min-width:600px){
+ /* Both sides are kept clear of the tab column, not just the left: that is what keeps the
+    panel centred on the *screen* rather than on the space left over beside the bar. */
+ .crash-ui .tabbed-controls{--tabs-column:calc(var(--web-control-comfort-height) + 2 * var(--space-12));--tabs-gutter:calc(var(--tabs-column) + var(--space-16))}
+ .crash-ui .controls.tabbed-controls{display:grid;grid-template-columns:minmax(0,1fr);width:min(var(--hud-max-width-px),100% - 2 * var(--tabs-gutter));max-width:100%;padding:var(--web-desktop-panel-padding)}
+ .crash-ui .tabbed-controls .tabs{position:fixed;left:var(--edge);top:50%;transform:translateY(-50%);display:grid;grid-template-columns:var(--tabs-column);grid-auto-rows:var(--web-control-comfort-height);gap:var(--space-8);padding:0;background:none;border:0;border-radius:0;box-shadow:none;pointer-events:auto}
+ .crash-ui .tabbed-controls .tab{min-height:var(--web-control-comfort-height)}
+ /* The side buttons' modals as a sheet: full height, docked to the right edge, sliding in.
+    Reduced motion is already handled — `.crash-ui.reduced *` cancels every animation. */
+ .crash-ui .modal-layer.is-sheet{justify-content:flex-end;align-items:stretch;padding:0}
+ .crash-ui .modal-layer.is-sheet .modal{--modal-radius:0;width:min(100%,var(--modal-max-width-px));max-width:var(--modal-max-width-px);height:100%;max-height:none;border-radius:0;border-width:0 0 0 var(--stroke-1);box-shadow:var(--elevation-modal);animation:crash-sheet-in var(--motion-ms) ease-out}
+ @keyframes crash-sheet-in{from{transform:translateX(100%)}to{transform:none}}
+}
+@media(min-width:600px){
+ .crash-ui .controls{grid-template-columns:minmax(var(--web-medium-stake-min-width),1.4fr) minmax(var(--web-medium-presets-min-width),1fr);align-items:center}
+}
+@media(min-width:960px){
+ .crash-ui .controls .settings-row{grid-column:auto;grid-template-columns:var(--web-settings-column-compact-width) minmax(0,1fr);display:grid;gap:var(--space-8)}
+ .crash-ui .controls .auto{min-width:0}
+ .crash-ui .controls .actions{grid-column:auto;align-self:stretch}
+ .crash-ui .controls .action{min-height:var(--web-action-compact-height)}
+ .crash-ui .controls>.settings-row,.crash-ui .controls>.stake,.crash-ui .controls>.presets,.crash-ui .controls>.actions{grid-column:auto;grid-row:auto}
+ .crash-ui .controls{display:grid;grid-template-columns:var(--web-laptop-settings-column-width) minmax(var(--web-laptop-stake-min-width),1fr) minmax(var(--web-laptop-actions-min-width),.8fr)}
+ .crash-ui .controls .presets{grid-column:1/3}
+ .crash-ui .controls .actions{grid-column:3;grid-row:1/3}
+}
+
+.crash-ui .win-coin-flight{position:fixed;inset:0;z-index:40;pointer-events:none;overflow:hidden}
+.crash-ui .win-coin-flight img{position:absolute;left:0;top:0;width:var(--web-win-coin-size);height:var(--web-win-coin-size);object-fit:contain;opacity:0;will-change:transform,opacity}
+
+.crash-ui .controls .stake [data-action=minus],.crash-ui .controls .stake [data-action=plus]{width:var(--control-h);height:var(--control-h);padding:0}
+
+/* Shared type hierarchy for live-win cards and record cards. */
+.crash-ui .winner-name,.crash-ui .record-title,.crash-ui .owner-name{font-size:var(--web-card-title-size);line-height:var(--leading-body)}
+/* A winner row is one line of type: the name, the multiplier and the amount all share
+   the card title size, and tell themselves apart by colour. */
+.crash-ui .winner-name,.crash-ui .winner .money,.crash-ui .win-multiple{font-size:var(--web-card-title-size);line-height:var(--leading-body)}
+.crash-ui .win-multiple{color:var(--text-muted)}
+.crash-ui .record-value{font-size:var(--web-card-amount-size);line-height:var(--leading-body)}
+.crash-ui .record>div,.crash-ui .owner>div{min-width:0}
+@media(max-width:599px){.crash-ui .records{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}}
+
+.crash-ui .controls .stake [data-action=minus],.crash-ui .controls .stake [data-action=plus]{font-size:var(--web-control-step-icon-size);line-height:var(--leading-none)}
+
+.crash-ui .controls [data-action=difficulty]{padding-inline:var(--space-8)}
+/* One account surface; only individual players retain their pill cards. */
+.crash-ui .account .winners.panel,
+.crash-ui .account .records{
+ background:transparent;
+ border:0;
+ border-top:var(--stroke-1) solid var(--border);
+ border-radius:0;
+ box-shadow:none;
+ margin-top:var(--space-16);
+ padding:var(--space-16) 0 0;
+}
+.crash-ui .account .wins-head{margin-bottom:var(--space-12)}
+.crash-ui .account .record-top,.crash-ui .account .owner{border:0;box-shadow:none;background:transparent}
+/* Record and owner share title/value rows, with the avatar centered beside them. */
+.crash-ui .account .record-top{align-items:flex-start;gap:var(--space-24)}
+.crash-ui .account .record>div,.crash-ui .account .owner>div{display:grid;row-gap:var(--space-4)}
+.crash-ui .account .owner{gap:var(--space-12);align-items:center}
+.crash-ui .account .owner-date{display:flex;align-items:center;min-height:calc(var(--web-card-amount-size) * 1.4);line-height:var(--leading-body)}
+
+/* A compact upper HUD with history outside the account surface. */
+.crash-ui .account-column{width:100%;min-width:0;display:flex;flex-direction:column;gap:var(--space-8)}
+.crash-ui .account-column .history{margin:0;padding:0 var(--space-8);background:none;border:0;box-shadow:none;max-width:100%;pointer-events:auto}
+.crash-ui .pill,.crash-ui .ladder-step{font-size:var(--web-hud-meta-size)}
+.crash-ui .identity strong{font-size:var(--web-hud-profile-size)}
+.crash-ui .balance .money{font-size:clamp(var(--type-20),5vw,var(--type-24))}
+.crash-ui .wins-head{font-size:var(--body-type-px)}
+.crash-ui .level,.crash-ui .owner-date,.crash-ui .online{font-size:var(--web-hud-meta-size)}
+@media(min-width:960px){
+ .crash-ui .balance .money{font-size:var(--web-hud-balance-size)}
+ .crash-ui .wins-head{font-size:var(--web-hud-section-size)}
+}
+/* Phone HUD: reduce empty space while preserving minimum tap targets. */
+@media(max-width:599px){
+ .crash-ui .account .winners.panel,.crash-ui .account .records{margin-top:var(--space-8);padding-top:var(--space-8)}
+ .crash-ui .account .wins-head{margin-bottom:var(--space-4)}
+ .crash-ui .account .winner{flex-basis:var(--web-win-card-compact-width);grid-template-columns:var(--web-avatar-sm) minmax(0,1fr);row-gap:0}
+ .crash-ui .account .winner .avatar,.crash-ui .account .owner .avatar{width:var(--space-24);height:var(--space-24)}
+ .crash-ui .account .record-top{gap:var(--space-8)}
+ .crash-ui .account .owner{gap:var(--space-8)}
+ .crash-ui .account .owner>div{row-gap:0}
+ .crash-ui .account .owner-date{min-height:0}
+}
+
+/* Nested surfaces derive their curvature from the enclosing surface and inset. */
+.crash-ui .panel{--panel-padding:var(--space-16)}
+.crash-ui .controls{
+ padding-bottom:calc(var(--control-padding) + var(--web-control-depth));
+ row-gap:calc(var(--web-control-row-gap) + var(--web-control-depth));
+}
+.crash-ui .controls .stake{
+ --stake-padding:var(--web-control-stake-padding);
+ --stake-radius:max(0px,calc(var(--panel-radius) - var(--control-padding)));
+ padding:var(--stake-padding);
+ padding-bottom:calc(var(--stake-padding) + var(--web-control-depth));
+ border-radius:var(--stake-radius);
+}
+.crash-ui .controls .stake .button{border-radius:max(0px,calc(var(--stake-radius) - var(--stake-padding)))}
+.crash-ui .account .winner{border-radius:max(0px,calc(var(--panel-radius) - var(--panel-padding)))}
+.crash-ui .account .icon-button{border-radius:max(0px,calc(var(--panel-radius) - var(--panel-padding)))}
+.crash-ui .modal .icon-button{border-radius:max(0px,calc(var(--modal-radius) - var(--modal-padding)))}
+@media(max-width:599px){.crash-ui .panel{--panel-padding:var(--space-12)}}
+
+/* Desktop density keeps touch targets and body typography unchanged. */
+@media(min-width:960px){
+ .crash-ui{--web-control-padding:var(--web-desktop-control-padding);--web-control-gap:var(--web-desktop-control-gap)}
+ .crash-ui .panel:not(.controls){--panel-padding:var(--web-desktop-panel-padding);padding:var(--panel-padding)}
+ .crash-ui .controls{max-width:var(--web-desktop-control-max-width)}
+ .crash-ui .controls .action{min-height:var(--web-desktop-action-height)}
+ .crash-ui .account .records{margin-top:var(--space-12);padding-top:var(--space-12)}
+ .crash-ui .wins-head{margin-bottom:var(--space-8)}
+}
+
+/* A single compact record summary below its heading. */
+.crash-ui .account .records{display:flex;flex-direction:column;gap:var(--space-6)}
+.crash-ui .records-heading{display:flex;align-items:center;gap:var(--space-8);font-size:var(--body-type-px)}
+.crash-ui .records-heading .icon{width:var(--space-24);height:var(--space-24)}
+.crash-ui .records-line{display:flex;align-items:center;gap:var(--space-8);min-width:0}
+.crash-ui .records-line .personal{flex:none;color:var(--success)}
+.crash-ui .account .records-line .record-top{display:flex;align-items:center;flex-wrap:nowrap;gap:var(--space-6);min-width:0;border-left:var(--stroke-1) solid var(--border);padding-left:var(--space-8)}
+.crash-ui .records-line .personal[hidden]+.record-top{border-left:0;padding-left:0}
+.crash-ui .records-line .record-value{font-size:var(--body-type-px);white-space:nowrap;flex:none}
+.crash-ui .records-line .record-top .record-value{color:var(--gold)}
+.crash-ui .records-line .record-summary-label,.crash-ui .records-line .record-by{font-size:var(--web-card-title-size);flex:none;color:var(--text-muted)}
+.crash-ui .records-line .owner-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--web-card-title-size)}
+
+/* Phone-only upper-panel density; controls retain their own type scale. */
+@media(max-width:599px){
+ .crash-ui .top{--web-card-title-size:var(--web-hud-mobile-title-size);--web-card-amount-size:var(--web-hud-mobile-amount-size)}
+ .crash-ui .top .identity strong{font-size:var(--web-hud-mobile-profile-size)}
+ .crash-ui .top .identity,.crash-ui .top .profile{gap:var(--space-8)}
+ .crash-ui .top .identity .avatar{width:var(--web-hud-mobile-avatar-size);height:var(--web-hud-mobile-avatar-size)}
+ .crash-ui .top .balance{gap:var(--space-6)}
+ .crash-ui .top .balance .money{font-size:var(--web-hud-mobile-balance-size)}
+ .crash-ui .top .wins-head,.crash-ui .top .records-heading{font-size:var(--web-hud-mobile-title-size)}
+ .crash-ui .top .records-heading{gap:var(--space-6)}
+ .crash-ui .top .records-heading .icon{width:var(--web-hud-mobile-win-avatar-size);height:var(--web-hud-mobile-win-avatar-size)}
+ .crash-ui .top .records-line .record-value{font-size:var(--web-hud-mobile-amount-size)}
+ .crash-ui .top .account .records{gap:var(--space-4)}
+ .crash-ui .top .account .winner{flex-basis:var(--web-hud-mobile-win-width);grid-template-columns:var(--web-hud-mobile-win-avatar-size) minmax(0,1fr);padding:var(--space-6) var(--space-8);column-gap:var(--space-6)}
+ .crash-ui .top .account .winner .avatar{width:var(--web-hud-mobile-win-avatar-size);height:var(--web-hud-mobile-win-avatar-size)}
+}
+
+/* Section spacing owns the account rhythm; do not add padding on both sides. */
+.crash-ui .account{display:flex;flex-direction:column;gap:var(--space-12)}
+.crash-ui .top .account>.winners.panel,
+.crash-ui .top .account>.records{margin:0;padding:0;border:0}
+.crash-ui .wins-head{position:relative;min-height:var(--space-32);padding-right:calc(var(--space-32) * 2 + var(--space-8))}
+.crash-ui .wins-head .text-button{position:absolute;right:0;top:50%;transform:translateY(-50%);min-height:var(--tap-min);margin:0}
+.crash-ui .account .wins-head{margin-bottom:var(--space-8)}
+
+/* Auto keeps its hit area while thumb and label exchange sides. */
+.crash-ui .controls .auto{position:relative;padding-inline:var(--space-6)}
+.crash-ui .controls .auto .knob{position:absolute;left:var(--space-6);top:50%;transform:translateY(-50%);transition:left var(--motion-ms) ease}
+.crash-ui .controls .auto .auto-label{flex:1;padding-left:var(--space-40);text-align:center}
+.crash-ui .controls .auto[aria-pressed=true] .knob{left:calc(100% - var(--space-32) - var(--space-6))}
+.crash-ui .controls .auto[aria-pressed=true] .auto-label{padding-left:0;padding-right:var(--space-40)}
+
+/* Align visible text rows, not the extra leading of inherited body line boxes. */
+.crash-ui .profile .identity>span:last-child{display:grid;gap:var(--space-4)}
+.crash-ui .profile .identity strong,.crash-ui .profile .level{line-height:var(--leading-tight)}
+.crash-ui .profile .level{display:block}
+.crash-ui .account .wins-head{min-height:var(--type-20);line-height:var(--type-20);margin-bottom:var(--space-12)}
+
+/* Operator features: disabled groups release their grid tracks instead of leaving gaps. */
+.crash-ui .controls.auto-only .settings-row{grid-template-columns:var(--web-settings-column-width);justify-content:start}
+.crash-ui .controls.difficulty-only .settings-row{grid-template-columns:minmax(0,1fr)}
+@media(min-width:600px){
+ .crash-ui .controls.no-presets>.stake{grid-column:1/-1}
+}
+@media(min-width:600px) and (max-height:720px){
+ .crash-ui .controls.no-settings>.stake{grid-column:1;grid-row:1/3}
+ .crash-ui .controls.no-settings>.actions{grid-column:2;grid-row:2}
+ .crash-ui .controls.no-presets>.stake{grid-column:1}
+ .crash-ui .controls.no-presets>.actions{grid-row:1/3}
+ .crash-ui .controls.no-settings.no-presets>.stake{grid-row:1}
+ .crash-ui .controls.no-settings.no-presets>.actions{grid-column:2;grid-row:1}
+}
+@media(min-width:960px){
+ .crash-ui .controls.auto-only{grid-template-columns:var(--web-settings-column-compact-width) minmax(var(--web-laptop-stake-min-width),1fr) minmax(var(--web-laptop-actions-min-width),.8fr)}
+ .crash-ui .controls.auto-only .settings-row{grid-template-columns:var(--web-settings-column-compact-width)}
+ .crash-ui .controls.no-presets>.stake{grid-column:auto}
+ .crash-ui .controls.no-presets>.actions{grid-column:3;grid-row:1}
+ .crash-ui .controls.no-settings{grid-template-columns:minmax(var(--web-laptop-stake-min-width),1fr) minmax(var(--web-laptop-actions-min-width),.8fr)}
+ .crash-ui .controls.no-settings>.stake{grid-row:auto}
+ .crash-ui .controls.no-settings>.presets{grid-column:1;grid-row:auto}
+ .crash-ui .controls.no-settings>.actions{grid-column:2;grid-row:1/3}
+ .crash-ui .controls.no-settings.no-presets>.actions{grid-column:2;grid-row:1}
+}
+
+/* Paired phone actions need more breathing room than a full-width CTA. */
+@media(max-width:599px){
+ .crash-ui .controls .actions:has(>[data-action=cash]:not([hidden])) .action-title{font-size:var(--type-20);gap:var(--space-8)}
+ .crash-ui .controls .actions:has(>[data-action=cash]:not([hidden])) .action .money{font-size:var(--type-16)}
+}
+
+/* Action symbols retain their size in single/paired and desktop/mobile layouts. */
+.crash-ui .controls .action-title .icon{width:var(--type-28);height:var(--type-28)}
+
+/* Three independent positions share the standard panel, stake and raised actions. */
+.crash-ui .controls.multi-bet-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--web-control-gap);align-items:start}
+.crash-ui .multi-bet{display:grid;gap:var(--space-8);min-width:0}
+.crash-ui .bet-quote{text-align:center;color:var(--text-muted);font-size:var(--web-card-title-size)}
+.crash-ui .bet-quote strong{display:block;font:var(--type-24)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;color:var(--text)}
+.crash-ui .bet-receipt{color:var(--text-muted);font-size:var(--web-hud-meta-size);text-align:center;min-height:var(--space-32);display:flex;align-items:center;justify-content:center}
+.crash-ui .controls .bet-wager{grid-template-columns:var(--control-h) minmax(0,1fr) var(--control-h);gap:var(--space-4)}
+.crash-ui .bet-amount{width:100%;min-width:0;appearance:textfield;background:transparent;border:0;color:var(--text);padding:0;text-align:center;font:var(--type-20) var(--font-numbers),var(--font-body),sans-serif}
+.crash-ui .bet-amount::-webkit-inner-spin-button{appearance:none}
+.crash-ui .controls .bet-wager .bet-step{min-width:var(--tap-min);height:var(--control-h);padding:0;font-size:var(--web-control-step-icon-size);line-height:var(--leading-none)}
+.crash-ui .controls .bet-action{width:100%;min-width:0;white-space:normal;font-size:var(--type-20);line-height:var(--leading-tight)}
+.crash-ui .bet-action .action-title{font-size:inherit}
+.crash-ui .bet-action .money{font-size:var(--body-type-px);line-height:var(--leading-tight)}
+.crash-ui .bet-action.bet-info{background:var(--surface-inset);color:var(--text-muted);border-color:var(--border);box-shadow:none;font-size:var(--web-card-title-size)}
+.crash-ui .bet-action.bet-info::before,.crash-ui .bet-action.bet-info::after{display:none}
+.crash-ui .bet-action.bet-cancel{background:linear-gradient(var(--button-top),var(--button-bottom));color:var(--text);border-color:var(--focus)}
+.crash-ui .bet-won .bet-receipt,.crash-ui .bet-won .bet-action{color:var(--success)}
+.crash-ui .round-phase{text-align:center;color:var(--text-muted);font-size:var(--web-hud-meta-size);line-height:var(--leading-tight);background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-pill);padding:var(--space-4) var(--space-12)}
+@media(max-width:599px){
+ .crash-ui .controls.multi-bet-controls{gap:var(--space-8);padding:var(--space-8);padding-bottom:calc(var(--space-8) + var(--web-control-depth))}
+ .crash-ui .controls .bet-wager{padding:var(--space-4);padding-bottom:calc(var(--space-4) + var(--web-control-depth));grid-template-columns:repeat(2,minmax(var(--tap-min),1fr));gap:var(--space-4)}
+ .crash-ui .bet-amount{grid-column:1/-1;grid-row:1;min-height:var(--space-32);font-size:var(--body-type-px)}
+ .crash-ui .controls .bet-wager .bet-step{height:var(--tap-min)}
+ .crash-ui .bet-quote strong{font-size:var(--type-20)}
+ .crash-ui .controls .bet-action{font-size:var(--body-type-px)}
+}
+
+/* Three-position actions retain their geometry across BET/CANCEL/COLLECT. */
+.crash-ui .controls .bet-action{height:var(--web-control-action-height);min-height:var(--web-control-action-height);flex-direction:column;border-radius:var(--button-radius)}
+
+/* Shared optional settings row for the three-position panel. */
+.crash-ui .controls.multi-bet-controls>.settings-row{grid-column:1/-1;grid-row:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:var(--web-control-gap)}
+.crash-ui .controls.multi-bet-controls.auto-only>.settings-row,.crash-ui .controls.multi-bet-controls.difficulty-only>.settings-row{grid-template-columns:minmax(0,1fr)}
+.crash-ui .controls.multi-bet-controls>.settings-row>.button{min-width:0;width:100%}
+
+.crash-ui .controls.multi-bet-controls[class]{grid-template-columns:repeat(3,minmax(0,1fr))}
+/* Desktop side panels: the account card and the live-wins column take less of the scene. */
+@media(min-width:960px){
+ .crash-ui .account,.crash-ui .account-column{max-width:var(--web-account-max-width)}
+ .crash-ui .top>.winners{width:var(--web-wins-column-width);margin:0 0 0 auto}
+ .crash-ui .wins-list{display:block;overflow:auto}
+ .crash-ui .winner{display:grid;align-items:center;border:0;border-bottom:var(--stroke-1) solid var(--border);border-radius:0}
+ .crash-ui .winner:last-child{border:0}
+ .crash-ui .winner .avatar{grid-row:auto}
+ .crash-ui .win-multiple{display:block;font-family:var(--font-numbers),var(--font-body),sans-serif}
+ .crash-ui .winner .money{text-align:right}
+ .crash-ui .panel{padding:var(--space-12)}
+ .crash-ui .identity strong{font-size:var(--type-18)}
+ .crash-ui .identity{min-height:var(--web-compact-row-height);gap:var(--space-8)}
+ .crash-ui .identity .avatar{width:var(--web-avatar-lg);height:var(--web-avatar-lg)}
+ .crash-ui .level{font-size:var(--type-12)}
+ .crash-ui .balance .money{font-size:var(--type-24)}
+ .crash-ui .balance .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}
+ .crash-ui .icon-button{width:var(--web-compact-row-height);height:var(--web-compact-row-height);padding:var(--space-6)}
+ .crash-ui .records{margin-top:var(--space-8);padding:var(--space-8) var(--space-8);gap:var(--space-8)}
+ .crash-ui .records-heading,.crash-ui .record-title,.crash-ui .owner-name{font-size:var(--type-12)}
+ .crash-ui .records-heading .icon,.crash-ui .record .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}
+ .crash-ui .record-value,.crash-ui .records-line .record-value{font-size:var(--type-16)}
+ .crash-ui .owner .avatar{width:var(--web-avatar-sm);height:var(--web-avatar-sm)}
+ .crash-ui .owner-date{font-size:var(--type-12)}
+ .crash-ui .wins-head{font-size:var(--type-16);margin-bottom:var(--space-4)}
+ .crash-ui .online{font-size:var(--type-12)}
+ .crash-ui .text-button{font-size:var(--type-12);min-height:var(--space-32)}
+ .crash-ui .wins-list{max-height:var(--web-wins-list-max-height)}
+ .crash-ui .winner{grid-template-columns:var(--web-avatar-sm) minmax(var(--web-winner-name-min-width),1fr) var(--tap-min) minmax(var(--web-winner-payout-min-width),auto);padding:var(--space-6) 0;gap:var(--space-6)}
+ .crash-ui .winner .avatar{width:var(--web-avatar-sm);height:var(--web-avatar-sm)}
+ .crash-ui .winner-name{font-size:var(--type-12)}
+ .crash-ui .winner .money,.crash-ui .win-multiple{font-size:var(--type-14)}
+ .crash-ui .history{margin-top:var(--space-8)}
+}
+/* Phone: the top and bottom panels run edge to edge and everything inside sits a little tighter. */
+@media(max-width:599px){
+ .crash-ui{--edge:0;--control-h:var(--tap-min);--web-control-padding:var(--space-8);--web-control-row-gap:var(--space-6);--web-control-gap:var(--space-8)}
+ .crash-ui .top{top:0;gap:0}
+ .crash-ui .top .panel{border-radius:0 0 var(--radius-24) var(--radius-24);border-top:0;border-left:0;border-right:0;padding:calc(var(--space-8) + env(safe-area-inset-top)) var(--space-12) var(--space-8);box-shadow:var(--elevation-sheet)}
+ .crash-ui .bottom{bottom:0;gap:var(--space-8)}
+ .crash-ui .controls{border-radius:var(--radius-24) var(--radius-24) 0 0;border-bottom:0;border-left:0;border-right:0;padding:var(--space-8) var(--space-8) calc(var(--space-8) + var(--web-control-depth) + env(safe-area-inset-bottom));box-shadow:var(--elevation-sheet-up)}
+ .crash-ui .account{gap:var(--space-8)}
+ .crash-ui .top .identity strong{font-size:var(--type-16)}
+ .crash-ui .top .identity{min-height:var(--web-compact-row-height)}
+ .crash-ui .top .identity .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md)}
+ .crash-ui .top .balance .money{font-size:var(--type-20)}
+ .crash-ui .icon-button{width:var(--web-compact-row-height);height:var(--web-compact-row-height);padding:var(--space-6)}
+ .crash-ui .wins-head{min-height:var(--space-24);margin-bottom:var(--space-4)}
+ .crash-ui .account .wins-head{margin-bottom:var(--space-4)}
+ .crash-ui .text-button{min-height:var(--space-24)}
+ .crash-ui .top .account .winner{padding:var(--space-4) var(--space-8)}
+ .crash-ui .winner-name,.crash-ui .winner .money{font-size:var(--type-12)}
+ .crash-ui .account .winners.panel,.crash-ui .account .records{margin-top:var(--space-6);padding-top:var(--space-6)}
+ .crash-ui .top .records-line .record-value{font-size:var(--type-14)}
+ .crash-ui .history{margin-top:var(--space-6)}
+ .crash-ui .pill{padding:var(--space-4) var(--space-8);font-size:var(--type-12)}
+ .crash-ui .ladder-step{font-size:var(--type-12)}
+ .crash-ui .multiplier{font-size:var(--type-24);padding:var(--space-4) var(--space-16);min-width:var(--web-compact-control-width)}
+ .crash-ui .auto,.crash-ui .settings-row>.button{min-height:var(--tap-min)}
+ .crash-ui .auto .knob{height:var(--web-knob-compact-size);width:var(--web-knob-compact-size)}
+ .crash-ui .stake .button{min-height:var(--tap-min)}
+ .crash-ui .stake .money{font-size:var(--type-20)}
+ .crash-ui .presets .button{min-height:var(--tap-min);padding:var(--space-4) var(--space-8);font-size:var(--type-16)}
+ .crash-ui .action{min-height:var(--web-action-compact-height);font-size:var(--type-20)}
+ .crash-ui .action .money,.crash-ui .action small{font-size:var(--type-16)}
+ .crash-ui .controls .bet-action{height:var(--web-action-compact-height);min-height:var(--web-action-compact-height)}
+ .crash-ui .bet-quote{font-size:var(--type-12)}
+ .crash-ui .bet-quote strong{font-size:var(--type-18)}
+ .crash-ui .bet-receipt{min-height:var(--space-24)}
+ .crash-ui .controls.multi-bet-controls{padding:var(--space-8) var(--space-8) calc(var(--space-8) + var(--web-control-depth) + env(safe-area-inset-bottom))}
+ .crash-ui .dev{top:var(--dev-top,var(--web-dev-top-phone))}
+}
+
+/* Bet tab pages: the reference's table hierarchy in the active brand's tokens. */
+.crash-ui .modal-layer.is-tab-view .modal{display:flex;flex-direction:column;overflow:hidden;height:100%;max-height:100%;gap:var(--space-16)}
+.crash-ui .is-tab-view .modal header{flex:none;position:relative;min-height:var(--tap-min);justify-content:center;padding-inline:var(--tap-min)}
+.crash-ui .is-tab-view .modal h2{color:var(--gold);font-size:var(--type-28);text-align:center}
+.crash-ui .is-tab-view .modal header .icon-button{position:absolute;right:0;top:0;border-radius:var(--radius-pill)}
+.crash-ui .is-tab-view .modal-body{display:block;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
+.crash-ui .bets-table{width:100%;table-layout:fixed;border-collapse:collapse;font-family:var(--font-body),sans-serif;font-size:var(--type-14);font-variant-numeric:tabular-nums}
+.crash-ui .bet-caption{position:absolute;width:0;height:0;overflow:hidden}
+.crash-ui .bets-table th,.crash-ui .bets-table td{padding:var(--space-16) var(--space-4);text-align:right;white-space:nowrap}
+.crash-ui .bets-table th:first-child,.crash-ui .bets-table td:first-child{text-align:left}
+.crash-ui .bets-table thead th{position:sticky;top:0;z-index:1;background:var(--surface);color:var(--text-muted);font-weight:inherit;border-bottom:var(--stroke-1) solid var(--border)}
+.crash-ui .top-bets th:first-child{width:36%}
+.crash-ui .top-bets th:nth-child(2){width:23%}
+.crash-ui .top-bets th:nth-child(3){width:16%}
+.crash-ui .top-bets th:nth-child(4){width:25%}
+.crash-ui .bet-player{display:flex;align-items:center;gap:var(--space-12);min-width:0}
+.crash-ui .bet-player>span:last-child{overflow:hidden;text-overflow:ellipsis}
+.crash-ui .bet-player .avatar{width:var(--web-avatar-sm);height:var(--web-avatar-sm)}
+.crash-ui .bets-table .bet-prize{color:var(--success);font-family:var(--font-numbers),var(--font-body),sans-serif}
+.crash-ui .bets-table .bet-day th{padding:var(--space-8);background:var(--surface-raised);color:var(--text-muted);font-weight:inherit}
+.crash-ui .bets-empty{text-align:center;color:var(--text-muted);padding:var(--space-24)}
+.crash-ui .modal-footer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8);flex:none;padding-bottom:var(--web-button-depth)}
+.crash-ui .modal-footer .button[aria-pressed=true]{background:var(--gold);color:var(--on-go);border-color:var(--gold)}
+@media(max-width:599px){
+ .crash-ui .modal-layer.is-tab-view{padding:var(--space-8);padding-top:max(var(--space-16),env(safe-area-inset-top));padding-bottom:max(var(--space-8),env(safe-area-inset-bottom))}
+ .crash-ui .modal-layer.is-tab-view .modal{width:100%;max-width:100%;padding:var(--space-12)}
+ .crash-ui .top-bets .bet-player{gap:var(--space-8)}
+ .crash-ui .top-bets .avatar{width:var(--space-24);height:var(--space-24)}
+}
+
+/* The tab navigation sits outside the floating window, above the dimmed game. */
+.crash-ui .modal-layer.is-tab-view{display:grid;grid-template-columns:minmax(0,var(--modal-max-width-px));grid-template-rows:minmax(0,1fr) auto;justify-content:end;align-items:stretch;gap:var(--space-12);padding:var(--space-16)}
+.crash-ui .modal-layer.is-tab-view .modal{min-height:0;width:100%;border:var(--stroke-1) solid var(--border);--modal-radius:var(--radius-48);border-radius:var(--modal-radius)}
+.crash-ui .is-tab-view>.modal-footer{min-width:0;padding:0 0 var(--web-button-depth)}
+@media(max-width:599px){
+ .crash-ui .modal-layer.is-tab-view{grid-template-columns:minmax(0,1fr);padding:var(--space-8);padding-top:calc(max(var(--space-8),env(safe-area-inset-top)) + var(--web-control-comfort-height) + var(--space-16));padding-bottom:max(var(--space-8),env(safe-area-inset-bottom))}
+ .crash-ui .modal-layer.is-tab-view .modal{--modal-radius:var(--radius-32)}
+}
+
+.crash-ui .modal-layer.is-tab-view{gap:var(--space-8)}
+.crash-ui .is-tab-view>.modal-footer{background:none;border:0;border-radius:0;box-shadow:none}
+.crash-ui .is-tab-view>.modal-footer .button{min-height:var(--web-control-comfort-height)}
+
+/* The same navigation moves into the modal layer. On larger screens it keeps
+   its existing position on the left; only phones put it below the window. */
+@media(min-width:600px){
+ .crash-ui .modal-layer.is-tab-view{--tabs-column:calc(var(--web-control-comfort-height) + 2 * var(--space-12));grid-template-columns:minmax(0,min(var(--modal-max-width-px),100% - var(--tabs-column) - var(--space-16)));grid-template-rows:minmax(0,1fr)}
+ .crash-ui .is-tab-view>.modal-footer{position:fixed;left:var(--edge);top:50%;transform:translateY(-50%);grid-template-columns:var(--tabs-column);grid-auto-rows:var(--web-control-comfort-height);gap:var(--space-8);padding:0;background:none;border:0;border-radius:0;box-shadow:none}
+ .crash-ui .is-tab-view>.modal-footer .tab{border-radius:var(--radius-24);color:var(--text-muted)}
+ .crash-ui .is-tab-view>.modal-footer .tab[aria-pressed=true]{color:var(--on-go)}
+}
+
+/* Information stays beside its navigation and leaves round actions available. */
+.crash-ui .modal-layer.is-context-panel{background:var(--scrim);pointer-events:none}
+.crash-ui .is-context-panel>.modal,.crash-ui .is-context-panel>.modal-footer{pointer-events:auto}
+.crash-ui:has(.modal-layer.is-context-panel:not([hidden])) .tabbed-controls{visibility:visible}
+.crash-ui .modal-layer.is-context-panel .modal{position:absolute;top:var(--space-16);bottom:calc(100% - var(--bet-controls-top) + var(--space-8));height:auto;max-height:none;animation:none}
+@media(min-width:600px){
+ .crash-ui .tabs-placeholder{display:none}
+ .crash-ui .modal-layer.is-context-panel .modal{left:calc(var(--edge) + var(--tabs-column) + 2 * var(--stroke-1) + var(--space-8));width:min(var(--modal-max-width-px),100% - 2 * var(--edge) - var(--tabs-column) - 2 * var(--stroke-1) - var(--space-8))}
+}
+@media(max-width:599px){
+ .crash-ui .modal-layer.is-context-panel .modal{left:var(--space-8);width:calc(100% - 2 * var(--space-8));top:calc(max(var(--space-8),env(safe-area-inset-top)) + var(--web-control-comfort-height) + var(--space-16))}
+ .crash-ui .is-context-panel>.modal-footer{position:absolute;left:var(--space-8);right:var(--space-8);bottom:max(var(--space-8),env(safe-area-inset-bottom))}
+}
+
+@media(min-width:600px){
+ .crash-ui .modal-layer.is-context-panel>.modal-footer{top:var(--tab-window-center);transform:translateY(-50%)}
+ .crash-ui .modal-layer.is-context-panel .modal{left:var(--tab-window-left);top:var(--tab-window-top);bottom:auto;width:var(--tab-window-width);height:var(--tab-window-height);container-type:inline-size}
+}
+@container(max-width:599px){
+ .crash-ui .top-bets .bet-player{gap:var(--space-8)}
+ .crash-ui .top-bets .avatar{width:var(--space-24);height:var(--space-24)}
+}
+
+/* Moving the navigation to the overlay must not resize or move its buttons. */
+@media(max-width:599px){
+ .crash-ui .tabbed-controls .tabs .tab,.crash-ui .modal-layer .modal-footer .tab{height:var(--web-control-comfort-height);min-height:var(--web-control-comfort-height);border-radius:var(--radius-24);border-width:var(--stroke-1);box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow)}
+ .crash-ui .modal-layer.is-tab-view>.modal-footer{position:fixed;left:var(--tabs-anchor-left);top:var(--tabs-anchor-top);right:auto;bottom:auto;width:var(--tabs-anchor-width);height:var(--tabs-anchor-height);padding:0;transform:none}
+ .crash-ui .modal-layer.is-tab-view .modal{position:absolute;top:calc(max(var(--space-8),env(safe-area-inset-top)) + var(--web-control-comfort-height) + var(--space-16));bottom:calc(100% - var(--tabs-anchor-top) + var(--space-8));left:var(--space-8);width:calc(100% - 2 * var(--space-8));height:auto}
+}
+
+/* Bet rows open an in-panel detail view; typography and surfaces follow the brand. */
+.crash-ui .bet-selectable{cursor:pointer}
+.crash-ui .bet-selectable:hover,.crash-ui .bet-selectable:focus-within{background:var(--surface-raised)}
+.crash-ui .bet-row-open{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;font:inherit;min-width:0}
+.crash-ui .is-tab-view .is-bet-detail header .bet-detail-back{left:0;right:auto}
+.crash-ui .is-bet-detail header h2{position:absolute;width:var(--stroke-1);height:var(--stroke-1);overflow:hidden;clip-path:inset(50%)}
+.crash-ui .bet-detail-hero{display:grid;justify-items:center;gap:var(--space-8)}
+.crash-ui .bet-detail-hero p{margin:0;color:var(--text-muted);font-size:var(--type-16)}
+.crash-ui .bet-detail-avatar{position:relative}
+.crash-ui .bet-detail-avatar>.avatar{width:calc(2 * var(--web-avatar-hero));height:calc(2 * var(--web-avatar-hero))}
+.crash-ui .bet-detail-trophy{position:absolute;left:calc(-1 * var(--space-16));top:var(--space-16);display:grid;place-items:center;width:var(--web-avatar-hero);height:var(--web-avatar-hero);border-radius:var(--radius-pill);background:var(--surface-inset);border:var(--stroke-2) solid var(--border)}
+.crash-ui .bet-detail-divider{display:flex;align-items:center;gap:var(--space-8);margin-block:var(--space-16)}
+.crash-ui .bet-detail-divider:before,.crash-ui .bet-detail-divider:after{content:'';height:var(--stroke-1);background:var(--border);flex:1}
+.crash-ui .bet-detail-divider span{min-width:0;max-width:100%;overflow-wrap:anywhere;text-align:center;padding:var(--space-8) var(--space-16);border-radius:var(--radius-8);background:var(--surface-raised);font-size:var(--type-20)}
+.crash-ui .bet-detail-date{text-align:center;color:var(--text-muted);font-size:var(--type-14);line-height:var(--leading-relaxed);margin:0 0 var(--space-24)}
+.crash-ui .bet-detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
+.crash-ui .bet-detail-card{display:grid;align-content:center;justify-items:center;gap:var(--space-8);min-width:0;padding:var(--space-16) var(--space-8);border-radius:var(--radius-16);background:var(--surface-raised);text-align:center;overflow-wrap:anywhere}
+.crash-ui .bet-detail-card strong{color:var(--gold);font:var(--type-20)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;max-width:100%}
+.crash-ui .bet-detail-card>span{font-size:var(--type-12);color:var(--text-muted)}
+.crash-ui .bet-detail-extras{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-8);margin-top:var(--space-8)}
+.crash-ui .bet-detail-extras .bet-detail-card:first-child{grid-column:1/-1}
+.crash-ui .bet-detail-extras .bet-detail-card strong{font-size:var(--type-20)}
+
+
+/* The tabbed configuration keeps records in its tabs and uses an edge-to-edge header. */
+.crash-ui.has-tabbed-controls .top{top:0;left:0;right:0;margin:0;gap:0}
+.crash-ui.has-tabbed-controls .account-column,.crash-ui.has-tabbed-controls .account{width:100%;max-width:none;margin:0}
+/* The header already supplies the 16px inset above history. */
+.crash-ui.has-tabbed-controls .account-column{gap:0}
+.crash-ui.has-tabbed-controls .account.panel{border-radius:0;border-top:0;border-inline:0;padding:var(--space-12) var(--space-16);padding-top:max(var(--space-12),env(safe-area-inset-top));padding-left:max(var(--space-16),env(safe-area-inset-left));padding-right:max(var(--space-16),env(safe-area-inset-right))}
+
+/* Floating header controls, with the game visible through the header itself. */
+.crash-ui.has-tabbed-controls .account.panel{background:transparent;border:0;box-shadow:none}
+.crash-ui.has-tabbed-controls .profile{display:grid;grid-template-columns:var(--tap-min) auto minmax(0,1fr) var(--tap-min);align-items:center;gap:var(--space-8)}
+.crash-ui.has-tabbed-controls .profile>.icon-button{width:var(--tap-min);height:var(--tap-min);min-height:var(--tap-min);padding:var(--space-8);background:var(--surface);color:var(--text);border-radius:var(--radius-pill)}
+.crash-ui.has-tabbed-controls :is(.profile,.account-summary)>.identity{min-height:var(--tap-min);padding:var(--space-4) var(--space-12) var(--space-4) var(--space-4);gap:var(--space-8);border-radius:var(--radius-pill);background:var(--gold);color:var(--on-go)}
+.crash-ui.has-tabbed-controls .profile .identity strong{display:none}
+.crash-ui.has-tabbed-controls :is(.profile,.account-summary) .identity .avatar{display:block;width:var(--space-32);height:var(--space-32);border:0}
+.crash-ui.has-tabbed-controls :is(.profile,.account-summary) .identity .level{font-size:var(--type-20);color:var(--on-go);line-height:var(--leading-tight);white-space:nowrap}
+.crash-ui.has-tabbed-controls .profile>.balance{justify-self:end;display:flex;align-items:center;min-width:0;max-width:100%;min-height:var(--tap-min);margin:0;padding:var(--space-8) var(--space-12);gap:var(--space-8);border-radius:var(--radius-pill);background:var(--surface)}
+.crash-ui.has-tabbed-controls .profile .balance>.icon{order:2;width:var(--space-24);height:var(--space-24)}
+.crash-ui.has-tabbed-controls .profile .balance .money{font-size:var(--type-20);white-space:nowrap;min-width:0}
+@media(max-width:599px){
+ .crash-ui.has-tabbed-controls .account.panel{padding-inline:var(--space-8);padding-left:max(var(--space-8),env(safe-area-inset-left));padding-right:max(var(--space-8),env(safe-area-inset-right))}
+ .crash-ui.has-tabbed-controls .profile .balance .money{font-size:var(--type-16)}
+}
+
+/* The tabbed header menu is a single action anchored below its trigger. */
+.crash-ui .modal-layer.is-menu-popover{background:transparent;pointer-events:none;padding:0}
+.crash-ui .modal-layer.is-menu-popover .modal{position:fixed;top:calc(var(--menu-anchor-bottom) + var(--space-8));right:var(--menu-anchor-right);left:auto;bottom:auto;width:max-content;max-width:calc(100% - 2 * var(--space-8));height:auto;max-height:calc(100dvh - var(--menu-anchor-bottom) - var(--space-16));padding:var(--space-8);border-radius:var(--radius-24);pointer-events:auto;animation:none}
+.crash-ui .is-menu-popover .modal header{display:none}
+.crash-ui .is-menu-popover .modal-body{display:block}
+.crash-ui .is-menu-popover .modal .flat-button{min-height:var(--tap-min);border-radius:var(--radius-16);padding:var(--space-12) var(--space-16);white-space:nowrap}
+
+/* Text labels share one size; currency retains the Play amount size in both states. */
+.crash-ui .tabbed-controls .actions .action .money.is-label{font-size:var(--type-20)}
+
+.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money{font-size:var(--type-32)}
+.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--type-20)}
+@media(max-width:599px){
+ .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label){font-size:var(--type-28)}
+}
+
+@media(min-width:600px){
+ .crash-ui .tabbed-controls .tabs .tab,.crash-ui .is-tab-view>.modal-footer .tab{border-radius:var(--radius-pill)}
+}
+
+/* Header controls use the same raised surfaces as the game's controls. */
+.crash-ui.has-tabbed-controls .profile>.icon-button{
+ background:linear-gradient(var(--button-top),var(--button-bottom));
+ border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow);
+}
+.crash-ui.has-tabbed-controls :is(.profile,.account-summary)>.identity{
+ background:linear-gradient(var(--action-go-top),var(--gold));
+ border:var(--stroke-1) solid var(--action-go-edge);
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow);
+}
+.crash-ui.has-tabbed-controls .profile>.balance{min-height:calc(var(--tap-min) + var(--space-4));border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-panel)}
+.crash-ui.has-tabbed-controls .profile>.icon-button:active,.crash-ui.has-tabbed-controls .profile>.identity:active{transform:translateY(var(--web-control-depth))}
+
+.crash-ui .is-menu-popover .setting{gap:var(--space-24);padding-inline:var(--space-8)}
+
+@media(min-width:600px){
+ .crash-ui .controls.tabbed-controls{width:100%;max-width:var(--web-desktop-control-max-width);margin-inline:0}
+}
+
+/* Wide screens: settings on the left and paired actions on the right. */
+@media(min-width:960px){
+ .crash-ui .controls.tabbed-controls{width:100%;max-width:var(--web-desktop-control-max-width);margin-inline:0}
+ .crash-ui .tabbed-controls .tabbed-main{grid-template-columns:minmax(calc(4 * var(--tap-min) + 4 * var(--space-32)),1.15fr) minmax(0,1fr);grid-template-rows:auto auto auto;gap:var(--space-16)}
+ .crash-ui .tabbed-controls .risk{grid-column:1/-1;grid-row:1}
+ .crash-ui .tabbed-controls .difficulty-row{grid-column:1;grid-row:2}
+ .crash-ui .tabbed-controls .bet-grid{display:contents}
+ .crash-ui .tabbed-controls .bet-grid>.wager{grid-column:1;grid-row:3}
+ .crash-ui .tabbed-controls .bet-grid>.actions{grid-column:2;grid-row:2/4;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-16)}
+ .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--tap-min),1fr) var(--tap-min) minmax(0,1.5fr) var(--tap-min) minmax(var(--tap-min),1fr)}
+ .crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{width:var(--tap-min)}
+ .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-20)}
+ .crash-ui .tabbed-controls .actions .action{min-height:var(--web-control-height)}
+}
+@media(min-width:960px){
+ .crash-ui .tabbed-controls .bet-grid>.actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-20)}
+}
+
+@media(min-width:600px){
+ .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--tap-min),1fr) var(--tap-min) minmax(var(--web-control-amount-width),1.5fr) var(--tap-min) minmax(var(--tap-min),1fr)}
+ .crash-ui .tabbed-controls .actions{container-type:inline-size}
+}
+@container(max-width:200px){
+ .crash-ui .tabbed-controls .actions .action .money,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money{font-size:var(--type-20)}
+}
+
+/* The shell can wrap another game's betting controls without replacing them. */
+.crash-ui .controls.tabbed-controls.navigation-only{background:none;border:0;box-shadow:none;padding:0;width:100%;margin:0}
+.crash-ui .tabbed-controls.navigation-only .tabbed-main{display:none}
+@media(min-width:600px){
+ .crash-ui .controls.tabbed-controls.navigation-only{display:contents}
+}
+
+/* One inset for the floating header, history and side navigation. */
+.crash-ui.has-tabbed-controls{--shell-inset:var(--space-16)}
+.crash-ui.has-tabbed-controls .account-column .history{padding-left:max(var(--shell-inset),env(safe-area-inset-left));padding-right:max(var(--shell-inset),env(safe-area-inset-right))}
+@media(min-width:600px){
+ .crash-ui.has-tabbed-controls .tabbed-controls .tabs,.crash-ui.has-tabbed-controls .is-tab-view>.modal-footer{left:max(var(--shell-inset),env(safe-area-inset-left))}
+}
+@media(max-width:599px){
+ .crash-ui.has-tabbed-controls{--shell-inset:var(--space-8)}
+}
+
+/* Difficulty and stake controls share a moderate corner radius. */
+.crash-ui .tabbed-controls .difficulty-row .button,.crash-ui .tabbed-controls .wager .stake .button{border-radius:var(--radius-16)}
+
+/* Center phone tab windows explicitly, independently of the layer's grid. */
+@media(max-width:599px){
+ .crash-ui .modal-layer.is-tab-view .modal{left:50%;right:auto;transform:translateX(-50%);margin-inline:0}
+}
+.crash-ui .is-tab-view .modal-body{scrollbar-gutter:stable both-edges}
+
+.crash-ui .modal-layer.is-account-popover .modal{left:var(--account-anchor-left);right:auto;width:min(calc(var(--modal-max-width-px) / 2 + var(--space-48)),100% - 2 * var(--space-8));padding:var(--space-16)}
+.crash-ui .is-account-popover .modal-body{gap:var(--space-8)}
+.crash-ui .is-account-popover .setting{gap:var(--space-16);padding:0;font-size:var(--type-14)}
+.crash-ui .is-account-popover .account-stat{white-space:nowrap}
+.crash-ui .is-account-popover .modal-section-title{margin:var(--space-8) 0 0;font-size:var(--type-14);color:var(--text-muted)}
+
+/* Full-width table surfaces; only cell content receives horizontal insets. */
+.crash-ui .is-tab-view .modal:has(.bets-table){--table-inset:var(--space-24);padding-inline:0;padding-bottom:0}
+.crash-ui .is-tab-view .modal:has(.bets-table) header{margin-inline:var(--table-inset)}
+.crash-ui .is-tab-view .modal-body:has(.bets-table){scrollbar-gutter:auto}
+.crash-ui .bets-table th:first-child,.crash-ui .bets-table td:first-child{padding-left:var(--table-inset)}
+.crash-ui .bets-table th:last-child,.crash-ui .bets-table td:last-child{padding-right:var(--table-inset)}
+@media(max-width:599px){
+ .crash-ui .is-tab-view .modal:has(.bets-table){--table-inset:var(--space-12)}
+}
+
+.crash-ui .is-account-popover .account-stat{display:inline-flex;align-items:center;gap:var(--space-8)}
+.crash-ui .is-account-popover .account-stat .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}
+
+.crash-ui .rules-content{--rules-font-weight:400;font-weight:var(--rules-font-weight);font-variation-settings:"wght" var(--rules-font-weight)}
+
+/* Long monetary values fit their actual cell, including narrow split actions. */
+.crash-ui .tabbed-controls .wager-amount{container-type:inline-size;width:100%}
+.crash-ui .tabbed-controls .wager-amount .money{font-size:clamp(var(--type-14),18cqi,var(--type-24));white-space:nowrap}
+.crash-ui .tabbed-controls .actions .action{container-type:inline-size;--amount-max-size:var(--type-32)}
+.crash-ui .tabbed-controls .actions .action .money:not(.is-label),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label){font-size:clamp(var(--type-20),18cqi,var(--amount-max-size))}
+@media(max-width:599px){
+ .crash-ui .tabbed-controls .actions .action{--amount-max-size:var(--type-28)}
+}
+
+/* A single header/content gap; paragraph margins must not add another inset. */
+.crash-ui .is-tab-view .modal header{margin-bottom:0}
+.crash-ui .rules-content>p{margin:0}
+.crash-ui .rules-content>p+p{margin-top:var(--space-16)}
+@media(max-width:599px){
+ .crash-ui .modal-layer.is-tab-view .modal:not(:has(.bets-table)){padding:var(--space-16)}
+}
+
+/* The shell uses a single 16px horizontal content inset on every viewport. */
+.crash-ui.has-tabbed-controls{--shell-inset:var(--space-16)}
+.crash-ui.has-tabbed-controls .panel:not(.navigation-only){padding-inline:var(--space-16)}
+.crash-ui.has-tabbed-controls .modal-layer .modal:not(:has(.bets-table)){padding-inline:var(--space-16)}
+.crash-ui.has-tabbed-controls .modal-layer .modal:has(.bets-table){--table-inset:var(--space-16);padding-inline:0}
+.crash-ui.has-tabbed-controls .is-menu-popover .setting{padding-inline:0}
+
+.crash-ui.has-tabbed-controls .modal-layer.is-menu-popover:not(.is-account-popover) .modal{width:min(calc(var(--modal-max-width-px) / 2),100% - 2 * var(--space-8))}
+
+.crash-ui.has-tabbed-controls .setting input.switch::before{box-sizing:border-box}
+
+.crash-ui.has-tabbed-controls .is-menu-popover .modal-body>[data-action=refill]{display:flex;width:100%;max-width:none;justify-self:stretch;align-self:stretch;justify-content:center;margin-inline:0}
+
+/* Equal outer content padding on all four sides. */
+.crash-ui.has-tabbed-controls .panel:not(.navigation-only){padding:var(--space-16)}
+.crash-ui.has-tabbed-controls .modal-layer .modal:not(:has(.bets-table)){padding:var(--space-16)}
+.crash-ui.has-tabbed-controls .modal-layer .modal:has(.bets-table){padding-top:var(--space-16)}
+
+/* A golden prize plaque, using the game's raised button materials. */
+.crash-ui.has-tabbed-controls .modal-layer.is-win .win-modal{
+ position:relative;isolation:isolate;container-type:inline-size;overflow:hidden;
+ width:min(100%,calc(var(--modal-max-width-px) - 2 * var(--space-48)));
+ border:var(--stroke-2) solid var(--action-go-edge);border-radius:var(--radius-32);
+ background:radial-gradient(ellipse at 50% 30%,color-mix(in srgb,var(--gold) 18%,var(--surface)),var(--surface) 75%);
+ box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--gold) 18%,transparent),0 var(--web-control-depth) 0 var(--action-go-shadow),var(--elevation-modal);
+ animation:win-plaque-in var(--motion-ms) ease-out;
+}
+.crash-ui.has-tabbed-controls .win-modal header{position:relative;justify-content:center;margin:var(--space-8) 0 var(--space-16);padding-inline:var(--space-32)}
+.crash-ui.has-tabbed-controls .win-modal header .icon-button{position:absolute;right:0;top:0}
+.crash-ui.has-tabbed-controls .win-modal h2{font-size:clamp(var(--type-24),8cqi,var(--type-32));color:var(--action-go-edge);letter-spacing:0.04em;text-shadow:0 var(--stroke-2) 0 var(--action-go-shadow)}
+.crash-ui.has-tabbed-controls .win-modal .modal-body{gap:var(--space-16)}
+.crash-ui.has-tabbed-controls .win-emblem{position:relative;display:grid;place-items:center;height:calc(var(--web-win-coin-hero) + var(--space-48));margin-inline:auto;width:100%}
+.crash-ui.has-tabbed-controls .win-emblem::before{content:"";position:absolute;inset:0;margin:auto;width:calc(var(--web-win-coin-hero) + var(--space-48));border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0deg 20deg,color-mix(in srgb,var(--gold) 18%,transparent) 20deg 30deg);mask-image:radial-gradient(circle,black 20%,transparent 72%)}
+.crash-ui.has-tabbed-controls .win-modal .win-coin{position:relative;width:calc(var(--web-win-coin-hero) + var(--space-16));height:calc(var(--web-win-coin-hero) + var(--space-16));filter:drop-shadow(0 var(--space-4) var(--space-12) color-mix(in srgb,var(--gold) 45%,transparent));animation:win-coin-arrive var(--motion-celebrate-ms) ease-out both}
+.crash-ui.has-tabbed-controls .win-spark{position:absolute;color:var(--action-go-edge);font-size:var(--type-32);line-height:var(--leading-none)}
+.crash-ui.has-tabbed-controls .win-spark-left{left:20%;top:var(--space-16);transform:rotate(-12deg)}
+.crash-ui.has-tabbed-controls .win-spark-right{right:20%;bottom:var(--space-16);font-size:var(--type-24);transform:rotate(12deg)}
+.crash-ui.has-tabbed-controls .win-total{padding:var(--space-8) 0 var(--space-16);border:0;border-radius:0;background:none;color:var(--action-go-edge);font-size:clamp(var(--type-24),13cqi,var(--type-52));font-weight:700;line-height:var(--leading-tight);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;box-shadow:none;text-shadow:0 var(--stroke-2) 0 var(--action-go-shadow),0 0 var(--space-24) color-mix(in srgb,var(--gold) 25%,transparent)}
+@keyframes win-plaque-in{from{opacity:0;transform:translateY(var(--space-12)) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes win-coin-arrive{0%{transform:scale(.8) rotate(-12deg)}25%{transform:scale(1.08) rotate(5deg)}45%,100%{transform:scale(1) rotate(0deg)}}
+
+/* Mobile shell navigation forms the footer of the game's own control surface. */
+@media(max-width:599px){
+ .crash-ui.has-tabbed-controls .bottom:has(.navigation-only){gap:0}
+ .crash-ui.has-tabbed-controls .bottom:has(.navigation-only)>.multiplier{margin-bottom:var(--space-16)}
+ .crash-ui.has-tabbed-controls .bottom:has(.navigation-only)>.controls:not(.navigation-only){width:100%;max-width:none;border-bottom-left-radius:0;border-bottom-right-radius:0;box-shadow:none;padding-bottom:var(--space-16)}
+ .crash-ui.has-tabbed-controls .controls.tabbed-controls.navigation-only{order:1;width:100%;max-width:none;padding:0 var(--space-16) var(--space-16);background:var(--surface);border-radius:0;box-shadow:none}
+}
+
+/* Shared shell surfaces use the same corners at every viewport size. */
+.crash-ui.has-tabbed-controls .bottom>.controls:not(.navigation-only){border-radius:var(--radius-32)}
+.crash-ui.has-tabbed-controls .modal-layer .modal{--modal-radius:var(--radius-32);border-radius:var(--modal-radius)}
+@media(max-width:599px){
+ .crash-ui.has-tabbed-controls .bottom>.controls:not(.navigation-only){border-bottom-left-radius:0;border-bottom-right-radius:0}
+}
+
+/* Stable action typography across idle, playing and viewport sizes. */
+.crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions .action .money.is-label,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--type-18)}
+.crash-ui .tabbed-controls .actions .action .money:not(.is-label):not(.long-amount),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label):not(.long-amount){font-size:var(--type-28)}
+
+/* GO has the same typographic emphasis as the cash-out amount. */
+.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title.go-label{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-28)}
+
+/* Embedded games can be narrower than a phone's full viewport. */
+@media(max-width:360px){
+ .crash-ui.has-tabbed-controls .profile{gap:var(--space-4)}
+ .crash-ui.has-tabbed-controls .profile>.identity{padding-right:var(--space-8);gap:var(--space-4)}
+ .crash-ui.has-tabbed-controls .profile .identity .avatar{width:var(--space-24);height:var(--space-24)}
+ .crash-ui.has-tabbed-controls .profile>.balance{padding-inline:var(--space-8);gap:var(--space-4)}
+ .crash-ui.has-tabbed-controls .profile .balance .money{font-size:var(--type-14)}
+ .crash-ui.has-tabbed-controls .profile .balance>.icon{width:calc(var(--space-16) + var(--space-4));height:calc(var(--space-16) + var(--space-4));flex-shrink:0}
+ .crash-ui .tabbed-controls .risk{min-width:0;gap:var(--space-8)}
+ .crash-ui .tabbed-controls .risk-meter{flex:1;width:auto}
+ .crash-ui .tabbed-controls .difficulty-row .button{min-width:0;padding-inline:var(--space-4);font-size:var(--type-14)}
+}

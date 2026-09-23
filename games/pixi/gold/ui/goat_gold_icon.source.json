@@ -1,0 +1,18 @@
+{
+  "provider": "SpriteCook",
+  "asset_id": "3c1092f2-618a-4219-86fe-e048ab78aeb6",
+  "job_id": "d6f11e42-96ee-45b5-a8fe-99a109b128b0",
+  "args": {
+    "prompt": "Create ONE polished square mobile game app icon for Goat Gold. Match the referenced goofy goat's identity: shaggy cream forelock, curved brown horns, enormous expressive white eyes with small slightly crossed pupils, floppy ears, red and blue neckerchief, lovable clumsy anxious grin with a tiny tongue. Tight head-and-shoulders composition, goat face dominates upper two thirds, EXACTLY TWO dark hoof hands grip ONE large warm ochre cloth sack in foreground. Sack has a small naturally sewn repair patch near its bottom, NO dollar symbol. A few oversized sparkling gold coins and one cyan diamond tumble into the open sack in FRONT of goat. Highly readable at 64px, strong silhouette, rich tactile stylized cartoon illustration with dark clean contours and beautiful warm dimensional shading matching reference, detailed but not cluttered. Deep navy/teal backdrop with golden sun glow behind head and subtle turquoise tropical light, vivid gold and cyan accents. Face, horns, bag fully within central 86% safe area. Full bleed opaque square artwork, no rounded corner mask, no external border, no text, no letters, no logo, no UI, no extra characters, no extra arms. Finished premium game icon, not a mockup.",
+    "pixel": false,
+    "bg_mode": "include",
+    "aspect_ratio": "1:1",
+    "smart_crop": false,
+    "model": "gemini-3.1-flash-image",
+    "resolution": "1K",
+    "mode": "ui",
+    "reference_asset_id": "3c93edd3-80ea-5d34-9a8d-e49f49a43b0b",
+    "project_id": "e90ca39f-817d-4e89-ae8c-3573308dab48",
+    "wait_seconds": 0
+  }
+}

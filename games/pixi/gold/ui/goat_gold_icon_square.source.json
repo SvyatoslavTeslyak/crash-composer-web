@@ -1,0 +1,18 @@
+{
+  "provider": "SpriteCook",
+  "asset_id": "4dda0950-0462-45a4-8854-0ea7414b3be3",
+  "job_id": "ce7d4655-a8a7-4e79-83a6-232f076c2d3e",
+  "args": {
+    "edit_asset_id": "3c1092f2-618a-4219-86fe-e048ab78aeb6",
+    "prompt": "Edit this exact app icon. ONE CHANGE ONLY: remove the rounded-square silhouette and ALL four white corner wedges. Extend the existing dark navy and teal background outward to fill every pixel of the entire square canvas, including all four sharp 90-degree corners. This is a full-bleed SQUARE source image, NOT a rounded app icon mockup. Absolutely no white corners, no transparent corners, no rounded edges, no border. Preserve the goat, expression, horns, hands, sack, patch, coins, diamonds, lighting, colors, composition and scale exactly as the original. Do not crop or zoom. Final background reaches all four straight image edges and all four square corners.",
+    "pixel": false,
+    "bg_mode": "include",
+    "aspect_ratio": "1:1",
+    "smart_crop": false,
+    "model": "gemini-3.1-flash-image",
+    "resolution": "1K",
+    "mode": "ui",
+    "project_id": "e90ca39f-817d-4e89-ae8c-3573308dab48",
+    "wait_seconds": 0
+  }
+}

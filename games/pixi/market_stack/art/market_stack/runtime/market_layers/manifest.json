@@ -1,0 +1,88 @@
+{
+  "source_size": [
+    1254,
+    1254
+  ],
+  "source_asset_id": "9aef4a78-27ab-4a17-8ca7-e1bce518047b",
+  "layers": {
+    "platform_rear": {
+      "file": "platform_rear.png",
+      "origin": [
+        489,
+        422
+      ],
+      "size": [
+        274,
+        52
+      ]
+    },
+    "platform_deck": {
+      "file": "platform_deck.png",
+      "origin": [
+        479,
+        470
+      ],
+      "size": [
+        297,
+        55
+      ]
+    },
+    "cart": {
+      "file": "cart.png",
+      "origin": [
+        511,
+        810
+      ],
+      "size": [
+        230,
+        157
+      ]
+    },
+    "environment": {
+      "file": "environment_roofless.jpg",
+      "origin": [
+        -1385,
+        -496
+      ],
+      "size": [
+        4026,
+        2247
+      ]
+    }
+  },
+  "anchors": {
+    "platform_surface": [
+      627,
+      473
+    ],
+    "cart_load_surface": [
+      627,
+      857
+    ],
+    "cart_ground": [
+      627,
+      965
+    ],
+    "left_pulley": [
+      493,
+      264
+    ],
+    "right_pulley": [
+      757,
+      264
+    ]
+  },
+  "status": "exact source cutouts with masked background repair and outpainted margins",
+  "clean_plate_asset_id": "b194a166-0969-4195-834f-478d8c41acae",
+  "max_lift": 165,
+  "render_order": [
+    "environment",
+    "hoist_ropes",
+    "platform_rear",
+    "carrier_reserved",
+    "platform_deck",
+    "cart",
+    "crates"
+  ],
+  "roof_revision": "flat structural beams; roof overhangs removed with imagegen"
+}

@@ -1,0 +1,83 @@
+/* Workbench components shared by the showcase and Composer's Layout sidebar: the game
+   picker, the device bar, the look (brand and theme) pickers and the panel switches.
+   Every value is a token from crash-ui/tokens.css or inspector.css. */
+.wb-section>h2{margin:0 0 var(--space-8);font-size:var(--inspector-type-xs);font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--inspector-muted)}
+.wb-section+.wb-section{margin-top:var(--space-24)}
+.wb-button{font:inherit;color:var(--inspector-text);background:var(--inspector-surface);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card);cursor:pointer;padding:0}
+.wb-button:hover{background:var(--inspector-surface-hover)}
+.wb-button[aria-pressed=true]{border-color:var(--inspector-accent);background:var(--inspector-surface-selected);color:var(--inspector-ink-selected)}
+.wb-button:focus-visible{outline:var(--stroke-2) solid var(--inspector-accent);outline-offset:var(--stroke-2)}
+/* Games: a drop-down whose rows carry the icon, the name and a subtitle. */
+.picker{position:relative}
+.game{display:grid;grid-template-columns:var(--space-40) 1fr;gap:var(--space-8);align-items:center;width:100%;padding:var(--space-6) var(--space-8);text-align:left;line-height:var(--leading-tight)}
+.game img{width:var(--space-40);height:var(--space-40);border-radius:var(--radius-8);object-fit:cover;display:block;background:var(--inspector-well)}
+.game strong{display:block;font-size:var(--inspector-type-md);font-weight:600}
+.game small{display:block;font-size:var(--inspector-type-sm);color:var(--inspector-muted);margin-top:var(--stroke-2)}
+.game.pick{grid-template-columns:var(--space-40) 1fr var(--space-16)}
+.game.pick svg{width:var(--space-16);height:var(--space-16);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--motion-fast-ms)}
+.game.pick[aria-expanded=true] svg{transform:rotate(180deg)}
+.games{position:absolute;left:0;right:0;top:calc(100% + var(--space-6));z-index:5;display:grid;gap:var(--space-4);padding:var(--space-6);background:var(--inspector-card);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card);box-shadow:var(--elevation-modal);max-height:60vh;overflow:auto}
+.games .game{border-color:transparent;background:none}
+.games .game:hover{background:var(--inspector-surface-hover)}
+.games .game[aria-pressed=true]{background:var(--inspector-surface-selected);border-color:var(--inspector-accent)}
+.games-footer{margin-top:var(--space-4);padding:var(--space-6) var(--space-8) 0;border-top:var(--stroke-1) solid var(--inspector-border)}
+.games-footer .switch{min-height:var(--space-32);font-size:var(--inspector-type-sm)}
+/* Devices: an icon each, with the size beneath. */
+.devices{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8)}
+.device{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:var(--space-8);text-align:left;padding:var(--space-8) var(--space-12);font-size:var(--inspector-type-sm);color:var(--inspector-muted)}
+.device svg{grid-row:span 2;width:var(--web-icon-md);height:var(--web-icon-md);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.device b{font-weight:600;font-size:var(--inspector-type-base);color:var(--inspector-text)}.device span{white-space:nowrap}
+.device[aria-pressed=true],.device[aria-pressed=true] b{color:var(--inspector-ink-selected)}
+.zoom{margin-top:var(--space-8);display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-6)}
+.zoom button{min-height:var(--inspector-control);font-size:var(--inspector-type-base)}
+/* Look: brand and theme as rows of chips. */
+.look{display:grid;gap:var(--space-8)}
+.look-row{display:flex;flex-wrap:wrap;gap:var(--space-6)}
+.look-row button{min-height:var(--inspector-control);padding:0 var(--space-12);font-size:var(--inspector-type-sm);white-space:nowrap;display:inline-flex;align-items:center;gap:var(--space-6)}
+.look-row .add{display:inline-flex;align-items:center;gap:var(--space-4);border-style:dashed;color:var(--inspector-muted)}
+.look-row .add svg{width:var(--space-12);height:var(--space-12);fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+.look-row .add:hover{color:var(--inspector-text)}
+/* A theme has no life outside its brand — the row is drawn inside the brand's block. */
+.look-themes{display:grid;gap:var(--space-8);margin-left:var(--space-8);padding-left:var(--space-12);border-left:var(--stroke-2) solid var(--inspector-border)}
+.look-row .season-off[aria-pressed=false]{color:var(--inspector-muted)}
+/* The chip centres its swatch by layout, not by nudging it off the text baseline. */
+.look-row .swatch{flex:none;width:var(--space-12);height:var(--space-12);border-radius:50%;border:var(--stroke-1) solid var(--inspector-border)}
+/* Switches. */
+.switch{display:flex;align-items:center;gap:var(--space-8);min-height:var(--web-compact-row-height);cursor:pointer;font-size:var(--inspector-type-md)}
+.switch input[type=checkbox]{appearance:none;-webkit-appearance:none;width:var(--space-40);height:var(--space-24);min-height:0;max-width:none;padding:0;margin:0;border-radius:var(--radius-pill);background:var(--inspector-surface-hover);border:var(--stroke-1) solid var(--inspector-border);position:relative;transition:background var(--motion-fast-ms);cursor:pointer;flex:none}
+.switch input[type=checkbox]::after{content:"";position:absolute;top:var(--space-4);left:var(--space-4);width:calc(var(--space-24) - 2 * var(--space-4) - 2 * var(--stroke-1));height:calc(var(--space-24) - 2 * var(--space-4) - 2 * var(--stroke-1));border-radius:50%;background:var(--inspector-muted);transition:transform var(--motion-fast-ms),background var(--motion-fast-ms)}
+.switch input[type=checkbox]:checked{background:var(--inspector-surface-selected);border-color:var(--inspector-accent)}.switch input[type=checkbox]:checked::after{transform:translateX(calc(var(--space-40) - var(--space-24)));background:var(--inspector-accent)}
+.note{color:var(--inspector-muted);font-size:var(--inspector-type-sm);margin:var(--space-6) 0 0}
+/* The stage: the frame sized like the chosen device, with a bezel for handhelds. */
+.wb-room{min-width:0;min-height:0;overflow:hidden;padding:var(--space-24);display:block;background-image:radial-gradient(var(--inspector-grid-dot) var(--stroke-1),transparent var(--stroke-1));background-size:var(--space-16) var(--space-16)}
+.fit{display:grid;place-items:center;width:100%;height:100%;overflow:auto}
+.box{position:relative;flex:none}
+.stage{position:absolute;left:0;top:0;transform-origin:0 0}
+.stage.bezel{padding:var(--space-12);background:var(--inspector-bg-deep);border:var(--stroke-1) solid var(--inspector-surface-hover);border-radius:var(--radius-32);box-shadow:var(--elevation-modal)}
+.stage.bezel .wb-frame{border-radius:var(--radius-24);border:0}
+.wb-frame{display:block;width:100%;height:100%;border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--radius-4);background:var(--surface)}
+.box.fluid,.stage.fluid{position:static;width:100%;height:100%;transform:none}
+.wb-size{position:absolute;right:0;top:calc(-1 * var(--space-24));white-space:nowrap;font:var(--inspector-type-sm) var(--inspector-mono);color:var(--inspector-muted)}
+/* The app bar shared by Composer pages. */
+.appbar{grid-column:1/-1;display:flex;align-items:center;gap:var(--space-16);min-height:var(--space-48);padding:var(--space-8) var(--space-16);background:var(--inspector-bg);border-bottom:var(--stroke-1) solid var(--inspector-border)}
+.appbar h1{display:flex;align-items:center;gap:var(--space-8);margin:0;font-size:var(--inspector-type-lg);letter-spacing:.02em;white-space:nowrap;flex:none;width:calc(var(--inspector-sidebar-width) - 2 * var(--space-16))}
+.appbar h1 img{border-radius:var(--radius-8)}
+.appbar h1 small{display:block;font-size:var(--inspector-type-xs);font-weight:400;letter-spacing:0;color:var(--inspector-muted)}
+.appbar .tabs{display:flex;gap:var(--space-16);align-self:stretch;margin:calc(-1 * var(--space-8)) 0 calc(-1 * var(--space-8)) var(--space-16)}
+/* Tabs are tabs: no chrome of their own, the one you are on underlined against the bar. */
+.appbar .tabs button{position:relative;align-self:stretch;height:auto;min-height:0;padding:0 var(--space-4);border:0;border-radius:0;background:none;color:var(--inspector-muted);display:inline-flex;align-items:center;gap:var(--space-6);font-size:var(--inspector-type-base);line-height:1}
+.appbar .tabs button:hover,.appbar .tabs button[aria-pressed=true]{background:none;color:var(--inspector-text)}
+.appbar .tabs button::after{content:"";position:absolute;left:0;right:0;bottom:0;height:var(--stroke-2);border-radius:var(--radius-pill);background:transparent}
+.appbar .tabs button[aria-pressed=true]::after{background:var(--inspector-accent)}
+.appbar .tabs button:focus-visible{outline:var(--stroke-2) solid var(--inspector-accent);outline-offset:calc(-1 * var(--stroke-2))}
+/* The game picker rides in the bar at control height. */
+.appbar .picker{width:var(--inspector-sidebar-width);flex:none}
+.appbar .picker .game.pick{height:var(--space-40);padding:0 var(--space-8) 0 var(--space-4);grid-template-columns:var(--space-32) 1fr var(--space-16);align-items:center;gap:var(--space-8);border-radius:var(--inspector-radius-card)}
+.appbar .picker .game.pick img{width:var(--space-32);height:var(--space-32);border-radius:var(--inspector-radius)}
+.appbar .picker .game.pick strong{font-size:var(--inspector-type-md)}
+.appbar a.wb-button,.appbar>button{height:var(--space-40);min-height:0;padding:0 var(--space-12);border-radius:var(--inspector-radius-card);display:inline-flex;align-items:center;gap:var(--space-6);font-size:var(--inspector-type-base);line-height:1}
+.appbar .grow{flex:1}
+.game.pick small:empty{display:none}
+.appbar a.wb-button{text-decoration:none}
+.appbar .tabs button svg,.appbar a.wb-button svg,.appbar>button svg{width:var(--space-16);height:var(--space-16);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.appbar .status{font-size:var(--inspector-type-sm);color:var(--inspector-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:var(--inspector-sidebar-width)}

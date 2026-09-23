@@ -1,0 +1,372 @@
+{
+  "version": 1,
+  "game": "kit",
+  "title": "Shared UI sounds",
+  "owner": "web/ui.js (BettingSound, WinSound). Every game plays these; a game never overrides them.",
+  "events": [
+    {
+      "id": "click",
+      "label": "Click (base)",
+      "trigger": "Base sound. Every panel press falls back to it.",
+      "volume_db": -17.08,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/2pwPAIIJxdLNQAWbgSRh",
+      "prompt": "A single soft tactile interface button click, warm muted pop with a tiny crisp tick, very short and dry, no music or voices.",
+      "takes": [
+        {
+          "file": "web/assets/audio/click.ogg",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "confirm",
+      "label": "Confirmation chime (base)",
+      "trigger": "Base sound. Cash out ready falls back to it.",
+      "volume_db": -18.42,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/SbZFM9DLX8KmmmoArqSt",
+      "prompt": "A brief soft two-note interface confirmation chime, warm rounded plucked tones rising gently, dry, no voices or background music.",
+      "takes": [
+        {
+          "file": "web/assets/audio/confirm.ogg",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "win",
+      "label": "Win popup",
+      "trigger": "The win popup opens.",
+      "volume_db": -7.13,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/6jxGdrR9AP3ZcRaHjT42",
+      "prompt": "A small handful of coins dropping into a metal cash tray, bright satisfying brief jingling clinks settling, close mic, under one second, no voices or music.",
+      "takes": [
+        {
+          "file": "web/assets/audio/win.ogg",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "win_transfer",
+      "label": "Win transfer",
+      "trigger": "Coins fly into the balance (same file, played 12% faster).",
+      "volume_db": -13.98,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/6jxGdrR9AP3ZcRaHjT42",
+      "prompt": "A small handful of coins dropping into a metal cash tray, bright satisfying brief jingling clinks settling, close mic, under one second, no voices or music.",
+      "takes": [
+        {
+          "file": "web/assets/audio/win.ogg",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "play",
+      "label": "Play pressed",
+      "trigger": "PLAY or GO is pressed.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/play_0.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/play_1.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/play_2.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "Confident interface button press, warm muted pop with a short bright tick, close-mic, very short and dry",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -18.66
+    },
+    {
+      "id": "cashout",
+      "label": "Cash out pressed",
+      "trigger": "CASH OUT is pressed.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/cashout_0.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/cashout_1.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/cashout_2.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "Rewarding interface confirm tap, bright metallic click with a tiny coin ring, close-mic, very short and dry",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -17.89
+    },
+    {
+      "id": "stake_minus",
+      "label": "Stake down",
+      "trigger": "The minus step lowers the stake.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/stake_minus_0.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_minus_1.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_minus_2.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "Small low-pitched interface tick, soft muted pop, close-mic, very short and dry",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -17.08
+    },
+    {
+      "id": "stake_plus",
+      "label": "Stake up",
+      "trigger": "The plus step raises the stake.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/stake_plus_0.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_plus_1.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_plus_2.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "High bright plastic button click, sharp loud transient, close-mic, very short",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -17.08
+    },
+    {
+      "id": "stake_min",
+      "label": "Stake to minimum",
+      "trigger": "MIN sets the smallest stake.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/stake_min_0.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_min_1.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_min_2.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "Muted low double tick, two quick soft interface clicks, close-mic, dry",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -16.25
+    },
+    {
+      "id": "stake_max",
+      "label": "Stake to maximum",
+      "trigger": "MAX sets the largest stake.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/stake_max_0.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_max_1.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_max_2.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "Bright crisp double tick, two quick interface clicks rising, close-mic, dry",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -19.7
+    },
+    {
+      "id": "stake_preset",
+      "label": "Preset stake",
+      "trigger": "A preset amount is chosen.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/stake_preset_0.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_preset_1.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/stake_preset_2.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "Poker chip tapped once on a table, sharp bright transient, loud and close, very short",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -23.6
+    },
+    {
+      "id": "auto",
+      "label": "Auto toggled",
+      "trigger": "The Auto switch is flipped.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/auto_0.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/auto_1.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/auto_2.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "Small toggle switch flick, tiny mechanical click, close-mic, dry",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -17.05
+    },
+    {
+      "id": "difficulty",
+      "label": "Difficulty opened",
+      "trigger": "The difficulty control or one of its options is pressed.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/difficulty_0.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/difficulty_1.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/difficulty_2.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "Soft woody tap opening a small panel, muted interface click with a short tail, close-mic, dry",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -21.54
+    },
+    {
+      "id": "cash_ready",
+      "label": "Cash out ready",
+      "trigger": "Cashing out becomes possible in this round.",
+      "fallback": "confirm",
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "web/assets/audio/cash_ready_0.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/cash_ready_1.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "web/assets/audio/cash_ready_2.mp3",
+          "enabled": false,
+          "source": "elevenlabs"
+        }
+      ],
+      "prompt": "Brief two-note interface chime, warm rounded plucked tones rising gently, dry, no music",
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
+      "volume_db": -21.47
+    },
+    {
+      "id": "difficulty_pick",
+      "label": "Difficulty selected",
+      "trigger": "Easy, Normal, Hard or Expert is pressed in the tabbed betting panel.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": []
+    },
+    {
+      "id": "header_click",
+      "label": "Header button pressed",
+      "trigger": "Back, avatar/account or menu is pressed in the header.",
+      "fallback": "click",
+      "pitch_jitter": 0,
+      "takes": []
+    }
+  ]
+}

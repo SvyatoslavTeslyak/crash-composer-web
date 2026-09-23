@@ -1,0 +1,23 @@
+/* Preview-only isolation: embedded sections need the surface their parent supplied. */
+.crash-ui .dev{display:none!important}
+body[data-view]:not([data-view=screen]) #scene{display:none}
+body[data-view]:not([data-view=screen]) .crash-ui .top,
+body[data-view]:not([data-view=screen]) .crash-ui .bottom{visibility:hidden}
+body[data-view=profile] .profile,
+body[data-view=winners] .winners,
+body[data-view=records] .records,
+body[data-view=history] .history,
+body[data-view=controls] .controls{visibility:visible}
+body[data-view=winners] .crash-ui .account .winners.panel,
+body[data-view=records] .crash-ui .account .records{
+ background:var(--surface);
+ border:var(--stroke-1) solid var(--border);
+ border-radius:var(--panel-radius);
+ padding:var(--panel-padding);
+ box-shadow:var(--elevation-panel);
+ pointer-events:auto;
+}
+
+body[data-view=profile] .crash-ui .account{visibility:visible}
+body[data-view=profile] .crash-ui .account .records,
+body[data-view=profile] .crash-ui .account .winners{display:none}

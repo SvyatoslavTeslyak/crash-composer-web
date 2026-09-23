@@ -1,0 +1,260 @@
+{
+  "version": 1,
+  "game": "gold",
+  "title": "Goat Gold",
+  "owner": "LocalFeedback (scripts/systems/local_feedback.gd)",
+  "events": [
+    {
+      "id": "sack_coins",
+      "label": "Coins into sack",
+      "trigger": "Treasure items land in the sack, one sound per 0.2–0.3 s.",
+      "volume_db": -12,
+      "pitch_jitter": 0.06,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/quMkLZruiqbHHQUkIr5X",
+      "prompt": "Handful of small gold coins dropping into a soft cloth sack, muffled metallic jingle with a soft fabric thump, short, close-mic, dry",
+      "takes": [
+        {
+          "file": "assets/audio/goat/sack_coins_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/sack_coins_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/sack_coins_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/sack_coins_3.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "sack_produce",
+      "label": "Vegetables into sack",
+      "trigger": "Market vegetables land in the sack, one sound per 0.2–0.3 s.",
+      "volume_db": -6,
+      "pitch_jitter": 0.06,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/quMkLZruiqbHHQUkIr5X",
+      "prompt": "Single fresh vegetable landing on a pile of vegetables in a sack, one short crisp juicy thump, very short, close-mic, dry, no rustle",
+      "takes": [
+        {
+          "file": "assets/audio/goat/sack_produce_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/sack_produce_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/sack_produce_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/sack_produce_3.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "gem_chime",
+      "label": "Gem lands",
+      "trigger": "Diamond, ruby or emerald lands (Treasure).",
+      "volume_db": -14,
+      "pitch_jitter": 0.06,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/quMkLZruiqbHHQUkIr5X",
+      "prompt": "Small crystal gem dropping onto a pile of coins, bright sparkling twinkle chime, short, close-mic",
+      "takes": [
+        {
+          "file": "assets/audio/goat/gem_chime_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/gem_chime_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "ingot_clunk",
+      "label": "Ingot lands",
+      "trigger": "Gold ingot lands (Treasure).",
+      "volume_db": -12,
+      "pitch_jitter": 0.06,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/quMkLZruiqbHHQUkIr5X",
+      "prompt": "Heavy gold bar dropping onto a pile of coins inside a cloth sack, dense metallic clunk with coin jingle, short, close-mic",
+      "takes": [
+        {
+          "file": "assets/audio/goat/ingot_clunk_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/ingot_clunk_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "sack_creak",
+      "label": "Sack creak",
+      "trigger": "The filling sack creaks, more often as it fills.",
+      "volume_db": -13,
+      "pitch_jitter": 0.06,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/quMkLZruiqbHHQUkIr5X",
+      "prompt": "Burlap sack stretching under heavy load, short rope creak and coarse fabric strain, close-mic, dry",
+      "takes": [
+        {
+          "file": "assets/audio/goat/sack_creak_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/sack_creak_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "sack_rip",
+      "label": "Sack rip",
+      "trigger": "The sack tears: round lost.",
+      "volume_db": -4,
+      "pitch_jitter": 0.06,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/quMkLZruiqbHHQUkIr5X",
+      "prompt": "Thick burlap sack ripping open, loud fast fabric tear with a seam popping, close-mic, dry",
+      "takes": [
+        {
+          "file": "assets/audio/goat/sack_rip_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/sack_rip_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "cashout_sparkle",
+      "label": "Cash out sparkle",
+      "trigger": "The round is cashed out.",
+      "volume_db": -9,
+      "pitch_jitter": 0.06,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/quMkLZruiqbHHQUkIr5X",
+      "prompt": "Light gentle win sparkle, soft rising glockenspiel shimmer with a delicate coin twinkle, airy and pleasant, short, no voice",
+      "takes": [
+        {
+          "file": "assets/audio/goat/cashout_sparkle_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/cashout_sparkle_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/goat/cashout_sparkle_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "spill",
+      "label": "Treasure spill",
+      "trigger": "Treasure pours out of the torn sack.",
+      "volume_db": -8,
+      "pitch_jitter": 0.02,
+      "takes": [
+        {
+          "file": "assets/audio/market/spill.wav",
+          "enabled": true,
+          "source": "synth"
+        }
+      ]
+    },
+    {
+      "id": "produce",
+      "label": "Produce spill",
+      "trigger": "Vegetables pour out of the torn sack (Market).",
+      "volume_db": -8,
+      "pitch_jitter": 0.02,
+      "takes": [
+        {
+          "file": "assets/audio/market/produce.wav",
+          "enabled": true,
+          "source": "synth"
+        }
+      ]
+    },
+    {
+      "id": "collapse",
+      "label": "Round lost",
+      "trigger": "The round is lost.",
+      "volume_db": -7,
+      "pitch_jitter": 0.02,
+      "takes": [
+        {
+          "file": "assets/audio/kenney/collapse.ogg",
+          "enabled": true,
+          "source": "kenney"
+        }
+      ]
+    },
+    {
+      "id": "start",
+      "label": "Round start",
+      "trigger": "A paid round starts.",
+      "volume_db": -8,
+      "pitch_jitter": 0.02,
+      "takes": [
+        {
+          "file": "assets/audio/kenney/start.ogg",
+          "enabled": true,
+          "source": "kenney"
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "label": "Background music",
+      "trigger": "Loops in the background while Sound is on.",
+      "volume_db": -20.0,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_music_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/i446mwkloS8Tn0TPKeF5",
+      "prompt": "Calm looping background music bed for a casual mobile farm treasure game: warm banjo and soft accordion with light woodblock percussion, rustic sunny and cosy, mid tempo, no vocals, no build-up, no climax, seamless 30 second loop, consistent from start to end, instrumental only",
+      "takes": [
+        {
+          "file": "assets/audio/music/theme.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    }
+  ]
+}

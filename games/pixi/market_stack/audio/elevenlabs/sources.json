@@ -1,0 +1,59 @@
+{
+  "generated_date": "2026-09-17",
+  "effects": [
+    {
+      "file": "crate_land.wav",
+      "provider": "ElevenLabs",
+      "model": "eleven_text_to_sound_v2",
+      "generation_id": "tfOm6jASdrbnqnblLSVi",
+      "flow_url": "https://elevenlabs.io/app/flows/QY7oxjLHYIDWItpUw1Pr",
+      "prompt": "A light slatted fruit crate landing on another crate: thin hollow wooden slats clacking with a short dry rattle and a soft muffled thud of fruit shifting inside, light not heavy, brief and clean, close mic, 0.4 seconds, no deep boom, no timber beam, no crack, no music, no voice",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "PCM WAV",
+        "trimmed_seconds": 0.45,
+        "highpass_hz": 160,
+        "peak_db": -3,
+        "fade_edges": true
+      },
+      "note": "2026-09-17: crates hold fruit, so the hit reads as thin slats and rattle rather than a solid wooden beam."
+    },
+    {
+      "file": "collapse.wav",
+      "provider": "ElevenLabs",
+      "model": "eleven_text_to_sound_v2",
+      "generation_id": "EnbWkkhcYTnparXZuhmm",
+      "flow_url": "https://elevenlabs.io/app/flows/QY7oxjLHYIDWItpUw1Pr",
+      "prompt": "A tall stack of light slatted fruit crates toppling over: a quick burst of thin hollow wooden clacks and slat rattle with fruit tumbling out, light and clattery, collapsing fast and stopping within half a second, close mic, 0.6 seconds total, no deep boom, no heavy timber, no glass, no debris tail, no music, no voice",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "PCM WAV",
+        "trimmed_seconds": 0.39,
+        "highpass_hz": 160,
+        "peak_db": -1.5,
+        "fade_edges": true
+      },
+      "revision": "2026-09-17: the previous 1.64 s take had its loudest impacts at 0.9–1.5 s while debris lands in 0.45–1.1 s. Chosen from 4 takes: 90% of energy within 0.43 s, silent by 0.6 s.",
+      "note": "2026-09-17: 0.39 s clatter of light fruit crates, matched to the collapse animation."
+    },
+    {
+      "file": "payout.ogg",
+      "provider": "ElevenLabs",
+      "model": "eleven_text_to_sound_v2",
+      "generation_id": "logFNe9aFB1ydMFnlWId",
+      "flow_url": "https://elevenlabs.io/app/flows/6jxGdrR9AP3ZcRaHjT42",
+      "prompt": "A small handful of coins dropping into a metal cash tray, bright satisfying brief jingling clinks settling, close mic, under one second, no voices or music.",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 24000,
+        "codec": "Vorbis",
+        "quality": 2,
+        "trimmed": true,
+        "fade_edges": true,
+        "tempo": 1
+      }
+    }
+  ]
+}

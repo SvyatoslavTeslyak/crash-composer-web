@@ -1,0 +1,50 @@
+/* Composer workbench tokens. The workbench is a developer tool, so it keeps its own neutral
+   palette and a denser type scale; every value the tool's stylesheets use is declared here,
+   on top of the kit's spacing, radius, stroke, alpha and motion scale from web/tokens.css. */
+:root{
+color-scheme:dark;
+--inspector-bg-deep:#0b1017;
+--inspector-bg:#151a21;
+--inspector-surface:#202732;
+--inspector-surface-hover:#2a3442;
+--inspector-surface-selected:#19374b;
+--inspector-ink-selected:#c7ecff;
+--inspector-well:#0e1722;
+--inspector-card:#151e29;
+--inspector-border:#303844;
+--inspector-border-strong:#3b4a5e;
+--inspector-text:#e2e7ee;
+--inspector-muted:#98a5b5;
+--inspector-placeholder:#76879a;
+--inspector-accent:#71caff;
+--inspector-accent-hover:#9bdbff;
+--inspector-accent-edge:#97dcff;
+--inspector-on-accent:#092137;
+--inspector-warning:#ffd37a;
+--inspector-danger:#ffab9e;
+--inspector-danger-border:#7a3b35;
+--inspector-grid-dot:color-mix(in srgb,#fff calc(var(--alpha-faint) * 50%),transparent);
+--inspector-glow:color-mix(in srgb,#123149 40%,transparent);
+--inspector-scrim:var(--scrim);
+--inspector-radius:var(--radius-4);
+--inspector-radius-card:var(--radius-8);
+--inspector-radius-panel:var(--radius-16);
+--inspector-control:var(--space-32);
+--inspector-type-xs:10px;
+--inspector-type-sm:11px;
+--inspector-type-base:12px;
+--inspector-type-md:13px;
+--inspector-type-lg:15px;
+--inspector-type-xl:23px;
+--inspector-mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+--inspector-sans:system-ui,sans-serif;
+--inspector-sidebar-width:280px;
+--inspector-sidebar-compact-width:220px;
+--inspector-frame-height:850px;
+--inspector-report-width:1120px;
+--inspector-card-min-width:360px;
+--inspector-metric-min-width:185px;
+--inspector-chart-height:130px;
+--inspector-entry-width:400px;
+}
+@media(pointer:coarse){:root{--inspector-control:var(--tap-min)}}

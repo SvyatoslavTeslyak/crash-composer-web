@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "game": "fruits",
+  "title": "Explosive Fruits",
+  "owner": "LocalFeedback (scripts/systems/local_feedback.gd)",
+  "events": [
+    {
+      "id": "slice",
+      "label": "Slice",
+      "trigger": "Any fruit is cut: blade swish with a juicy chop.",
+      "volume_db": -8,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/8jJMsIPHCDxUckRh81xf",
+      "prompt": "Sharp blade swipe slicing cleanly through a juicy watermelon, fast whoosh into a wet crisp chop with a small juice splash, short, close-mic, dry",
+      "takes": [
+        {
+          "file": "assets/audio/fruits/eleven/slice_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fruits/eleven/slice_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fruits/eleven/slice_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fruits/eleven/slice_3.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "launch",
+      "label": "Fruit launch",
+      "trigger": "A wave of fruit is thrown up.",
+      "volume_db": -25,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/8jJMsIPHCDxUckRh81xf",
+      "prompt": "Soft short air whoosh of a round fruit tossed upward, light and airy, very short, dry",
+      "takes": [
+        {
+          "file": "assets/audio/fruits/eleven/launch_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fruits/eleven/launch_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fruits/eleven/launch_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "golden",
+      "label": "Golden core",
+      "trigger": "A golden core is revealed.",
+      "volume_db": -8,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/8jJMsIPHCDxUckRh81xf",
+      "prompt": "Magical treasure reveal, bright sparkling chime burst with shimmering gold glitter, rewarding, short, no voice",
+      "takes": [
+        {
+          "file": "assets/audio/fruits/eleven/golden_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fruits/eleven/golden_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "rotten",
+      "label": "Rotten core",
+      "trigger": "A rotten core is revealed and cuts the multiplier.",
+      "volume_db": -6,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/8jJMsIPHCDxUckRh81xf",
+      "prompt": "Squishy rotten fruit squelch, wet mushy splat followed by a sad deflating slime gurgle, short, close-mic, no voice",
+      "takes": [
+        {
+          "file": "assets/audio/fruits/eleven/rotten_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fruits/eleven/rotten_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "boom",
+      "label": "BOOM",
+      "trigger": "An explosive core ends the round.",
+      "volume_db": -4,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/8jJMsIPHCDxUckRh81xf",
+      "prompt": "Big punchy cartoon bomb explosion with wet juicy fruit splatter and scattering debris, deep boom, short tail",
+      "takes": [
+        {
+          "file": "assets/audio/fruits/eleven/boom_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fruits/eleven/boom_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "freeze",
+      "label": "Freeze / slow-mo",
+      "trigger": "A freeze fruit survives and starts slow motion.",
+      "volume_db": -11,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/8jJMsIPHCDxUckRh81xf",
+      "prompt": "Icy crystal freeze whoosh with a descending slow-motion time warp, glassy shimmer, short, no voice",
+      "takes": [
+        {
+          "file": "assets/audio/fruits/eleven/freeze_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/fruits/eleven/freeze_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "safe",
+      "label": "Safe slice",
+      "trigger": "An ordinary safe slice result.",
+      "volume_db": -12,
+      "pitch_jitter": 0.02,
+      "takes": [
+        {
+          "file": "assets/audio/kenney/safe_0.ogg",
+          "enabled": true,
+          "source": "kenney"
+        },
+        {
+          "file": "assets/audio/kenney/safe_1.ogg",
+          "enabled": true,
+          "source": "kenney"
+        },
+        {
+          "file": "assets/audio/kenney/safe_2.ogg",
+          "enabled": true,
+          "source": "kenney"
+        }
+      ]
+    },
+    {
+      "id": "start",
+      "label": "Round start",
+      "trigger": "A paid round starts.",
+      "volume_db": -8,
+      "pitch_jitter": 0.02,
+      "takes": [
+        {
+          "file": "assets/audio/kenney/start.ogg",
+          "enabled": true,
+          "source": "kenney"
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "label": "Background music",
+      "trigger": "Loops in the background while Sound is on.",
+      "volume_db": -20.0,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_music_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/CZwW5NkVgbVXqRSZL9WF",
+      "prompt": "Calm looping background music bed for a casual mobile fruit-slicing game set in a sunny tropical bazaar: warm steel drums and soft marimba with light hand percussion, breezy and relaxed, mid tempo, no vocals, no build-up, no climax, seamless 30 second loop, consistent from start to end, instrumental only",
+      "takes": [
+        {
+          "file": "assets/audio/music/theme.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    }
+  ]
+}

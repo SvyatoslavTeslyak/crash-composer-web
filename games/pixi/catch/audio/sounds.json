@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "game": "catch",
+  "title": "Catch Clash",
+  "owner": "catch_game.gd (_sound)",
+  "events": [
+    {
+      "id": "start",
+      "label": "Duel starts",
+      "trigger": "Betting closes and both boats pull the net tight.",
+      "volume_db": -8,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/r92q0qYEafr1BGj9TRB2",
+      "prompt": "Two fishermen in wooden boats pull a shared fishing net tight at once, thick wet rope snaps taut with a strong water swoosh and a boat thud, short, close-mic, no voices",
+      "takes": [
+        {
+          "file": "assets/audio/catch/eleven/duel_start_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/duel_start_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/duel_start_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "pull_grunt",
+      "label": "Fishermen heave",
+      "trigger": "During the duel the fishermen grunt as they haul: every 2.6 s, speeding up to 1.3 s as the catch grows.",
+      "volume_db": -14,
+      "pitch_jitter": 0.1,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/bTxJyCsYvUf4Q3nJ4UCq",
+      "prompt": "A strong man hauling a heavy wet rope with all his strength, one short strained effort grunt like hngh or uhh, breathy, no words, close-mic, dry",
+      "takes": [
+        {
+          "file": "assets/audio/catch/eleven/pull_grunt_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/pull_grunt_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/pull_grunt_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "creak",
+      "label": "Rope creak",
+      "trigger": "Every 2.4 s during the duel, and when a duel ends without a rip.",
+      "volume_db": -18,
+      "pitch_jitter": 0.08,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/r92q0qYEafr1BGj9TRB2",
+      "prompt": "Thick wet rope and wooden boat hull creaking under a hard tug-of-war strain, single short tense creak, close-mic, dry",
+      "takes": [
+        {
+          "file": "assets/audio/catch/eleven/rope_creak_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/rope_creak_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/rope_creak_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "net_rip",
+      "label": "Net rips",
+      "trigger": "Every third result: the shared net tears.",
+      "volume_db": -8,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/r92q0qYEafr1BGj9TRB2",
+      "prompt": "A heavy fishing net stretched between two boats rips apart, loud rope snap and tearing mesh followed by a water splash, short, close-mic",
+      "takes": [
+        {
+          "file": "assets/audio/catch/eleven/net_rip_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/net_rip_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/net_rip_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "splash",
+      "label": "Catch lands",
+      "trigger": "Other results: the winner hauls the catch into the boat.",
+      "volume_db": -8,
+      "pitch_jitter": 0.05,
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/r92q0qYEafr1BGj9TRB2",
+      "prompt": "A fisherman hauls the whole net of fish into his wooden boat, big wet splash and a thump of fish landing on the deck with water dripping, short, close-mic, no voices",
+      "takes": [
+        {
+          "file": "assets/audio/catch/eleven/catch_splash_0.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/catch_splash_1.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        },
+        {
+          "file": "assets/audio/catch/eleven/catch_splash_2.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "label": "Background music",
+      "trigger": "Loops in the background while Sound is on.",
+      "volume_db": -20.0,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_music_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/gRFQ5Pf97KMTTe1mFo24",
+      "prompt": "Calm looping background music bed for a casual mobile fishing-boat contest game: light nautical accordion and plucked strings over a soft steady rhythm, friendly and lively but restrained, mid tempo, no vocals, no build-up, no climax, seamless 30 second loop, consistent from start to end, instrumental only",
+      "takes": [
+        {
+          "file": "assets/audio/music/theme.wav",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    }
+  ]
+}

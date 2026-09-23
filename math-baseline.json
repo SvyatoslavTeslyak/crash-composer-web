@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "status": "source-baseline-not-certified",
+  "games": {
+    "road": {
+      "name": "Goat Road",
+      "model": "steps",
+      "maxPayout": 1000000.0,
+      "minBet": 1.0,
+      "maxBet": 1000.0,
+      "targetReturn": 0.95,
+      "risks": [
+        0.06,
+        0.1,
+        0.16,
+        0.24
+      ],
+      "maxSteps": 20,
+      "sources": [
+        {
+          "path": "goat-road/scripts/systems/multiplier_manager.gd",
+          "sha256": "0ba36654a7191dd5844538ae82bfeee09fb3b2786305a86c38fc5d48b7635f5d"
+        },
+        {
+          "path": "goat-road/scripts/game/game_manager.gd",
+          "sha256": "f72f5879219db9d01260bfcef68625484bd32412d684fa8eb48bd08b55a52e41"
+        },
+        {
+          "path": "goat-road/addons/crash_ui/ui/preview_math.gd",
+          "sha256": "483cb695863ab9b202d660896d03212639e15122cf6ef510ba76ca6fb757ead2"
+        },
+        {
+          "path": "goat-road/scripts/ui/bet_control_panel.gd",
+          "sha256": "67a67c91878da144e6b57df1a032bdc2dd083de4d5aa686c53b79fa00c6b190a"
+        }
+      ]
+    },
+    "fish": {
+      "name": "Fish Master",
+      "model": "crash",
+      "maxPayout": 1000000.0,
+      "minBet": 1.0,
+      "maxBet": 1000.0,
+      "targetReturn": 0.95,
+      "growth": [
+        0.09,
+        0.13,
+        0.18,
+        0.24
+      ],
+      "sources": [
+        {
+          "path": "fish-master/scripts/game/fishing_round.gd",
+          "sha256": "aa2a98087dde8b1630b2a0f67542d8908690b66d96acca7122f00b9969c9f4ee"
+        },
+        {
+          "path": "fish-master/scripts/game/game_manager.gd",
+          "sha256": "38078d00217302f749d5ddbbc1835b859429ee9b9cc9f88a74fc86d04b96b6b7"
+        },
+        {
+          "path": "fish-master/addons/crash_ui/ui/preview_math.gd",
+          "sha256": "483cb695863ab9b202d660896d03212639e15122cf6ef510ba76ca6fb757ead2"
+        }
+      ]
+    },
+    "gold": {
+      "name": "Goat Gold",
+      "model": "crash",
+      "maxPayout": 1000000.0,
+      "minBet": 1.0,
+      "maxBet": 1000.0,
+      "targetReturn": 0.95,
+      "growth": [
+        0.09,
+        0.13,
+        0.18,
+        0.24
+      ],
+      "sources": [
+        {
+          "path": "goat-gold/scripts/game/gold_round.gd",
+          "sha256": "1163d5bf10ad27a64c794b93b6cb8a992bed762cad4bc3b66f5ddfcc5ecff6f7"
+        },
+        {
+          "path": "goat-gold/scripts/game/game_manager.gd",
+          "sha256": "016026a15f8b4dd57da194b26509c83b152a8917801953bf5563c81c919ca1db"
+        },
+        {
+          "path": "goat-gold/addons/crash_ui/ui/preview_math.gd",
+          "sha256": "483cb695863ab9b202d660896d03212639e15122cf6ef510ba76ca6fb757ead2"
+        }
+      ]
+    },
+    "fruits": {
+      "name": "Explosive Fruits",
+      "model": "fruits",
+      "maxPayout": 1000000.0,
+      "minBet": 1.0,
+      "maxBet": 1000.0,
+      "targetReturn": 0.95,
+      "risks": [
+        0.06,
+        0.1,
+        0.16,
+        0.24
+      ],
+      "maxSteps": 25,
+      "goldChance": 0.15,
+      "goldBoost": 3.5,
+      "hotFactor": 2.2,
+      "maxRisk": 0.6,
+      "mysteryHotChance": 0.35,
+      "rottenChance": 0.12,
+      "rottenRule": "flat",
+      "rottenDropMin": 0.08,
+      "rottenDropMax": 0.34,
+      "sources": [
+        {
+          "path": "explosive-fruits/scripts/game/fruit_round.gd",
+          "sha256": "880d1f7881577d656b9adce7e7de3f8c2c1161421141f595266a802bf79d2a1d"
+        },
+        {
+          "path": "explosive-fruits/scripts/game/game_manager.gd",
+          "sha256": "dd3c2a519cc7a18e71b529e6662374f53fe46ace850a27f2f76c36b090f4dd09"
+        },
+        {
+          "path": "explosive-fruits/addons/crash_ui/ui/preview_math.gd",
+          "sha256": "483cb695863ab9b202d660896d03212639e15122cf6ef510ba76ca6fb757ead2"
+        },
+        {
+          "path": "explosive-fruits/scripts/systems/multiplier_manager.gd",
+          "sha256": "93c4e8bee244232bd3cc801d712a67f52a7d3095ba19a2ddac2f831052a8d23c"
+        },
+        {
+          "path": "explosive-fruits/scripts/game/fruit_stage.gd",
+          "sha256": "f1ae4b9844c4b03040b0592d8e51fa6b2635e91ecd57230be39614b1b90c3a06"
+        }
+      ]
+    },
+    "fuel": {
+      "name": "Fuel Run",
+      "model": "fruits",
+      "maxPayout": 1000000.0,
+      "minBet": 1.0,
+      "maxBet": 1000.0,
+      "targetReturn": 0.95,
+      "risks": [
+        0.06,
+        0.1,
+        0.16,
+        0.24
+      ],
+      "maxSteps": 25,
+      "goldChance": 0.15,
+      "goldBoost": 3.5,
+      "hotFactor": 2.2,
+      "maxRisk": 0.6,
+      "mysteryHotChance": 0.35,
+      "rottenChance": 0.0,
+      "rottenRule": "share",
+      "rottenPenalty": 0.21,
+      "sources": [
+        {
+          "path": "fuel-run/scripts/game/fuel_round.gd",
+          "sha256": "953a95e6053c57ca82df9b176cff2a55f6df4394399fa03574025455cea26044"
+        },
+        {
+          "path": "fuel-run/scripts/game/game_manager.gd",
+          "sha256": "4ccc4fe59431cbc6be6391684ac8b6b15d04390c7af6392fdb5d7c8a4c22b5fe"
+        },
+        {
+          "path": "fuel-run/addons/crash_ui/ui/preview_math.gd",
+          "sha256": "483cb695863ab9b202d660896d03212639e15122cf6ef510ba76ca6fb757ead2"
+        },
+        {
+          "path": "fuel-run/scripts/systems/multiplier_manager.gd",
+          "sha256": "775ee29a55d55864fc3621c04ee572e5b8fefa739bb2f7927af4efcf46ffcf9c"
+        },
+        {
+          "path": "fuel-run/scripts/game/run_stage.gd",
+          "sha256": "7045ed5f29cf8414dc0d8e99f276e0e10fa9b42342a1ff9d2b63d7f238d3920d"
+        }
+      ]
+    },
+    "catch": {
+      "name": "Catch Clash",
+      "model": "catch",
+      "targetReturn": 0.95,
+      "maxPayout": 1000000.0,
+      "minBet": 1.0,
+      "maxBet": 1000.0,
+      "maxMultiplier": 1000.0,
+      "growth": 0.18,
+      "probabilities": [
+        0.4,
+        0.45,
+        0.5,
+        0.55,
+        0.6
+      ],
+      "sources": [
+        {
+          "path": "catch-clash/scripts/game/catch_round.gd",
+          "sha256": "6a6ef0e234a6d3f19c9b6663236437237e21a31bb6231402fc88fc93d46c1075"
+        },
+        {
+          "path": "catch-clash/scripts/game/catch_game.gd",
+          "sha256": "4cbde183c6d355eb85486bb85560714694da38b2b6d0c2087a8747407dc6e55e"
+        }
+      ]
+    }
+  },
+  "sourceVerification": "source-files"
+}

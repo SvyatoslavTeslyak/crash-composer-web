@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crash Composer</title>
+<script src="cloud-config.js?v=1790170358"></script>
+<script src="hosted.js"></script>
+<script type="module" src="roles.js?v=1790170358"></script>
+<script type="module" src="lotomobil.js?v=1790170358"></script>
+<script src="session.js?v=1790170358"></script>
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=1790170358">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1790170358">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790170358">
+<link rel="stylesheet" href="inspector.css?v=1790170358">
+<link rel="stylesheet" href="workbench.css?v=1790170358">
+<link rel="stylesheet" href="translates.css?v=1790170358">
+<link rel="stylesheet" href="share.css?v=1790170358">
+<script src="crash-ui/tokens.js?v=1790170358"></script>
+<script src="icons.js?v=1790170358"></script>
+<script src="workbench.js?v=1790170358"></script>
+<link rel="stylesheet" href="math.css?v=1790170358">
+<link rel="stylesheet" href="sound.css?v=1790170358">
+<style>
+#lotomobil-section p{margin:0;color:var(--inspector-muted);font-size:12px;line-height:1.5}#lotomobil-section .wb-button{padding:10px}.lotomobil-mode{font-size:12px;color:var(--inspector-accent)}.share-dialog.lotomobil-dialog{width:min(420px,calc(100vw - 32px));padding:20px;border-radius:16px}.lotomobil-dialog h2{font-size:20px;margin:4px 0 12px}.lotomobil-dialog>p{margin:0 0 16px;font-size:13px}.lotomobil-dialog form{display:grid;gap:12px}.lotomobil-dialog label{margin:0;gap:6px;font-size:13px}.lotomobil-dialog input{padding:9px 10px}.lotomobil-dialog #lotomobil-error{margin:12px 0 0}.lotomobil-dialog #lotomobil-error:empty{display:none}.lotomobil-dialog [hidden]{display:none!important}.lotomobil-dialog button[type=submit]:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}.lotomobil-dialog button.is-loading{gap:8px}.lotomobil-dialog button.is-loading::before{content:"";width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:lotomobil-spin .8s linear infinite}@keyframes lotomobil-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.lotomobil-dialog button.is-loading::before{animation:none}}
+
+[hidden]{display:none!important}*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;grid-template-columns:var(--inspector-sidebar-width) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);overflow:hidden;background:var(--inspector-bg-deep);color:var(--inspector-text);font:var(--inspector-type-md)/var(--leading-body) var(--inspector-sans)}
+aside#side{min-height:0;overflow:auto;display:flex;flex-direction:column;background:var(--inspector-bg);border-right:var(--stroke-1) solid var(--inspector-border);padding:var(--space-24) var(--space-16) 0}
+#layout-controls,#math-controls,#sound-controls{padding-bottom:var(--space-24)}
+aside#side>*{flex:none}
+#workspace-title{margin:0 0 16px;font-size:20px;line-height:1.3;font-weight:600;letter-spacing:-.025em;color:var(--inspector-text)}
+h1{display:flex;align-items:center;gap:var(--space-8);font-size:var(--inspector-type-lg);letter-spacing:.02em;margin:0 0 var(--space-24)}h1 img{flex:none;border-radius:var(--inspector-radius-card)}
+h1 span{min-width:0}h1 small{display:block;font-size:var(--inspector-type-xs);font-weight:400;letter-spacing:0;color:var(--inspector-muted);margin-top:var(--space-4);white-space:nowrap}
+.toolbar,#side .wb-section,#look-controls .wb-section,#library-controls .wb-section{display:grid;gap:var(--space-8);padding:var(--space-12) 0 var(--space-16)}
+.toolbar>small,.wb-section>small{color:var(--inspector-muted);font-size:var(--inspector-type-xs);margin-top:calc(-1 * var(--space-4))}
+.toolbar>strong,#side .wb-section>h2,#look-controls .wb-section>h2,#library-controls .wb-section>h2{font-size:var(--inspector-type-xs);font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--inspector-muted);margin:0 0 var(--space-4)}
+.property{display:grid;grid-template-columns:var(--space-48) minmax(0,1fr);align-items:center;gap:var(--space-8);color:var(--inspector-muted)}
+button,input,select{font:inherit;color:var(--inspector-text);background:var(--inspector-surface);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card);padding:var(--space-4) var(--space-8);min-height:var(--inspector-control);min-width:0;max-width:100%}
+select{appearance:none;-webkit-appearance:none;padding-right:var(--space-40);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%23c7d0dc' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right var(--space-12) center;background-size:var(--space-12) var(--space-12)}
+@media(forced-colors:active){select{appearance:auto;background-image:none}}
+button{cursor:pointer;font:var(--inspector-type-md) var(--inspector-sans)}
+/* A disabled control keeps its shape and reads as a control: a quiet fill and muted ink,
+   never a transparent box that dissolves into the panel behind it. */
+button:disabled,select:disabled,input:disabled{cursor:not-allowed}
+button:disabled{background:var(--inspector-surface);border-color:var(--inspector-border);color:var(--inspector-muted)}
+button:disabled svg{opacity:.7}button:hover{background:var(--inspector-surface-hover)}button[aria-pressed=true]{border-color:var(--inspector-accent);background:var(--inspector-surface-selected);color:var(--inspector-ink-selected)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:var(--stroke-2) solid var(--inspector-accent);outline-offset:var(--stroke-2)}
+.appbar #picker{width:220px}.appbar #picker .game.pick{grid-template-columns:var(--space-32) minmax(0,1fr) var(--space-16)}.appbar #picker .game.pick strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.workspace-target{border-top:0;padding-top:0}.workspace-target #target{width:100%}.workspace-target .visibility-option{font-size:var(--inspector-type-sm);color:var(--inspector-muted)}#target-build{display:grid;gap:var(--space-8)}#target-build small,#target-note,#target-message{display:block}
+.subhead{display:block;margin:var(--space-12) 0 -2px;font-size:var(--inspector-type-sm);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--inspector-muted)}
+.presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-4)}
+.presets button{display:grid;gap:var(--stroke-1);line-height:var(--leading-tight);padding:var(--space-4) var(--space-4)}
+.presets b{font:600 var(--inspector-type-xs) var(--inspector-sans);letter-spacing:.1em;color:var(--inspector-muted)}
+.presets button[aria-pressed=true] b{color:inherit}
+.presets button[data-break]{border-bottom-color:var(--inspector-accent)}input[type=number]{width:100%;font-family:var(--inspector-mono)}input[type=range]{width:100%;padding:0;accent-color:var(--inspector-accent)}
+main{min-width:0;min-height:0;padding:var(--space-24);overflow:auto;background-image:radial-gradient(var(--inspector-grid-dot) var(--stroke-1),transparent var(--stroke-1));background-size:var(--space-16) var(--space-16)}
+#room[hidden]{display:none}
+small{color:var(--inspector-muted);font-size:var(--inspector-type-sm)}#size{font:var(--inspector-type-sm) var(--inspector-mono);color:var(--inspector-accent)}
+.visibility-option{display:flex;align-items:center;gap:var(--space-8);min-height:var(--inspector-control);cursor:pointer}
+@media(pointer:coarse){.visibility-option{min-height:var(--tap-min)}}
+@media(max-width:640px){body{grid-template-columns:var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr);overflow-x:auto}header{padding:var(--space-16) var(--space-12)}main{padding:var(--space-12)}}
+.visually-hidden{position:absolute;width:var(--stroke-1);height:var(--stroke-1);min-height:0;padding:0;margin:calc(-1 * var(--stroke-1));border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#custom-size summary{cursor:pointer;font-size:var(--inspector-type-sm);color:var(--inspector-muted);margin:var(--space-8) 0}
+
+.look-colour{display:grid;grid-template-columns:minmax(0,1fr) var(--space-40) calc(var(--space-48) + var(--space-32));align-items:center;gap:var(--space-8);min-height:var(--inspector-control);font-size:var(--inspector-type-sm);color:var(--inspector-muted);text-transform:capitalize}
+.look-colour input[type=color]{width:var(--space-40);height:var(--inspector-control);padding:var(--stroke-2);border-radius:var(--inspector-radius);cursor:pointer}
+.look-colour input[type=text]{font:var(--inspector-type-sm) var(--inspector-mono);padding:0 var(--space-6);min-height:var(--inspector-control);text-transform:none}
+#look-controls .toolbar{gap:var(--space-4)}
+.generate-row{display:grid;gap:var(--space-6);margin-top:var(--space-4)}
+.season-row{display:flex;flex-wrap:wrap;gap:var(--space-6)}
+.season{display:inline-flex;align-items:center;gap:var(--space-6);min-height:var(--inspector-control);padding:0 var(--space-12);font-size:var(--inspector-type-sm)}
+.season i{width:var(--space-16);height:var(--space-16);border-radius:50%;border:var(--stroke-1) solid var(--inspector-border)}
+#look-generate{min-height:var(--inspector-control);background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}
+#look-generate:hover{background:var(--inspector-accent-hover)}
+
+#look-controls .look-view .look-strip,#look-controls .look-view .look-faces-view{margin-top:0}
+#look-controls>*:first-child,#library-controls>*:first-child{padding-top:0}
+.role .reset{visibility:hidden;min-height:var(--space-24);padding:0 var(--space-6)}
+.theme-mode .role.themed .reset{visibility:visible}
+.role.themed .role-title::after{content:' · theme';font-size:var(--inspector-type-xs);color:var(--inspector-accent)}
+.role-pair{display:grid;gap:var(--space-4);padding:var(--space-8);margin-bottom:var(--space-6);background:var(--inspector-well);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card)}
+.role{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"title swatch" "about swatch" "ratio ratio";align-items:center;column-gap:var(--space-8);min-height:var(--space-40)}
+.role-title{grid-area:title;font-size:var(--inspector-type-md);color:var(--inspector-text)}
+.role-about{grid-area:about;font-size:var(--inspector-type-xs);color:var(--inspector-muted)}
+.role .ratio{grid-area:ratio;display:none;font-size:var(--inspector-type-xs);font-style:normal;color:var(--inspector-danger)}
+.role.fail .ratio{display:block}.role.fail .role-title{color:var(--inspector-danger)}
+.role-swatch{grid-area:swatch;display:flex;align-items:center;gap:var(--space-6)}
+.role-swatch input[type=color]{width:var(--space-40);height:var(--space-32);min-height:0;padding:var(--stroke-2);border-radius:var(--inspector-radius);cursor:default}
+.role-swatch input[type=color]:not(:disabled){cursor:pointer}
+.role-swatch input[type=text]{width:calc(var(--space-48) + var(--space-24));font:var(--inspector-type-sm) var(--inspector-mono);padding:0 var(--space-6);min-height:var(--space-32);text-transform:none}
+.role-swatch input[type=text]:read-only{border-color:transparent;background:transparent;color:var(--inspector-muted)}
+.role.flash{outline:var(--stroke-2) solid var(--inspector-accent);border-radius:var(--inspector-radius)}
+.look-colour.overridden .reset{visibility:visible}.look-colour .reset{visibility:hidden;min-height:var(--space-24);padding:0 var(--space-6)}
+.look-colour{grid-template-columns:minmax(0,1fr) var(--space-40) calc(var(--space-48) + var(--space-32)) auto}
+#look-controls{display:flex;flex-direction:column;min-height:100%}
+#look-actions,#look-view-actions{position:sticky;bottom:0;margin-top:auto;background:var(--inspector-bg);border-top:var(--stroke-1) solid var(--inspector-border);box-shadow:var(--elevation-sheet-up);padding:var(--space-12) 0 var(--space-24);display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8)}
+#look-view-actions button{grid-column:1/-1;display:inline-flex;align-items:center;justify-content:center;gap:var(--space-8);min-height:var(--inspector-control)}
+#look-view-actions svg{width:var(--space-16);height:var(--space-16);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#look-view-actions[hidden]{display:none}
+.stage-status{display:block;padding:0 0 var(--space-12);color:var(--inspector-muted);font-size:var(--inspector-type-sm)}
+#look-actions small{grid-column:1/-1}
+#look-actions button{min-height:var(--inspector-control)}
+#look-actions #look-save,#look-view-actions button:not(.quiet){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}
+#look-actions #look-save:disabled,#look-view-actions button:not(.quiet):disabled{background:var(--inspector-surface);border-color:var(--inspector-border);color:var(--inspector-muted)}
+#look-actions #look-save:hover,#look-view-actions button:not(.quiet):hover{background:var(--inspector-accent-hover)}
+#look-view-actions .quiet{background:transparent;border-color:transparent;color:var(--inspector-muted);font-size:var(--inspector-type-sm);min-height:var(--space-32)}
+#look-view-actions .quiet:hover{color:var(--inspector-text)}
+#look-actions #look-revert{background:transparent;border-color:var(--inspector-border);color:var(--inspector-text)}
+#look-actions #look-revert:hover{background:var(--inspector-surface-hover)}
+.look-danger{padding-top:var(--space-8)}
+.look-danger #look-delete{width:100%;min-height:var(--inspector-control);background:transparent;border-color:transparent;color:var(--inspector-danger)}
+.look-danger #look-delete:hover{background:color-mix(in srgb,var(--inspector-danger) calc(var(--alpha-faint) * 100%),transparent)}
+.look-group summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;font-size:var(--inspector-type-xs);font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--inspector-muted);min-height:var(--space-32)}
+.look-group summary::after{content:"▾";font-size:var(--inspector-type-md)}
+.look-group:not([open]) summary::after{content:"▸"}
+.look-group summary .count{color:var(--inspector-danger);text-transform:none;letter-spacing:0;margin-left:auto;margin-right:var(--space-8)}
+.look-colour .ratio{grid-column:1/-1;font-size:var(--inspector-type-xs);font-style:normal;color:var(--inspector-danger);text-transform:none;display:none}
+.look-colour.fail{background:color-mix(in srgb,var(--inspector-danger) calc(var(--alpha-faint) * 100%),transparent);border-radius:var(--inspector-radius);padding-inline:var(--space-4);margin-inline:calc(-1 * var(--space-4))}
+.look-colour.fail .ratio{display:block}
+.look-colour.fail input[type=color]{outline:var(--stroke-2) solid var(--inspector-danger)}
+.look-colour.flash{outline:var(--stroke-2) solid var(--inspector-accent)}
+.face{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-6) var(--space-8);align-items:center;padding:var(--space-8);margin-bottom:var(--space-6);background:var(--inspector-well);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card)}
+.face b{grid-column:1/-1;font-size:var(--inspector-type-xs);font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--inspector-muted)}
+.face select[data-face]{grid-column:1/-1;width:100%}
+.face select[data-weight]{width:100%}
+.face .switch{min-height:var(--inspector-control);font-size:var(--inspector-type-sm);gap:var(--space-6)}
+.upload{min-height:var(--inspector-control);padding:0 var(--space-12);width:100%;margin-top:var(--space-4)}
+.uploads{display:grid;gap:var(--space-4);margin-top:var(--space-6)}
+.upload-row{display:flex;align-items:center;gap:var(--space-8);font-size:var(--inspector-type-sm);color:var(--inspector-text)}
+.upload-row em{font-style:normal;font-size:var(--inspector-type-xs);color:var(--inspector-muted)}
+.upload-row .muted{color:var(--inspector-muted)}
+.upload-row span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.upload-row button{min-height:var(--space-24);width:var(--space-24);padding:0;background:transparent;border-color:transparent;color:var(--inspector-danger);font-size:var(--inspector-type-md)}
+.upload-row button:disabled{color:var(--inspector-muted);cursor:not-allowed}
+.upload-row button:not(:disabled):hover{background:color-mix(in srgb,var(--inspector-danger) calc(var(--alpha-faint) * 100%),transparent)}
+#look-toast{position:fixed;left:50%;top:calc(var(--space-48) + var(--space-24));transform:translate(-50%,calc(-1 * var(--space-12)));z-index:50;padding:var(--space-12) var(--space-16);border-radius:var(--inspector-radius-card);background:var(--inspector-surface-selected);color:var(--inspector-ink-selected);border:var(--stroke-1) solid var(--inspector-accent);box-shadow:var(--elevation-sheet);font-size:var(--inspector-type-md);opacity:0;pointer-events:none;transition:opacity var(--motion-ms),transform var(--motion-ms)}
+#look-toast.show{opacity:1;transform:translate(-50%,0)}
+#look-toast.sound-error{border-color:var(--inspector-danger);color:var(--inspector-danger)}
+#side>.wb-section{padding-top:0}
+#look-editor{display:flex;flex-direction:column;flex:1}
+#look-editor[hidden]{display:none}
+#look-editor h2{display:flex;align-items:center;gap:var(--space-8);margin:0 0 var(--space-8);font-size:var(--inspector-type-lg);letter-spacing:.02em}
+#look-editor h2 small{font-size:var(--inspector-type-xs);font-weight:400;color:var(--inspector-muted);letter-spacing:0}
+.look-strip{display:flex;flex-wrap:wrap;gap:var(--space-6);margin-top:var(--space-12)}
+/* One grid for the whole list, so every face's name starts in the same column:
+   a per-row grid sized its label track to 48px, which NUMBERS overflowed. */
+.look-faces-view{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--space-4) var(--space-8);margin-top:var(--space-12)}
+.look-faces-view span{display:contents;font-size:var(--inspector-type-sm);color:var(--inspector-text)}
+.look-faces-view b{font-size:var(--inspector-type-xs);font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--inspector-muted);padding-top:var(--stroke-2)}
+.look-strip span{display:inline-flex;align-items:center;gap:var(--space-6);font-size:var(--inspector-type-xs);color:var(--inspector-muted)}
+.look-strip i{width:var(--space-16);height:var(--space-16);border-radius:50%;border:var(--stroke-1) solid var(--inspector-border)}
+/* The stage clips, so each report carries its own scroll. */
+#library-report,#math-report,#sound-report,#translates-report{min-width:0;min-height:0;height:100%;overflow:auto}
+#library-report{padding:var(--space-24) var(--space-32);background:var(--inspector-bg-deep)}
+#library-report[hidden]{display:none}
+#library-report>*{max-width:var(--inspector-report-width);margin-inline:auto}
+.lib-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:var(--space-16);margin-bottom:var(--space-16)}
+.lib-head h2{font-size:var(--inspector-type-xl);margin:0 0 var(--space-6)}
+.lib-head p{margin:0;color:var(--inspector-muted);max-width:75ch}
+.lib-choose{display:flex;align-items:center;gap:var(--space-8);font-size:var(--inspector-type-sm);color:var(--inspector-muted);white-space:nowrap}
+.lib-choose select{min-height:var(--inspector-control);font-size:var(--inspector-type-md)}
+.lib-card .lib-card{margin-bottom:var(--space-12);background:var(--inspector-well)}
+.lib-card .lib-card:last-child{margin-bottom:0}
+.lib-card{padding:var(--space-24);margin-bottom:var(--space-16);background:var(--inspector-card);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card)}
+.lib-card h3{font-size:var(--inspector-type-md);margin:0 0 var(--space-12)}
+.lib-sub{margin:calc(-1 * var(--space-8)) 0 var(--space-16);color:var(--inspector-muted);font-size:var(--inspector-type-sm);max-width:75ch}
+.lib-note{color:var(--inspector-muted);max-width:75ch;margin:0 0 var(--space-16)}
+.specimen-row{display:grid;grid-template-columns:var(--space-48) minmax(0,1fr);gap:var(--space-16);align-items:baseline;padding:var(--space-8) 0;border-top:var(--stroke-1) solid var(--inspector-border)}
+.specimen-row:first-of-type{border-top:0}
+.specimen-weight{font:var(--inspector-type-sm) var(--inspector-mono);color:var(--inspector-muted);white-space:nowrap}
+.specimen{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--inspector-text);line-height:1.25}
+.specimen-use{display:flex;gap:var(--space-8);align-items:center}
+.use-select{min-height:var(--inspector-control);width:calc(var(--inspector-metric-min-width) - var(--space-32));font-size:var(--inspector-type-sm)}
+.specimen-use button{min-height:var(--inspector-control);padding:0 var(--space-12);font-size:var(--inspector-type-xs);white-space:nowrap}
+.font-list{display:grid}
+.font-row{display:grid;grid-template-columns:minmax(var(--inspector-metric-min-width),var(--space-48)) minmax(0,1fr) auto;gap:var(--space-16);align-items:center;padding:var(--space-12) 0;border-top:var(--stroke-1) solid var(--inspector-border)}
+.font-row:first-child{border-top:0}
+.font-row .specimen{font-size:var(--inspector-type-xl)}
+.font-name b{display:block;font-size:var(--inspector-type-md);font-weight:600}
+.font-name small{display:block;color:var(--inspector-muted);font-size:var(--inspector-type-xs)}
+.origin{font-style:normal;padding:0 var(--space-4);border-radius:var(--inspector-radius);background:var(--inspector-surface);color:var(--inspector-muted)}
+.origin.uploaded{background:var(--inspector-surface-selected);color:var(--inspector-ink-selected)}
+.origin.kit{background:var(--inspector-well)}
+.current{display:block;margin-top:var(--stroke-2);font-style:normal;font-size:var(--inspector-type-xs);color:var(--inspector-accent)}
+.font-row.is-current{background:color-mix(in srgb,var(--inspector-accent) calc(var(--alpha-faint) * 40%),transparent);border-radius:var(--inspector-radius);padding-inline:var(--space-8);margin-inline:calc(-1 * var(--space-8))}
+.lib-remove,.lib-remove-space{display:inline-grid;place-items:center;width:var(--inspector-control);height:var(--inspector-control);min-height:0;padding:0;flex:none}
+.lib-remove{background:transparent;border-color:transparent;color:var(--inspector-danger)}
+.lib-remove svg{width:var(--space-16);height:var(--space-16);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.lib-remove:disabled{color:var(--inspector-muted)}
+.lib-remove:not(:disabled):hover{background:color-mix(in srgb,var(--inspector-danger) calc(var(--alpha-faint) * 100%),transparent)}
+.add-font{display:grid;grid-template-columns:repeat(auto-fit,minmax(var(--inspector-card-min-width),1fr));gap:var(--space-16)}
+.add-way{padding:var(--space-16);background:var(--inspector-well);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card)}
+.add-way b{display:block;font-size:var(--inspector-type-md);font-weight:600;margin-bottom:var(--space-4)}
+.add-way p{margin:0 0 var(--space-12);color:var(--inspector-muted);font-size:var(--inspector-type-sm)}
+.add-row{display:flex;gap:var(--space-8)}
+.add-row input{flex:1;min-width:0;min-height:var(--inspector-control);font-size:var(--inspector-type-md)}
+.add-row .wb-button{flex:none;white-space:nowrap;padding:0 var(--space-16);min-height:var(--inspector-control)}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--inspector-card-min-width),1fr));gap:var(--space-8)}
+.swatches .swatch{display:flex;align-items:center;gap:var(--space-12);text-align:left;padding:var(--space-8);background:var(--inspector-card);border:var(--stroke-1) solid var(--inspector-border)}
+.swatches .swatch i{width:var(--space-40);height:var(--space-40);border-radius:var(--inspector-radius);border:var(--stroke-1) solid var(--inspector-border);flex:none}
+.swatches .swatch b{display:block;font-size:var(--inspector-type-md);font-weight:600;text-transform:capitalize}
+.swatches .swatch em{font:var(--inspector-type-sm) var(--inspector-mono);font-style:normal;color:var(--inspector-accent)}
+.swatches .swatch small{display:block;color:var(--inspector-muted);font-size:var(--inspector-type-xs)}
+.swatches .swatch.copied{border-color:var(--inspector-accent)}
+.lib-table{width:100%;border-collapse:collapse;font-size:var(--inspector-type-sm)}
+.lib-table th{text-align:left;color:var(--inspector-muted);font-weight:500;padding:var(--space-6)}
+.lib-table td{padding:var(--space-6);border-top:var(--stroke-1) solid var(--inspector-border)}
+.lib-table tr.bad td{color:var(--inspector-danger)}
+.lib-table .chip{display:inline-flex;align-items:center;justify-content:center;width:var(--space-40);height:var(--space-24);border-radius:var(--inspector-radius);font-style:normal}
+.scale-row{display:grid;grid-template-columns:var(--space-48) minmax(0,1fr) var(--space-48);gap:var(--space-16);align-items:center;padding:var(--space-4) 0}
+.scale-name{font-size:var(--inspector-type-sm);color:var(--inspector-muted);white-space:nowrap}
+.scale-draw{display:flex;align-items:center}
+.scale-draw i{display:block}
+.scale-value{font:var(--inspector-type-sm) var(--inspector-mono);color:var(--inspector-accent);text-align:right;white-space:nowrap}
+.scale-type{font-family:var(--inspector-sans);color:var(--inspector-text);line-height:1}
+.scale-motion{width:var(--space-16);height:var(--space-16);border-radius:50%;background:var(--inspector-accent);animation:libslide linear infinite alternate}
+@keyframes libslide{to{transform:translateX(var(--space-48))}}
+.icon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--inspector-metric-min-width),1fr));gap:var(--space-12)}
+.icon-grid figure{margin:0;padding:var(--space-16);display:grid;justify-items:center;gap:var(--space-8);background:var(--inspector-well);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card)}
+.icon-grid figure.is-spare{border-style:dashed}
+.icon-grid figcaption small{display:block;color:var(--inspector-muted);font-size:var(--inspector-type-xs);margin-top:var(--stroke-2)}
+.icon-actions{display:flex;gap:var(--space-6);opacity:0;transition:opacity var(--motion-fast-ms)}
+.icon-grid figure:hover .icon-actions,.icon-actions:focus-within{opacity:1}
+.icon-actions button{min-height:var(--space-24);padding:0 var(--space-8);font-size:var(--inspector-type-xs)}
+.icon-grid img{width:var(--space-32);height:var(--space-32);object-fit:contain}
+.icon-grid figcaption{font:var(--inspector-type-xs) var(--inspector-mono);color:var(--inspector-text);text-align:center}
+.appbar #picker,.appbar #language{height:44px;flex:none}
+.appbar #picker .game.pick{height:44px}
+.appbar #language{width:76px;min-height:44px;padding:0 30px 0 12px;border-radius:var(--inspector-radius-card);font-size:var(--inspector-type-md);background-position:right 12px center}
+.appbar h1{width:calc(var(--inspector-sidebar-width) + 32px)}
+/* Primary workspace navigation; the inspector remains beside it. */
+body{grid-template-columns:64px var(--inspector-sidebar-width) minmax(0,1fr)}
+.workspace-rail{grid-column:1;grid-row:2;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;background:var(--inspector-bg);border-right:1px solid var(--inspector-border);position:relative;z-index:20}
+aside#side{grid-column:2;grid-row:2}
+#room{grid-column:3;grid-row:2}
+.workspace-rail .wb-button{position:relative;display:grid;place-items:center;flex:none;width:44px;height:44px;min-height:44px;padding:0;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--inspector-muted)}
+.workspace-rail .wb-button:hover{background:var(--inspector-surface-hover);color:var(--inspector-text)}
+.workspace-rail .wb-button[aria-pressed=true]{background:var(--inspector-surface-selected);color:var(--inspector-accent);border-color:var(--inspector-border)}
+.workspace-rail .wb-button[aria-pressed=true]::before{content:"";position:absolute;left:-9px;width:3px;height:20px;background:var(--inspector-accent);border-radius:0 3px 3px 0}
+.workspace-rail svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rail-tooltip{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);padding:8px 12px;border:1px solid var(--inspector-border);border-radius:8px;background:var(--inspector-surface);color:var(--inspector-text);font-size:13px;line-height:1.4;white-space:nowrap;box-shadow:0 4px 16px #0005;visibility:hidden;opacity:0;pointer-events:none}
+.workspace-rail button:hover .rail-tooltip,.workspace-rail button:focus-visible .rail-tooltip{visibility:visible;opacity:1}
+.workspace-account{margin-top:auto;position:relative;flex:none;padding-top:16px}
+#workspace-avatar{display:grid;place-items:center;width:40px;height:40px;min-height:40px;padding:0;border-radius:50%;background:var(--inspector-surface-selected);color:var(--inspector-accent);border:1px solid var(--inspector-border);font-size:16px;font-weight:600}
+#workspace-avatar:hover,#workspace-avatar[aria-expanded=true]{border-color:var(--inspector-accent);background:var(--inspector-surface-hover)}
+#workspace-account-menu{position:absolute;bottom:calc(100% + 8px);left:0;width:240px;padding:8px;border:1px solid var(--inspector-border);border-radius:12px;background:var(--inspector-bg);box-shadow:0 8px 32px #0005}
+#workspace-account-name{display:block;padding:8px;color:var(--inspector-muted);font-size:var(--inspector-type-sm);overflow-wrap:anywhere}
+#workspace-people,#workspace-roles,#workspace-password,#workspace-logout{display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:8px;border:0;background:transparent;text-align:left}
+#workspace-people:hover,#workspace-roles:hover,#workspace-password:hover,#workspace-logout:hover{background:var(--inspector-surface-hover)}
+#workspace-logout svg{width:18px;height:18px}
+#workspace-account-error{display:block;padding:8px;color:var(--inspector-danger)}
+.workspace-rail .workspace-dirty::after{content:"";position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--inspector-warning)}
+@media(max-width:640px){body{grid-template-columns:64px var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr)}}
+</style>
+<header class="appbar">
+<h1><img src="favicon-256.png?v=1790170358" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 23 Sep 2026, 02:07</small></span></h1>
+<div id="picker" class="picker"></div><select id="language" aria-label="Preview language"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
+
+<span class="grow"></span>
+<button id="cloud-configurations" class="wb-button" type="button">Cloud</button>
+<button id="share-game" class="wb-button" type="button">Share</button>
+<a id="showcase-link" class="wb-button" href="https://svyatoslavteslyak.github.io/crash-showcase/" target="_blank" rel="noopener" title="The public showcase of the same builds"><i data-icon="external"></i>Showcase</a>
+</header>
+<nav class="workspace-rail" aria-label="Composer workspace">
+<button class="wb-button" id="layout-tab" type="button" aria-label="Game" aria-pressed="true"><i data-icon="game"></i><span class="rail-tooltip" aria-hidden="true">Game</span></button>
+<button class="wb-button" id="look-tab" type="button" aria-label="Brands" aria-pressed="false"><i data-icon="brands"></i><span class="rail-tooltip" aria-hidden="true">Brands</span></button>
+<button class="wb-button" id="library-tab" type="button" aria-label="Library" aria-pressed="false"><i data-icon="library"></i><span class="rail-tooltip" aria-hidden="true">Library</span></button>
+<button class="wb-button" id="math-tab" type="button" aria-label="Math" aria-pressed="false"><i data-icon="math"></i><span class="rail-tooltip" aria-hidden="true">Math</span></button>
+<button class="wb-button" id="sound-tab" type="button" aria-label="Sound effects" aria-pressed="false"><i data-icon="sound"></i><span class="rail-tooltip" aria-hidden="true">Sound effects</span></button>
+<button class="wb-button" id="translates-tab" type="button" aria-label="Translates" aria-pressed="false"><i data-icon="translates"></i><span class="rail-tooltip" aria-hidden="true">Translates</span></button>
+<div class="workspace-account" id="workspace-account">
+<button id="workspace-avatar" type="button" aria-label="Account menu" aria-expanded="false" aria-controls="workspace-account-menu">?</button>
+<div id="workspace-account-menu" hidden>
+<span id="workspace-account-name"></span>
+<button id="workspace-people" type="button" hidden>People &amp; invitations</button>
+<button id="workspace-roles" type="button" hidden>Roles &amp; permissions</button>
+<button id="workspace-password" type="button">Change password</button>
+<button id="workspace-logout" type="button"><i data-icon="logout"></i>Sign out</button>
+<small id="workspace-account-error" role="alert" hidden></small>
+</div>
+</div>
+</nav>
+<aside id="side" aria-labelledby="workspace-title">
+<h2 id="workspace-title">Game</h2>
+<div id="layout-controls">
+<section id="lotomobil-section" class="toolbar" aria-label="Game connection"></section>
+<small id="live-status" class="stage-status" role="status">Simulated data</small>
+<div class="toolbar" aria-label="Preview viewport"><strong>Device</strong><div id="devices"></div><div id="zoom"></div>
+<details id="custom-size"><summary>Custom size</summary><div class="presets">
+<button data-width="360"><b>XS</b>360</button><button data-width="430"><b>S</b>430</button>
+<button data-width="600" data-break><b>M</b>600</button><button data-width="768"><b>L</b>768</button>
+<button data-width="960" data-break><b>XL</b>960</button><button data-width="1024"><b>2XL</b>1024</button>
+<button data-width="1440" data-break><b>3XL</b>1440</button><button id="fluid" aria-pressed="true"><b>AUTO</b>Fluid</button></div>
+<small>Marked widths are where the kit layout changes: 600, 960 and 1440 px.</small>
+<label class="property">Width <input id="width" type="number" min="320" max="2560" value="1024"></label>
+<input id="range" aria-label="Viewport width" type="range" min="320" max="1920" value="1024">
+<label class="property">Height <input id="height" type="number" min="360" max="1400" value="850"></label>
+<button id="rotate" type="button">Swap width and height</button>
+</details>
+<span id="size"></span>
+</div>
+<div class="toolbar" aria-label="Look" hidden><strong>Look</strong><div id="look"></div><small>Brands and seasonal themes restyle the panels and controls only; the game scene is the game's.</small></div>
+<div class="toolbar" aria-label="Game configuration"><strong>Game configuration</strong>
+<label class="property">Header &amp; tabs <select id="presentation-preset"><option value="standard">Game default</option><option value="tabbed-shell-v1">Tabbed shell · v1</option></select></label>
+<label class="property" data-placeholder-only>Bet panel <select id="control-variant"><option value="standard">Standard</option><option value="tabbed">Two columns · Goat Road</option><option value="three-position">Three positions · Catch Clash</option></select></label>
+<em class="subhead" data-visibility-heading>Panels the player sees</em>
+<label class="switch visibility-option" hidden><input type="checkbox" data-flag="multiplier_ladder" checked>Multiplier ladder</label>
+<label class="switch visibility-option"><input type="checkbox" data-flag="leaderboard" checked>Live wins</label>
+<label class="switch visibility-option"><input type="checkbox" data-flag="history" checked>Round history</label>
+<label class="switch visibility-option"><input type="checkbox" data-flag="personal_record" checked>My record</label>
+<label class="switch visibility-option"><input type="checkbox" data-flag="online_count" checked>Online count</label>
+<em class="subhead" data-visibility-heading="features">Bet panel features</em>
+<label class="switch visibility-option"><input type="checkbox" data-feature="auto" checked>Auto play</label>
+<label class="switch visibility-option"><input type="checkbox" data-feature="difficulty" checked>Difficulty level</label>
+<label class="switch visibility-option"><input type="checkbox" data-feature="presets">Preset amounts</label>
+</div>
+<div class="toolbar" aria-label="Open"><strong>Open</strong>
+<small>Put a modal on the stage to look at it.</small>
+<label class="property">Modal <select id="modal"><option value="">No modal</option><option value="difficulty">Difficulty</option><option value="menu">Settings / Auto</option><option value="account">Account</option><option value="wins">All wins</option><option value="win">Win</option></select></label>
+</div>
+</div>
+<section id="look-controls" hidden aria-label="Brand editor"></section>
+<section id="library-controls" hidden aria-label="UI library"></section>
+<div id="games-footer" hidden><label class="switch"><input type="checkbox" id="show-all-games" checked>Show every game</label></div>
+<section id="math-controls" hidden>
+<div class="toolbar"><strong>Math configuration</strong><small id="math-mode-note">Draft analysis. Changes are saved locally. Apply explicitly to an isolated game preview.</small></div>
+<div id="math-inputs" class="toolbar"><strong>Return, limits & strategy</strong></div>
+<details id="math-mechanics" open><summary>Mechanics</summary><label class="property">Risk preset <select id="math-risk-preset"><option value="0">Easy</option><option value="1">Normal</option><option value="2">Hard</option><option value="3">Expert</option><option value="custom">Custom</option></select></label><label class="property" id="math-kind-row">Fruit scenario <select id="math-kind"><option value="normal">Normal / Freeze</option><option value="hot">Hot</option></select></label></details>
+<div id="math-liquidity" class="toolbar"><strong>Liquidity scenario</strong></div>
+<div class="toolbar"><small id="math-error" role="alert"></small><button id="math-reset">Restore source defaults</button><button id="math-pin">Pin as baseline</button><button id="math-apply">Apply to game preview</button><button id="math-source">Preview source defaults</button><button id="math-export">Export draft JSON</button><label>Import draft<input id="math-import" type="file" accept="application/json,.json"></label><small id="math-message" role="status"></small></div>
+</section>
+<section id="translates-controls" hidden aria-label="Translation controls"></section><section id="sound-controls" hidden aria-label="Sound effects sources"></section>
+</aside>
+<main class="wb-room" id="room"><section id="library-report" hidden aria-label="UI library"></section><section id="math-report" hidden aria-label="Mathematics report"></section><section id="translates-report" hidden aria-label="Translations"></section><section id="sound-report" hidden aria-label="Sound effects"></section><div id="translation-live-tools" hidden><strong>Mobile preview</strong><select id="translation-preview-view" aria-label="Preview window"><option value="">Game</option></select><small id="translation-preview-note" role="status">Edit a text to see changes here.</small></div><div class="fit" id="fit"><div class="box" id="box"><span class="wb-size" id="size"></span><div class="stage" id="stage"><iframe id="frame" class="wb-frame" title="Live HTML/CSS UI components"></iframe></div></div></div></main>
+<script>
+const frame=document.querySelector('#frame'),width=document.querySelector('#width'),range=document.querySelector('#range'),height=document.querySelector('#height');
+const theStage=Workbench.stage({fit:document.querySelector('#fit'),box:document.querySelector('#box'),stage:document.querySelector('#stage'),frame,size:document.querySelector('#size')});
+function customSize(){const w=Math.max(320,Math.min(2560,Number(width.value)||360)),h=Math.max(360,Math.min(1400,Number(height.value)||850));width.value=w;range.value=w;height.value=h;
+ document.querySelectorAll('[data-width]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.width)===w)));document.querySelector('#fluid').setAttribute('aria-pressed','false');
+ devices.device='custom';theStage.custom(w,h)}
+function setWidth(value){width.value=value;customSize()}
+function setHeight(value){height.value=value;customSize()}
+document.querySelectorAll('[data-width]').forEach(b=>b.onclick=()=>setWidth(b.dataset.width));
+width.onchange=()=>setWidth(width.value);range.oninput=()=>setWidth(range.value);height.onchange=e=>setHeight(e.target.value);
+document.querySelector('#fluid').onclick=()=>{document.querySelectorAll('[data-width]').forEach(b=>b.setAttribute('aria-pressed','false'));document.querySelector('#fluid').setAttribute('aria-pressed','true');devices.device='fluid';theStage.set({device:'fluid'})};
+document.querySelector('#rotate').onclick=()=>{const w=Number(width.value)||390,h=Number(height.value)||844;width.value=h;height.value=w;customSize()};
+document.querySelector('#modal').onchange=e=>frame.contentWindow.postMessage({type:'crash-preview',modal:e.target.value},location.origin);
+function sendFlags(){frame.contentWindow.postMessage({type:'crash-preview',flags:Object.fromEntries([...document.querySelectorAll('[data-flag]')].map(n=>[n.dataset.flag,n.checked]))},location.origin)}
+document.querySelectorAll('[data-flag]').forEach(n=>n.onchange=sendFlags);
+function sendFeatures(){frame.contentWindow.postMessage({type:'crash-preview',features:Object.fromEntries([...document.querySelectorAll('[data-feature]')].map(n=>[n.dataset.feature,n.checked]))},location.origin)}
+document.querySelectorAll('[data-feature]').forEach(n=>n.onchange=sendFeatures);
+frame.addEventListener('load',()=>{sendFlags();sendFeatures();
+ const game=window.ComposerTarget?.value;
+ if(game&&game!=='kit')frame.contentWindow.postMessage({type:'crash-preview',game},location.origin);
+ for(const key of ['state','view','modal'])frame.contentWindow.postMessage({type:'crash-preview',[key]:document.querySelector('#'+key)?.value},location.origin)});
+const devices=Workbench.deviceBar({container:document.querySelector('#devices'),zoomContainer:document.querySelector('#zoom'),device:'mobile',onChange:({device,zoom})=>{document.querySelectorAll('[data-width]').forEach(b=>b.setAttribute('aria-pressed','false'));document.querySelector('#fluid').setAttribute('aria-pressed',String(device==='fluid'));theStage.set({device,zoom});showcaseLink()}});
+theStage.set({device:'mobile',zoom:'fit'});
+const look=Workbench.lookPicker({container:document.querySelector('#look'),onChange:v=>{Workbench.applyLook(frame,v);showcaseLink()}});
+window.ComposerLookPicker=look;
+frame.addEventListener('load',()=>Workbench.applyLook(frame,{brand:look.brand,theme:look.theme}));
+// The game picker mirrors the select that target.js owns: it shows the games the select offers and picks through it.
+const select=document.querySelector('#target');
+const gameIcon=id=>id==='kit'?'favicon-256.png':`icons/${id}.png`;
+let picker=null;
+function buildSize(id){
+ if(id==='kit')return '';
+ const build=window.ComposerTarget?.source(id)?.build;
+ if(!build)return 'Build size…';
+ if(!build.built)return 'No build';
+ return Number.isFinite(build.sizeBytes)?(build.sizeBytes/1e6).toFixed(1)+' MB · build':'';
+}
+function syncPicker(){
+ const games=[...select.options].map(o=>({id:o.value,title:o.textContent}));
+ const footer=document.querySelector('#games-footer');footer.hidden=false;picker=Workbench.gamePicker({container:document.querySelector('#picker'),games,value:select.value,thumb:gameIcon,subtitle:buildSize,onPick:id=>{select.value=id;select.dispatchEvent(new Event('change'))},footer});
+ showcaseLink();
+}
+// The showcase link opens the same game, device and look on the public site.
+function showcaseLink(){const g=select.value;const p=new URLSearchParams({lang:document.querySelector('#language').value,game:g==='kit'?'gold':g,device:devices.device==='custom'?'fluid':devices.device});document.querySelector('#showcase-link').href='https://svyatoslavteslyak.github.io/crash-showcase/#'+p}
+new MutationObserver(syncPicker).observe(select,{childList:true});
+select.addEventListener('change',()=>setTimeout(syncPicker,0));
+window.addEventListener('composer-target',syncPicker);
+window.addEventListener('composer-catalog',()=>picker?.refresh());
+syncPicker();
+</script>
+<script>
+// Each workspace owns its sidebar controls and main view; the preview frame belongs to Layout.
+const workspaces={layout:['#layout-controls','#fit','#frame'],look:['#look-controls','#fit','#frame'],library:['#library-controls','#library-report'],math:['#math-controls','#math-report'],sound:['#sound-controls','#sound-report'],translates:['#translates-controls','#translates-report','#fit','#frame','#translation-live-tools']};
+for(const mode of Object.keys(workspaces))document.querySelector('#'+mode+'-tab').onclick=()=>{
+ // Nodes shared by two workspaces (the stage belongs to Layout and Look) stay visible when either is active.
+ for(const nodes of Object.values(workspaces))for(const node of nodes)document.querySelector(node).hidden=true;
+ for(const node of workspaces[mode])document.querySelector(node).hidden=false;
+ for(const key of Object.keys(workspaces))document.querySelector('#'+key+'-tab').setAttribute('aria-pressed',String(key===mode));
+ // Game is the reference view: the look it shows is the plain one, whatever the other tabs are set to.
+ if(mode==='layout')Workbench.applyLook(frame,{brand:'default',theme:''});
+ window.dispatchEvent(new CustomEvent('composer-workspace',{detail:mode}));
+};
+</script>
+<script src="target.js?v=1790170358"></script>
+<script src="live.js?v=1790170358"></script>
+<script src="look.js?v=1790170358"></script>
+<script src="library.js?v=1790170358"></script>
+<script type="module" src="math.js?v=1790170358"></script>
+<script src="sound.js?v=1790170358"></script>
+<script src="translation-table.js?v=1790170358"></script>
+
+<script type="module" src="cloud.js?v=1790170358"></script>
+<script src="translates.js?v=1790170358"></script>
+<script src="share.js?v=1790170358"></script>
+</html>
