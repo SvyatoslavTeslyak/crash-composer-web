@@ -118,11 +118,11 @@ function jsonView(payload,title='JSON of this version'){return '<details class="
 const localRelease=()=>!window.ComposerHosting&&['127.0.0.1','localhost'].includes(location.hostname);
 function releaseActions(v){
  const can=ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game());
- return (can&&localRelease()?'<button class="wb-button primary" data-apply="'+esc(v.id)+'">Apply locally</button>':'')+(v.status==='submitted'?' <button class="wb-button" data-review="'+esc(v.id)+'" data-approve="false">Return for changes</button>':'');
+ return can&&localRelease()?'<button class="wb-button primary" data-apply="'+esc(v.id)+'">Apply locally</button>':'';
 }
 function reviewStatus(status,count){const accepted=status==='approved';return '<span class="review-status '+(accepted?'accepted':'awaiting')+'"'+(accepted?' title="Accepted by Admin; not published yet"':'')+'>'+(accepted?'Accepted':'Awaiting review')+(count?' · '+count:'')+'</span>'}
 function reviewVersions(){
- const groups=[['submitted','Needs review','Apply locally accepts this version. Return for changes sends it back to the editor.'],['approved','Accepted · not published','Already accepted. Apply locally if needed, then commit and push to publish.']];
+ const groups=[['submitted','Needs review','Apply locally accepts this version. Use Discard all changes to reset unpublished changes for this game.'],['approved','Accepted · not published','Already accepted. Apply locally if needed, then commit and push to publish.']];
  return groups.map(([status,title,hint])=>{const items=sentVersions().filter(v=>v.status===status);return items.length?'<section class="review-queue" data-review-status="'+status+'"><h3>'+title+' <span class="review-count">'+items.length+'</span></h3><p class="review-intro">'+hint+'</p><div class="cloud-list">'+items.map(v=>'<article><strong>'+esc(v.summary)+'</strong>'+authorLine('Sent by',v.submitted_by,v.submitted_at)+diffHTML(v.payload,{...basePayload,...published?.payload})+jsonView({schema_version:1,game_id:v.game_id,version_id:v.id,revision:v.revision,payload:v.payload})+'<div class="share-actions">'+releaseActions(v)+'</div>'+'</article>').join('')+'</div></section>':''}).join('')+(published?'<p class="review-published">Published: revision '+esc(published.revision)+' — already live.</p>':'');
 }
 
@@ -147,7 +147,6 @@ function render(){
  for(const group of dialog.querySelectorAll('[data-review-group]'))if(collapsed.has(group.dataset.reviewGroup))group.open=false;
  dialog.querySelector('[data-close]').onclick=()=>dialog.close();$('#cloud-refresh').onclick=()=>run(refresh);
  $('#cloud-discard')?.addEventListener('click',()=>{if(!canDiscard()||busy)return;const id=game(),revision=currentDraft.revision;if(!confirm('Discard all unpublished changes for '+ComposerTarget.entry().title+'? This includes shared draft edits, open edits in this window, and sent or approved versions. The published game stays unchanged.'))return;run(async()=>{await rpc('composer_discard_changes',{p_game:id,p_revision:revision});location.reload()})});
- for(const b of dialog.querySelectorAll('[data-review]'))b.onclick=()=>run(async()=>{const approve=b.dataset.approve==='true';await rpc('composer_review',{p_version:b.dataset.review,p_approve:approve,p_note:''});await refresh();message(approve?'Approved.':'Returned.');notify(approve?'Changes approved':'Changes returned')});
  $('#cloud-discard-unsent')?.addEventListener('click',()=>{
   if(busy)return;
   if(!confirm('Discard your unsent edits for '+ComposerTarget.entry().title+'? Your tracked edits and unsaved edits in this window will be reset. Sent versions and other people’s changes will stay. Older edits without authorship history will be preserved.'))return;
