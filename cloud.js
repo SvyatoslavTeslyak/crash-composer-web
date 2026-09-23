@@ -63,10 +63,11 @@ function newChanges(){return changes({...basePayload,...currentDraft?.payload},e
 function returnedVersion(){return versions.find(v=>v.status==='rejected'&&Number(v.revision)===Number(currentDraft?.revision))}
 function renderProgress(){
  const review=isReviewer(),pending=versions.filter(v=>v.status==='submitted').length;
+ const awaiting=review?0:sentVersions().filter(v=>v.status==='submitted').length;
  const unsent=canSubmit()?1:0;
  const count=review?pending+unsent:newChanges().reduce((sum,g)=>sum+g.rows.length,0);
- button.innerHTML='<span>Changes</span>'+(count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'');
- button.setAttribute('aria-label','Changes'+(count?', '+count+(review?' to review':' saved changes'):''));
+ button.innerHTML='<span>Changes</span>'+(count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'')+(awaiting?reviewStatus('submitted',awaiting):'');
+ button.setAttribute('aria-label','Changes'+(count?', '+count+(review?' to review':' saved changes'):'')+(awaiting?', '+awaiting+' awaiting review':''));
  button.disabled=busy;
  button.title='View saved changes';
  button.hidden=!review&&!ComposerAuth.has('drafts.submit',game());
