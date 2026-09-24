@@ -8,7 +8,10 @@ function fitGame(){
  $('game-device').style.transform=mobile?'':'scale('+Math.max(.1,scale)+')';
 }
 window.addEventListener('resize',fitGame);fitGame();
-function endpoint(base,path){const url=new URL(base);if(url.protocol!=='https:'||url.username||url.password)throw Error('Lotomobil login is not configured.');return new URL(path.replace(/^\//,''),url.href.replace(/\/?$/,'/')).href}
+// Only HTTPS reaches a real service. A plain-HTTP base is allowed for one case: the page and the
+// service both on this machine, which is the local preview proxying (or mocking) Lotomobil.
+const LOCAL=/^(127\.0\.0\.1|localhost|\[::1\])$/;
+function endpoint(base,path){const url=new URL(base);const local=url.protocol==='http:'&&LOCAL.test(url.hostname)&&LOCAL.test(location.hostname);if(!(url.protocol==='https:'||local)||url.username||url.password)throw Error('Lotomobil login is not configured.');return new URL(path.replace(/^\//,''),url.href.replace(/\/?$/,'/')).href}
 let ready=false;
 try{endpoint(config.authBaseUrl,'login/me');endpoint(config.apiBaseUrl,'v1/betting/runner/checkouts');const game=new URL(config.gameUrl);if(game.origin!==location.origin)throw Error();ready=!params.has('game')||params.get('game')==='road'}catch{}
 const sessionKey='lotomobil-player-session-v1:'+JSON.stringify([config.authBaseUrl,config.apiBaseUrl]);
@@ -44,6 +47,6 @@ window.Lotomobil={get player(){return phone},async request(path,options={}){
  const current=session;
  try{return await request(config.apiBaseUrl,path,{...options,headers:{...options.headers,Authentication:current.auth}})}catch(error){if((error.status===401||error.status===403)&&session===current)login('Your session expired. Log in again to resume your game.');throw error}
 }};
-if(config.environment==='QA')document.querySelector('.brand').textContent='LOTOMOBIL · QA';
+if(config.environment&&config.environment!=='PROD')document.querySelector('.brand').textContent='LOTOMOBIL · '+config.environment;
 if(ready&&restoreSession())openGame();else login(ready?'':'Lotomobil login is not configured yet.');
 })();

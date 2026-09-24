@@ -158,10 +158,10 @@ function iconsSection(){
  const tile=i=>`<figure class="${i.used?'':'is-spare'}"><img src="crash-ui/assets/icons/${i.name}?v=${iconSeq}" alt="">
 <figcaption>${esc(i.name)}<small>${i.bytes>102400?Math.round(i.bytes/1024)+' KB · heavy':i.used?'drawn by the UI':'spare'}</small></figcaption>
 <span class="icon-actions"><button type="button" data-replace="${i.name}">Replace…</button>${i.used?'':`<button type="button" class="lib-remove" data-drop="${i.name}">Delete</button>`}</span></figure>`;
- return head('Icons','The shared artwork every game draws from. Replacing one keeps its name, so every game picks it up; the ones nothing names can go.')
+ return head('Icons','The shared artwork every game draws from, as files: replacing one keeps its name, so every game picks it up; the ones nothing names can go. The glyphs that recolour with the brand — the back arrow, the speaker, the bet-detail marks — are drawn inline by the UI and are not files here.')
  +card('',`<div class="icon-grid">${list.map(tile).join('')||'<p class="lib-note">Nothing matches.</p>'}</div>`)
- +card('Add an icon',`<div class="add-way"><b>A new name</b><p>An .svg or .png under 512 KB. Only a game that draws it by name will show it.</p>
- <div class="add-row"><button id="icon-add" type="button" class="wb-button">Choose a file…</button><input id="icon-file" type="file" accept=".svg,.png" hidden></div></div>`);
+ +card('Add an icon',`<div class="add-way"><b>A new name</b><p>An .svg, .png or .webp under 512 KB. Only a game that draws it by name will show it.</p>
+ <div class="add-row"><button id="icon-add" type="button" class="wb-button">Choose a file…</button><input id="icon-file" type="file" accept=".svg,.png,.webp" hidden></div></div>`);
 }
 let iconSeq=0;
 async function putIcon(name,file){
@@ -188,7 +188,7 @@ function draw(){
  report.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{navigator.clipboard?.writeText(b.dataset.copy);b.classList.add('copied');setTimeout(()=>b.classList.remove('copied'),900)});
  report.querySelectorAll('.use-select').forEach(n=>n.onchange=()=>{if(n.value)use(n.value,n.dataset.family,Number(n.dataset.weight)).catch(e=>note(e.message,true))});
  report.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFamily(catalog.families.find(f=>f.id===b.dataset.remove)));
- report.querySelectorAll('[data-replace]').forEach(b=>b.onclick=()=>pickFile(f=>putIcon(b.dataset.replace,f),'.svg,.png'));
+ report.querySelectorAll('[data-replace]').forEach(b=>b.onclick=()=>pickFile(f=>putIcon(b.dataset.replace,f),'.svg,.png,.webp'));
  report.querySelectorAll('[data-drop]').forEach(b=>b.onclick=()=>dropIcon(b.dataset.drop));
  const iconAdd=$('#icon-add');
  if(iconAdd){iconAdd.onclick=()=>$('#icon-file').click();$('#icon-file').onchange=e=>{const f=e.target.files[0];if(f)putIcon(f.name,f);e.target.value=''}}

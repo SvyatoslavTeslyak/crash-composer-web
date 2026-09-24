@@ -1,4 +1,5 @@
-.crash-ui,.crash-ui *{box-sizing:border-box}.crash-ui{font:var(--body-type-px)/var(--leading-body) var(--font-body),sans-serif;font-synthesis:none;color:var(--text);position:fixed;inset:0;z-index:10;pointer-events:none;--edge:var(--space-16);--gap:var(--space-16);--button-radius:var(--radius-24);--panel-radius:var(--web-panel-radius);--control-h:var(--web-control-comfort-height)}.crash-ui button,.crash-ui input,.crash-ui select{font:inherit}.crash-ui{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.crash-ui input,.crash-ui textarea{-webkit-user-select:text;user-select:text}.crash-ui button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.crash-ui button:focus-visible,.crash-ui input:focus-visible,.crash-ui select:focus-visible{outline:var(--stroke-3) solid var(--focus);outline-offset:var(--stroke-3)}.crash-ui [hidden]{display:none!important}.crash-ui .panel{background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--panel-radius);padding:var(--space-16);box-shadow:var(--elevation-panel);pointer-events:auto}.crash-ui .button{display:flex;align-items:center;justify-content:center;gap:var(--space-8);min-height:var(--control-h);min-width:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--button-radius);border:var(--stroke-2) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-button-depth) 0 var(--button-shadow);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms);white-space:nowrap}.crash-ui .button:hover:not(:disabled){filter:brightness(1.12)}.crash-ui .button:active:not(:disabled){transform:translateY(var(--web-button-depth));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}.crash-ui button:disabled{cursor:default}.crash-ui .button:disabled{background:var(--button-disabled);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .button[aria-pressed=true]{border-color:var(--focus)}.crash-ui .icon{width:var(--web-icon-md);height:var(--web-icon-md);object-fit:contain;flex:none}.crash-ui .chevron{display:block;width:var(--space-16);height:var(--space-16);flex:0 0 var(--space-16)}.crash-ui .money{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-24);font-variant-numeric:tabular-nums}.crash-ui .muted{color:var(--text-muted);font-size:var(--type-12)}.crash-ui .avatar{--index:5;width:var(--web-avatar-xl);height:var(--web-avatar-xl);flex:none;border-radius:50%;border:var(--stroke-1) solid var(--gold);background-image:url('assets/avatars/players.png');background-size:calc(100% * 1536 / 464) calc(100% * 1024 / 464);background-repeat:no-repeat;background-position:var(--avatar-x,100%) var(--avatar-y,100%)}.crash-ui .top{position:absolute;left:var(--edge);right:var(--edge);top:max(var(--edge),env(safe-area-inset-top));display:flex;gap:var(--space-16);align-items:flex-start;pointer-events:none}.crash-ui .account{width:100%;min-width:0}.crash-ui .profile{display:flex;align-items:center;gap:var(--space-12)}.crash-ui .identity{display:flex;align-items:center;gap:var(--space-12);border:0;background:none;color:inherit;text-align:left;padding:0;min-height:var(--tap-min)}.crash-ui .identity strong{display:block;font-size:var(--type-24)}.crash-ui .level{color:var(--gold);font-size:var(--type-12)}.crash-ui .balance{margin-left:auto;display:flex;gap:var(--space-8);align-items:center;min-width:0}.crash-ui .balance .money{font-size:clamp(var(--type-24),5vw,var(--type-32))}.crash-ui .icon-button{width:var(--tap-min);height:var(--tap-min);border:0;background:none;color:inherit;padding:var(--space-8);flex:none}.crash-ui .records{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:var(--space-16);padding:var(--space-12);margin-top:var(--space-12);background:var(--surface-inset);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24)}.crash-ui .record{display:flex;gap:var(--space-8);align-items:flex-start;min-width:0}.crash-ui .record .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .record-title{font-size:var(--type-12);color:var(--text-muted)}.crash-ui .record-value{font-size:var(--type-24);color:var(--success)}.crash-ui .record-top{display:flex;gap:var(--space-16);flex-wrap:wrap;align-items:center;min-width:0}.crash-ui .record-top .record-value{color:var(--gold)}.crash-ui .owner{display:flex;gap:var(--space-8);align-items:center;min-width:0;flex:1 1 var(--web-owner-min-width)}.crash-ui .owner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md)}.crash-ui .owner-name{font-size:var(--type-12);overflow-wrap:anywhere}.crash-ui .owner-date{font:var(--type-12) var(--font-body),sans-serif;color:var(--text-muted);white-space:nowrap}.crash-ui .winners{width:100%;margin-top:var(--space-12)}.crash-ui .wins-head{display:flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-12);font-size:var(--type-16)}.crash-ui .online{font-size:var(--type-12);color:var(--switch-on);display:flex;align-items:center;gap:var(--space-6);white-space:nowrap}.crash-ui .dot{width:var(--web-status-dot);height:var(--web-status-dot);border-radius:50%;background:currentColor}.crash-ui .text-button{border:0;background:none;color:var(--text-muted);min-height:var(--tap-min);padding:0 var(--space-4);margin-left:auto;font-size:var(--type-12)}.crash-ui .wins-list{display:flex;gap:var(--space-8);overflow-x:auto;scrollbar-width:none}.crash-ui .winner{display:grid;align-items:center;grid-template-columns:var(--web-avatar-md) minmax(var(--web-winner-name-min-width),auto);gap:var(--space-4) var(--space-8);flex:1 0 var(--web-win-card-width);padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16)}.crash-ui .winner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md);grid-row:span 2;align-self:center}.crash-ui .winner-name{font-size:var(--type-12);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.crash-ui .winner .money{color:var(--success);white-space:nowrap}.crash-ui .win-multiple{display:none}.crash-ui .history{display:flex;gap:var(--space-8);overflow:auto;scrollbar-width:none;margin-top:var(--space-12)}.crash-ui .pill{border:var(--stroke-1) solid color-mix(in srgb,currentColor calc(var(--alpha-soft) * 100%),var(--border));border-radius:var(--radius-24);background:var(--surface-raised);color:var(--pill-cyan);padding:var(--space-6) var(--space-8);font-family:var(--font-numbers),var(--font-body),sans-serif;white-space:nowrap}.crash-ui .pill.tier-success{color:var(--pill-success)}.crash-ui .pill.tier-purple{color:var(--pill-purple)}.crash-ui .pill.tier-gold{color:var(--pill-gold)}.crash-ui .bottom{position:absolute;left:var(--edge);right:var(--edge);bottom:max(var(--edge),env(safe-area-inset-bottom));pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:var(--space-12)}/* The steps of a climbing round, beside the scene: the kit's panel, so a brand restyles it
+.crash-ui,.crash-ui *{box-sizing:border-box}.crash-ui{font:var(--body-type-px)/var(--leading-body) var(--font-body),sans-serif;font-synthesis:none;color:var(--text);position:fixed;inset:0;z-index:10;pointer-events:none;--edge:var(--space-16);--gap:var(--space-16);--button-radius:var(--radius-24);--panel-radius:var(--web-panel-radius);--control-h:var(--web-control-comfort-height)}.crash-ui button,.crash-ui input,.crash-ui select{font:inherit}.crash-ui{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.crash-ui input,.crash-ui textarea{-webkit-user-select:text;user-select:text}.crash-ui button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.crash-ui button:focus-visible,.crash-ui input:focus-visible,.crash-ui select:focus-visible{outline:var(--stroke-3) solid var(--focus);outline-offset:var(--stroke-3)}.crash-ui [hidden]{display:none!important}.crash-ui .panel{background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--panel-radius);padding:var(--space-16);box-shadow:var(--elevation-panel);pointer-events:auto}.crash-ui .button{display:flex;align-items:center;justify-content:center;gap:var(--space-8);min-height:var(--control-h);min-width:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--button-radius);border:var(--stroke-2) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-button-depth) 0 var(--button-shadow);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms);white-space:nowrap}.crash-ui .button:hover:not(:disabled){filter:brightness(1.12)}.crash-ui .button:active:not(:disabled){transform:translateY(var(--web-button-depth));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}.crash-ui button:disabled{cursor:default}.crash-ui .button:disabled{background:var(--button-disabled);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .button[aria-pressed=true]{border-color:var(--focus)}.crash-ui .icon{width:var(--web-icon-md);height:var(--web-icon-md);object-fit:contain;flex:none}.crash-ui .chevron{display:block;width:var(--space-16);height:var(--space-16);flex:0 0 var(--space-16)}.crash-ui .money{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-24);font-variant-numeric:tabular-nums}.crash-ui .muted{color:var(--text-muted);font-size:var(--type-12)}.crash-ui .avatar{--index:5;width:var(--web-avatar-xl);height:var(--web-avatar-xl);flex:none;border-radius:50%;border:var(--stroke-1) solid var(--gold);background-image:url('assets/avatars/players.webp');background-size:calc(100% * 1536 / 464) calc(100% * 1024 / 464);background-repeat:no-repeat;background-position:var(--avatar-x,100%) var(--avatar-y,100%)}.crash-ui .top{position:absolute;left:var(--edge);right:var(--edge);top:max(var(--edge),env(safe-area-inset-top));display:flex;gap:var(--space-16);align-items:flex-start;pointer-events:none}.crash-ui .account{width:100%;min-width:0}.crash-ui .profile{display:flex;align-items:center;gap:var(--space-12)}.crash-ui .identity{display:flex;align-items:center;gap:var(--space-12);border:0;background:none;color:inherit;text-align:left;padding:0;min-height:var(--tap-min)}.crash-ui .identity strong{display:block;font-size:var(--type-24)}.crash-ui .level{color:var(--gold);font-size:var(--type-12)}/* The coin follows the number, as it does beside every other amount. */
+.crash-ui .balance{margin-left:auto;display:flex;gap:var(--space-8);align-items:center;min-width:0}.crash-ui .balance>.icon{order:1}.crash-ui .balance .money{font-size:clamp(var(--type-24),5vw,var(--type-32))}.crash-ui .icon-button{width:var(--tap-min);height:var(--tap-min);border:0;background:none;color:inherit;padding:var(--space-8);flex:none}.crash-ui .records{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:var(--space-16);padding:var(--space-12);margin-top:var(--space-12);background:var(--surface-inset);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24)}.crash-ui .record{display:flex;gap:var(--space-8);align-items:flex-start;min-width:0}.crash-ui .record .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .record-title{font-size:var(--type-12);color:var(--text-muted)}.crash-ui .record-value{font-size:var(--type-24);color:var(--success)}.crash-ui .record-top{display:flex;gap:var(--space-16);flex-wrap:wrap;align-items:center;min-width:0}.crash-ui .record-top .record-value{color:var(--gold)}.crash-ui .owner{display:flex;gap:var(--space-8);align-items:center;min-width:0;flex:1 1 var(--web-owner-min-width)}.crash-ui .owner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md)}.crash-ui .owner-name{font-size:var(--type-12);overflow-wrap:anywhere}.crash-ui .owner-date{font:var(--type-12) var(--font-body),sans-serif;color:var(--text-muted);white-space:nowrap}.crash-ui .winners{width:100%;margin-top:var(--space-12)}.crash-ui .wins-head{display:flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-12);font-size:var(--type-16)}.crash-ui .online{font-size:var(--type-12);color:var(--switch-on);display:flex;align-items:center;gap:var(--space-6);white-space:nowrap}.crash-ui .dot{width:var(--web-status-dot);height:var(--web-status-dot);border-radius:50%;background:currentColor}.crash-ui .text-button{border:0;background:none;color:var(--text-muted);min-height:var(--tap-min);padding:0 var(--space-4);margin-left:auto;font-size:var(--type-12)}.crash-ui .wins-list{display:flex;gap:var(--space-8);overflow-x:auto;scrollbar-width:none}.crash-ui .winner{display:grid;align-items:center;grid-template-columns:var(--web-avatar-md) minmax(var(--web-winner-name-min-width),auto);gap:var(--space-4) var(--space-8);flex:1 0 var(--web-win-card-width);padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16)}.crash-ui .winner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md);grid-row:span 2;align-self:center}.crash-ui .winner-name{font-size:var(--type-12);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.crash-ui .winner .money{color:var(--success);white-space:nowrap}.crash-ui .win-multiple{display:none}.crash-ui .history{display:flex;gap:var(--space-8);overflow:auto;scrollbar-width:none;margin-top:var(--space-12)}.crash-ui .pill{border:var(--stroke-1) solid color-mix(in srgb,currentColor calc(var(--alpha-soft) * 100%),var(--border));border-radius:var(--radius-24);background:var(--surface-raised);color:var(--pill-cyan);padding:var(--space-6) var(--space-8);font-family:var(--font-numbers),var(--font-body),sans-serif;white-space:nowrap}.crash-ui .pill.tier-success{color:var(--pill-success)}.crash-ui .pill.tier-purple{color:var(--pill-purple)}.crash-ui .pill.tier-gold{color:var(--pill-gold)}.crash-ui .bottom{position:absolute;left:var(--edge);right:var(--edge);bottom:max(var(--edge),env(safe-area-inset-bottom));pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:var(--space-12)}/* The steps of a climbing round, beside the scene: the kit's panel, so a brand restyles it
    with everything else. It stands in the band the scene was given, clear of both panels. */
 .crash-ui .ladder{position:absolute;left:var(--edge);top:var(--scene-top,0);height:calc(var(--scene-bottom,100%) - var(--scene-top,0));display:flex;align-items:center;pointer-events:none}
 .crash-ui .ladder-list{list-style:none;margin:0;padding:var(--space-16) var(--space-12);display:grid;gap:var(--space-8);background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24);box-shadow:var(--elevation-panel,none)}
@@ -20,7 +21,11 @@
    are square, and the border it would draw along it is gone. */
 @media(max-width:599px){.crash-ui .ladder{left:0}
 .crash-ui .ladder-list{border-top-left-radius:0;border-bottom-left-radius:0;border-left:0}}
-.crash-ui .multiplier{min-width:var(--web-multiplier-min-width);border:var(--stroke-2) solid var(--multiplier-color,var(--cyan));border-radius:var(--radius-32);background:var(--surface);text-align:center;font:var(--type-32) var(--font-numbers),var(--font-body),sans-serif;color:var(--multiplier-color,var(--cyan));padding:var(--space-4) var(--space-24)}.crash-ui .controls{width:100%;max-width:var(--web-control-max-width);display:grid;gap:var(--space-16)}.crash-ui .settings-row{display:grid;grid-template-columns:var(--web-settings-column-width) 1fr;gap:var(--space-12)}.crash-ui .auto{background:var(--switch-off);border-radius:var(--radius-pill);padding:var(--space-6) var(--space-8) var(--space-6) var(--space-6);justify-content:flex-start}.crash-ui .knob{height:var(--web-knob-size);width:var(--web-knob-size);border-radius:50%;background:var(--knob);flex:none}.crash-ui .auto[aria-pressed=true]{background:var(--switch-on);color:var(--on-success)}.crash-ui .stake{display:grid;grid-template-columns:var(--tap-min) var(--tap-min) minmax(var(--web-winner-name-min-width),1fr) var(--tap-min) var(--tap-min);gap:var(--space-8);align-items:center}.crash-ui .stake .money{text-align:center;font-size:var(--type-24);min-width:0}/* The stake reads like the balance in the header: the same coin, then the number, no currency   mark. The coin is drawn on the amount itself, so it grows and shrinks with the digits and   the pair always lands in one line box. Sizes step, never interpolate: the stake is the   panel's largest figure while it is short and gives up a step as it grows. */.crash-ui .coin-amount::before{content:'';display:inline-block;width:1em;height:1em;margin-right:var(--space-6);vertical-align:-0.12em;background:url('assets/icons/coin.png') center/contain no-repeat}.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=short]{font-size:var(--type-32)}.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=mid]{font-size:var(--type-24)}.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=long]{font-size:var(--type-16)}@media(max-width:389px){.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=short]{font-size:var(--type-24)}.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=mid]{font-size:var(--type-16)}}.crash-ui .tabbed-controls .wager-amount .money[data-fit=long]{font-size:var(--type-16)}.crash-ui .stake .button{padding:var(--space-4);font-size:var(--type-16)}.crash-ui .presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-8)}.crash-ui .presets .button{min-width:0}.crash-ui .actions{display:flex;gap:var(--space-12);min-width:0}.crash-ui .action{flex:1;min-width:0;min-height:var(--web-control-action-height);flex-direction:column;gap:var(--space-4);font-size:var(--type-24);border-radius:var(--radius-32);color:var(--on-go);border-color:var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--action-go-shadow)}.crash-ui .action.cash{background:linear-gradient(var(--action-cash-top),var(--action-cash-bottom));border-color:var(--action-cash-edge);color:var(--on-cash);box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-cash-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--cash-shadow)}
+.crash-ui .multiplier{min-width:var(--web-multiplier-min-width);border:var(--stroke-2) solid var(--multiplier-color,var(--cyan));border-radius:var(--radius-32);background:var(--surface);text-align:center;font:var(--type-32) var(--font-numbers),var(--font-body),sans-serif;color:var(--multiplier-color,var(--cyan));padding:var(--space-4) var(--space-24)}.crash-ui .controls{width:100%;max-width:var(--web-control-max-width);display:grid;gap:var(--space-16)}.crash-ui .settings-row{display:grid;grid-template-columns:var(--web-settings-column-width) 1fr;gap:var(--space-12)}.crash-ui .auto{background:var(--switch-off);border-radius:var(--radius-pill);padding:var(--space-6) var(--space-8) var(--space-6) var(--space-6);justify-content:flex-start}.crash-ui .knob{height:var(--web-knob-size);width:var(--web-knob-size);border-radius:50%;background:var(--knob);flex:none}.crash-ui .auto[aria-pressed=true]{background:var(--switch-on);color:var(--on-success)}.crash-ui .stake{display:grid;grid-template-columns:var(--tap-min) var(--tap-min) minmax(var(--web-winner-name-min-width),1fr) var(--tap-min) var(--tap-min);gap:var(--space-8);align-items:center}.crash-ui .stake .money{text-align:center;font-size:var(--type-24);min-width:0}/* The stake reads like the balance in the header: the number, then the same coin, no currency   mark. The coin is drawn on the amount itself, so it grows and shrinks with the digits and   the pair always lands in one line box. Sizes step, never interpolate: the stake is the   panel's largest figure while it is short and gives up a step as it grows. */.crash-ui .coin-amount::after{content:'';display:inline-block;width:1em;height:1em;margin-left:var(--space-6);vertical-align:-0.12em;background:url('assets/icons/coin.webp') center/contain no-repeat}
+.crash-ui.no-webp .coin-amount::after{background-image:url('assets/icons/coin.png')}
+.crash-ui.no-webp .avatar{background-image:url('assets/avatars/players.png')}/* In a table the coin keeps a readable size whatever the row's type size. */
+.crash-ui .bets-table .coin-amount::after{width:var(--type-14);height:var(--type-14);margin-left:var(--space-4)}
+.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=short]{font-size:var(--type-32)}.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=mid]{font-size:var(--type-24)}.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=long]{font-size:var(--type-20)}@media(max-width:389px){.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=short]{font-size:var(--type-24)}.crash-ui .controls:not(.tabbed-controls) .stake .money[data-fit=mid]{font-size:var(--type-20)}}.crash-ui .tabbed-controls .wager-amount .money[data-fit=long]{font-size:var(--type-20)}.crash-ui .stake .button{padding:var(--space-4);font-size:var(--type-16)}.crash-ui .presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-8)}.crash-ui .presets .button{min-width:0}.crash-ui .actions{display:flex;gap:var(--space-12);min-width:0}.crash-ui .action{flex:1;min-width:0;min-height:var(--web-control-action-height);flex-direction:column;gap:var(--space-4);font-size:var(--type-24);border-radius:var(--radius-32);color:var(--on-go);border-color:var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--action-go-shadow)}.crash-ui .action.cash{background:linear-gradient(var(--action-cash-top),var(--action-cash-bottom));border-color:var(--action-cash-edge);color:var(--on-cash);box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--action-cash-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-button-depth) 0 var(--cash-shadow)}
 .crash-ui .action:disabled,.crash-ui .action.cash:disabled{background:var(--button-disabled);border-color:var(--border);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .action-title{display:flex;align-items:center;justify-content:center;gap:var(--space-8)}.crash-ui .action .money,.crash-ui .action small{font-size:var(--type-16);line-height:var(--leading-tight)}.crash-ui .action .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .modal-layer{position:fixed;inset:0;z-index:30;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:var(--space-16);pointer-events:auto;touch-action:pan-y}.crash-ui .modal{width:min(100%,var(--modal-max-width-px));max-height:calc(100dvh - var(--space-32));overflow:auto;overscroll-behavior:contain;padding:var(--space-24);background:var(--surface);border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-modal)}.crash-ui .modal header{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);margin-bottom:var(--space-16)}.crash-ui .modal h2{font-size:var(--type-24);margin:0}.crash-ui .modal-body{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16)}.crash-ui .modal .button{min-height:var(--web-control-comfort-height)}.crash-ui .setting{display:flex;align-items:center;justify-content:space-between;gap:var(--space-16);min-height:var(--web-control-comfort-height)}.crash-ui .setting input[type=checkbox]{width:var(--space-24);height:var(--space-24);accent-color:var(--switch-on)}.crash-ui select{background:var(--button);color:var(--text);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16);padding:var(--space-12);max-width:55%}.crash-ui .win-modal{text-align:center}.crash-ui .win-modal .win-coin{width:var(--web-win-coin-hero);height:var(--web-win-coin-hero);display:block;margin:auto}.crash-ui .win-total{font:var(--type-48) var(--font-numbers),var(--font-body),sans-serif;color:var(--gold)}.crash-ui .toast{position:absolute;top:45%;left:50%;transform:translateX(-50%);padding:var(--space-12) var(--space-24);border-radius:var(--radius-24);background:var(--surface);border:var(--stroke-1) solid var(--border);pointer-events:none;text-align:center;max-width:90%}.crash-ui .dev{position:absolute;right:var(--space-16);top:var(--dev-top,var(--web-dev-top));pointer-events:auto;min-height:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--radius-16);background:var(--surface-scrim);border:var(--stroke-1) solid var(--border);color:var(--text)}.crash-ui .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}.crash-ui .confetti i{position:absolute;left:50%;top:45%;width:var(--space-8);height:var(--space-12);background:var(--gold);animation:celebrate var(--motion-celebrate-ms) ease-out forwards;transform:rotate(var(--angle));border-radius:var(--radius-4)}.crash-ui .confetti i:nth-child(3n){background:var(--success)}.crash-ui .confetti i:nth-child(3n + 1){background:var(--cyan)}@keyframes celebrate{to{transform:translate(var(--x),var(--y)) rotate(480deg);opacity:0}}.crash-ui.reduced *{animation:none!important;transition:none!important}
 @media(max-width:599px){.crash-ui{--edge:var(--space-8)}.crash-ui .panel{padding:var(--space-12)}.crash-ui .modal-layer:not(.is-win){align-items:flex-end}.crash-ui .account .records{gap:var(--space-8);padding:var(--space-8)}.crash-ui .record .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}.crash-ui .record-value{font-size:var(--type-16)}.crash-ui .record-title{font-size:var(--type-12)}.crash-ui .modal{padding:var(--space-24)}.crash-ui .stake .money{font-size:var(--type-24)}.crash-ui .balance .icon{width:var(--web-icon-sm);height:var(--web-icon-sm)}}
 @media(min-width:600px){.crash-ui .settings-row,.crash-ui .actions{grid-column:1/-1}.crash-ui .record-top{flex-wrap:nowrap}.crash-ui .record-title,.crash-ui .owner-name{font-size:var(--type-16)}.crash-ui .record-value{font-size:var(--type-24)}.crash-ui .winners{max-width:100%}}
@@ -502,12 +507,18 @@
 .crash-ui .bets-table tbody td{padding-block:var(--space-4)}
 .crash-ui .bets-table th:first-child,.crash-ui .bets-table td:first-child{text-align:left}
 .crash-ui .bets-table thead th{position:sticky;top:0;z-index:1;background:var(--surface);color:var(--text-muted);font-weight:inherit;border-bottom:var(--stroke-1) solid var(--border)}
-.crash-ui .top-bets th:first-child{width:30%}
-.crash-ui .top-bets th:nth-child(2){width:22%}
-.crash-ui .top-bets th:nth-child(3){width:18%}
-.crash-ui .top-bets th:nth-child(4){width:30%}
+/* Top bets: rank, player, wager, multiplier, prize. The rank is a narrow muted number; the
+   player's cell is the one that reads left like a first column. */
+.crash-ui .top-bets th:first-child{width:9%}
+.crash-ui .top-bets th:nth-child(2){width:31%}
+.crash-ui .top-bets th:nth-child(3){width:20%}
+.crash-ui .top-bets th:nth-child(4){width:14%}
+.crash-ui .top-bets th:nth-child(5){width:26%}
+.crash-ui .top-bets th:nth-child(2),.crash-ui .top-bets td:nth-child(2){text-align:left;padding-left:0}
+.crash-ui .bets-table .bet-rank{color:var(--text-muted);font-family:var(--font-numbers),var(--font-body),sans-serif;text-align:left}
+.crash-ui .bets-table td.bet-rank,.crash-ui .bets-table th.bet-rank{padding-right:0}
 .crash-ui .bet-player{display:flex;align-items:center;gap:var(--space-12);min-width:0}
-.crash-ui .bet-player>span:last-child{overflow:hidden;text-overflow:ellipsis}
+.crash-ui .bet-player>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .crash-ui .bet-player .avatar{width:var(--web-avatar-sm);height:var(--web-avatar-sm)}
 .crash-ui .bets-table .bet-prize{color:var(--success);font-family:var(--font-numbers),var(--font-body),sans-serif}
 .crash-ui .bets-table .bet-day th{padding:var(--space-8);background:var(--surface-raised);color:var(--text-muted);font-weight:inherit}
@@ -517,7 +528,7 @@
 @media(max-width:599px){
  .crash-ui .modal-layer.is-tab-view{padding:var(--space-8);padding-top:max(var(--space-16),env(safe-area-inset-top));padding-bottom:max(var(--space-8),env(safe-area-inset-bottom))}
  .crash-ui .modal-layer.is-tab-view .modal{width:100%;max-width:100%;padding:var(--space-12)}
- .crash-ui .top-bets .bet-player{gap:var(--space-8)}
+ .crash-ui .top-bets .bet-player{gap:var(--space-12)}
  .crash-ui .top-bets .avatar{width:var(--space-24);height:var(--space-24)}
 }
 
@@ -562,7 +573,7 @@
  .crash-ui .modal-layer.is-context-panel .modal{left:var(--tab-window-left);top:var(--tab-window-top);bottom:auto;width:var(--tab-window-width);height:var(--tab-window-height);container-type:inline-size}
 }
 @container(max-width:599px){
- .crash-ui .top-bets .bet-player{gap:var(--space-8)}
+ .crash-ui .top-bets .bet-player{gap:var(--space-12)}
  .crash-ui .top-bets .avatar{width:var(--space-24);height:var(--space-24)}
 }
 
@@ -570,35 +581,62 @@
 @media(max-width:599px){
  .crash-ui .tabbed-controls .tabs .tab,.crash-ui .modal-layer .modal-footer .tab{height:var(--web-control-comfort-height);min-height:var(--web-control-comfort-height);border-radius:var(--radius-24);border-width:var(--stroke-1);box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow)}
  .crash-ui .modal-layer.is-tab-view>.modal-footer{position:fixed;left:var(--tabs-anchor-left);top:var(--tabs-anchor-top);right:auto;bottom:auto;width:var(--tabs-anchor-width);height:var(--tabs-anchor-height);padding:0;transform:none}
- .crash-ui .modal-layer.is-tab-view .modal{position:absolute;top:calc(max(var(--space-8),env(safe-area-inset-top)) + var(--web-control-comfort-height) + var(--space-16));bottom:calc(100% - var(--tabs-anchor-top) + var(--space-8));left:var(--space-8);width:calc(100% - 2 * var(--space-8));height:auto}
+ .crash-ui .modal-layer.is-tab-view .modal{position:absolute;top:calc(max(var(--space-8),env(safe-area-inset-top)) + var(--web-control-comfort-height) + var(--space-16));bottom:calc(100% - var(--tabs-anchor-top) + var(--space-8));left:var(--edge);width:calc(100% - 2 * var(--edge));height:auto}
 }
 
 /* Bet rows open an in-panel detail view; typography and surfaces follow the brand. */
 .crash-ui .bet-selectable{cursor:pointer}
 .crash-ui .bet-selectable:hover,.crash-ui .bet-selectable:focus-within{background:var(--surface-raised)}
-.crash-ui .bet-row-open{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;font:inherit;min-width:0}
+/* The whole row is the tap target, so the opener inside it need not be tap height itself. */
+.crash-ui .bet-row-open{display:block;width:100%;min-height:var(--space-32);padding:0;border:0;background:none;color:inherit;text-align:left;font:inherit;min-width:0;overflow:hidden}
 .crash-ui .is-tab-view .is-bet-detail header .bet-detail-back{left:0;right:auto}
 .crash-ui .is-bet-detail header h2{position:absolute;width:var(--stroke-1);height:var(--stroke-1);overflow:hidden;clip-path:inset(50%)}
-.crash-ui .bet-detail-hero{display:grid;justify-items:center;gap:var(--space-8)}
+/* One disc size for every bet page's hero: 132px, whether it holds a face or a glow. */
+/* The hero's glow reaches 32px past the disc, and the body scrolls, so the hero keeps room above
+   it; every bet page has it, so the three line up. */
+.crash-ui .bet-detail-hero{--bet-detail-disc:calc(2 * var(--web-avatar-hero) + var(--space-32) + var(--space-4));display:grid;justify-items:center;gap:var(--space-8);padding-top:var(--space-24)}
 .crash-ui .bet-detail-hero p{margin:0;color:var(--text-muted);font-size:var(--type-16)}
-.crash-ui .bet-detail-avatar{position:relative}
-.crash-ui .bet-detail-avatar>.avatar{width:calc(2 * var(--web-avatar-hero));height:calc(2 * var(--web-avatar-hero))}
-.crash-ui .bet-detail-trophy{position:absolute;left:calc(-1 * var(--space-16));top:var(--space-16);display:grid;place-items:center;width:var(--web-avatar-hero);height:var(--web-avatar-hero);border-radius:var(--radius-pill);background:var(--surface-inset);border:var(--stroke-2) solid var(--border)}
-.crash-ui .bet-detail-divider{display:flex;align-items:center;gap:var(--space-8);margin-block:var(--space-16)}
-.crash-ui .bet-detail-divider:before,.crash-ui .bet-detail-divider:after{content:'';height:var(--stroke-1);background:var(--border);flex:1}
-.crash-ui .bet-detail-divider span{min-width:0;max-width:100%;overflow-wrap:anywhere;text-align:center;padding:var(--space-8) var(--space-16);border-radius:var(--radius-8);background:var(--surface-raised);font-size:var(--type-24)}
-.crash-ui .bet-detail-date{text-align:center;color:var(--text-muted);font-size:var(--type-16);line-height:var(--leading-relaxed);margin:0 0 var(--space-24)}
-.crash-ui .bet-detail-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.72fr) minmax(0,1.28fr);gap:var(--space-8)}
-.crash-ui .bet-detail-card{display:grid;align-content:center;justify-items:center;gap:var(--space-8);min-width:0;padding:var(--space-16);border-radius:var(--radius-16);background:var(--surface-raised);text-align:center;overflow-wrap:anywhere}
-.crash-ui .bet-detail-card strong{color:var(--gold);font:var(--type-24)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;max-width:100%}
-.crash-ui .bet-detail-grid,.crash-ui .bet-detail-extras{container-type:inline-size}
-.crash-ui .bet-detail-card strong{font-size:var(--type-16)}
-@media(max-width:389px){.crash-ui .bet-detail-card strong{font-size:var(--type-14)}}
-@media(max-width:359px){.crash-ui .bet-detail-card strong{font-size:var(--type-12)}}
-.crash-ui .bet-detail-grid .bet-detail-card strong{white-space:nowrap;overflow-wrap:normal}
-.crash-ui .bet-detail-card>span{font-size:var(--type-12);color:var(--text-muted)}
+/* The rank pill hangs half below the disc, so the avatar keeps that much room under it. */
+.crash-ui .bet-detail-avatar{position:relative;margin-bottom:var(--space-32)}
+/* Your own bet: the painted medal or coins sit in a quiet gold glow where the avatar would be —
+   a faint rim, a soft inner bloom, a softer outer one, and the art itself casting a little light.
+   The outcome is the title under it. */
+.crash-ui .bet-detail-outcome{position:relative;display:flex;align-items:center;justify-content:center;width:var(--bet-detail-disc);height:var(--bet-detail-disc);border-radius:50%;border:var(--stroke-1) solid color-mix(in srgb,var(--gold) 16%,transparent);background:radial-gradient(circle at center,color-mix(in srgb,var(--gold) 11%,transparent) 0%,color-mix(in srgb,var(--gold) 5.5%,transparent) 45%,color-mix(in srgb,var(--gold) 1.8%,transparent) 70%,transparent 100%);box-shadow:0 0 var(--space-32) color-mix(in srgb,var(--gold) 5.5%,transparent),inset 0 0 var(--space-32) color-mix(in srgb,var(--gold) 3.5%,transparent)}
+.crash-ui .bet-detail-outcome .icon{width:calc(var(--space-48) + var(--space-40));height:calc(var(--space-48) + var(--space-40));object-fit:contain;filter:drop-shadow(0 var(--space-6) var(--space-8) color-mix(in srgb,var(--surface-inset) 35%,transparent)) drop-shadow(0 0 var(--space-12) color-mix(in srgb,var(--gold) 16%,transparent))}
+.crash-ui .bet-detail-outcome.is-lost{filter:saturate(.7)}
+/* A player's face is a disc of the same size as the glow, with no glow: just the avatar's rim. */
+.crash-ui .bet-detail-avatar>.avatar{width:var(--bet-detail-disc);height:var(--bet-detail-disc)}
+.crash-ui .bet-detail-title{margin:var(--space-8) 0 0;text-align:center;font-size:var(--type-24);line-height:var(--leading-tight);font-weight:700;color:var(--text);overflow-wrap:anywhere}
+.crash-ui .bet-detail-title+.bet-detail-date{margin-top:var(--space-4)}
+/* The place on the leaderboard: one gold pill on the disc's lower rim, the cup and the number
+   together, centred and overlapping the disc by half its height, rimmed in the window's own
+   surface and giving off a little gold light. */
+.crash-ui .bet-detail-rank{position:absolute;left:50%;bottom:calc(-1 * var(--space-40) / 2);transform:translateX(-50%);display:inline-flex;align-items:center;gap:var(--space-6);height:var(--space-40);padding:0 var(--space-12);border-radius:var(--radius-pill);background:var(--action-go);color:var(--on-go);border:var(--stroke-2) solid var(--surface);box-shadow:0 0 var(--space-16) color-mix(in srgb,var(--action-go) calc(var(--alpha-medium) * 100%),transparent),0 0 var(--space-4) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-strong) * 100%),transparent);font:700 var(--type-20)/var(--leading-none) var(--font-numbers),var(--font-body),sans-serif;white-space:nowrap}
+.crash-ui .bet-detail-rank .icon{width:var(--space-24);height:var(--space-24)}
+
+.crash-ui .bet-detail-date{text-align:center;color:var(--text-muted);font-size:var(--type-14);line-height:var(--leading-relaxed);margin:0 0 var(--space-24)}
+/* Bet details: the figures as a list of rows on one raised card, the result on its own card,
+   then the game's extras two abreast. Flat surfaces, one hairline between rows, no outlines. */
+.crash-ui .bet-detail-list{display:grid;padding-inline:var(--space-16);border-radius:var(--radius-16);background:var(--surface-raised)}
+.crash-ui .bet-detail-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--space-12);min-height:var(--space-48);padding-block:var(--space-8)}
+.crash-ui .bet-detail-row{position:relative}
+/* The hairline between rows fades out at both ends instead of hitting the card's edge. */
+.crash-ui .bet-detail-row+.bet-detail-row::before{content:"";position:absolute;left:0;right:0;top:0;height:var(--stroke-1);background:linear-gradient(90deg,transparent,var(--border) 18%,var(--border) 82%,transparent)}
+.crash-ui .bet-detail-icon{display:grid;place-items:center;width:var(--space-32);height:var(--space-32);flex:none;color:var(--gold)}
+.crash-ui .bet-detail-icon .icon{width:var(--space-24);height:var(--space-24)}
+.crash-ui .bet-detail-label{font-size:var(--type-12);letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+.crash-ui .bet-detail-row strong{color:var(--gold);font:var(--type-20)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.crash-ui .bet-detail-row.is-prize strong{color:var(--success);font-size:var(--type-24)}
+.crash-ui .bet-detail-tile{display:flex;align-items:center;gap:var(--space-12);min-width:0;padding:var(--space-12) var(--space-16);border-radius:var(--radius-16);background:var(--surface-raised)}
+.crash-ui .bet-detail-tile>span:last-child{display:grid;gap:var(--space-4);min-width:0}
+.crash-ui .bet-detail-tile strong{color:var(--gold);font:var(--type-20)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.crash-ui .bet-detail-result{margin-top:var(--space-8);justify-content:center}
+/* The result mark alone keeps a disc behind it: it is a badge, the figures' icons are glyphs. */
+.crash-ui .bet-detail-result .bet-detail-icon{width:var(--space-40);height:var(--space-40);border-radius:var(--radius-pill);background:var(--surface-inset)}
+.crash-ui .bet-detail-result.is-won .bet-detail-icon,.crash-ui .bet-detail-result.is-won strong{color:var(--success)}
+.crash-ui .bet-detail-result.is-lost .bet-detail-icon,.crash-ui .bet-detail-result.is-lost strong{color:var(--danger)}
 .crash-ui .bet-detail-extras{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-8);margin-top:var(--space-8)}
-.crash-ui .bet-detail-extras .bet-detail-card:first-child{grid-column:1/-1}
+@media(max-width:389px){.crash-ui .bet-detail-row strong{font-size:var(--type-16)}.crash-ui .bet-detail-row.is-prize strong{font-size:var(--type-20)}.crash-ui .bet-detail-tile strong{font-size:var(--type-16)}}
 
 
 /* The tabbed configuration keeps records in its tabs and uses an edge-to-edge header. */
@@ -616,12 +654,12 @@
 .crash-ui.has-tabbed-controls .profile .identity strong{display:none}
 .crash-ui.has-tabbed-controls :is(.profile,.account-summary) .identity .avatar{display:block;width:var(--space-32);height:var(--space-32);border:0}
 .crash-ui.has-tabbed-controls :is(.profile,.account-summary) .identity .level{font-size:var(--type-20);color:var(--on-go);line-height:var(--leading-tight);white-space:nowrap}
-.crash-ui.has-tabbed-controls .profile>.balance{justify-self:end;display:flex;align-items:center;min-width:0;max-width:100%;min-height:var(--tap-min);margin:0;padding:var(--space-8) var(--space-12);gap:var(--space-8);border-radius:var(--radius-pill);background:var(--surface)}
-.crash-ui.has-tabbed-controls .profile .balance>.icon{order:0;width:var(--space-24);height:var(--space-24)}
+.crash-ui.has-tabbed-controls .profile>.balance{justify-self:end;display:flex;align-items:center;min-width:0;max-width:100%;min-height:var(--tap-min);margin:0;padding:var(--space-4) var(--space-12);gap:var(--space-4);border-radius:var(--radius-pill);background:var(--surface)}
+/* The coin is the size of the figures beside it, as everywhere else. */
+.crash-ui.has-tabbed-controls .profile .balance>.icon{order:1;width:var(--type-20);height:var(--type-20)}
 .crash-ui.has-tabbed-controls .profile .balance .money{font-size:var(--type-20);white-space:nowrap;min-width:0}
 @media(max-width:599px){
  .crash-ui.has-tabbed-controls .account.panel{padding-inline:var(--space-8);padding-left:max(var(--space-8),env(safe-area-inset-left));padding-right:max(var(--space-8),env(safe-area-inset-right))}
- .crash-ui.has-tabbed-controls .profile .balance .money{font-size:var(--type-16)}
 }
 
 /* The tabbed header menu is a single action anchored below its trigger. */
@@ -655,7 +693,7 @@
  border:var(--stroke-1) solid var(--action-go-edge);
  box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow);
 }
-.crash-ui.has-tabbed-controls .profile>.balance{min-height:calc(var(--tap-min) + var(--space-4));border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-panel)}
+.crash-ui.has-tabbed-controls .profile>.balance{min-height:var(--tap-min);border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-panel)}
 .crash-ui.has-tabbed-controls .profile>.icon-button:active,.crash-ui.has-tabbed-controls .profile>.identity:active{transform:translateY(var(--web-control-depth))}
 
 .crash-ui .is-menu-popover .setting{gap:var(--space-24);padding-inline:var(--space-8)}
@@ -807,7 +845,8 @@
 
 /* Shared shell surfaces use the same corners at every viewport size. */
 .crash-ui.has-tabbed-controls .bottom>.controls:not(.navigation-only){border-radius:var(--radius-32)}
-.crash-ui.has-tabbed-controls .modal-layer .modal{--modal-radius:var(--radius-32);border-radius:var(--modal-radius)}
+/* Every window in the tabbed shell is a 24px card: bets, details, rules, the popovers. */
+.crash-ui.has-tabbed-controls .modal-layer .modal{--modal-radius:var(--radius-24);border-radius:var(--modal-radius)}
 @media(max-width:599px){
  .crash-ui.has-tabbed-controls .bottom>.controls:not(.navigation-only){border-bottom-left-radius:0;border-bottom-right-radius:0}
 }
@@ -825,8 +864,7 @@
  .crash-ui.has-tabbed-controls .profile>.identity{padding-right:var(--space-8);gap:var(--space-4)}
  .crash-ui.has-tabbed-controls .profile .identity .avatar{width:var(--space-24);height:var(--space-24)}
  .crash-ui.has-tabbed-controls .profile>.balance{padding-inline:var(--space-8);gap:var(--space-4)}
- .crash-ui.has-tabbed-controls .profile .balance .money{font-size:var(--type-16)}
- .crash-ui.has-tabbed-controls .profile .balance>.icon{width:calc(var(--space-16) + var(--space-4));height:calc(var(--space-16) + var(--space-4));flex-shrink:0}
+ .crash-ui.has-tabbed-controls .profile .balance>.icon{flex-shrink:0}
  .crash-ui .tabbed-controls .risk{min-width:0;gap:var(--space-8)}
  .crash-ui .tabbed-controls .risk-meter{flex:1;width:auto}
  .crash-ui .tabbed-controls .difficulty-row .button{min-width:0;padding-inline:var(--space-4);font-size:var(--type-16)}
@@ -846,7 +884,8 @@
 .crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button{display:grid;place-items:center;padding:0;line-height:0;flex:none;width:var(--tap-min);height:var(--tap-min);border-radius:var(--radius-pill);border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms)}
 .crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button:hover{filter:brightness(1.12)}
 .crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button:active{transform:translateY(var(--web-control-depth));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}
-.crash-ui.has-tabbed-controls .modal-layer .modal>header .icon{display:block;width:calc(var(--space-16) + var(--space-4));height:calc(var(--space-16) + var(--space-4))}
+/* Window header glyphs match the game header's: 24 in a 44 button. */
+.crash-ui.has-tabbed-controls .modal-layer .modal>header .icon{display:block;width:var(--space-24);height:var(--space-24)}
 .crash-ui.has-menu-drawer .is-menu-drawer .modal-body{display:block;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding-bottom:env(safe-area-inset-bottom);scrollbar-gutter:stable}
 .crash-ui.has-menu-drawer .drawer-tabs{display:flex;align-items:stretch;gap:var(--space-2);flex:none;padding:var(--space-4);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-pill);background:color-mix(in srgb,var(--text) 4%,var(--surface))}
 .crash-ui.has-menu-drawer .modal.is-bet-detail .drawer-tabs{display:none}
@@ -859,8 +898,8 @@
 .crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal:has(.bets-table){--table-inset:var(--space-24)}
 .crash-ui.has-menu-drawer .is-menu-drawer .modal-body:has(>.bets-table){margin-inline:calc(-1 * var(--table-inset));scrollbar-gutter:auto}
 @media(max-width:599px){.crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal:has(.bets-table){--table-inset:var(--space-16)}}
-.crash-ui.has-menu-drawer .is-menu-drawer .bets-table td{white-space:normal;overflow-wrap:anywhere}
-@media(max-width:599px){.crash-ui.has-tabbed-controls .bets-table{font-size:var(--type-12)}.crash-ui.has-menu-drawer .is-menu-drawer .bet-player{gap:var(--space-4)}}
+.crash-ui.has-menu-drawer .is-menu-drawer .bets-table td{overflow:hidden;text-overflow:ellipsis}
+@media(max-width:599px){.crash-ui.has-tabbed-controls .bets-table{font-size:var(--type-12)}.crash-ui.has-menu-drawer .is-menu-drawer .bet-player{gap:var(--space-12)}}
 
 /* Close occupies the same screen position as the menu trigger. */
 .crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal{position:relative;padding-top:calc(var(--drawer-menu-top,var(--space-12)) - var(--space-4) - var(--stroke-1))}
@@ -896,6 +935,9 @@
  box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),inset 0 calc(-1 * var(--stroke-1)) 0 var(--button-shadow);
 }
 .crash-ui [data-action=betDetails],.crash-ui [data-action=back],.crash-ui .flat-button{min-width:var(--tap-min);min-height:var(--tap-min)}
+/* Inside a table the row is the tap target (the tr carries the action too): row padding plus
+   this opener make a 44px row, tighter than a tap-height button inside a padded row. */
+.crash-ui .bets-table .bet-row-open[data-action=betDetails]{min-height:calc(var(--tap-min) - 2 * var(--space-4))}
 
 /* Centre icon artwork independently of text baselines and native button padding. */
 .crash-ui .icon-button{display:grid;place-items:center;line-height:0}
@@ -908,14 +950,17 @@
 /* Discrete responsive type sizes; never interpolate between scale steps. */
 @media(max-width:389px){
  .crash-ui.has-tabbed-controls .win-total{font-size:var(--type-32)}
- .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-16)}
+ .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-20)}
 }
 .crash-ui .tabbed-controls .actions .action .money.long-amount{font-size:var(--type-16)}
 
 /* Keep short monetary values together on narrow phones. */
 @media(max-width:389px){
- .crash-ui .top-bets th:first-child{width:28%}
- .crash-ui .top-bets th:nth-child(4){width:32%}
+ .crash-ui .top-bets th:first-child{width:9%}
+ .crash-ui .top-bets th:nth-child(2){width:24%}
+ .crash-ui .top-bets th:nth-child(3){width:22%}
+ .crash-ui .top-bets th:nth-child(4){width:14%}
+ .crash-ui .top-bets th:nth-child(5){width:31%}
 }
 
 /* Bets share one presentation; only the surrounding navigation differs. */
@@ -927,9 +972,12 @@
 .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal>header .bet-detail-back{position:absolute;left:0;right:auto;top:0}
 .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal-body{flex:1;min-height:0;overflow:auto;scrollbar-gutter:auto}
 .crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal-body:has(>.bets-table){margin-inline:calc(-1 * var(--table-inset))}
-.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bets-table td{white-space:normal;overflow-wrap:anywhere}
-.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bet-player{gap:var(--space-8)}
-@media(max-width:599px){.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bet-player{gap:var(--space-4)}}
+/* A row is one line: a name that does not fit is cut with an ellipsis, never wrapped, and the
+   cells sit closer so the figures keep their room on a narrow phone. */
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bets-table td{overflow:hidden;text-overflow:ellipsis}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bets-table th:not(:first-child):not(:last-child),.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bets-table td:not(:first-child):not(:last-child){padding-inline:var(--space-4)}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bet-player{gap:var(--space-12)}
+@media(max-width:599px){.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bet-player{gap:var(--space-12)}}
 
 .crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal:has(.bets-table){--table-inset:var(--space-16);padding-inline:var(--space-16)}
 
@@ -974,3 +1022,22 @@
 .crash-ui.has-tabbed-controls .modal-layer.is-menu-popover:not(.is-account-popover) .modal:not(:has(.bets-table)){--modal-radius:var(--radius-24);border-radius:var(--modal-radius);padding:var(--space-12);width:max-content;min-width:calc(var(--web-settings-column-width) + var(--web-switch-width) + 2 * var(--space-12))}
 .crash-ui.has-tabbed-controls .is-menu-popover .modal-body{display:grid;gap:var(--space-4)}
 .crash-ui.has-tabbed-controls .is-menu-popover .setting{min-height:var(--tap-min);gap:var(--space-16);padding-inline:var(--space-4)}
+
+/* On a phone the window is a card above the tab row, not a sheet behind it: 4px in from both
+   sides, 8px under the HUD row, 8px above the tabs, whose position the script reports as the
+   tabs anchor. */
+@media(max-width:599px){
+ .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer){padding:calc(max(var(--space-8),env(safe-area-inset-top)) + var(--web-control-comfort-height) + var(--space-8)) var(--space-4) calc(100dvh - var(--tabs-anchor-top,100dvh) + var(--space-8))}
+ .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal{width:100%;height:100%}
+}
+
+/* The narrowest phones: five columns in 256px, so the rank and the name give way to the figures. */
+@media(max-width:359px){
+ .crash-ui .top-bets th:first-child{width:8%}
+ .crash-ui .top-bets th:nth-child(2){width:21%}
+ .crash-ui .top-bets th:nth-child(3){width:22%}
+ .crash-ui .top-bets th:nth-child(4){width:15%}
+ .crash-ui .top-bets th:nth-child(5){width:34%}
+ .crash-ui .bets-table th:first-child,.crash-ui .bets-table td:first-child{padding-left:var(--space-8)}
+ .crash-ui .bets-table th:last-child,.crash-ui .bets-table td:last-child{padding-right:var(--space-12)}
+}

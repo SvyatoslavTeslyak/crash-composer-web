@@ -1690,14 +1690,14 @@
       ]
     },
     "lanes_crossed_abe605": {
-      "source": "LANES CROSSED",
-      "en": "LANES CROSSED",
-      "fr": "VOIES FRANCHIES",
+      "source": "LANES",
+      "en": "LANES",
+      "fr": "VOIES",
       "group": "Bet panel & messages",
       "games": [
         "road"
       ],
-      "ht": "LIY TRAVÈSE",
+      "ht": "LIY",
       "usage": [
         "text"
       ],

@@ -117,6 +117,7 @@ auth.ready=(async()=>{
 })();
 window.addEventListener('focus',()=>{if(!login&&client)auth.refreshPermissions().catch(()=>location.replace('login.html'))});
 document.addEventListener('composer-permissions',()=>{const roles=document.querySelector('#workspace-roles');if(roles)roles.hidden=!auth.has('roles.manage');const people=document.querySelector('#workspace-people');if(people)people.hidden=!(auth.has('users.manage')||auth.has('users.invite'));});
+const AVATAR_FACES=11;
 function setupAccountMenu(){
  const account=document.querySelector('#workspace-account');if(!account)return;
  const avatar=document.querySelector('#workspace-avatar'),menu=document.querySelector('#workspace-account-menu'),logout=document.querySelector('#workspace-logout'),errorBox=document.querySelector('#workspace-account-error');
@@ -127,6 +128,8 @@ function setupAccountMenu(){
  let colourHash=2166136261;for(const char of identity)colourHash=Math.imul(colourHash^char.codePointAt(0),16777619);
  avatar.style.setProperty('--avatar-hue',String((colourHash>>>0)%360));
  avatar.textContent=Array.from(name)[0].toLocaleUpperCase();avatar.setAttribute('aria-label','Account menu: '+name);avatar.title=name;
+ // The same hash picks one of the faces the games use for their players, so a new account gets a face at random and keeps it.
+ const face='avatar-'+String(1+(colourHash>>>0)%AVATAR_FACES).padStart(2,'0')+'.png',img=new Image();img.onload=()=>{avatar.style.backgroundImage='url("'+face+'")';avatar.classList.add('has-face')};img.src=face;
  document.querySelector('#workspace-account-name').textContent=user?.email||name;
  document.querySelector('#workspace-password')?.addEventListener('click',()=>location.assign('login.html?mode=password'));
  const rolesButton=document.querySelector('#workspace-roles');if(rolesButton)rolesButton.hidden=!auth.has('roles.manage');const peopleButton=document.querySelector('#workspace-people');if(peopleButton)peopleButton.hidden=!(auth.has('users.manage')||auth.has('users.invite'));
