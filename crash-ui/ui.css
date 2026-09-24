@@ -937,18 +937,33 @@
 
 .crash-ui .history .history-result{display:inline-flex;align-items:center;gap:var(--space-6);flex-shrink:0;font-family:var(--font-numbers),var(--font-body),sans-serif}.crash-ui .history .history-result.is-cashout .history-result-icon{color:var(--success)}.crash-ui .history .history-result.is-loss .history-result-icon{color:var(--danger)}.crash-ui .history-result-icon{font-family:var(--font-body),sans-serif;font-size:.85em}.crash-ui button.history-result:hover{filter:brightness(1.12)}
 
-.crash-ui .win-toast{position:absolute;top:var(--win-toast-top,72px);left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:var(--space-12);max-width:calc(100% - 32px);padding:var(--space-12) var(--space-16);border:1px solid var(--gold);border-radius:999px;background:var(--surface);box-shadow:var(--elevation-panel);pointer-events:none}
-.crash-ui .win-toast .win-coin{width:36px;height:36px;object-fit:contain;animation:none;transform:none;margin:0}
-.crash-ui .win-toast strong{display:block;font-size:var(--type-14);white-space:nowrap;color:var(--text)}
-.crash-ui .win-toast span{display:block;color:var(--gold);font-family:var(--font-numbers),sans-serif;font-weight:700;font-size:var(--type-20);white-space:nowrap}
+/* The cash-out toast: a small pill that pops in under the HUD with a burst of splashes and
+   pops out again. The pill is a card inside a transparent wrapper, so the gold bloom behind it
+   and the splashes can show around the card without tinting it. */
+.crash-ui .win-toast{--win-toast-motion:calc(var(--motion-fast-ms) * 2.5);position:absolute;top:var(--win-toast-top,calc(var(--space-48) + var(--space-24)));left:50%;transform:translateX(-50%);z-index:30;max-width:calc(100% - var(--space-32));pointer-events:none}
+.crash-ui .win-toast-card{position:relative;display:flex;align-items:center;gap:var(--space-12);padding:var(--space-12) var(--space-24) var(--space-12) var(--space-16);border:var(--stroke-1) solid var(--gold);border-radius:var(--radius-pill);background:var(--surface);box-shadow:var(--elevation-panel)}
+.crash-ui .win-toast::before{content:"";position:absolute;inset:calc(-1 * var(--space-24));z-index:-1;border-radius:var(--radius-pill);background:radial-gradient(closest-side,color-mix(in srgb,var(--gold) calc(var(--alpha-medium) * 100%),transparent),transparent);animation:win-toast-bloom var(--motion-celebrate-ms) ease-in-out infinite}
+.crash-ui .win-splash{position:absolute;left:50%;top:50%;width:0;height:0;z-index:-1;pointer-events:none}
+.crash-ui .win-splash i{position:absolute;left:0;top:0;width:var(--space-12);height:var(--space-12);margin:calc(-1 * var(--space-6));border-radius:50%;background:var(--gold);box-shadow:0 0 var(--space-8) color-mix(in srgb,var(--gold) calc(var(--alpha-bright) * 100%),transparent);opacity:0;animation:win-splash calc(var(--motion-ms) * 5) cubic-bezier(.2,.8,.3,1) var(--win-splash-delay) both}
+.crash-ui .win-splash i:nth-child(3n){background:var(--success);box-shadow:0 0 var(--space-8) color-mix(in srgb,var(--success) calc(var(--alpha-bright) * 100%),transparent)}
+.crash-ui .win-splash i:nth-child(2n){width:var(--space-8);height:var(--space-8);margin:calc(-1 * var(--space-4))}
+.crash-ui .win-toast-card{perspective:calc(var(--space-48) * 5)}
+.crash-ui .win-toast .win-flip{position:relative;width:var(--space-32);height:var(--space-32);flex:none;transform-style:preserve-3d;animation:win-flip var(--win-flip-ms) cubic-bezier(.4,0,.2,1) var(--win-flip-at) both}
+.crash-ui .win-toast .win-flip img{position:absolute;inset:0;width:100%;height:100%;margin:0;object-fit:contain;backface-visibility:hidden;-webkit-backface-visibility:hidden;animation:none;transform:none}
+.crash-ui .win-toast .win-flip .win-coin{transform:rotateY(180deg)}
+@keyframes win-flip{from{transform:rotateY(0)}to{transform:rotateY(180deg)}}
+.crash-ui .win-toast strong{display:block;font-size:var(--type-12);white-space:nowrap;color:var(--text)}
+.crash-ui .win-toast span{display:block;color:var(--gold);font-family:var(--font-numbers),sans-serif;font-weight:700;font-size:var(--type-16);white-space:nowrap}
 
-@keyframes win-toast-enter{from{transform:translate(-50%,calc(-100% - var(--win-toast-top,72px)));opacity:0}to{transform:translate(-50%,0);opacity:1}}
-.crash-ui .win-toast{animation:win-toast-enter 300ms cubic-bezier(.22,1,.36,1) both}
-.crash-ui.reduced .win-toast{animation:none}
-@media(prefers-reduced-motion:reduce){.crash-ui .win-toast{animation:none}}
+@keyframes win-toast-enter{0%{transform:translateX(-50%) scale(.5);opacity:0}60%{transform:translateX(-50%) scale(1.08);opacity:1}100%{transform:translateX(-50%) scale(1);opacity:1}}
+@keyframes win-toast-bloom{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+@keyframes win-splash{0%{transform:translate(0,0) scale(.4);opacity:0}15%{opacity:1;transform:translate(calc(var(--dx) * .25),calc(var(--dy) * .25)) scale(1)}100%{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+.crash-ui .win-toast{animation:win-toast-enter var(--win-toast-motion) cubic-bezier(.22,1,.36,1) both}
+.crash-ui.reduced .win-toast,.crash-ui.reduced .win-toast::before,.crash-ui.reduced .win-splash i,.crash-ui.reduced .win-flip{animation:none}
+@media(prefers-reduced-motion:reduce){.crash-ui .win-toast,.crash-ui .win-toast::before,.crash-ui .win-splash i,.crash-ui .win-flip{animation:none}}
 
-@keyframes win-toast-exit{from{transform:translate(-50%,0);opacity:1}to{transform:translate(-50%,calc(-100% - var(--win-toast-top,72px)));opacity:0}}
-.crash-ui .win-toast.is-leaving{animation:win-toast-exit 300ms cubic-bezier(.4,0,1,1) both}
+@keyframes win-toast-exit{0%{transform:translateX(-50%) scale(1);opacity:1}30%{transform:translateX(-50%) scale(1.06);opacity:1}100%{transform:translateX(-50%) scale(.5);opacity:0}}
+.crash-ui .win-toast.is-leaving{animation:win-toast-exit var(--win-toast-motion) cubic-bezier(.4,0,1,1) both}
 
 /* The settings popover in the tabbed shell is a small card next to its button, not a panel:
    a panel's 32px corner and comfort-height rows made it look inflated. A card corner, one

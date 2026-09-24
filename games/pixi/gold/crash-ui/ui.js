@@ -22,6 +22,9 @@ const icon=(name)=>'<img class="icon" alt="" src="'+base+'assets/icons/'+name+(n
 // short, and gives that up one step at a time as the amount grows.
 // The tabbed shell's top-right button opens the sound switches, so it is a speaker.
 const SPEAKER_SVG='<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.99 3.98c.69-.53 1.5-.96 2.38-.59.86.36 1.14 1.24 1.26 2.11.12.88.12 2.1.12 3.62v5.76c0 1.52 0 2.74-.12 3.62-.12.87-.4 1.75-1.26 2.11-.88.37-1.69-.06-2.38-.59-.7-.54-1.6-1.45-2.64-2.52-.54-.55-.9-.82-1.26-.97-.37-.15-.81-.21-1.58-.21-.67 0-1.27 0-1.72-.05-.47-.05-.92-.16-1.31-.43-.76-.51-1.05-1.27-1.16-1.96-.08-.52-.07-1.09-.06-1.55v-.68c-.01-.46-.02-1.03.06-1.54.11-.7.4-1.45 1.16-1.97.39-.27.84-.38 1.31-.43.45-.04 1.05-.04 1.72-.04.77 0 1.21-.07 1.58-.22.36-.15.72-.41 1.26-.97 1.05-1.07 1.94-1.98 2.64-2.52Z"/><path fill="currentColor" fill-rule="evenodd" d="M16.39 8.2a1 1 0 0 1 1.4.19A5.98 5.98 0 0 1 19 12a5.98 5.98 0 0 1-1.2 3.6 1 1 0 1 1-1.6-1.2A3.98 3.98 0 0 0 17 12c0-.91-.3-1.75-.8-2.39a1 1 0 0 1 .19-1.4Z"/><path fill="currentColor" fill-rule="evenodd" d="M19.32 6.26a1 1 0 0 1 1.41.06A8.25 8.25 0 0 1 23 12a8.25 8.25 0 0 1-2.26 5.68 1 1 0 1 1-1.48-1.36A6.25 6.25 0 0 0 21 12a6.25 6.25 0 0 0-1.74-4.32 1 1 0 0 1 .06-1.42Z"/></svg>';
+// The cash-out toast's clock: the check pops for a second, flips into the coin, the coins fly
+// (WEB_WIN_COIN_DURATION_MS plus their stagger), and the toast leaves once they have landed.
+const WIN_FLIP_AT=1000,WIN_FLIP_MS=400,WIN_TOAST_MS=2800;
 const fitStake=(node,text)=>{node.dataset.fit=text.length>4?'long':text.length>2?'mid':'short'};
 // The player stakes coins and is paid in the currency: the bet, the presets and the amount on
 // PLAY are coin amounts, CASH OUT and every payout stay money(). A PLAY subtitle is either an
@@ -320,12 +323,17 @@ class GameUI {
   this.winBalanceFrom=this.state.balanceKnown===false?null:Number(this.state.balance);
   const toast=document.createElement('div');toast.className='win-toast';toast.setAttribute('role','status');
   const amount=s.winToastAmount??s.winAmount,multiplier=s.history?.[0]?.multiplier;
-  toast.innerHTML='<img class="win-coin" src="'+base+'assets/icons/coin.png" alt=""><div><strong>Cashed out'+(Number.isFinite(multiplier)?' · '+Number(multiplier).toFixed(2)+'×':'')+'</strong><span>+'+money(amount)+'</span></div>';
+  // The card sits inside a transparent wrapper so the bloom behind it can show around it.
+  // The check flips over into the coin, and only then do the coins set off for the balance.
+  toast.style.setProperty('--win-flip-at',WIN_FLIP_AT+'ms');toast.style.setProperty('--win-flip-ms',WIN_FLIP_MS+'ms');
+  // Splashes: a dozen drops thrown out from the centre as the card lands, each on its own bearing.
+  const splash=Array.from({length:12},(_,i)=>{const a=(i/12)*Math.PI*2+(i%2?.26:0),d=(i%3?96:136);return '<i style="--dx:'+Math.round(Math.cos(a)*d)+'px;--dy:'+Math.round(Math.sin(a)*d*.7)+'px;--win-splash-delay:'+(i%4)*40+'ms"></i>'}).join('');
+  toast.innerHTML='<span class="win-splash" aria-hidden="true">'+splash+'</span><div class="win-toast-card"><span class="win-flip" aria-hidden="true"><img class="win-mark" src="'+base+'assets/icons/cashed-out.webp" alt=""><img class="win-coin" src="'+base+'assets/icons/coin.png" alt=""></span><div><strong>Cashed out'+(Number.isFinite(multiplier)?' · '+Number(multiplier).toFixed(2)+'×':'')+'</strong><span>+'+money(amount)+'</span></div></div>';
   this.host.append(toast);this.winToast=toast;
   const id=s.winId;
   queueMicrotask(()=>{if(this.state.win&&this.state.winId===id)this.send('dismissWin',{})});
-  this.toastFlightTimer=setTimeout(()=>{if(this.winToast!==toast)return;this.winSound.playTransfer();this.flyWinCoins(true)},200);
-  this.toastEndTimer=setTimeout(()=>{if(this.winToast===toast)this.hideWinToast()},2000);
+  this.toastFlightTimer=setTimeout(()=>{if(this.winToast!==toast)return;this.winSound.playTransfer();this.flyWinCoins(true)},WIN_FLIP_AT+WIN_FLIP_MS);
+  this.toastEndTimer=setTimeout(()=>{if(this.winToast===toast)this.hideWinToast()},WIN_TOAST_MS);
  }
  hideWinToast(){
   const toast=this.winToast;if(!toast)return;
@@ -534,7 +542,10 @@ class GameUI {
    const rect=(this.modal==='account'?account:menu).getBoundingClientRect();
    const edge=parseFloat(getComputedStyle(this.host).getPropertyValue('--space-8'));
    const width=this.q('.modal').getBoundingClientRect().width;
-   layer.style.setProperty('--account-anchor-left',Math.max(edge,Math.min(rect.left,innerWidth-width-edge))+'px');
+   // The account card hangs from the row's left edge, as the sound card hangs from its right:
+   // both line up with the outermost button, not with the control that opened them.
+   const rowLeft=this.q('.profile').getBoundingClientRect().left;
+   layer.style.setProperty('--account-anchor-left',Math.max(edge,Math.min(rowLeft,innerWidth-width-edge))+'px');
    layer.style.setProperty('--menu-anchor-bottom',rect.bottom+'px');layer.style.setProperty('--menu-anchor-right',(innerWidth-rect.right)+'px');
    const refill=this.q('.modal [data-action=refill]');if(refill)refill.disabled=this.config.refill===false||this.state.refill===false||this.state.canBet===false;
   }
