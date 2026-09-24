@@ -489,11 +489,12 @@ class GameUI {
   if(kind==='account'){
    body.innerHTML='<div class="account-summary">'+avatar('You',s.players)+'<div><p>You · Level '+(1+Math.floor((s.xp||0)/10))+'</p><p class="modal-note">'+((s.xp||0)%10)+' / 10 XP</p></div></div>';
    if(this.tabbed)body.innerHTML='';
-   const row=(k,v,tone='',monetary=false)=>'<div class="setting"><span>'+esc(k)+'</span><strong class="account-stat '+tone+'">'+esc(v)+(this.tabbed&&monetary?icon('coin.png'):'')+'</strong></div>';
-   body.innerHTML+=row('Balance',s.balanceKnown===false?'Not provided by API':money(s.balance,0),'',true)+row('Personal record',money(s.personal),'gold',true)+'<h3 class="modal-section-title">This session</h3>'+row('Completed rounds',s.rounds||0)+row('Successful cash outs',s.roundWins||0,'success')+row('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold');
+   // Winnings are paid in the currency, so a money() figure carries its unit and never the coin.
+   const row=(k,v,tone='')=>'<div class="setting"><span>'+esc(k)+'</span><strong class="account-stat '+tone+'">'+esc(v)+'</strong></div>';
+   body.innerHTML+=row('Balance',s.balanceKnown===false?'Not provided by API':money(s.balance,0))+row('Personal record',money(s.personal),'gold')+'<h3 class="modal-section-title">This session</h3>'+row('Completed rounds',s.rounds||0)+row('Successful cash outs',s.roundWins||0,'success')+row('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold');
    if(this.tabbed){
     const stat=(label,value,tone='',wide=false)=>'<div class="account-session-stat'+(wide?' account-session-wide':'')+'"><span>'+label+'</span><strong class="'+tone+'">'+esc(value)+'</strong></div>';
-    body.innerHTML='<div class="account-record-card"><span class="account-record-label"><span>Personal record</span></span><strong>'+esc(money(s.personal))+icon('coin.png')+'</strong></div><h3 class="modal-section-title">This session</h3><div class="account-session-grid">'+stat('Completed rounds',s.rounds||0)+stat('Successful cash outs',s.roundWins||0,'success')+stat('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold',true)+'</div>';
+    body.innerHTML='<div class="account-record-card"><span class="account-record-label"><span>Personal record</span></span><strong>'+esc(money(s.personal))+'</strong></div><h3 class="modal-section-title">This session</h3><div class="account-session-grid">'+stat('Completed rounds',s.rounds||0)+stat('Successful cash outs',s.roundWins||0,'success')+stat('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold',true)+'</div>';
    }
 
   }
