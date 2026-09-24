@@ -21,7 +21,8 @@ window.fetch=async(input,options={})=>{
  const route=url.pathname.startsWith(basePath)?'/'+url.pathname.slice(basePath.length):url.pathname;
  if(url.origin===location.origin&&!['GET','HEAD','OPTIONS'].includes(method)&&!/^\/(auth\/login\/(player|otp)|api\/v[12]\/betting\/runner\/)/.test(route)){
   let permission=null,game=null;
-  if(route==='/release/apply'){permission='releases.publish';game=window.ComposerTarget?.value;if(state.member?.role!=='admin')throw Error('Admin access required');}
+  if(route==='/settings/showcase'){permission='releases.publish';if(state.member?.role!=='admin')throw Error('Admin access required');}
+  else if(route==='/release/apply'){permission='releases.publish';game=window.ComposerTarget?.value;if(state.member?.role!=='admin')throw Error('Admin access required');}
   else if(route.startsWith('/brands/'))permission='design.edit';
   else if(route.startsWith('/studio/')){
    permission=route==='/studio/rebuild'?'build.preview':'audio.edit';

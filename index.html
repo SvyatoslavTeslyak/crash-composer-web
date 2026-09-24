@@ -1,26 +1,26 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<meta name="composer-version" content="ux-20260923.1-a0d197281b10">
+<meta name="composer-version" content="ux-20260923.1-2aa4542a35a8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Crash Composer</title>
-<script src="cloud-config.js?v=1790242090"></script>
-<script src="hosted.js?v=1790242090248030408"></script>
-<script type="module" src="roles.js?v=1790242090"></script>
-<script type="module" src="lotomobil.js?v=1790242090"></script>
-<script src="session.js?v=1790242090"></script>
-<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=1790242090">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=1790242090">
-<link rel="stylesheet" href="crash-ui/tokens.css?v=1790242090">
-<link rel="stylesheet" href="inspector.css?v=1790242090">
-<link rel="stylesheet" href="workbench.css?v=1790242090">
-<link rel="stylesheet" href="translates.css?v=1790242090">
-<link rel="stylesheet" href="share.css?v=1790242090">
-<script src="crash-ui/tokens.js?v=1790242090"></script>
-<script src="icons.js?v=1790242090"></script>
-<script src="workbench.js?v=1790242090"></script>
-<link rel="stylesheet" href="math.css?v=1790242090">
-<link rel="stylesheet" href="sound.css?v=1790242090">
+<script src="cloud-config.js?v=1790244206"></script>
+<script src="hosted.js?v=1790244206995029674"></script>
+<script type="module" src="roles.js?v=1790244206"></script>
+<script type="module" src="lotomobil.js?v=1790244206"></script>
+<script src="session.js?v=1790244206"></script>
+<link rel="icon" type="image/png" sizes="64x64" href="composer-icon-64.png?v=1790244206">
+<link rel="apple-touch-icon" href="composer-icon-180.png?v=1790244206">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790244206">
+<link rel="stylesheet" href="inspector.css?v=1790244206">
+<link rel="stylesheet" href="workbench.css?v=1790244206">
+<link rel="stylesheet" href="translates.css?v=1790244206">
+<link rel="stylesheet" href="share.css?v=1790244206">
+<script src="crash-ui/tokens.js?v=1790244206"></script>
+<script src="icons.js?v=1790244206"></script>
+<script src="workbench.js?v=1790244206"></script>
+<link rel="stylesheet" href="math.css?v=1790244206">
+<link rel="stylesheet" href="sound.css?v=1790244206">
 <style>
 #lotomobil-section p{margin:0;color:var(--inspector-muted);font-size:var(--inspector-type-base);line-height:1.5}#lotomobil-section .wb-button{padding:var(--inspector-type-xs)}.lotomobil-mode{font-size:var(--inspector-type-base);color:var(--inspector-accent)}.share-dialog.lotomobil-dialog{width:min(var(--inspector-size-420),calc(100vw - var(--space-32)));padding:var(--type-20);border-radius:var(--space-16)}.lotomobil-dialog h2{font-size:var(--type-20);margin:var(--space-4) 0 var(--inspector-type-base)}.lotomobil-dialog>p{margin:0 0 var(--space-16);font-size:var(--inspector-type-md)}.lotomobil-dialog form{display:grid;gap:var(--inspector-type-base)}.lotomobil-dialog label{margin:0;gap:var(--space-6);font-size:var(--inspector-type-md)}.lotomobil-dialog input{padding:var(--inspector-size-9) var(--inspector-type-xs)}.lotomobil-dialog #lotomobil-error{margin:var(--inspector-type-base) 0 0}.lotomobil-dialog #lotomobil-error:empty{display:none}.lotomobil-dialog [hidden]{display:none!important}.lotomobil-dialog button[type=submit]:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}.lotomobil-dialog button.is-loading{gap:var(--space-8)}.lotomobil-dialog button.is-loading::before{content:"";width:var(--type-14);height:var(--type-14);border:var(--stroke-2) solid currentColor;border-right-color:transparent;border-radius:50%;animation:lotomobil-spin var(--inspector-loading-duration) linear infinite}@keyframes lotomobil-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.lotomobil-dialog button.is-loading::before{animation:none}}
 
@@ -248,18 +248,20 @@ aside#side{grid-column:2;grid-row:2}
 #workspace-avatar{display:grid;place-items:center;width:var(--tap-min);height:var(--tap-min);min-height:var(--tap-min);padding:0;border-radius:50%;--avatar-hue:200;background:var(--avatar-bg);color:var(--avatar-fg);border:var(--stroke-1) solid var(--avatar-border);font-size:var(--space-16);font-weight:600}
 #workspace-avatar:hover,#workspace-avatar[aria-expanded=true]{outline:var(--stroke-1) solid var(--avatar-border);outline-offset:var(--stroke-2)}
 #workspace-avatar:focus-visible{outline:var(--stroke-2) solid var(--avatar-fg);outline-offset:var(--stroke-2)}
-#workspace-account-menu{position:absolute;bottom:calc(100% + var(--space-8));left:0;width:var(--web-dev-top-phone);padding:var(--space-8);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-type-base);background:var(--inspector-bg);box-shadow:0 var(--space-8) var(--space-32) var(--inspector-overlay-shadow)}
+#workspace-account-menu,#workspace-settings-menu{position:absolute;bottom:calc(100% + var(--space-8));left:0;width:var(--web-dev-top-phone);padding:var(--space-8);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-type-base);background:var(--inspector-bg);box-shadow:0 var(--space-8) var(--space-32) var(--inspector-overlay-shadow)}
+.workspace-settings-wrap{position:relative;margin-bottom:var(--space-12)}
+#workspace-settings-toggle[aria-expanded=true]{background:var(--inspector-surface-selected);color:var(--inspector-accent)}
 #workspace-account-name{display:block;padding:var(--space-8);color:var(--inspector-muted);font-size:var(--inspector-type-sm);overflow-wrap:anywhere}
-#workspace-people,#workspace-roles,#workspace-password,#workspace-logout{display:flex;align-items:center;gap:var(--inspector-type-xs);width:100%;min-height:var(--space-40);padding:var(--space-8);border:0;background:transparent;text-align:left}
-#workspace-people:hover,#workspace-roles:hover,#workspace-password:hover,#workspace-logout:hover{background:var(--inspector-surface-hover)}
+#workspace-settings,#workspace-people,#workspace-roles,#workspace-password,#workspace-logout{display:flex;align-items:center;gap:var(--inspector-type-xs);width:100%;min-height:var(--tap-min);padding:var(--space-8);border:0;background:transparent;text-align:left}
+#workspace-settings:hover,#workspace-people:hover,#workspace-roles:hover,#workspace-password:hover,#workspace-logout:hover{background:var(--inspector-surface-hover)}
 #workspace-logout svg{width:var(--type-18);height:var(--type-18)}
 #workspace-account-error{display:block;padding:var(--space-8);color:var(--inspector-danger)}
 .workspace-rail .workspace-dirty::after{content:"";position:absolute;top:var(--space-6);right:var(--space-6);width:var(--space-6);height:var(--space-6);border-radius:50%;background:var(--inspector-warning)}
 @media(max-width:640px){body{grid-template-columns:var(--radius-64) var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr)}}
 </style>
-<link rel="stylesheet" href="ux.css?v=1790242090">
+<link rel="stylesheet" href="ux.css?v=1790244206">
 <header class="appbar">
-<h1><img src="favicon-256.png?v=1790242090" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 24 Sep 2026, 10:22</small></span></h1>
+<h1><img src="composer-icon-256.png?v=1790244206" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 24 Sep 2026, 10:57</small></span></h1>
 <div id="picker" class="picker"></div><select id="language" aria-label="Preview language"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
 
 <span class="grow"></span>
@@ -275,11 +277,16 @@ aside#side{grid-column:2;grid-row:2}
 <button class="wb-button" id="sound-tab" type="button" aria-label="Sound effects" aria-pressed="false"><i data-icon="sound"></i><span class="rail-tooltip" aria-hidden="true">Sound effects</span></button>
 <button class="wb-button" id="translates-tab" type="button" aria-label="Translates" aria-pressed="false"><i data-icon="translates"></i><span class="rail-tooltip" aria-hidden="true">Translates</span></button>
 <div class="workspace-account" id="workspace-account">
+<div class="workspace-settings-wrap" id="workspace-settings-wrap" hidden>
+<button class="wb-button" id="workspace-settings-toggle" type="button" aria-label="Settings" aria-expanded="false" aria-controls="workspace-settings-menu"><i data-icon="settings"></i><span class="rail-tooltip" aria-hidden="true">Settings</span></button>
+<div id="workspace-settings-menu" hidden>
+<button id="workspace-people" type="button" hidden>People &amp; invitations</button>
+<button id="workspace-roles" type="button" hidden>Roles &amp; permissions</button>
+</div>
+</div>
 <button id="workspace-avatar" type="button" aria-label="Account menu" aria-expanded="false" aria-controls="workspace-account-menu">?</button>
 <div id="workspace-account-menu" hidden>
 <span id="workspace-account-name"></span>
-<button id="workspace-people" type="button" hidden>People &amp; invitations</button>
-<button id="workspace-roles" type="button" hidden>Roles &amp; permissions</button>
 <button id="workspace-password" type="button">Change password</button>
 <button id="workspace-logout" type="button"><i data-icon="logout"></i>Sign out</button>
 <small id="workspace-account-error" role="alert" hidden></small>
@@ -367,7 +374,7 @@ window.ComposerLookPicker=look;
 frame.addEventListener('load',()=>Workbench.applyLook(frame,{brand:look.brand,theme:look.theme}));
 // The game picker mirrors the select that target.js owns: it shows the games the select offers and picks through it.
 const select=document.querySelector('#target');
-const gameIcon=id=>id==='kit'?'favicon-256.png':`icons/${id}.png`;
+const gameIcon=id=>id==='kit'?'composer-icon-256.png':`icons/${id}.png`;
 let picker=null;
 function buildSize(id){
  if(id==='kit')return '';
@@ -403,18 +410,19 @@ for(const mode of Object.keys(workspaces))document.querySelector('#'+mode+'-tab'
  window.dispatchEvent(new CustomEvent('composer-workspace',{detail:mode}));
 };
 </script>
-<script src="draft-editors.js?v=1790242090"></script>
-<script src="target.js?v=1790242090"></script>
-<script src="translation-table.js?v=1790242090"></script>
-<script src="live.js?v=1790242090"></script>
-<script src="look.js?v=1790242090"></script>
-<script src="library.js?v=1790242090"></script>
-<script type="module" src="math.js?v=1790242090"></script>
-<script src="sound.js?v=1790242090"></script>
+<script src="draft-editors.js?v=1790244206"></script>
+<script src="target.js?v=1790244206"></script>
+<script src="showcase-settings.js?v=1790244206"></script>
+<script src="translation-table.js?v=1790244206"></script>
+<script src="live.js?v=1790244206"></script>
+<script src="look.js?v=1790244206"></script>
+<script src="library.js?v=1790244206"></script>
+<script type="module" src="math.js?v=1790244206"></script>
+<script src="sound.js?v=1790244206"></script>
 
-<script type="module" src="cloud.js?v=1790242090"></script>
-<script src="translates.js?v=1790242090"></script>
-<script src="share.js?v=1790242090"></script>
+<script type="module" src="cloud.js?v=1790244206"></script>
+<script src="translates.js?v=1790244206"></script>
+<script src="share.js?v=1790244206"></script>
 </html>
 
-<script src="ux.js?v=1790242090"></script>
+<script src="ux.js?v=1790244206"></script>

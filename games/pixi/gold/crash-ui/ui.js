@@ -182,6 +182,10 @@ class GameUI {
   document.addEventListener('keydown',this.keyHandler);
   this.outsideMenu=e=>{if(['menu','account'].includes(this.modal)&&this.tabbed&&!this.q('.modal').contains(e.target)&&!this.q('.profile [data-action='+this.modal+']').contains(e.target))this.close(false)};
   document.addEventListener('pointerdown',this.outsideMenu,true);
+  const embed=new URLSearchParams(location.search);
+  if(['standard','tabbed-shell-v1','menu-drawer-v1'].includes(embed.get('preset')))this.config.presentationPreset=embed.get('preset');
+  this.embedFlags=Object.fromEntries(['leaderboard','history','personal_record','online_count','multiplier_ladder'].filter(key=>['0','1'].includes(embed.get(key))).map(key=>[key,embed.get(key)==='1']));
+  this.embedFeatures=Object.fromEntries(['auto','difficulty','presets'].filter(key=>['0','1'].includes(embed.get(key))).map(key=>[key,embed.get(key)==='1']));
   this.standardControls=this.q('.controls');this.betSettings=this.q('.settings-row');this.setControlsVariant(config.controlsVariant);
   this.resize=new ResizeObserver(()=>this.layout());this.resize.observe(host);this.resize.observe(host.querySelector('.account'));this.resize.observe(column);this.resize.observe(host.querySelector('.controls'));if(this.multiBet)this.resize.observe(this.multiBet.element);
  }
@@ -239,6 +243,7 @@ class GameUI {
   this.send(action,{});
  }
  update(s){
+  s={...s,flags:{...s.flags,...this.embedFlags},features:{...s.features,...this.embedFeatures}};
   window.CrashI18n?.setGame(s.game);
   this.winSound.update(s);
   this.bettingSound.setEnabled(s.settings?.sound===true);

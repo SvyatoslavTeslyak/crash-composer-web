@@ -171,7 +171,7 @@ function render(){const d=current();if(!d)return;
 function mark(){$('#translates-tab').classList.toggle('workspace-dirty',[...drafts.values()].some(d=>Object.keys(d.edits||{}).length))}
 function navigation(){
  const entries=available();
- $('#translation-areas').innerHTML=[['ui','UI','Header, controls & windows'],['scene','Scene','Text inside the game world']].map(([id,title,description])=>'<button class="translation-area" data-area="'+id+'" aria-pressed="'+(area===id)+'"><span><strong>'+title+'</strong><small>'+description+'</small></span><b>'+entries.filter(([,e])=>areaOf(e)===id).length+'</b></button>').join('');
+ $('#translation-areas').innerHTML=[['ui','Interface'],['scene','Game scene']].map(([id,title])=>'<button type="button" class="translation-section-link" data-area="'+id+'" aria-pressed="'+(area===id)+'"><span>'+title+'</span><b>'+entries.filter(([,e])=>areaOf(e)===id).length+'</b></button>').join('');
  const groups=[...new Set(entries.filter(([,e])=>areaOf(e)===area).map(([,e])=>e.group))];if(!groups.includes(category))category='all';
  const scoped=entries.filter(([,e])=>areaOf(e)===area);
  $('#translation-sections').innerHTML=[['all','All sections',scoped.length],...groups.map(g=>[g,g,scoped.filter(([,e])=>e.group===g).length])].map(([id,label,count])=>'<button type="button" class="translation-section-link" data-section="'+esc(id)+'" aria-pressed="'+(category===id)+'"><span>'+esc(label)+'</span><b>'+count+'</b></button>').join('');
