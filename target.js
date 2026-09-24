@@ -134,8 +134,9 @@ window.ComposerTarget={
 };
 
 // Restore the workspace only once every tab module has subscribed.
-window.addEventListener('DOMContentLoaded',()=>{
- if(['look','library','sound'].includes(opening.tab))$('#'+opening.tab+'-tab').click();else writeHash();
+window.addEventListener('DOMContentLoaded',async()=>{
+ await window.ComposerAuth.ready;
+ if(['look','library','sound','translates'].includes(opening.tab))$('#'+opening.tab+'-tab').click();else writeHash();
  refresh().catch(error=>say(error.message+' — start Composer with tools/preview.py so studio/ routes are available.',true));
 });
 window.ComposerAuth.ready.then(()=>{const permitted=TARGETS.filter(t=>window.ComposerAuth.canRead(t.id));if(permitted.length&&!window.ComposerAuth.canRead(value))set(permitted[0].id);options()});

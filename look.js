@@ -131,18 +131,18 @@ function render(){
 <section class="wb-section"><h2>Brands</h2><div id="look-pick"></div></section>
 <section class="wb-section look-view" id="look-strip-section"><h2>Colours</h2><div class="look-strip" id="look-strip"></div></section>
 <section class="wb-section look-view" id="look-faces-section"><h2>Fonts</h2><div class="look-faces-view" id="look-faces-view"></div></section>
-<div id="look-editor" hidden></div><div class="toolbar"><button id="look-refresh" type="button">Reload shared draft</button><small>Private changes for the selected game. Use Send changes to send your saved edits to Admin.</small></div><div class="toolbar" id="look-view-actions"><button id="look-edit-main" type="button"></button><button id="look-edit-other" type="button" class="quiet"></button></div>`;
+<div id="look-editor" hidden></div>`;
  sheet=$('#look-editor');
  sheet.innerHTML=`
 <h2 id="sheet-title"><span></span><small></small></h2>
 <div class="toolbar" id="look-head"><label class="property">Title <input id="look-title" type="text" placeholder="Numba Kenya"></label><small id="look-id-hint"></small></div>
 <div class="toolbar" id="look-season" aria-label="Season" hidden><strong>Season</strong><div class="season-row" id="look-seasons"></div><small>A season sets the play and cash-out colours and two accents over the brand; surfaces and text stay the brand\'s. Or set the primary below and generate.</small></div>
 <div class="toolbar" id="look-primary" aria-label="Primary"><strong>Primary</strong><div class="role-pair">${['primary','onPrimary'].map(k=>roleRow(k)).join('')}</div>
-<div class="generate-row"><select id="look-style" aria-label="Palette style"></select><button id="look-generate" type="button" class="wb-button">Generate the palette</button></div><small>Surfaces, inks and accents come from the primary colour in the chosen style and are kept readable; edit anything after.</small></div>
+<div class="generate-row"><select id="look-style" aria-label="Palette style"></select><button id="look-generate" type="button" class="wb-button">Generate the palette</button></div></div>
 <div class="toolbar" id="look-colours" aria-label="Colours"><strong>Colours</strong>
 ${pairs().filter(([a])=>a!=='primary').map(([a,b])=>`<div class="role-pair">${[a,b].filter(Boolean).map(k=>roleRow(k)).join('')}</div>`).join('')}
 <small>Twelve colours describe a brand; panels, borders, switches and shadows derive from them.</small></div>
-<div class="toolbar" id="look-faces" aria-label="Faces"><strong>Fonts</strong><small>Body is every label; numbers is amounts, multipliers and the action totals. The library lives in the Library tab.</small>
+<div class="toolbar" id="look-faces" aria-label="Faces"><strong>Fonts</strong>
 ${catalog.roles.map(role=>`<div class="face" data-role="${role}"><b>${role==='body'?'Body':'Numbers'}</b>
 <select data-family="${role}" aria-label="${role} font" title="The family every ${role==="body"?"label":"amount and multiplier"} is set in">${catalog.families.map(f=>`<option value="${f.id}">${esc(f.title)}</option>`).join('')}</select>
 <select data-weight="${role}" aria-label="${role} weight"></select>
@@ -153,11 +153,10 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
 <small>Each one follows the roles above until you set it here.</small></details>
 <div class="toolbar look-danger" id="look-danger"><button id="look-delete" type="button">Delete brand</button></div>
 <div class="toolbar" id="look-actions" aria-label="Actions"><button id="look-save" type="button">Save brand</button><button id="look-revert" type="button">Cancel</button><small id="look-message" role="status"></small></div>`;
- const viewActions=$('#look-view-actions'),editActions=$('#look-actions'),scroll=document.createElement('div');
- scroll.className='look-scroll';viewActions.remove();editActions.remove();scroll.append(...panel.childNodes);panel.append(scroll,viewActions,editActions);
+ const editActions=$('#look-actions'),scroll=document.createElement('div');
+ scroll.className='look-scroll';editActions.remove();scroll.append(...panel.childNodes);panel.append(scroll,editActions);
  const pickerState=window.ComposerLookPicker;
- lookPicker=Workbench.lookPicker({container:$('#look-pick'),catalogTokens:{BRAND_SWATCHES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,b.roles?.primary||b.colors?.ACTION_GO])),THEME_SWATCHES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,Object.fromEntries(Object.entries(b.themes).map(([tid,t])=>[tid,t.roles?.primary||b.roles?.primary||b.colors?.ACTION_GO]))])),BRANDS:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,b.title])),THEMES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,Object.fromEntries(Object.entries(b.themes).map(([tid,t])=>[tid,t.title]))]))},brand:pickerState?.brand||'default',theme:pickerState?.theme||'',onChange:v=>{if(pickerState){pickerState.brand=v.brand;pickerState.theme=v.theme}Workbench.applyLook(frame,v);if(!editing)show(v.brand,v.theme)},onAddTheme:()=>editTheme(true),onAddBrand:()=>edit(true)});
- $('#look-edit-main').onclick=()=>themeId?editTheme(false):edit(false);$('#look-edit-other').onclick=()=>edit(false);
+ lookPicker=Workbench.lookPicker({container:$('#look-pick'),catalogTokens:{BRAND_SWATCHES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,b.roles?.primary||b.colors?.ACTION_GO])),THEME_SWATCHES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,Object.fromEntries(Object.entries(b.themes).map(([tid,t])=>[tid,t.roles?.primary||b.roles?.primary||b.colors?.ACTION_GO]))])),BRANDS:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,b.title])),THEMES:Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,Object.fromEntries(Object.entries(b.themes).map(([tid,t])=>[tid,t.title]))]))},brand:pickerState?.brand||'default',theme:pickerState?.theme||'',onChange:v=>{if(pickerState){pickerState.brand=v.brand;pickerState.theme=v.theme}Workbench.applyLook(frame,v);if(!editing)show(v.brand,v.theme)},onAddTheme:()=>editTheme(true),onAddBrand:()=>edit(true),onEditBrand:()=>edit(false),onEditTheme:()=>editTheme(false)});
  $('#look-title').oninput=()=>{if(!creating)return;const id=slug($('#look-title').value);$('#look-id-hint').textContent=id?(editingTheme?'Saved as brands/'+brandId+'/themes/'+id+'.json':'Saved as brands/'+id+'/'):'';dirty=true};
  $('#look-seasons').replaceChildren(...Object.entries(SEASONS).map(([id,sn])=>{const b=document.createElement('button');b.type='button';b.className='wb-button season';b.innerHTML=`<i style="background:linear-gradient(135deg,${sn.primary} 50%,${sn.success} 50%)"></i>${esc(sn.title)}`;b.onclick=()=>{// A season replaces the one before it: start again from the brand, then apply it.
    Object.assign(roles,brandRoles(),fromSeason(id,brandRoles()));if(creating&&!$('#look-title').value){$('#look-title').value=sn.title;$('#look-title').dispatchEvent(new Event('input'))}staged=false;dirty=true;mode();paint();apply();toast(sn.title+' applied over '+catalog.brands[brandId].title+'. Adjust any role, then Save.')};return b}));
@@ -178,7 +177,6 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
  sheet.querySelectorAll('[data-weight]').forEach(n=>n.onchange=()=>setFace(n.dataset.weight,{weight:Number(n.value)}));
  sheet.querySelectorAll('[data-italic]').forEach(n=>n.onchange=()=>setFace(n.dataset.italic,{style:n.checked?'italic':'normal'}));
 
- $('#look-refresh').onclick=()=>{if(dirty&&!confirm('Discard unsaved design edits and reload?'))return;dirty=false;editing=false;catalog=null;open().catch(e=>say(e.message,true))};
  $('#look-save').onclick=()=>save().catch(e=>say(e.message,true));$('#look-revert').onclick=()=>{show(brandId,themeId)};$('#look-delete').onclick=remove;
 }
 let lookPicker=null;
@@ -221,12 +219,8 @@ function edit(fresh){
 function mode(){
  const brand=catalog.brands[brandId];
  sheet.hidden=!editing;
- $('#look-view-actions').hidden=editing;
  $('#look-actions').hidden=!editing;
- // One primary action: edit what is on the stage (the theme when one is chosen). The brand is a quiet second choice.
- const PEN=icon('edit');
- $('#look-edit-main').innerHTML=PEN+(themeId?'Edit '+esc(brand.themes[themeId].title)+' theme':'Edit '+esc(brand.title));
- $('#look-edit-other').hidden=!themeId;$('#look-edit-other').textContent='Edit the '+brand.title+' brand instead'; $('#look-pick').hidden=editing;panel.querySelectorAll('.look-view').forEach(n=>n.hidden=editing);
+ $('#look-pick').hidden=editing;panel.querySelectorAll('.look-view').forEach(n=>n.hidden=editing);
  panel.querySelector('h2').textContent=editing?(editingTheme?'Theme':'Brand'):'Brands';
  $('#sheet-title span').textContent=editingTheme?(creating?'New theme':brand.themes[themeId]?.title||''):(creating?'New brand':brand.title);
  $('#sheet-title small').textContent=editingTheme?'theme of '+brand.title:(creating?'from '+brand.title:'brand');
@@ -250,7 +244,7 @@ function paint(){
  for(const [k,v] of Object.entries(all)){const c=sheet.querySelector(`[data-key="${k}"]`),h=sheet.querySelector(`[data-hex="${k}"]`),row=c?.closest('.look-colour');if(c)c.value=v;if(h)h.value=v;if(row)row.classList.toggle('overridden',k in overrides)}
  $('#look-advanced .count').textContent=Object.keys(overrides).length?Object.keys(overrides).length+' overridden':'';
  if(sheet.querySelector('[data-family]'))paintFaces();
- $('#look-faces-view').innerHTML=catalog.roles.map(role=>{const f=fonts[role],fam=familyOf(f.file);return `<span><b>${role}</b>${esc(fam?fam.title:f.file)} · ${WEIGHT_TITLES[f.weight]||f.weight}${f.style==='italic'?' italic':''}</span>`}).join('');
+ $('#look-faces-view').innerHTML=catalog.roles.map(role=>{const f=fonts[role],fam=familyOf(f.file);return `<span><b>${role==='body'?'Body':'Numbers'}</b>${esc(fam?fam.title:f.file)} · ${WEIGHT_TITLES[f.weight]||f.weight}${f.style==='italic'?' italic':''}</span>`}).join('');
  $('#look-strip').innerHTML=catalog.colorRoles.map(r=>`<span title="${esc(r.about)}"><i style="background:${roles[r.key]}"></i>${esc(r.title)}</span>`).join('');
  audit();
 }
@@ -364,7 +358,6 @@ async function open(){
   catalog=await (await fetch('brands/')).json();render();
   let wanted='',wantedTheme=null;try{wanted=sessionStorage.getItem('crash-composer-look')||'';wantedTheme=sessionStorage.getItem('crash-composer-look-theme');sessionStorage.removeItem('crash-composer-look');sessionStorage.removeItem('crash-composer-look-theme')}catch{}
   const hash=new URLSearchParams(location.hash.slice(1));
-  if(!wanted&&catalog.draftSelection){wanted=catalog.draftSelection.brand;wantedTheme=catalog.draftSelection.theme}
   if(!wanted)wanted=hash.get('brand')||window.ComposerLookPicker?.brand||'default';
   if(wantedTheme===null)wantedTheme=hash.get('theme')||window.ComposerLookPicker?.theme||'';
   if(!catalog.brands[wanted])wanted='default';

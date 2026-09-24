@@ -24,7 +24,7 @@
   for(const [id,brand] of Object.entries(design?.brands||{})){
    if(brand===null)delete catalog.brands[id];else catalog.brands[id]={...(catalog.brands[id]||{}),...clone(brand)};
   }
-  catalog.draftSelection=design?.selection;return catalog;
+  return catalog;
  }
  function editableBrand(b){return {title:b.title,roles:clone(b.roles||{}),overrides:clone(b.overrides||{}),fonts:clone(b.fonts||{}),themes:Object.fromEntries(Object.entries(b.themes||{}).map(([id,t])=>[id,{title:t.title,roles:clone(t.roles||{})}]))}}
  function applyAudio(manifest,patch){
@@ -38,13 +38,13 @@
   return manifest;
  }
  async function baseline(payload,g){
-  const out={translations:{},design:{brands:{},selection:{brand:'default',theme:''}},audio:{},_labels:{translations:{},brands:{},events:{}}};
+  const out={translations:{},design:{brands:{}},audio:{},_labels:{translations:{},brands:{},events:{}}};
   if(payload.translations){const data=await original('translations?game='+encodeURIComponent(g));out.translations=data.overrides||{};for(const [id,values] of Object.entries(payload.translations)){const entry=data.catalog.entries[id];if(entry){out._labels.translations[id]=entry.source;out.translations[id]={...Object.fromEntries(Object.keys(values).map(lang=>[lang,entry[lang]||entry.source])),...out.translations[id]}}}}
   if(payload.design){const data=await original('brands/');for(const id of Object.keys(payload.design.brands||{}))if(data.brands[id]){out.design.brands[id]=editableBrand(data.brands[id]);out._labels.brands[id]=data.brands[id].title}}
   if(payload.audio){const data=await original('studio/catalog?engine=pixi');for(const [id,patch] of Object.entries(payload.audio)){const m=data.sources.find(s=>s.id===id)?.manifest;if(m){out._labels.events[id]=Object.fromEntries(m.events.map(e=>[e.id,e.label||e.id]));out.audio[id]={events:patch.events.map(c=>m.events.find(e=>e.id===c.id)).filter(Boolean).map(e=>({id:e.id,volume_db:e.volume_db??null,pitch_jitter:e.pitch_jitter||0,...('prompt' in e?{prompt:e.prompt}:{}),takes:e.takes.map(t=>({enabled:t.enabled!==false}))}))}}}}
   return out;
  }
- window.ComposerDraftEditors={get enabled(){return enabled()},baseline,selection:()=>snapshots.get(key(game(),'design'))?.payload.design?.selection,applyAudio};
+ window.ComposerDraftEditors={get enabled(){return enabled()},baseline,applyAudio};
  window.fetch=async(input,options={})=>{
   const url=new URL(input instanceof Request?input.url:input,location.href),path=url.pathname.slice(base.pathname.length),method=(options.method||'GET').toUpperCase();
   if(url.origin!==base.origin||!url.pathname.startsWith(base.pathname)||!(/^(brands\/|studio\/(catalog|save|restore|upload))/.test(path)))return nativeFetch(input,options);
@@ -64,15 +64,16 @@
     const old=snapshots.get(key(g,'design'));if(!old)throw Error('Reload Brands before saving.');
     const design=clone(old.payload.design||{brands:{}}),catalog=mergeBrands(await original('brands/'),design),body=options.body?JSON.parse(options.body):{};
     const id=parts[1],theme=parts[3];
-    if(method==='DELETE'&&!theme){if(id==='default')throw Error('Cannot remove default brand');design.brands[id]=null;design.selection={brand:'default',theme:''}}
+    if(method==='DELETE'&&!theme){if(id==='default')throw Error('Cannot remove default brand');design.brands[id]=null}
     else{
      const originalBrand=catalog.brands[id]||catalog.brands[body.from]||catalog.brands.default,b=editableBrand(originalBrand);
      if(theme){if(method==='DELETE')delete b.themes[theme];else b.themes[theme]={title:body.title,roles:body.roles}}
      else{for(const field of ['title','roles','overrides','fonts'])if(field in body)b[field]=clone(body[field])}
      const allowedFonts=new Set(catalog.fonts.map(f=>typeof f==='string'?f:f.file));
      for(const face of Object.values(b.fonts))if(!allowedFonts.has(face.file)&&!catalog.fonts.some(f=>(typeof f==='string'?f:f.file)?.split('/').pop()===face.file))throw Error('Choose a font from the shared library.');
-     design.brands[id]=b;design.selection={brand:id,theme:method==='DELETE'?'':theme||''};
+     design.brands[id]=b;
     }
+    delete design.selection; // Preview choices belong to the iframe URL, not the shared draft.
     await save(g,'design',design);return json({saved:true,cloud:true});
    }
    if(path==='studio/save'&&method==='POST'){

@@ -220,6 +220,8 @@ class GameUI {
  features(){return {auto:true,difficulty:true,presets:true,...(this.state?.features||{})}}
  text(key,value){if(this.slots[key].textContent!==String(value))this.slots[key].textContent=value}
  action(action,value){
+  // Header back navigation is inactive until the host exit flow is defined.
+  if(action==='leave')return;
   this.bettingSound.play(action);
   if(action==='drawerTab'){this.rulesFrom='tab';this.open(value);return}
   if(action==='menu'&&this.config.presentationPreset==='menu-drawer-v1'){if(this.q('.modal-layer').classList.contains('is-menu-drawer')&&this.modal)this.close();else this.open(this.drawerSelection||'topbets');return}
@@ -430,6 +432,7 @@ class GameUI {
   }
   const tabView=!drawer&&!!this.tabbed&&['topbets','mybets','rules'].includes(kind)&&(kind!=='rules'||this.rulesFrom==='tab');
   layer.classList.toggle('is-tab-view',tabView);
+  layer.classList.toggle('is-rules-panel',tabView&&kind==='rules');
   layer.classList.toggle('is-bets-panel',!!this.tabbed&&['topbets','mybets'].includes(kind));
   const dialog=this.q('.modal');
   for(const node of [layer,dialog]){node.removeAttribute('role');node.removeAttribute('aria-modal');node.removeAttribute('aria-labelledby')}

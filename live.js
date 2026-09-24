@@ -20,13 +20,25 @@
   }
  }
  new MutationObserver(syncPresetTags).observe(presetSelect,{childList:true,attributes:true,subtree:true});
+ const modalSelect=document.querySelector('#modal'),modalTags=document.querySelector('#modal-options');
+ function syncModalTags(){
+  const options=Array.from(modalSelect.options);
+  for(const button of modalTags.children)if(!options.some(o=>o.value===button.dataset.modal))button.remove();
+  for(const option of options){
+   let button=Array.from(modalTags.children).find(b=>b.dataset.modal===option.value);
+   if(!button){button=document.createElement('button');button.type='button';button.className='wb-button';button.dataset.modal=option.value;button.onclick=()=>{modalSelect.value=button.dataset.modal;modalSelect.dispatchEvent(new Event('change'));syncModalTags()};modalTags.append(button)}
+   button.textContent=option.textContent;button.disabled=modalSelect.disabled||option.disabled;button.setAttribute('aria-pressed',String(option.value===modalSelect.value));
+  }
+ }
+ new MutationObserver(syncModalTags).observe(modalSelect,{childList:true,attributes:true,subtree:true});
+ syncModalTags();
  const nativePresets=new WeakMap();
  const amountPresets=document.querySelector('[data-feature=presets]');
  let amountOverride=null;
  function syncInspector(){
   const road=game()==='road';
   const modalSelect=document.querySelector('#modal'),selected=modalSelect.value;
-  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets']]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
+  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details']]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
   if(modalSelect.dataset.game!==game()){
    modalSelect.replaceChildren(...modalOptions.map(([value,label])=>new Option(label,value)));modalSelect.dataset.game=game();modalSelect.value=modalOptions.some(([value])=>value===selected)?selected:'';
   }
@@ -67,16 +79,24 @@
  // hidden on phones, visible on larger screens. Only an override adds presets=0/1.
  const featureQuery=()=>[...document.querySelectorAll('[data-feature]')].filter(n=>n!==amountPresets||amountOverride!==null).map(n=>'&'+n.dataset.feature+'='+(n.checked?'1':'0')).join('');
  function flags(){if(!live()){sendFlags();return}const ui=instance();if(ui)document.querySelectorAll('[data-flag]').forEach(n=>ui.send('flag',{key:n.dataset.flag,value:n.checked}))}
- function modal(){const kind=document.querySelector('#modal').value;if(!TranslationTable.windowAllowed(game(),kind))return;if(!live()){demo({modal:kind});return}const ui=instance();if(!ui)return;if(kind){if(game()==='road'&&kind==='rules')ui.rulesFrom='tab';ui.open(kind)}else ui.close()}
+ function modal(){const kind=document.querySelector('#modal').value;if(!TranslationTable.windowAllowed(game(),kind))return;if(!live()){demo({modal:kind});return}const ui=instance();if(!ui)return;
+  if(kind==='betDetails'||kind==='topBetDetails'){
+   ui.open(kind==='topBetDetails'?'topbets':'mybets');
+   // A presentation-only sample makes an empty account's detail layout inspectable.
+   // Do not insert sample bets into the game state, storage or API.
+   if(!ui.betRows?.length)ui.betRows=[{name:'Preview player',time:Date.now(),wager:3,payout:4.83,multiplier:1.61,details:[{label:'RESULT',value:'Cashed out'},{label:'DIFFICULTY',value:'Medium'},{label:'LANES CROSSED',value:'3 / 20'}]}];
+   ui.showBetDetails(0);return;
+  }
+  if(kind){if(game()==='road'&&kind==='rules')ui.rulesFrom='tab';ui.open(kind)}else ui.close()}
  async function load(){
   clearInterval(timer);const request=++generation;
   presetSelect.value=savedPreset();presetSelect.disabled=live();syncInspector();
   document.querySelectorAll('[data-placeholder-only]').forEach(row=>row.hidden=live());
 
-  document.querySelector('#modal').value='';
+  document.querySelector('#modal').value='';syncModalTags();
   if(!live()){
    syncInspector();
-   document.querySelector('#modal').closest('label').hidden=false;
+   document.querySelector('#modal-controls').hidden=false;
    document.querySelector('#control-variant').disabled=false;status.textContent=playable()?'Simulated data · '+window.ComposerTarget.entry().title:'Simulated data · shared UI kit';frame.src='game.html';return
   }
   // Blank the frame first: a Godot export left running would keep its audio going under the next game.
@@ -85,7 +105,7 @@
   const custom=game()==='catch';
   document.querySelector('#control-variant').value=custom?'three-position':game()==='road'&&engine()==='pixi'?'tabbed':'standard';document.querySelector('#control-variant').disabled=true;
   syncInspector();
-  document.querySelector('#modal').closest('label').hidden=false;
+  document.querySelector('#modal-controls').hidden=false;
   const url='games/'+engine()+'/'+game()+'/index.html';
   try{const response=await fetch(url,{method:'HEAD'});if(request!==generation)return;if(!response.ok)throw Error('missing');frame.src=url+'?ui-kit=1&api='+((game()==='road'&&engine()==='pixi'&&window.Lotomobil?.connected&&!applied[game()])?'1':'0')+'&revision='+request+'&build='+encodeURIComponent(window.ComposerHosting?.revision||'local')+featureQuery()+(applied[game()]?'&difficulty=0#math='+encodeURIComponent(JSON.stringify(applied[game()])):'')}
   catch{if(request!==generation)return;frame.src='about:blank';status.textContent='No '+window.ComposerTarget.engineTitle()+' build for this game yet. Build it, then rebuild the preview.'}
@@ -129,10 +149,21 @@ window.addEventListener('composer-target',()=>{amountOverride=null;follow()});
   try{localStorage.setItem(presetKey(),presetSelect.value)}catch{}
  };
  document.querySelector('#control-variant').onchange=()=>{syncInspector();demo({controlsVariant:document.querySelector('#control-variant').value})};
- document.querySelector('#modal').onchange=modal;
+ document.querySelector('#modal').onchange=()=>{modal();syncModalTags()};
  document.querySelectorAll('[data-flag]').forEach(n=>n.onchange=flags);
  document.querySelectorAll('[data-feature]').forEach(n=>n.onchange=()=>{if(n===amountPresets)amountOverride=n.checked;return live()?load():sendFeatures()});
+ let modalStateObserver=null;
+ function syncModalFromGame(){
+  const ui=instance();if(!ui)return;
+  const kind=ui.betDetail?(ui.modal==='topbets'?'topBetDetails':'betDetails'):ui.modal||'';
+  if(!Array.from(modalSelect.options).some(option=>option.value===kind)||modalSelect.value===kind)return;
+  modalSelect.value=kind;syncModalTags();
+ }
  frame.addEventListener('load',()=>{
+  modalStateObserver?.disconnect();
+  modalStateObserver=new MutationObserver(syncModalFromGame);
+  if(frame.contentDocument?.documentElement)modalStateObserver.observe(frame.contentDocument.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','class']});
+  syncModalFromGame();
   frame.inert=false;
   if(!live()){demo({presentationPreset:document.querySelector('#presentation-preset').value,controlsVariant:document.querySelector('#control-variant').value});return;}
   // A PixiJS build makes its canvas from script, so the document has none at load time:

@@ -1,14 +1,12 @@
-.workspace-context{position:relative;z-index:2;display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--inspector-border);background:var(--inspector-bg);font-size:12px;color:var(--inspector-muted);flex-shrink:0;grid-column:1/-1}
-.workspace-context a{margin-left:auto;color:var(--inspector-accent)}
 #save-context[data-state=unsaved],#save-context[data-state=error]{color:var(--inspector-warning)}
 #save-context[data-state=saved]{color:var(--inspector-muted)}
-#room{position:relative;padding-top:58px}.workspace-context{position:absolute;top:0;left:0;right:0}
+#room{position:relative;padding-top:0}
 #composer-update{position:fixed;z-index:80;top:68px;right:20px;padding:12px;background:var(--inspector-bg);border:1px solid var(--inspector-accent);border-radius:12px;box-shadow:var(--elevation-modal)}
 #composer-update button{padding:8px 12px;margin-left:12px}#workspace-account-menu>button{min-height:40px;width:100%;text-align:left}
 .cloud-dialog .discard-changes{background:transparent;border-color:transparent;color:var(--inspector-muted)}
 .cloud-dialog .discard-changes:hover:not(:disabled){background:var(--inspector-surface);color:var(--inspector-danger)}
 .release-next{padding:16px;margin-top:16px;border:1px solid var(--inspector-accent);border-radius:12px}.release-next p{margin:8px 0}.release-next button{padding:8px 12px}.release-next code{overflow-wrap:anywhere}
-@media(max-width:1100px){.appbar{flex-wrap:wrap}#room{padding-top:82px}.workspace-context{font-size:12px}.workspace-context a{margin-left:0}}
+@media(max-width:1100px){.appbar{flex-wrap:wrap}}
 @media(max-width:700px){.appbar h1{display:none}}
 
 #math-apply.primary{background:var(--inspector-accent);color:var(--inspector-on-accent);border-color:var(--inspector-accent);font-weight:700}
@@ -16,3 +14,5 @@
 #sound-controls label:has(#sound-search){display:grid;gap:8px}#sound-search{width:100%;min-width:0}
 @media(min-width:701px) and (max-width:1100px){.appbar h1{width:auto;flex:1}.appbar #picker{width:190px}.appbar{gap:8px}.appbar #showcase-link{margin-left:auto}}
 .review-history{margin-top:20px;padding-top:16px;border-top:1px solid var(--inspector-border)}.review-history summary{cursor:pointer;color:var(--inspector-muted)}
+
+#cloud-configurations #save-context{font-size:var(--inspector-type-xs);font-weight:400}

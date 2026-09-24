@@ -38,32 +38,37 @@ function deviceBar({container,zoomContainer,device='mobile',zoom='fit',onChange}
  container.replaceChildren(...DEVICES.map(d=>{const b=h('button',{class:'device wb-button',type:'button','data-device':d.id},`${d.icon}<b>${d.title}</b><span>${d.size}</span>`);b.onclick=()=>{device=d.id;paint();onChange({device,zoom})};return b}));
  if(zoomContainer){zoomContainer.className='zoom';zoomContainer.replaceChildren(...ZOOMS.map(([z,label])=>{const b=h('button',{class:'wb-button',type:'button','data-zoom':z},label);b.onclick=()=>{zoom=z;paint();onChange({device,zoom})};return b}))}
  const paint=()=>{container.querySelectorAll('.device').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.device===device)));
-  if(zoomContainer){zoomContainer.querySelectorAll('[data-zoom]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.zoom===zoom)));zoomContainer.hidden=!DEVICES.find(d=>d.id===device).w}};
+  if(zoomContainer){zoomContainer.querySelectorAll('[data-zoom]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.zoom===zoom)));zoomContainer.hidden=device==='fluid'}};
  paint();
- return {get device(){return device},set device(id){if(DEVICES.some(d=>d.id===id)){device=id;paint()}},get zoom(){return zoom},set zoom(z){zoom=z;paint()},info:()=>DEVICES.find(d=>d.id===device)};
+ return {get device(){return device},set device(id){if(id==='custom'||DEVICES.some(d=>d.id===id)){device=id;paint()}},get zoom(){return zoom},set zoom(z){zoom=z;paint()},info:()=>DEVICES.find(d=>d.id===device)};
 }
 
 /** Brand and theme chips from CrashTokens; the theme row shows the chosen brand's themes. onChange({brand,theme}). */
-function lookPicker({container,brand='default',theme='',onChange,onAddTheme=null,onAddBrand=null,themes=true,catalogTokens=null}){
+function lookPicker({container,brand='default',theme='',onChange,onAddTheme=null,onAddBrand=null,onEditBrand=null,onEditTheme=null,themes=true,catalogTokens=null}){
  const tokens=catalogTokens||window.CrashTokens||{BRANDS:{default:'Lotomobil'},THEMES:{}};
  const themesOf=b=>(tokens.THEMES||{})[b]||{};
  container.className='look';
  const brandRow=h('div',{class:'look-row',role:'group','aria-label':'Brand'}),themeRow=h('div',{class:'look-row',role:'group','aria-label':'Theme'}),themeNote=h('em',{class:'note'},'Theme');
  const themeBox=h('div',{class:'look-themes'});
  const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function appendChoice(row,button,edit,label){
+  if(!edit){row.append(button);return}
+  const group=h('span',{class:'look-chip'}),pencil=h('button',{class:'wb-button look-chip-edit',type:'button','aria-label':'Edit '+label,title:'Edit '+label},icon('edit'));
+  pencil.onclick=edit;group.append(button,pencil);row.append(group);
+ }
  const swatch=c=>c?`<i class="swatch" style="background:${c}"></i>`:'';
- for(const [id,title] of Object.entries(tokens.BRANDS)){const b=h('button',{class:'wb-button',type:'button','data-brand':id,title},swatch((tokens.BRAND_SWATCHES||{})[id])+escape(title.replace(/ \(.*\)$/,'')));b.onclick=()=>{brand=id;if(!(theme in themesOf(brand)))theme='';fillThemes();paint();onChange({brand,theme})};brandRow.append(b)}
+ for(const [id,title] of Object.entries(tokens.BRANDS)){const b=h('button',{class:'wb-button',type:'button','data-brand':id,title},swatch((tokens.BRAND_SWATCHES||{})[id])+escape(title.replace(/ \(.*\)$/,'')));b.onclick=()=>{brand=id;if(!(theme in themesOf(brand)))theme='';fillThemes();paint();onChange({brand,theme})};appendChoice(brandRow,b,onEditBrand?()=>onEditBrand(id):null,title)}
  if(onAddBrand){const add=h('button',{class:'wb-button add',type:'button',title:'New brand'},icon('plus')+'Add new');add.onclick=()=>onAddBrand();brandRow.append(add)}
  function fillThemes(){
   themeRow.replaceChildren();
   const none=h('button',{class:'wb-button season-off',type:'button','data-theme':'',title:'The brand as designed, no season over it'},'No season');none.onclick=()=>{theme='';paint();onChange({brand,theme})};themeRow.append(none);
-  for(const [id,title] of Object.entries(themesOf(brand))){const b=h('button',{class:'wb-button',type:'button','data-theme':id},swatch(((tokens.THEME_SWATCHES||{})[brand]||{})[id])+escape(title));b.onclick=()=>{theme=id;paint();onChange({brand,theme})};themeRow.append(b)}
+  for(const [id,title] of Object.entries(themesOf(brand))){const b=h('button',{class:'wb-button',type:'button','data-theme':id},swatch(((tokens.THEME_SWATCHES||{})[brand]||{})[id])+escape(title));b.onclick=()=>{theme=id;paint();onChange({brand,theme})};appendChoice(themeRow,b,onEditTheme?()=>onEditTheme(brand,id):null,title)}
   if(onAddTheme){const add=h('button',{class:'wb-button add',type:'button',title:'New theme for this brand'},icon('plus')+'Add new');add.onclick=()=>onAddTheme(brand);themeRow.append(add)}
   themeNote.textContent=(tokens.BRANDS[brand]||'This brand')+' · seasons';
  }
  themeBox.replaceChildren(themeNote,themeRow);
  container.replaceChildren(...(themes?[h('em',{class:'note'},'Brand'),brandRow,themeBox]:[brandRow]));
- const paint=()=>{brandRow.querySelectorAll('button:not(.add)').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.brand===brand)));themeRow.querySelectorAll('button:not(.add)').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.theme||'')===theme)))};
+ const paint=()=>{brandRow.querySelectorAll('[data-brand]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.brand===brand)));themeRow.querySelectorAll('[data-theme]').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.theme||'')===theme)));container.querySelectorAll('.look-chip').forEach(group=>{group.querySelector('.look-chip-edit').hidden=group.firstElementChild.getAttribute('aria-pressed')!=='true'})};
  fillThemes();paint();
  return {get brand(){return brand},set brand(id){if(id in tokens.BRANDS){brand=id;if(!(theme in themesOf(brand)))theme='';fillThemes();paint()}},get theme(){return theme},set theme(id){if(!id||id in themesOf(brand)){theme=id||'';paint()}},get themes(){return themesOf(brand)}};
 }

@@ -1,28 +1,28 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<meta name="composer-version" content="ux-20260923.1-2aa4542a35a8">
+<meta name="composer-version" content="ux-20260923.1-b857761cc548">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Crash Composer</title>
-<script src="cloud-config.js?v=1790244206"></script>
-<script src="hosted.js?v=1790244206995029674"></script>
-<script type="module" src="roles.js?v=1790244206"></script>
-<script type="module" src="lotomobil.js?v=1790244206"></script>
-<script src="session.js?v=1790244206"></script>
-<link rel="icon" type="image/png" sizes="64x64" href="composer-icon-64.png?v=1790244206">
-<link rel="apple-touch-icon" href="composer-icon-180.png?v=1790244206">
-<link rel="stylesheet" href="crash-ui/tokens.css?v=1790244206">
-<link rel="stylesheet" href="inspector.css?v=1790244206">
-<link rel="stylesheet" href="workbench.css?v=1790244206">
-<link rel="stylesheet" href="translates.css?v=1790244206">
-<link rel="stylesheet" href="share.css?v=1790244206">
-<script src="crash-ui/tokens.js?v=1790244206"></script>
-<script src="icons.js?v=1790244206"></script>
-<script src="workbench.js?v=1790244206"></script>
-<link rel="stylesheet" href="math.css?v=1790244206">
-<link rel="stylesheet" href="sound.css?v=1790244206">
+<script src="cloud-config.js?v=1790251277"></script>
+<script src="hosted.js?v=1790251277737520736"></script>
+<script type="module" src="roles.js?v=1790251277"></script>
+<script type="module" src="lotomobil.js?v=1790251277"></script>
+<script src="session.js?v=1790251277"></script>
+<link rel="icon" type="image/png" sizes="64x64" href="composer-icon-64.png?v=1790251277">
+<link rel="apple-touch-icon" href="composer-icon-180.png?v=1790251277">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790251277">
+<link rel="stylesheet" href="inspector.css?v=1790251277">
+<link rel="stylesheet" href="workbench.css?v=1790251277">
+<link rel="stylesheet" href="translates.css?v=1790251277">
+<link rel="stylesheet" href="share.css?v=1790251277">
+<script src="crash-ui/tokens.js?v=1790251277"></script>
+<script src="icons.js?v=1790251277"></script>
+<script src="workbench.js?v=1790251277"></script>
+<link rel="stylesheet" href="math.css?v=1790251277">
+<link rel="stylesheet" href="sound.css?v=1790251277">
 <style>
-#lotomobil-section p{margin:0;color:var(--inspector-muted);font-size:var(--inspector-type-base);line-height:1.5}#lotomobil-section .wb-button{padding:var(--inspector-type-xs)}.lotomobil-mode{font-size:var(--inspector-type-base);color:var(--inspector-accent)}.share-dialog.lotomobil-dialog{width:min(var(--inspector-size-420),calc(100vw - var(--space-32)));padding:var(--type-20);border-radius:var(--space-16)}.lotomobil-dialog h2{font-size:var(--type-20);margin:var(--space-4) 0 var(--inspector-type-base)}.lotomobil-dialog>p{margin:0 0 var(--space-16);font-size:var(--inspector-type-md)}.lotomobil-dialog form{display:grid;gap:var(--inspector-type-base)}.lotomobil-dialog label{margin:0;gap:var(--space-6);font-size:var(--inspector-type-md)}.lotomobil-dialog input{padding:var(--inspector-size-9) var(--inspector-type-xs)}.lotomobil-dialog #lotomobil-error{margin:var(--inspector-type-base) 0 0}.lotomobil-dialog #lotomobil-error:empty{display:none}.lotomobil-dialog [hidden]{display:none!important}.lotomobil-dialog button[type=submit]:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}.lotomobil-dialog button.is-loading{gap:var(--space-8)}.lotomobil-dialog button.is-loading::before{content:"";width:var(--type-14);height:var(--type-14);border:var(--stroke-2) solid currentColor;border-right-color:transparent;border-radius:50%;animation:lotomobil-spin var(--inspector-loading-duration) linear infinite}@keyframes lotomobil-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.lotomobil-dialog button.is-loading::before{animation:none}}
+#lotomobil-section p{margin:0;color:var(--inspector-muted);font-size:var(--inspector-type-base);line-height:1.5}#lotomobil-section .wb-button{width:100%;max-width:100%;align-self:stretch;justify-self:stretch;flex:none;height:var(--tap-min);min-height:var(--tap-min);padding:0 var(--space-12);font-size:var(--inspector-type-sm);line-height:1.4}.lotomobil-mode{font-size:var(--inspector-type-base);color:var(--inspector-accent)}.share-dialog.lotomobil-dialog{width:min(var(--inspector-size-420),calc(100vw - var(--space-32)));padding:var(--type-20);border-radius:var(--space-16)}.lotomobil-dialog h2{font-size:var(--type-20);margin:var(--space-4) 0 var(--inspector-type-base)}.lotomobil-dialog>p{margin:0 0 var(--space-16);font-size:var(--inspector-type-md)}.lotomobil-dialog form{display:grid;gap:var(--inspector-type-base)}.lotomobil-dialog label{margin:0;gap:var(--space-6);font-size:var(--inspector-type-md)}.lotomobil-dialog input{padding:var(--inspector-size-9) var(--inspector-type-xs)}.lotomobil-dialog #lotomobil-error{margin:var(--inspector-type-base) 0 0}.lotomobil-dialog #lotomobil-error:empty{display:none}.lotomobil-dialog [hidden]{display:none!important}.lotomobil-dialog button[type=submit]:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}.lotomobil-dialog button.is-loading{gap:var(--space-8)}.lotomobil-dialog button.is-loading::before{content:"";width:var(--type-14);height:var(--type-14);border:var(--stroke-2) solid currentColor;border-right-color:transparent;border-radius:50%;animation:lotomobil-spin var(--inspector-loading-duration) linear infinite}@keyframes lotomobil-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.lotomobil-dialog button.is-loading::before{animation:none}}
 
 [hidden]{display:none!important}*{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;grid-template-columns:var(--inspector-sidebar-width) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);overflow:hidden;background:var(--inspector-bg-deep);color:var(--inspector-text);font:var(--inspector-type-md)/var(--leading-body) var(--inspector-sans)}
 aside#side{min-height:0;overflow:auto;display:flex;flex-direction:column;background:var(--inspector-bg);border-right:var(--stroke-1) solid var(--inspector-border);padding:var(--space-24) var(--space-16) 0}
@@ -63,6 +63,11 @@ small{color:var(--inspector-muted);font-size:var(--inspector-type-sm)}#size{font
 @media(max-width:640px){body{grid-template-columns:var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr);overflow-x:auto}header{padding:var(--space-16) var(--space-12)}main{padding:var(--space-12)}}
 .visually-hidden{position:absolute;width:var(--stroke-1);height:var(--stroke-1);min-height:0;padding:0;margin:calc(-1 * var(--stroke-1));border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 #custom-size summary{cursor:pointer;font-size:var(--inspector-type-sm);color:var(--inspector-muted);margin:var(--space-8) 0}
+/* The sliders sit in the same column as the presets and the number fields: a range input's
+   default 2px margin would shift the track off that column, and its inline-block leading
+   would space the rows by accident. Each slider belongs to the field above it. */
+#custom-size label.property{margin-top:var(--space-12)}
+#custom-size input[type=range]{display:block;margin:var(--space-4) 0 0}
 
 .look-colour{display:grid;grid-template-columns:minmax(0,1fr) var(--space-40) calc(var(--space-48) + var(--space-32));align-items:center;gap:var(--space-8);min-height:var(--inspector-control);font-size:var(--inspector-type-sm);color:var(--inspector-muted);text-transform:capitalize}
 .look-colour input[type=color]{width:var(--space-40);height:var(--inspector-control);padding:var(--stroke-2);border-radius:var(--inspector-radius);cursor:pointer}
@@ -150,7 +155,7 @@ aside#side:has(#look-controls:not([hidden])){overflow:hidden}
    a per-row grid sized its label track to var(--space-48), which NUMBERS overflowed. */
 .look-faces-view{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--space-4) var(--space-8);margin-top:var(--space-12)}
 .look-faces-view span{display:contents;font-size:var(--inspector-type-sm);color:var(--inspector-text)}
-.look-faces-view b{font-size:var(--inspector-type-xs);font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--inspector-muted);padding-top:var(--stroke-2)}
+.look-faces-view b{font-size:var(--inspector-type-sm);font-weight:400;text-transform:none;letter-spacing:normal;color:var(--inspector-muted)}
 .look-strip span{display:inline-flex;align-items:center;gap:var(--space-6);font-size:var(--inspector-type-xs);color:var(--inspector-muted)}
 .look-strip i{width:var(--space-16);height:var(--space-16);border-radius:50%;border:var(--stroke-1) solid var(--inspector-border)}
 /* The stage clips, so each report carries its own scroll. */
@@ -259,9 +264,9 @@ aside#side{grid-column:2;grid-row:2}
 .workspace-rail .workspace-dirty::after{content:"";position:absolute;top:var(--space-6);right:var(--space-6);width:var(--space-6);height:var(--space-6);border-radius:50%;background:var(--inspector-warning)}
 @media(max-width:640px){body{grid-template-columns:var(--radius-64) var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr)}}
 </style>
-<link rel="stylesheet" href="ux.css?v=1790244206">
+<link rel="stylesheet" href="ux.css?v=1790251277">
 <header class="appbar">
-<h1><img src="composer-icon-256.png?v=1790244206" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 24 Sep 2026, 10:57</small></span></h1>
+<h1><img src="composer-icon-256.png?v=1790251277" alt="" width="28" height="28"><span>Crash Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 24 Sep 2026, 12:55</small></span></h1>
 <div id="picker" class="picker"></div><select id="language" aria-label="Preview language"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
 
 <span class="grow"></span>
@@ -297,24 +302,23 @@ aside#side{grid-column:2;grid-row:2}
 <h2 id="workspace-title">Game</h2>
 <div id="layout-controls">
 <section id="lotomobil-section" class="toolbar" aria-label="Game connection"></section>
-<small id="live-status" class="stage-status" role="status">Simulated data</small>
+<small id="live-status" hidden></small>
 <div class="toolbar" aria-label="Preview viewport"><strong>Device</strong><div id="devices"></div><div id="zoom"></div>
 <details id="custom-size"><summary>Custom size</summary><div class="presets">
 <button data-width="360"><b>XS</b>360</button><button data-width="430"><b>S</b>430</button>
 <button data-width="600" data-break><b>M</b>600</button><button data-width="768"><b>L</b>768</button>
 <button data-width="960" data-break><b>XL</b>960</button><button data-width="1024"><b>2XL</b>1024</button>
 <button data-width="1440" data-break><b>3XL</b>1440</button><button id="fluid" aria-pressed="true"><b>AUTO</b>Fluid</button></div>
-<small>Marked widths are where the kit layout changes: 600, 960 and 1440 px.</small>
 <label class="property">Width <input id="width" type="number" min="320" max="2560" value="1024"></label>
 <input id="range" aria-label="Viewport width" type="range" min="320" max="1920" value="1024">
 <label class="property">Height <input id="height" type="number" min="360" max="1400" value="850"></label>
-<button id="rotate" type="button">Swap width and height</button>
+<input id="height-range" aria-label="Viewport height" type="range" min="360" max="1400" value="850">
 </details>
 <span id="size"></span>
 </div>
 <div class="toolbar" aria-label="Look" hidden><strong>Look</strong><div id="look"></div><small>Brands and seasonal themes restyle the panels and controls only; the game scene is the game's.</small></div>
 <div class="toolbar" aria-label="Game configuration"><strong>Preview controls</strong>
-<div class="property preview-navigation"><span id="navigation-label">Navigation</span><div id="navigation-presets" class="look-row" role="group" aria-labelledby="navigation-label" aria-describedby="presentation-note"></div><select id="presentation-preset" hidden aria-label="Navigation"><option value="standard">Game default</option><option value="tabbed-shell-v1">Bottom tabs</option><option value="menu-drawer-v1">Menu tabs</option></select></div>
+<div class="property preview-navigation"><span id="navigation-label">Navigation</span><div id="navigation-presets" class="look-row" role="group" aria-labelledby="navigation-label" aria-describedby="presentation-note"></div><select id="presentation-preset" hidden aria-label="Navigation"><option value="standard">Game default</option><option value="tabbed-shell-v1">Tabs</option><option value="menu-drawer-v1">Menu tabs</option></select></div>
 <small id="presentation-note" role="status" hidden></small>
 <label class="property" data-placeholder-only>Bet panel <select id="control-variant"><option value="standard">Standard</option><option value="tabbed">Two columns · Goat Road</option><option value="three-position">Three positions · Catch Clash</option></select></label>
 <em class="subhead" data-visibility-heading>Panels the player sees</em>
@@ -330,7 +334,7 @@ aside#side{grid-column:2;grid-row:2}
 </div>
 <details class="toolbar" aria-label="Open"><summary>Advanced · preview a window</summary>
 <small>Put a modal on the stage to look at it.</small>
-<label class="property">Modal <select id="modal"><option value="">No modal</option><option value="difficulty">Difficulty</option><option value="menu">Settings / Auto</option><option value="account">Account</option><option value="wins">All wins</option><option value="win">Win</option></select></label>
+<div id="modal-controls"><select id="modal" hidden aria-hidden="true" tabindex="-1"><option value="">No modal</option><option value="difficulty">Difficulty</option><option value="menu">Settings / Auto</option><option value="account">Account</option><option value="wins">All wins</option><option value="win">Win</option></select><div id="modal-options" class="look-row" role="group" aria-label="Preview window"></div></div>
 </details>
 </div>
 <section id="look-controls" hidden aria-label="Brand editor"></section>
@@ -347,17 +351,16 @@ aside#side{grid-column:2;grid-row:2}
 </aside>
 <main class="wb-room" id="room"><section id="library-report" hidden aria-label="UI library"></section><section id="math-report" hidden aria-label="Mathematics report"></section><section id="translates-report" hidden aria-label="Translations"></section><section id="sound-report" hidden aria-label="Sound effects"></section><div id="translation-live-tools" hidden><strong>Mobile preview</strong><select id="translation-preview-view" aria-label="Preview window"><option value="">Game</option></select><small id="translation-preview-note" role="status">Edit a text to see changes here.</small></div><div class="fit" id="fit"><div class="box" id="box"><span class="wb-size" id="size"></span><div class="stage" id="stage"><iframe id="frame" class="wb-frame" title="Live HTML/CSS UI components"></iframe></div></div></div></main>
 <script>
-const frame=document.querySelector('#frame'),width=document.querySelector('#width'),range=document.querySelector('#range'),height=document.querySelector('#height');
+const frame=document.querySelector('#frame'),width=document.querySelector('#width'),range=document.querySelector('#range'),height=document.querySelector('#height'),heightRange=document.querySelector('#height-range');
 const theStage=Workbench.stage({fit:document.querySelector('#fit'),box:document.querySelector('#box'),stage:document.querySelector('#stage'),frame,size:document.querySelector('#size')});
-function customSize(){const w=Math.max(320,Math.min(2560,Number(width.value)||360)),h=Math.max(360,Math.min(1400,Number(height.value)||850));width.value=w;range.value=w;height.value=h;
+function customSize(){const w=Math.max(320,Math.min(2560,Number(width.value)||360)),h=Math.max(360,Math.min(1400,Number(height.value)||850));width.value=w;range.value=w;height.value=h;heightRange.value=h;
  document.querySelectorAll('[data-width]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.width)===w)));document.querySelector('#fluid').setAttribute('aria-pressed','false');
  devices.device='custom';theStage.custom(w,h)}
 function setWidth(value){width.value=value;customSize()}
 function setHeight(value){height.value=value;customSize()}
 document.querySelectorAll('[data-width]').forEach(b=>b.onclick=()=>setWidth(b.dataset.width));
-width.onchange=()=>setWidth(width.value);range.oninput=()=>setWidth(range.value);height.onchange=e=>setHeight(e.target.value);
+width.onchange=()=>setWidth(width.value);range.oninput=()=>setWidth(range.value);height.onchange=e=>setHeight(e.target.value);heightRange.oninput=()=>setHeight(heightRange.value);
 document.querySelector('#fluid').onclick=()=>{document.querySelectorAll('[data-width]').forEach(b=>b.setAttribute('aria-pressed','false'));document.querySelector('#fluid').setAttribute('aria-pressed','true');devices.device='fluid';theStage.set({device:'fluid'})};
-document.querySelector('#rotate').onclick=()=>{const w=Number(width.value)||390,h=Number(height.value)||844;width.value=h;height.value=w;customSize()};
 document.querySelector('#modal').onchange=e=>frame.contentWindow.postMessage({type:'crash-preview',modal:e.target.value},location.origin);
 function sendFlags(){frame.contentWindow.postMessage({type:'crash-preview',flags:Object.fromEntries([...document.querySelectorAll('[data-flag]')].map(n=>[n.dataset.flag,n.checked]))},location.origin)}
 document.querySelectorAll('[data-flag]').forEach(n=>n.onchange=sendFlags);
@@ -400,7 +403,7 @@ syncPicker();
 // Each workspace owns its sidebar controls and main view; the preview frame belongs to Layout.
 const workspaces={layout:['#layout-controls','#fit','#frame'],look:['#look-controls','#fit','#frame'],library:['#library-controls','#library-report'],math:['#math-controls','#math-report'],sound:['#sound-controls','#sound-report'],translates:['#translates-controls','#translates-report','#fit','#frame','#translation-live-tools']};
 for(const mode of Object.keys(workspaces))document.querySelector('#'+mode+'-tab').onclick=()=>{
- if(document.querySelector('#'+mode+'-tab').disabled)return;
+ if(document.querySelector('#'+mode+'-tab').disabled||!window.ComposerAuth.canWorkspace(mode))return;
  // Nodes shared by two workspaces (the stage belongs to Layout and Look) stay visible when either is active.
  for(const nodes of Object.values(workspaces))for(const node of nodes)document.querySelector(node).hidden=true;
  for(const node of workspaces[mode])document.querySelector(node).hidden=false;
@@ -409,20 +412,30 @@ for(const mode of Object.keys(workspaces))document.querySelector('#'+mode+'-tab'
  if(mode==='layout')Workbench.applyLook(frame,{brand:'default',theme:''});
  window.dispatchEvent(new CustomEvent('composer-workspace',{detail:mode}));
 };
+function syncWorkspaceAccess(){
+ for(const mode of Object.keys(workspaces)){
+  if(mode==='math')continue; // This workspace is not available in the current product.
+  const tab=document.querySelector('#'+mode+'-tab');tab.hidden=!window.ComposerAuth.canWorkspace(mode);
+ }
+ const active=Object.keys(workspaces).find(mode=>document.querySelector('#'+mode+'-tab').getAttribute('aria-pressed')==='true');
+ if(active&&!window.ComposerAuth.canWorkspace(active))document.querySelector('#layout-tab').click();
+}
+window.ComposerAuth.ready.then(syncWorkspaceAccess);
+document.addEventListener('composer-permissions',syncWorkspaceAccess);
 </script>
-<script src="draft-editors.js?v=1790244206"></script>
-<script src="target.js?v=1790244206"></script>
-<script src="showcase-settings.js?v=1790244206"></script>
-<script src="translation-table.js?v=1790244206"></script>
-<script src="live.js?v=1790244206"></script>
-<script src="look.js?v=1790244206"></script>
-<script src="library.js?v=1790244206"></script>
-<script type="module" src="math.js?v=1790244206"></script>
-<script src="sound.js?v=1790244206"></script>
+<script src="draft-editors.js?v=1790251277"></script>
+<script src="target.js?v=1790251277"></script>
+<script src="showcase-settings.js?v=1790251277"></script>
+<script src="translation-table.js?v=1790251277"></script>
+<script src="live.js?v=1790251277"></script>
+<script src="look.js?v=1790251277"></script>
+<script src="library.js?v=1790251277"></script>
+<script type="module" src="math.js?v=1790251277"></script>
+<script src="sound.js?v=1790251277"></script>
 
-<script type="module" src="cloud.js?v=1790244206"></script>
-<script src="translates.js?v=1790244206"></script>
-<script src="share.js?v=1790244206"></script>
+<script type="module" src="cloud.js?v=1790251277"></script>
+<script src="translates.js?v=1790251277"></script>
+<script src="share.js?v=1790251277"></script>
 </html>
 
-<script src="ux.js?v=1790244206"></script>
+<script src="ux.js?v=1790251277"></script>

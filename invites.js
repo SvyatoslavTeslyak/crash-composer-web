@@ -5,6 +5,7 @@ if(document.querySelector('#access-root[data-page=people]')){
  dialog.innerHTML=`<header><div><small>TEAM</small><h2 id="invite-title">Invite people</h2></div><button type="button" class="wb-button" data-close aria-label="Close">✕</button></header>
  <p>Create a one-time invitation. The person chooses their own password, then signs in with email and password.</p>
  <p class="share-note">Create a private link, then send it to the person yourself. No invitation email is sent automatically.</p><form id="invite-form">
+ <label>Name<input name="name" type="text" autocomplete="off" maxlength="120" required></label>
  <label>Email<input name="email" type="email" autocomplete="off" required></label>
  <label>Access<select name="role"></select></label>
  <fieldset><legend>Games</legend><div id="invite-games"></div></fieldset>
@@ -24,7 +25,7 @@ if(document.querySelector('#access-root[data-page=people]')){
  addressNote();form.elements.workspace.addEventListener('input',addressNote);
  dialog.querySelector('[data-close]').onclick=()=>dialog.close();dialog.addEventListener('close',reset);
  async function openInvite(prefill=null){
-  if(!auth.has('users.invite'))return;reset();form.elements.email.value=prefill?.email||'';const menu=document.querySelector('#workspace-account-menu');if(menu)menu.hidden=true;document.querySelector('#workspace-avatar')?.setAttribute('aria-expanded','false');dialog.showModal();
+  if(!auth.has('users.invite'))return;reset();form.elements.namedItem('name').value=prefill?.name||'';form.elements.email.value=prefill?.email||'';const menu=document.querySelector('#workspace-account-menu');if(menu)menu.hidden=true;document.querySelector('#workspace-avatar')?.setAttribute('aria-expanded','false');dialog.showModal();
   const container=dialog.querySelector('#invite-games');container.replaceChildren();submit.disabled=true;
   const {data:roles,error:roleError}=await auth.client.from('composer_roles').select('id,name,permissions').order('name');if(roleError){status.textContent=roleError.message;return}
   form.elements.role.replaceChildren(...roles.filter(role=>role.id!=='admin'&&(auth.member.role==='admin'||role.permissions.every(p=>auth.has(p)))).map(role=>new Option(role.name,role.id)));
@@ -42,7 +43,7 @@ if(document.querySelector('#access-root[data-page=people]')){
   let destination;try{destination=new URL(fields.get('workspace'));if(destination.username||destination.password||!['https:','http:'].includes(destination.protocol)||(destination.protocol==='http:'&&!['localhost','127.0.0.1','[::1]'].includes(destination.hostname)))throw Error();destination=new URL('login.html',destination.href.endsWith('/')||destination.pathname.endsWith('.html')?destination.href:destination.href+'/');destination.search='';destination.hash=''}catch{status.textContent='Use an HTTPS Composer address, or localhost for testing.';return}
   busy=true;submit.disabled=true;submit.textContent='Creating invitation…';
   try{
-   const {data,error}=await auth.client.functions.invoke('composer-invite',{body:{email:fields.get('email'),role:fields.get('role'),games}});
+   const {data,error}=await auth.client.functions.invoke('composer-invite',{body:{name:String(fields.get('name')||'').trim(),email:fields.get('email'),role:fields.get('role'),games}});
    if(error){let detail;try{detail=await error.context?.json()}catch{}throw Error(detail?.error||error.message||'Invitation service is unavailable.')}
    if(!data?.token_hash)throw Error(data?.error||'Invitation service did not return a link.');
    destination.hash=new URLSearchParams({invite_token:data.token_hash}).toString();link.value=destination.href;result.hidden=false;status.textContent='Invitation created for '+data.email+'. Copy the link and share it privately.';document.dispatchEvent(new Event('composer-invited'));

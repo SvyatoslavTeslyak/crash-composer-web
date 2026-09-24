@@ -81,3 +81,8 @@
 .appbar a.wb-button{text-decoration:none}
 .appbar .tabs button svg,.appbar a.wb-button svg,.appbar>button svg{width:var(--space-16);height:var(--space-16);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .appbar .status{font-size:var(--inspector-type-sm);color:var(--inspector-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:var(--inspector-sidebar-width)}
+
+.look-chip{display:inline-flex;align-items:stretch;gap:var(--space-4);max-width:100%}
+.look-row .look-chip-edit{width:var(--inspector-control);height:var(--inspector-control);min-width:var(--inspector-control);min-height:var(--inspector-control);padding:0;justify-content:center;flex:none}
+.look-row .look-chip-edit[hidden]{display:none}
+.look-chip-edit svg{width:var(--space-16);height:var(--space-16);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}

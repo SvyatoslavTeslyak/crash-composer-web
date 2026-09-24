@@ -64,3 +64,6 @@
 .share-dialog.lotomobil-dialog #lotomobil-error{font-size:var(--type-14);margin:var(--space-16) 0 0}
 .share-dialog.lotomobil-dialog form>p{margin:0;color:var(--inspector-muted);font-size:var(--type-14)}
 @media(max-width:400px){.share-dialog.lotomobil-dialog{padding:var(--space-24)}.share-dialog.lotomobil-dialog>header [data-close]{top:calc(-1 * var(--space-12));right:calc(-1 * var(--space-12))}}
+
+.share-dialog .share-choice{display:grid;gap:var(--space-8);margin:var(--space-16) 0 var(--space-8);font-size:var(--type-14)}
+.share-dialog .share-choice .wb-button{min-height:var(--inspector-control);padding:0 var(--space-12);font-size:var(--inspector-type-sm);white-space:normal;text-align:center}

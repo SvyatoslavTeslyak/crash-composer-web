@@ -38,8 +38,8 @@ const feedback=document.createElement('span');feedback.id='changes-feedback';fee
 const isReviewer=()=>ComposerAuth.member?.role!=='art_director'&&ComposerAuth.has('drafts.review',game());
 let feedbackTimer;
 let appliedRelease=null,releases=[];
-let authors=new Map();
-function authorName(id){return authors.get(id)||(id===session?.user?.id?session.user.email:null)||'Unknown author'}
+let authors=new Map(),contributors=[],contributorsError=false;
+function authorName(id){return authors.get(id)||(id===session?.user?.id?(session.user.user_metadata?.full_name||session.user.email):null)||'Unknown author'}
 function authorLine(label,id,time){return '<p class="review-author">'+esc(label)+' <strong>'+esc(authorName(id))+'</strong>'+(time?' <span>· '+esc(new Date(time).toLocaleString())+'</span>':'')+'</p>'}
 function notify(text){feedback.textContent=text;clearTimeout(feedbackTimer);feedbackTimer=setTimeout(()=>feedback.textContent='',7000)}
 const dirty=()=>!canSwitch();
@@ -55,7 +55,7 @@ function changes(payload,baseline){
   // Missing sections mean no overrides, not deletion of the shipped library.
   if(!payload?.[section])return {section,rows:[]};
   const before=flat(baseline?.[section]||{}),after=flat(payload[section]);
-  return {section,rows:[...new Set([...Object.keys(before),...Object.keys(after)])].filter(k=>before[k]!==after[k]).map(path=>({path,before:before[path],after:after[path]}))};
+  return {section,rows:[...new Set([...Object.keys(before),...Object.keys(after)])].filter(k=>!(section==='design'&&(k==='/selection'||k.startsWith('/selection/')))&&before[k]!==after[k]).map(path=>({path,before:before[path],after:after[path]}))};
  });
 }
 function draftChanges(){return changes(currentDraft?.payload,{...basePayload,...published?.payload})}
@@ -69,6 +69,7 @@ function renderProgress(){
  const unsent=canSubmit()?1:0;
  const count=review?pending+unsent:newChanges().reduce((sum,g)=>sum+g.rows.length,0);
  button.innerHTML='<span>Changes</span>'+(count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'')+(awaiting?reviewStatus('submitted',awaiting):'');
+ window.ComposerUX?.refresh();
  button.setAttribute('aria-label','Changes'+(count?', '+count+(review?' to review':' saved changes'):'')+(awaiting?', '+awaiting+' awaiting review':''));
  button.disabled=busy;
  button.title='View saved changes';
@@ -80,7 +81,6 @@ function reviewGroup(section,row,payload,baseline){
  const pretty=v=>String(v||'Setting').replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[_-]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
  if(section==='translations')return {key:p[0],title:labels?.translations?.[p[0]]||p[0],category:'Languages',label:({en:'English',fr:'French',ht:'Creole'}[p[1]]||p[1])};
  if(section==='audio')return {key:p.slice(0,3).join('/'),title:(p[0]==='kit'?'Interface sounds':'Scene sounds')+' · '+(labels?.events?.[p[0]]?.[p[2]]||pretty(p[2])),category:'Sound settings',label:p.slice(3).map(v=>({volume_db:'Volume (dB)',pitch_jitter:'Pitch variation',takes:'Take',enabled:'Enabled'})[v]||pretty(v)).join(' · ')};
- if(p[0]==='selection')return {key:'selection',title:'Active appearance',category:'Selection',label:pretty(p[1])};
  const brand=payload?.design?.brands?.[p[1]]||baseline?.design?.brands?.[p[1]],title=brand?.title||labels?.brands?.[p[1]]||pretty(p[1]);
  const theme=p[2]==='themes',tail=p.slice(theme?4:2),themeId=p[3];
  const category=({roles:'Colors',overrides:'Component styles',fonts:'Fonts'})[tail[0]]||'General';
@@ -102,7 +102,7 @@ function diffHTML(payload,baseline){
 function message(text){const status=dialog.querySelector('[role=status]');if(status)status.textContent=text}
 function canSubmit(){return !loadError&&!!currentDraft&&!dirty()&&newChanges().some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision))&&ComposerAuth.has('drafts.submit',game())}
 function canDiscard(){return ComposerAuth.member?.role==='admin'&&!!currentDraft&&(dirty()||draftChanges().some(g=>g.rows.length)||versions.some(v=>['submitted','approved'].includes(v.status)))}
-function busyControls(){const hint=$('#cloud-save-hint');if(hint)hint.textContent=dirty()?'Save your open edits to include them in this list.':!canSubmit()&&versions.some(v=>Number(v.revision)===Number(currentDraft?.revision))?returnedVersion()?'Returned by Admin. Make your corrections and save before sending again.':'':'';const submit=$('#cloud-submit');if(submit){submit.disabled=busy||!canSubmit();submit.title=dirty()?'Save your open edits first':canSubmit()?'Send saved changes to Admin':'No new saved changes to send'}for(const b of dialog.querySelectorAll('button:not([data-close]):not(#cloud-submit)'))b.disabled=busy;const ownDiscard=$('#cloud-discard-unsent');if(ownDiscard)ownDiscard.disabled=busy||(!dirty()&&!newChanges().some(g=>g.rows.length));const discard=$('#cloud-discard');if(discard)discard.disabled=busy||!canDiscard();renderProgress()}
+function busyControls(){const hint=$('#cloud-save-hint');if(hint)hint.textContent=dirty()?'Save your open edits to include them in this list.':!canSubmit()&&versions.some(v=>Number(v.revision)===Number(currentDraft?.revision))?returnedVersion()?'Returned by Admin. Make your corrections and save before sending again.':'':'';const submit=$('#cloud-submit');if(submit){submit.disabled=busy||!canSubmit();submit.title=dirty()?'Save your open edits first':canSubmit()?'Send saved changes to Admin':'No new saved changes to send'}for(const b of dialog.querySelectorAll('button:not([data-close]):not(#cloud-submit)'))b.disabled=busy;const ownDiscard=$('#cloud-discard-unsent');if(ownDiscard)ownDiscard.disabled=busy||(!dirty()&&!newChanges().some(g=>g.rows.length));const discard=$('#cloud-discard');if(discard)discard.disabled=busy||!canDiscard();const apply=$('#cloud-apply-draft');if(apply)apply.disabled=busy||!canApplyDraft();renderProgress()}
 async function run(fn){if(busy)return;busy=true;busyControls();try{await fn()}catch(e){message(e.message);notify(e.message)}finally{busy=false;busyControls();renderProgress()}}
 async function refresh(){
  const request=++refreshId,id=game();if(!client||ComposerAuth.local)return;
@@ -111,12 +111,14 @@ async function refresh(){
  member=session?check(await client.from('composer_members').select('role,active').eq('user_id',session.user.id).maybeSingle()):null;
  if(session&&member?.active){
   const [v,n,d,p,a]=await Promise.all([client.from('composer_versions').select('*').eq('game_id',id).order('submitted_at',{ascending:false}).limit(20),client.from('composer_notifications').select('id,kind,version_id,read_at,created_at').order('created_at',{ascending:false}).limit(30),draft(id),client.from('composer_versions').select('*').eq('game_id',id).eq('status','published').order('revision',{ascending:false}).limit(1),ComposerAuth.member?.role==='admin'?Promise.resolve(client.rpc('composer_list_members')).catch(()=>({data:[]})):Promise.resolve({data:[]})]);
+  let attribution={data:[]};if(ComposerAuth.member?.role==='admin')try{attribution=await client.rpc('composer_draft_contributors',{p_game:id,p_revision:d.revision})}catch{attribution={error:true}}
   const baseline=await window.ComposerDraftEditors.baseline(d.payload,id);
   if(request!==refreshId||id!==game())return;
   const receipts=await client.from('composer_releases').select('version_id,published_at,git_commit').order('published_at',{ascending:false}).limit(100);
   if(request!==refreshId||id!==game())return;
   releases=receipts.error?[]:receipts.data||[];
-  authors=new Map((a.error?[]:a.data||[]).map(person=>[person.user_id,person.email]));versions=check(v);notices=check(n);currentDraft=d;published=check(p)[0]||null;basePayload=baseline;loadError='';
+  contributors=attribution.data||[];contributorsError=!!attribution.error;
+  authors=new Map((a.error?[]:a.data||[]).map(person=>[person.user_id,person.name?person.name+' ('+person.email+')':person.email]));versions=check(v);notices=check(n);currentDraft=d;published=check(p)[0]||null;basePayload=baseline;loadError='';
  }else{versions=[];notices=[];currentDraft=null}
  render();
 }
@@ -125,6 +127,15 @@ const localRelease=()=>!window.ComposerHosting&&['127.0.0.1','localhost'].includ
 function releaseActions(v){
  const can=ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game());
  return can&&localRelease()?'<button class="wb-button primary" data-apply="'+esc(v.id)+'">Apply locally</button>':'';
+}
+function canApplyDraft(){return ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game())&&localRelease()&&!loadError&&!dirty()&&!!currentDraft&&draftChanges().some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision)&&['rejected','published'].includes(v.status))}
+function draftReview(){
+ if(!draftChanges().some(g=>g.rows.length))return '<p class="review-intro">No saved changes to apply.</p>';
+ const names=[...new Set(contributors.map(item=>authorName(item.actor)))];
+ return '<section class="review-queue"><h3>All saved changes</h3><p class="review-intro">This applies the complete saved state for this game, including teammates’ changes. Review everything below before applying.</p>'+authorLine('Last saved by',currentDraft?.updated_by,currentDraft?.updated_at)+'<p class="review-author">'+(contributorsError?'Contributor history unavailable.':names.length?'Contributors since the last publication: '+names.map(esc).join(', '):'No tracked contributor history.')+' Older edits may have no attribution.</p>'+diffHTML({...basePayload,...currentDraft.payload},{...basePayload,...published?.payload})+'<p id="cloud-save-hint"></p>'+(localRelease()?'<button class="wb-button primary" id="cloud-apply-draft">Apply locally</button>':'')+'</section>';
+}
+async function applyVersion(versionId,id){
+ const auth=check(await client.auth.getSession());const response=await fetch('release/apply',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({version_id:versionId})});const data=await response.json();if(!response.ok)throw Error(data.message||'Could not apply configuration');appliedRelease={game:id,path:data.path};await refresh();message('Applied locally: '+data.path+'. Review, commit and push to publish.');notify('Configuration ready to commit');
 }
 function reviewStatus(status,count){const accepted=status==='approved';return '<span class="review-status '+(accepted?'accepted':'awaiting')+'"'+(accepted?' title="Accepted by Admin; not published yet"':'')+'>'+(accepted?'Accepted':'Awaiting review')+(count?' · '+count:'')+'</span>'}
 function publicationHistory(){
@@ -143,10 +154,10 @@ function render(){
  const sent=sentVersions(),newCount=newChanges().reduce((sum,g)=>sum+g.rows.length,0);
  dialog.innerHTML='<header><div><small>'+esc(ComposerTarget.entry().title)+'</small><div class="review-heading"><h2 id="cloud-title">Changes</h2>'+(!isReviewer()?['submitted','approved'].map(status=>{const count=sent.filter(v=>v.status===status).length;return count?reviewStatus(status,count):''}).join(''):'')+'</div></div><button class="wb-button" data-close aria-label="Close">✕</button></header><button class="wb-button" id="cloud-refresh">Refresh</button>'+
  (ComposerAuth.member?.role==='admin'?' <button class="wb-button discard-changes" id="cloud-discard">Discard all changes</button>':'')+
- (ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game())&&!localRelease()?'<aside class="review-local-note" aria-label="Publishing changes"><strong>Publish from local Composer</strong><p>You can review changes here. To publish them, open local Composer and sign in with the same Admin account. In Changes, find the sent version and click <b>Apply locally</b>, then commit and push the configuration file. GitHub will update Composer web and Showcase automatically.</p></aside>':'')+
+ (ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game())&&!localRelease()?'<aside class="review-local-note" aria-label="Publishing changes"><strong>Publish from local Composer</strong><p>You can review changes here. To publish them, open local Composer and sign in with the same Admin account. In Changes, review all saved changes or a sent version and click <b>Apply locally</b>, then commit and push the configuration file. GitHub will update Composer web and Showcase automatically.</p></aside>':'')+
  (isReviewer()?reviewVersions():'')+
  (!isReviewer()?'<p class="review-intro">Review your saved changes, then send them to Admin. This game draft is shared with your team.</p>':'')+
- '<div id="draft-changes">'+(isReviewer()?(newCount?'<h3>Not sent yet</h3>'+authorLine('Last saved by',currentDraft?.updated_by,currentDraft?.updated_at)+'<p class="review-intro">'+(sent.length?'Only edits made after the latest sent version are shown here. ':'')+'The editor needs to click <b>Send changes</b> before you can apply these edits.</p>'+diffHTML({...basePayload,...currentDraft?.payload},editingBaseline()):sent.length?'':'<p class="review-intro">No unpublished changes.</p>'):
+ '<div id="draft-changes">'+(isReviewer()?draftReview():
  (newCount?'<h3 class="review-new-title">'+(returnedVersion()?'Returned for changes':'New changes')+' <span class="review-count">'+newCount+'</span></h3>'+diffHTML({...basePayload,...currentDraft?.payload},editingBaseline()):'<div class="review-empty"><strong>'+(sent.length?'All changes sent':'No new changes')+'</strong><p>'+(sent.length?'Your changes are with Admin. You can keep editing; only new edits will appear here.':'Saved edits will appear here when you change texts, design or sounds.')+'</p></div>'))+'</div>'+
 
  (!isReviewer()?'<div class="review-send"><p id="cloud-save-hint"></p><button class="wb-button discard-changes" id="cloud-discard-unsent">Discard unsent changes</button><button class="wb-button primary" id="cloud-submit"'+(!newCount?' hidden':'')+'>Send changes</button></div>'+ (sent.length?'<details class="review-sent"><summary><span>Sent to Admin</span><span class="review-count">'+sent.length+'</span></summary><p>Already sent. These changes are not included in your red counter.</p>'+sent.map(v=>'<details class="review-sent-version"><summary><span class="review-version-label"><strong>View changes</strong><time>'+esc(new Date(v.submitted_at).toLocaleString())+'</time></span>'+reviewStatus(v.status)+'</summary>'+diffHTML(v.payload,{...basePayload,...published?.payload})+jsonView(v.payload)+'</details>').join('')+'</details>':''):'')+
@@ -163,8 +174,14 @@ function render(){
  });
  for(const b of dialog.querySelectorAll('[data-apply]'))b.onclick=()=>{
   if(!confirm('Apply this sent version to the local game configuration? Review the file, then commit and push to publish.'))return;
-  run(async()=>{const auth=check(await client.auth.getSession());const response=await fetch('release/apply',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({version_id:b.dataset.apply})});const data=await response.json();if(!response.ok)throw Error(data.message||'Could not apply configuration');appliedRelease={game:game(),path:data.path};await refresh();message('Applied locally: '+data.path+'. Review, commit and push to publish.');notify('Configuration ready to commit')});
+  const id=game();run(()=>applyVersion(b.dataset.apply,id));
  };
+ $('#cloud-apply-draft')?.addEventListener('click',()=>{
+  if(busy||!canApplyDraft())return;
+  const id=game(),revision=currentDraft.revision;
+  if(!confirm('Apply all reviewed saved changes, including teammates’ edits, to the local configuration? This does not publish.'))return;
+  run(async()=>{const version=await rpc('composer_accept_draft',{p_game:id,p_revision:revision});try{await applyVersion(version.id,id)}catch(error){await refresh();throw error}});
+ });
  $('#cloud-submit')?.addEventListener('click',sendChanges);
  $('#copy-publish')?.addEventListener('click',async()=>{const path=appliedRelease?.path;if(!/^configurations\/[a-z][a-z0-9_]*\.json$/.test(path))return;try{await navigator.clipboard.writeText('git add -- '+path+'\ngit diff --cached -- '+path+'\ngit commit --only '+path+' -m "Publish reviewed game configuration"\ngit push origin main');message('Publish commands copied. Run them from the Composer repository.')}catch{message('Could not copy. Review, commit and push '+path+' from the Composer repository.')}});
  busyControls();

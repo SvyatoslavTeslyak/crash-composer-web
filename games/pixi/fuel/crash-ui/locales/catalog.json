@@ -115,7 +115,8 @@
       ],
       "presets": [
         "tabbed-shell-v1"
-      ]
+      ],
+      "previewWindow": "topbets"
     },
     "my_bets_717af4": {
       "source": "My bets",
@@ -146,7 +147,8 @@
       ],
       "presets": [
         "tabbed-shell-v1"
-      ]
+      ],
+      "previewWindow": "rules"
     },
     "bet_panels_21dcde": {
       "source": "Bet panels",
@@ -160,6 +162,9 @@
       ],
       "presets": [
         "tabbed-shell-v1"
+      ],
+      "excludedPresets": [
+        "menu-drawer-v1"
       ]
     },
     "go_f63f96": {
@@ -924,7 +929,10 @@
         "market_stack": [
           "tabbed-shell-v1"
         ]
-      }
+      },
+      "excludedPresets": [
+        "menu-drawer-v1"
+      ]
     },
     "visible_panels_203d9f": {
       "source": "Visible panels",
@@ -1015,7 +1023,12 @@
       "usage": [
         "text"
       ],
-      "previewWindow": "menu"
+      "previewWindow": "menu",
+      "usageByGame": {
+        "road": [
+          "unused"
+        ]
+      }
     },
     "refill_to_1_000_069d6c": {
       "source": "Refill to $1,000",
@@ -1202,7 +1215,10 @@
       "usage": [
         "text"
       ],
-      "previewWindow": "account"
+      "previewWindow": "account",
+      "presets": [
+        "standard"
+      ]
     },
     "personal_record_24e81d": {
       "source": "Personal record",

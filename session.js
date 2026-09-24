@@ -8,6 +8,7 @@ let state={local:false,session:null,member:null,games:[],permissions:[]},client=
 const auth=window.ComposerAuth={
  get client(){return client},get local(){return state.local},get session(){return state.session},get member(){return state.member},
  has(permission,game=null){return !!state.member?.active&&state.permissions.includes(permission)&&(game===null||state.games.includes(game))},
+ canWorkspace(mode){return !!state.member&& (state.member.role!=='copywriter'||['layout','translates'].includes(mode))},
  canRead(game){return auth.has('workspace.view',game==='kit'?null:game)},
  canEdit(game){return auth.has('translations.edit',game)},
  async refreshPermissions(){if(!await account())throw Error('Sign in again.');document.dispatchEvent(new Event('composer-permissions'));},
@@ -53,6 +54,7 @@ auth.ready=(async()=>{
  await dom();
  const errorBox=document.querySelector('#entry-error');
  const fragment=new URLSearchParams(location.hash.slice(1)),invitation=login?fragment.get('invite_token'):null;
+ const changingPassword=login&&new URLSearchParams(location.search).get('mode')==='password';
  const recovery=login&&(fragment.get('type')==='recovery'||new URLSearchParams(location.search).get('mode')==='recovery');
  if(invitation){sessionStorage.setItem('composer-pending-invite',invitation);sessionStorage.removeItem('composer-password-setup');history.replaceState(null,'',location.pathname+location.search)}
  let setup=login&&(recovery||!!sessionStorage.getItem('composer-pending-invite')||!!sessionStorage.getItem('composer-password-setup')||new URLSearchParams(location.search).get('mode')==='password');
@@ -74,13 +76,14 @@ auth.ready=(async()=>{
  visibility.onclick=()=>{const shown=password.type==='password';password.type=shown?'text':'password';confirm.type=shown?'text':'password';visibility.textContent=shown?'Hide password':'Show password';visibility.setAttribute('aria-pressed',String(shown))};
  forgot.hidden=setup;
  if(setup){
-  document.querySelector('#entry-title').textContent=recovery?'Reset your password':'Create your password';
+  document.querySelector('#entry-title').textContent=recovery?'Reset your password':changingPassword?'Change password':'Create your password';
   document.querySelector('#entry-hint').textContent='Choose a password to access Crash Composer. Next time, sign in with your email and password.';
   document.querySelector('#email-field').hidden=true;email.required=false;
   document.querySelector('#confirm-field').hidden=false;confirm.required=true;
   password.autocomplete='new-password';password.minLength=10;
   document.querySelector('#password-hint').hidden=false;submit.textContent='Save password & continue';cancel.hidden=false;
-  cancel.onclick=async()=>{try{if(sessionStorage.getItem('composer-password-setup')){const {error}=await client.auth.signOut();if(error)throw error;}sessionStorage.removeItem('composer-pending-invite');sessionStorage.removeItem('composer-password-setup');location.replace('login.html')}catch(error){errorBox.textContent=error.message}};
+  cancel.textContent=changingPassword?'Back to Composer':'Back to sign in';
+  cancel.onclick=async()=>{if(changingPassword){location.assign('index.html');return}try{if(state.session||sessionStorage.getItem('composer-password-setup')){const {error}=await client.auth.signOut({scope:'local'});if(error)throw error;}sessionStorage.removeItem('composer-pending-invite');sessionStorage.removeItem('composer-password-setup');location.replace('login.html')}catch(error){errorBox.textContent=error.message}};
  }
  let busy=false;
  forgot.onclick=async()=>{if(busy)return;if(!email.value.trim()||!email.checkValidity()){email.reportValidity();email.focus();return}busy=true;forgot.disabled=true;submit.disabled=true;errorBox.textContent='';try{if(!client)throw Error('Sign-in service unavailable. Try again.');const redirect=new URL('login.html',window.ComposerCloudConfig.workspaceUrl||location.href);redirect.searchParams.set('mode','recovery');const {error}=await client.auth.resetPasswordForEmail(email.value.trim(),{redirectTo:redirect.href});if(error)throw error;document.querySelector('#entry-status').textContent='If this email has an account, a reset link will arrive shortly. Check your inbox and spam folder.'}catch(error){errorBox.textContent=error.status===429?'Too many requests. Wait a few minutes before trying again.':error.message}finally{busy=false;forgot.disabled=false;submit.disabled=false}};
