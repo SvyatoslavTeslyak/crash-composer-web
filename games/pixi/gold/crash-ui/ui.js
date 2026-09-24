@@ -78,7 +78,7 @@ class BettingSound {
 // Confetti announces the popup; coin clinks belong only to the wallet transfer.
 class WinSound {
  constructor(){this.clip=new Audio(base+'assets/audio/win-paper-pop.ogg');this.clip.preload='auto';this.clip.volume=0.44;this.transferClip=new Audio(base+'assets/audio/win.ogg');this.transferClip.preload='auto';this.transferClip.volume=0.20;this.enabled=false;this.active=false;this.jitter={};this.clip.preservesPitch=false;soundLevels.then(plan=>{const pick=(id,clip,fallback)=>{const spec=plan[id];if(!spec)return;if(spec.file&&spec.file!==fallback)clip.src=base+'assets/audio/'+spec.file;if(Number.isFinite(spec.volume))clip.volume=spec.volume;this.jitter[id]=spec.jitter||0};pick('win',this.clip,'win-paper-pop.ogg');pick('win_transfer',this.transferClip,'win.ogg')})}
- update(state){this.enabled=state.settings?.sound===true;if(!this.enabled){this.clip.pause();this.transferClip.pause()}const active=!!state.win;if(this.game===state.game&&active&&(!this.active||(state.winId!==undefined&&state.winId!==this.winId)))this.play();this.game=state.game;this.active=active;this.winId=state.winId}
+ update(state){this.enabled=state.settings?.sound===true;if(!this.enabled){this.clip.pause();this.transferClip.pause()}const active=!!state.win;if(state.game==='road')this.clip.pause();if(state.game!=='road'&&this.game===state.game&&active&&(!this.active||(state.winId!==undefined&&state.winId!==this.winId)))this.play();this.game=state.game;this.active=active;this.winId=state.winId}
  spread(id){const j=this.jitter[id]||0;return 1+(Math.random()*2-1)*j}
  play(){if(!this.enabled||document.hidden)return;this.clip.currentTime=0;this.clip.playbackRate=this.spread('win');this.clip.play().catch(()=>{})}
  playTransfer(){if(!this.enabled||document.hidden)return;this.transferClip.currentTime=0;this.transferClip.playbackRate=1.12*this.spread('win_transfer');this.transferClip.preservesPitch=false;this.transferClip.play().catch(()=>{})}
@@ -185,6 +185,7 @@ class GameUI {
   this.slots=Object.fromEntries([...host.querySelectorAll('[data-slot]')].map(n=>[n.dataset.slot,n]));
   host.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b&&!b.disabled)this.action(b.dataset.action,b.dataset.value);else {const control=e.target.closest('.bet-step,.bet-action');if(control&&!control.disabled)this.bettingSound.play(control.dataset.step==='-1'?'minus':control.dataset.step?'plus':'go')}});
   host.addEventListener('change',e=>{if(e.target.dataset.setting==='sound')this.bettingSound.setEnabled(e.target.checked);if(e.target.dataset.setting)this.send('setting',{key:e.target.dataset.setting,value:e.target.type==='checkbox'?e.target.checked:Number(e.target.value)});if(e.target.dataset.flag)this.send('flag',{key:e.target.dataset.flag,value:e.target.checked})});
+  this.dismissWinClick=e=>{if(this.modal!=='win')return;e.preventDefault();e.stopImmediatePropagation();this.dismissedWin=true;this.close(false);this.send('dismissWin',{})};document.addEventListener('click',this.dismissWinClick,true);
   host.querySelector('.modal-layer').addEventListener('click',e=>{if(e.target===e.currentTarget&&this.modal!=='win')this.close()});
   this.keyHandler=e=>{if(!this.modal)return;if(e.target.matches?.('[data-action=drawerTab]')&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const tabs=[...e.target.parentElement.children],index=tabs.indexOf(e.target),next=e.key==='Home'?0:e.key==='End'?tabs.length-1:(index+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;this.action('drawerTab',tabs[next].dataset.value);return;}if(['ArrowDown','ArrowUp','ArrowLeft','ArrowRight','Home','End'].includes(e.key)&&e.target.matches('[role=radio]')){e.preventDefault();const items=[...e.target.parentElement.querySelectorAll('[role=radio]')];let index=items.indexOf(e.target);index=e.key==='Home'?0:e.key==='End'?items.length-1:(index+(e.key==='ArrowDown'||e.key==='ArrowRight'?1:-1)+items.length)%items.length;items[index].focus();return;}if(e.key==='Escape'&&this.modal!=='win'){e.preventDefault();if(this.betDetail)this.backToBets();else if(this.modal.startsWith('limit:'))this.open('menu');else this.close()}if(e.key==='Tab'&&!this.contextPanel){const items=[...host.querySelectorAll('.modal-layer button,.modal-layer input,.modal-layer select')].filter(n=>!n.disabled&&!n.hidden&&n.getClientRects().length);if(!items.length){e.preventDefault();return}const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}};
   document.addEventListener('keydown',this.keyHandler);
@@ -231,6 +232,7 @@ class GameUI {
  features(){return {auto:true,difficulty:true,presets:true,...(this.state?.features||{})}}
  text(key,value){if(this.slots[key].textContent!==String(value))this.slots[key].textContent=value}
  action(action,value){
+  if(action==='go'&&this.winToast)this.finishWinToast();
   // Header back navigation is inactive until the host exit flow is defined.
   if(action==='leave')return;
   this.bettingSound.play(action);
@@ -262,8 +264,11 @@ class GameUI {
   this.winSound.update(s);
   this.bettingSound.setEnabled(s.settings?.sound===true);
   this.bettingSound.updateCashReady(s);
+  const toastWin=s.game==='road'&&s.win&&(!this.state.win||this.state.winId!==s.winId);
+  if(toastWin)this.showWinToast(s);
+  if(this.state.game&&this.state.game!==s.game)this.finishWinToast();
   this.state=s;currency=typeof s.currency==='string'?s.currency:'';this.host.hidden=false;this.host.classList.toggle('reduced',!!s.settings?.reduced_motion);
-  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',s.balanceKnown===false?'—':(window.CrashI18n?.number?window.CrashI18n.number(Number(s.balance||0),{useGrouping:true,minimumFractionDigits:0,maximumFractionDigits:0}):new Intl.NumberFormat('en-US',{useGrouping:true,maximumFractionDigits:0}).format(Number(s.balance||0))));this.text('bet',coinAmount(s.bet));fitStake(this.slots.bet,this.slots.bet.textContent);
+  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',this.heldWinBalance!==undefined?this.heldWinBalance:s.balanceKnown===false?'—':(window.CrashI18n?.number?window.CrashI18n.number(Number(s.balance||0),{useGrouping:true,minimumFractionDigits:0,maximumFractionDigits:0}):new Intl.NumberFormat('en-US',{useGrouping:true,maximumFractionDigits:0}).format(Number(s.balance||0))));this.text('bet',coinAmount(s.bet));fitStake(this.slots.bet,this.slots.bet.textContent);
 
   this.text('personal',money(s.personal));this.text('top',money(s.record?.payout));this.text('owner',s.record?.name||'');this.q('.record-top').title=[s.record?.name,s.record?.date].filter(Boolean).join(' · ');
   const signature=JSON.stringify([s.players,s.record?.name]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players)}
@@ -290,42 +295,82 @@ class GameUI {
   this.q('.multiplier').style.setProperty('--multiplier-color',multiplierColour(s.multiplier,s.game));
   this.q('.multiplier').hidden=s.game==='road';this.q('.multiplier').textContent=Number(s.multiplier||1).toFixed(2)+'×';
   this.q('.toast').hidden=!s.toast;this.q('.toast').textContent=s.toast||'';
-  if(s.win&&this.modal!=='win')this.open('win');else if(!s.win&&this.modal==='win')this.close();
+  if(!s.win||this.dismissedWinId!==s.winId||this.dismissedWinGame!==s.game)this.dismissedWin=false;this.dismissedWinId=s.winId;this.dismissedWinGame=s.game;
+  if(s.game!=='road'&&s.win&&!this.dismissedWin&&this.modal!=='win')this.open('win');else if(!s.win&&this.modal==='win')this.close();
   if(this.modal==='win'){const total=this.q('.win-total');if(total)total.textContent=money(s.winAmount);const subtitle=this.q('.win-subtitle');if(subtitle)subtitle.textContent=s.winSubtitle||'Well played!'}
   if(this.modal==='difficulty'&&!s.canBet)this.close();
   const transfer=s.winTransferId||0;
-  if(this.lastTransferId!==undefined&&transfer!==this.lastTransferId&&s.win){this.winSound.playTransfer();requestAnimationFrame(()=>this.flyWinCoins())}
+  if(this.lastTransferId!==undefined&&transfer!==this.lastTransferId&&s.win&&s.game!=='road'){this.winSound.playTransfer();requestAnimationFrame(()=>this.flyWinCoins())}
   this.lastTransferId=transfer;
-  if(s.settings?.reduced_motion)this.clearWinCoins();
+  if(s.settings?.reduced_motion){this.clearWinCoins();if(this.winToast)this.releaseWinBalance()}
   this.standardControls.hidden=!!this.multiBet||this.controlsVariant==='tabbed';
   this.layout();
+ }
+ showWinToast(s){
+  this.finishWinToast();
+  this.heldWinBalance=this.slots.balance.textContent;
+  this.winBalanceFrom=this.state.balanceKnown===false?null:Number(this.state.balance);
+  const toast=document.createElement('div');toast.className='win-toast';toast.setAttribute('role','status');
+  const amount=s.winToastAmount??s.winAmount,multiplier=s.history?.[0]?.multiplier;
+  toast.innerHTML='<img class="win-coin" src="'+base+'assets/icons/coin.png" alt=""><div><strong>Cashed out'+(Number.isFinite(multiplier)?' · '+Number(multiplier).toFixed(2)+'×':'')+'</strong><span>+'+money(amount)+'</span></div>';
+  this.host.append(toast);this.winToast=toast;
+  const id=s.winId;
+  queueMicrotask(()=>{if(this.state.win&&this.state.winId===id)this.send('dismissWin',{})});
+  this.toastFlightTimer=setTimeout(()=>{if(this.winToast!==toast)return;this.winSound.playTransfer();this.flyWinCoins(true)},200);
+  this.toastEndTimer=setTimeout(()=>{if(this.winToast===toast)this.finishWinToast()},2000);
+ }
+ finishWinToast(){
+  clearTimeout(this.toastFlightTimer);clearTimeout(this.toastEndTimer);
+  if(this.winToast){this.clearWinCoins();this.winToast.remove();this.winToast=null}
+  this.heldWinBalance=undefined;
+ }
+ releaseWinBalance(){
+  this.heldWinBalance=undefined;
+  const s=this.state;
+  this.text('balance',s.balanceKnown===false?'—':new Intl.NumberFormat(window.CrashI18n?.locale==='fr'?'fr-FR':'en-US',{maximumFractionDigits:0}).format(Number(s.balance||0)));
+ }
+ pulseBalance(){
+  if(this.state.settings?.reduced_motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  this.balancePulse?.cancel();
+  this.balancePulse=this.slots.balance.animate([{transform:'translateY(0) scale(1)'},{transform:'translateY(-2px) scale(1.055)',offset:.3},{transform:'translateY(0) scale(1)'}],{duration:180,easing:'ease-out'});
  }
  clearWinCoins(){
   if(this.coinFrame)cancelAnimationFrame(this.coinFrame);
   this.coinFrame=0;this.coinLayer?.remove();this.coinLayer=null;
  }
- flyWinCoins(){
+ flyWinCoins(toast=false){
   this.clearWinCoins();
-  if(this.modal!=='win'||this.state.settings?.reduced_motion||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const source=this.q('.win-coin'),target=this.q('.balance .icon');
-  if(!source||!target)return;
+  if((toast?!this.winToast:this.modal!=='win')||this.state.settings?.reduced_motion||matchMedia('(prefers-reduced-motion: reduce)').matches){if(toast)this.releaseWinBalance();return;}
+  const source=toast?this.winToast?.querySelector('.win-coin'):this.q('.win-coin'),target=this.q('.balance .icon');
+  if(!source||!target){if(toast)this.releaseWinBalance();return;}
   const layer=document.createElement('div');layer.className='win-coin-flight';layer.setAttribute('aria-hidden','true');this.host.append(layer);this.coinLayer=layer;
   const coins=Array.from({length:CrashTokens.WEB_WIN_COIN_COUNT},()=>{const coin=document.createElement('img');coin.src=base+'assets/icons/coin.png';coin.alt='';layer.append(coin);return coin});
   const speed=Math.max(0.5,Math.min(2,Number(this.config.winCoinSpeed)||1));
   const duration=CrashTokens.WEB_WIN_COIN_DURATION_MS/speed,stagger=CrashTokens.WEB_WIN_COIN_STAGGER_MS/speed;
+  const arrived=new Set();
   const start=performance.now();
   const tick=now=>{
-   if(!source.isConnected||this.modal!=='win'||this.state.settings?.reduced_motion||matchMedia('(prefers-reduced-motion: reduce)').matches){this.clearWinCoins();return}
+   if(!source.isConnected||(toast?!this.winToast:this.modal!=='win')||this.state.settings?.reduced_motion||matchMedia('(prefers-reduced-motion: reduce)').matches){this.clearWinCoins();if(toast)this.releaseWinBalance();return}
+   // Count only during arrivals, keeping the server-confirmed balance as the target.
+   if(toast&&now-start>=duration&&Number.isFinite(this.winBalanceFrom)&&this.state.balanceKnown!==false){
+    const progress=Math.min(1,(now-start-duration)/Math.max(1,(coins.length-1)*stagger));
+    const value=this.winBalanceFrom+(Number(this.state.balance)-this.winBalanceFrom)*progress;
+    if(Number.isFinite(value)){
+     this.heldWinBalance=new Intl.NumberFormat(window.CrashI18n?.locale==='fr'?'fr-FR':'en-US',{maximumFractionDigits:0}).format(value);
+     this.text('balance',this.heldWinBalance);
+    }
+   }
    const a=source.getBoundingClientRect(),b=target.getBoundingClientRect();
    coins.forEach((coin,i)=>{
     const p=Math.max(0,Math.min(1,(now-start-i*stagger)/duration));
+    if(p===1&&!arrived.has(i)){arrived.add(i);this.pulseBalance()}
     const t=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
     const arc=Math.sin(t*Math.PI),x=a.x+a.width/2+(b.x+b.width/2-a.x-a.width/2)*t+85*Math.sin(i*1.8)*arc;
     const y=a.y+a.height/2+(b.y+b.height/2-a.y-a.height/2)*t-100*arc;
     coin.style.opacity=String(Math.min(t*10,1)*Math.min((1-t)*10,1));
     coin.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) rotate(${arc*(i%2===0?.5:-.5)}rad) scale(${.8+.4*arc})`;
    });
-   if(now-start<duration+(coins.length-1)*stagger)this.coinFrame=requestAnimationFrame(tick);else this.clearWinCoins();
+   if(now-start<duration+(coins.length-1)*stagger)this.coinFrame=requestAnimationFrame(tick);else{this.clearWinCoins();if(toast)this.releaseWinBalance()}
   };
   this.coinFrame=requestAnimationFrame(tick);
  }
@@ -537,7 +582,7 @@ class GameUI {
   this.host.style.setProperty('--scene-bottom',bounds.bottom+'px');
   const key=JSON.stringify(bounds);if(key!==this.lastBounds){this.lastBounds=key;this.send('layout',bounds)}
  }
- destroy(){this.winSound.destroy();this.bettingSound.destroy();this.clearWinCoins();this.resize.disconnect();document.removeEventListener('keydown',this.keyHandler);document.removeEventListener('pointerdown',this.outsideMenu,true);this.host.remove()}
+ destroy(){this.balancePulse?.cancel();this.finishWinToast();document.removeEventListener('click',this.dismissWinClick,true);this.winSound.destroy();this.bettingSound.destroy();this.clearWinCoins();this.resize.disconnect();document.removeEventListener('keydown',this.keyHandler);document.removeEventListener('pointerdown',this.outsideMenu,true);this.host.remove()}
 }
 let callback=null,instance=null;
 window.CrashUI={presentationPresets:Object.freeze({'menu-drawer-v1':Object.freeze({id:'menu-drawer-v1',title:'Menu tabs',version:1,scope:'header-navigation-windows'}),'tabbed-shell-v1':Object.freeze({id:'tabbed-shell-v1',title:'Bottom tabs',version:1,scope:'header-navigation-windows'})}),GameUI,MultiBetControls,connect(fn){callback=fn;if(!instance){const host=document.createElement('div');host.hidden=true;document.body.append(host);instance=new GameUI(host,(action,data)=>callback?.(JSON.stringify({action,...data})));}return true},receive(state){instance?.update(typeof state==='string'?JSON.parse(state):state)},get instance(){return instance}};
