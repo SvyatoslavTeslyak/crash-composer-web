@@ -327,7 +327,7 @@ class GameUI {
   // The check flips over into the coin, and only then do the coins set off for the balance.
   toast.style.setProperty('--win-flip-at',WIN_FLIP_AT+'ms');toast.style.setProperty('--win-flip-ms',WIN_FLIP_MS+'ms');
   // Splashes: a dozen drops thrown out from the centre as the card lands, each on its own bearing.
-  const splash=Array.from({length:12},(_,i)=>{const a=(i/12)*Math.PI*2+(i%2?.26:0),d=(i%3?96:136);return '<i style="--dx:'+Math.round(Math.cos(a)*d)+'px;--dy:'+Math.round(Math.sin(a)*d*.7)+'px;--win-splash-delay:'+(i%4)*40+'ms"></i>'}).join('');
+  const splash=Array.from({length:16},(_,i)=>{const a=(i/16)*Math.PI*2+(i%2?.2:0),d=(i%3?120:170);return '<i'+(i%4===3?' class="win-splash-star"':'')+' style="--dx:'+Math.round(Math.cos(a)*d)+'px;--dy:'+Math.round(Math.sin(a)*d*.7)+'px;--win-splash-delay:'+(i%4)*35+'ms">'+(i%4===3?'✦':'')+'</i>'}).join('');
   toast.innerHTML='<span class="win-splash" aria-hidden="true">'+splash+'</span><div class="win-toast-card"><span class="win-flip" aria-hidden="true"><img class="win-mark" src="'+base+'assets/icons/cashed-out.webp" alt=""><img class="win-coin" src="'+base+'assets/icons/coin.png" alt=""></span><div><strong>Cashed out'+(Number.isFinite(multiplier)?' · '+Number(multiplier).toFixed(2)+'×':'')+'</strong><span>+'+money(amount)+'</span></div></div>';
   this.host.append(toast);this.winToast=toast;
   const id=s.winId;
@@ -383,12 +383,15 @@ class GameUI {
     }
    }
    const a=source.getBoundingClientRect(),b=target.getBoundingClientRect();
+   // The coins take a shallow arc into the balance: a little lift and sway, enough to read as a
+   // throw, not so much that they leave the screen on a phone where both sit near the top.
+   const lift=40,sway=30;
    coins.forEach((coin,i)=>{
     const p=Math.max(0,Math.min(1,(now-start-i*stagger)/duration));
     if(p===1&&!arrived.has(i)){arrived.add(i);this.pulseBalance()}
     const t=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
-    const arc=Math.sin(t*Math.PI),x=a.x+a.width/2+(b.x+b.width/2-a.x-a.width/2)*t+85*Math.sin(i*1.8)*arc;
-    const y=a.y+a.height/2+(b.y+b.height/2-a.y-a.height/2)*t-100*arc;
+    const arc=Math.sin(t*Math.PI),x=a.x+a.width/2+(b.x+b.width/2-a.x-a.width/2)*t+sway*Math.sin(i*1.8)*arc;
+    const y=a.y+a.height/2+(b.y+b.height/2-a.y-a.height/2)*t-lift*arc;
     coin.style.opacity=String(Math.min(t*10,1)*Math.min((1-t)*10,1));
     coin.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) rotate(${arc*(i%2===0?.5:-.5)}rad) scale(${.8+.4*arc})`;
    });
