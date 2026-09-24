@@ -67,3 +67,5 @@
 
 .share-dialog .share-choice{display:grid;gap:var(--space-8);margin:var(--space-16) 0 var(--space-8);font-size:var(--type-14)}
 .share-dialog .share-choice .wb-button{min-height:var(--inspector-control);padding:0 var(--space-12);font-size:var(--inspector-type-sm);white-space:normal;text-align:center}
+
+.share-menu{position:fixed;z-index:90;display:grid;gap:4px;width:240px;max-width:calc(100vw - 16px);padding:6px;border:1px solid #394451;border-radius:14px;background:#161e28;box-shadow:0 12px 32px #0006}.share-menu[hidden],.share-menu [hidden]{display:none}.share-menu .wb-button{min-height:44px;width:100%;text-align:left;justify-content:flex-start;padding:10px 12px;border-color:transparent;background:transparent;white-space:normal}.share-menu .wb-button:hover,.share-menu .wb-button:focus-visible{background:#243a4b}.share-menu .wb-button:focus-visible{outline:2px solid #6cccff;outline-offset:-2px}
