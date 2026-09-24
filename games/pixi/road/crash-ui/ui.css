@@ -934,3 +934,5 @@
 .crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal:has(.bets-table){--table-inset:var(--space-16);padding-inline:var(--space-16)}
 
 .crash-ui.has-menu-drawer .drawer-tab-label{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere;min-width:0}
+
+.crash-ui .history .history-result{display:inline-flex;align-items:center;gap:var(--space-6);flex-shrink:0;font-family:var(--font-numbers),var(--font-body),sans-serif}.crash-ui .history .history-result.is-cashout .history-result-icon{color:var(--success)}.crash-ui .history .history-result.is-loss .history-result-icon{color:var(--danger)}.crash-ui .history-result-icon{font-family:var(--font-body),sans-serif;font-size:.85em}.crash-ui button.history-result:hover{filter:brightness(1.12)}

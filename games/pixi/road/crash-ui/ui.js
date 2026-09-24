@@ -9,6 +9,8 @@ let currency='';
 // by the wording they use on it.
 // How high a multiplier reads: the same four tiers colour the live badge and the history.
 const tintFor=m=>Number(m)>=10?'gold':Number(m)>=5?'purple':Number(m)>=2?'success':'cyan';
+// Road lane markers belong to the scene and keep this palette across brands.
+const multiplierColour=(m,game)=>game==='road'?(Number(m)<=0?'#ff9999':{gold:'#ffd468',purple:'#d5a0ff',success:'#62e4ad',cyan:'#71d5ff'}[tintFor(m)]):'var(--'+tintFor(m)+')';
 const goIsCash=s=>s.goCash!==undefined?!!s.goCash:s.goTitle==='CASH OUT';
 const money=(v,digits=2)=>window.CrashI18n?.locale==='fr'?window.CrashI18n.number(Number(v||0),{minimumFractionDigits:digits,maximumFractionDigits:digits})+' '+(currency||'$'):currency?Number(v||0).toFixed(digits)+' '+currency:'$'+Number(v||0).toFixed(digits);
 const wager=v=>money(v,Number.isInteger(Number(v||0))?0:2);
@@ -234,6 +236,7 @@ class GameUI {
   this.bettingSound.play(action);
   if(action==='drawerTab'){this.rulesFrom='tab';this.open(value);return}
   if(action==='menu'&&this.config.presentationPreset==='menu-drawer-v1'){if(this.q('.modal-layer').classList.contains('is-menu-drawer')&&this.modal)this.close();else this.open(this.drawerSelection||'topbets');return}
+  if(action==='historyDetails'){const entry=this.state.bets?.[Number(value)];if(!entry||this.state.win)return;this.open('mybets');const index=this.betRows?.findIndex(v=>v.time===entry.time&&v.multiplier===entry.multiplier);if(index>=0)this.showBetDetails(index);return}
   if(action==='betDetails'){this.showBetDetails(Number(value));return}
   if(action==='betsBack'){this.backToBets();return}
   if(['menu','account'].includes(action)&&this.tabbed&&this.modal===action){this.close();return}
@@ -260,7 +263,7 @@ class GameUI {
   this.bettingSound.setEnabled(s.settings?.sound===true);
   this.bettingSound.updateCashReady(s);
   this.state=s;currency=typeof s.currency==='string'?s.currency:'';this.host.hidden=false;this.host.classList.toggle('reduced',!!s.settings?.reduced_motion);
-  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',s.balanceKnown===false?'—':window.CrashI18n?.locale==='fr'?window.CrashI18n.number(Number(s.balance||0),{minimumFractionDigits:0,maximumFractionDigits:0}):Number(s.balance||0).toFixed(0));this.text('bet',coinAmount(s.bet));fitStake(this.slots.bet,this.slots.bet.textContent);
+  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',s.balanceKnown===false?'—':(window.CrashI18n?.number?window.CrashI18n.number(Number(s.balance||0),{useGrouping:true,minimumFractionDigits:0,maximumFractionDigits:0}):new Intl.NumberFormat('en-US',{useGrouping:true,maximumFractionDigits:0}).format(Number(s.balance||0))));this.text('bet',coinAmount(s.bet));fitStake(this.slots.bet,this.slots.bet.textContent);
 
   this.text('personal',money(s.personal));this.text('top',money(s.record?.payout));this.text('owner',s.record?.name||'');this.q('.record-top').title=[s.record?.name,s.record?.date].filter(Boolean).join(' · ');
   const signature=JSON.stringify([s.players,s.record?.name]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players)}
@@ -283,8 +286,8 @@ class GameUI {
   controls.classList.toggle('no-settings',!settingsVisible);controls.classList.toggle('auto-only',features.auto&&!features.difficulty);controls.classList.toggle('difficulty-only',features.difficulty&&!features.auto);controls.classList.toggle('no-presets',!presetsShown);
   const featureKey=JSON.stringify(features);if(featureKey!==this.lastFeatures){const changed=this.lastFeatures!==undefined;this.lastFeatures=featureKey;const modal=this.modal||'';if((modal==='difficulty'&&!features.difficulty)||(modal.startsWith('limit:auto')&&!features.auto))this.close();else if(changed&&modal==='menu')this.open('menu')}
   const winsKey=JSON.stringify(s.wins);if(winsKey!==this.lastWins){this.lastWins=winsKey;this.q('.wins-list').innerHTML=this.winRows((s.wins||[]).slice(0,5));if(this.modal==='wins')this.q('.modal-body').innerHTML=this.winRows(s.wins||[])||'<p class=muted>No wins yet.</p>'}
-  const histKey=JSON.stringify(s.history);if(histKey!==this.lastHistory){this.lastHistory=histKey;this.q('.history').innerHTML=(s.history||[]).slice(0,15).map(v=>'<span class="pill tier-'+tintFor(v.multiplier)+'">'+Number(v.multiplier).toFixed(2)+'×</span>').join('')}
-  this.q('.multiplier').style.setProperty('--multiplier-color',`var(--${tintFor(s.multiplier)})`);
+  const histKey=JSON.stringify([s.game,s.history,s.bets?.map(v=>v.time)]);if(histKey!==this.lastHistory){this.lastHistory=histKey;this.q('.history').innerHTML=(s.history||[]).slice(0,15).map((v,i)=>{const value=Number(v.multiplier).toFixed(2)+'×',colour=multiplierColour(v.multiplier,s.game);if(typeof v.cashed_out!=='boolean')return '<span style="color:'+colour+'" class="pill tier-'+tintFor(v.multiplier)+'">'+value+'</span>';const label=v.cashed_out?'Cashed out':'Lost',linked=!!s.bets?.[i],tag=linked?'button':'span';return '<'+tag+(linked?' type="button" data-action="historyDetails" data-value="'+i+'"':'')+' style="color:'+colour+'" class="pill history-result tier-'+tintFor(v.multiplier)+' '+(v.cashed_out?'is-cashout':'is-loss')+'" title="'+label+'" aria-label="'+label+', '+value+'"><span class="history-result-icon" aria-hidden="true">'+(v.cashed_out?'✓':'✕')+'</span><span>'+value+'</span></'+tag+'>'}).join('')}
+  this.q('.multiplier').style.setProperty('--multiplier-color',multiplierColour(s.multiplier,s.game));
   this.q('.multiplier').hidden=s.game==='road';this.q('.multiplier').textContent=Number(s.multiplier||1).toFixed(2)+'×';
   this.q('.toast').hidden=!s.toast;this.q('.toast').textContent=s.toast||'';
   if(s.win&&this.modal!=='win')this.open('win');else if(!s.win&&this.modal==='win')this.close();
@@ -392,7 +395,7 @@ class GameUI {
    const content=s.difficultyContent||{};
    body.innerHTML='<p class="modal-description">'+esc(content.description||'Higher risk. Bigger rewards.')+'</p><p class="modal-note">'+esc(content.limits||'')+'</p><div class="option-list" role="radiogroup" aria-label="Difficulty">'+(content.options||[]).map((v,i)=>this.radioOption('chooseDifficulty',i,i===s.difficulty,v.title,v.description,v.reward,v.rewardLabel)).join('')+'</div>';
   }
-  if(kind==='menu'&&this.tabbed){body.innerHTML=(this.config.menuSettings||['sound','music','haptics']).map(k=>'<label class="setting">'+({sound:'Sound',music:'Music',haptics:'Vibration'}[k])+'<input class="switch" type="checkbox" role="switch" data-setting="'+k+'" '+(s.settings?.[k]?'checked':'')+'></label>').join('')+button('refill','Refill to $1,000','flat-button')}
+  if(kind==='menu'&&this.tabbed){body.innerHTML=(this.config.menuSettings||['sound','music','haptics']).map(k=>'<label class="setting">'+({sound:'Sound',music:'Music',haptics:'Vibration'}[k])+'<input class="switch" type="checkbox" role="switch" data-setting="'+k+'" '+(s.settings?.[k]?'checked':'')+'></label>').join('')+(this.config.refill!==false&&this.state?.refill!==false?button('refill','Refill to $1,000','flat-button'):'')}
   if(kind==='menu'&&!this.tabbed){
    body.innerHTML=(this.config.menuSettings||['sound','music','haptics']).map(k=>'<label class="setting">'+({sound:'Sound',music:'Music',haptics:'Vibration',reduced_motion:'Reduce motion'}[k])+'<input class="switch" type="checkbox" role="switch" data-setting="'+k+'" '+(s.settings?.[k]?'checked':'')+'></label>').join('');
    const limits=this.limitOptions();
