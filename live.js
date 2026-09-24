@@ -175,3 +175,19 @@ window.addEventListener('composer-target',()=>{amountOverride=null;follow()});
  });
  window.addEventListener('DOMContentLoaded',follow);
 })();
+
+// Expand the existing iframe so its draft, language and current round stay intact.
+(()=>{
+ const fit=document.querySelector('#fit'),frame=document.querySelector('#frame');
+ const button=document.createElement('button');button.type='button';button.id='preview-fullscreen';button.className='wb-button';
+ button.innerHTML=icon('fullscreen')+'<span>Full screen</span>';button.setAttribute('aria-pressed','false');fit.append(button);
+ let full=false,native=false;
+ function paint(on){full=on;fit.classList.toggle('preview-fullscreen',on);button.querySelector('span').textContent=on?'Minimize':'Full screen';button.setAttribute('aria-pressed',String(on));}
+ async function exit(){paint(false);if(document.fullscreenElement===fit)await document.exitFullscreen().catch(()=>{});native=false;button.focus({preventScroll:true});}
+ button.onclick=async()=>{if(full){await exit();return}paint(true);try{if(fit.requestFullscreen){await fit.requestFullscreen();native=true}}catch{/* The fixed viewport layout also supports browsers without Fullscreen API. */}};
+ document.addEventListener('fullscreenchange',()=>{if(native&&!document.fullscreenElement){native=false;paint(false)}});
+ const escape=event=>{if(event.key==='Escape'&&full){event.preventDefault();exit()}};
+ document.addEventListener('keydown',escape);
+ const bind=()=>{try{frame.contentDocument.addEventListener('keydown',escape)}catch{}};
+ frame.addEventListener('load',bind);bind();
+})();

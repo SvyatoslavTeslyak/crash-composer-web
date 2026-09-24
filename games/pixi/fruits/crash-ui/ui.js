@@ -201,6 +201,9 @@ class GameUI {
   const tabbed=variant==='tabbed'||['tabbed-shell-v1','menu-drawer-v1'].includes(this.config.presentationPreset);
   this.host.classList.toggle('has-tabbed-controls',tabbed);
   this.host.classList.toggle('has-menu-drawer',this.config.presentationPreset==='menu-drawer-v1');
+  const settingsOnly=tabbed&&this.config.presentationPreset!=='menu-drawer-v1',menuButton=this.q('.profile [data-action=menu]');
+  menuButton.setAttribute('aria-label',settingsOnly?'Settings':'Menu');
+  menuButton.innerHTML=settingsOnly?'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M9.5 2h5l.6 2.5 2 1.2 2.5-.7L22 9.2 20.1 11v2.3l1.9 1.8-2.4 4.2-2.5-.7-2 1.2-.6 2.2h-5l-.6-2.2-2-1.2-2.5.7L2 15.1l1.9-1.8V11L2 9.2 4.4 5l2.5.7 2-1.2L9.5 2ZM15 12a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z"/></svg>':icon('menu.svg');
   this.q('.account').setAttribute('aria-label',tabbed?'Player account':'Player and records');
   let back=this.q('.game-back');
   if(tabbed&&!back){back=document.createElement('button');back.type='button';back.className='icon-button game-back';back.dataset.action='leave';back.setAttribute('aria-label','Back to previous page');back.innerHTML='<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H4m7-7-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';this.q('.profile').prepend(back)}

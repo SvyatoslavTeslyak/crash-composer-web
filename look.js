@@ -47,14 +47,14 @@ function inkFor(hex){const dark='#0f1720',light='#ffffff';return contrastOf(dark
 // How much of the primary the neutrals carry: Lab chroma of the surface and of the text on it,
 // and `accent` the chroma of the tertiary. Plain keeps both greys at chroma 0, so the brand
 // shows only where it acts: the PLAY button, the amounts and the cash-out.
-const STYLES={plain:{title:'Plain',about:'grey surfaces, the brand only on the buttons',surface:0,ink:0,tone:7,accent:12},neutral:{title:'Neutral',about:'Material: near-grey surfaces with a hint of the brand',surface:4,ink:4,tone:6},tinted:{title:'Tinted',about:'surfaces lean towards the brand',surface:14,ink:8,tone:8},branded:{title:'Branded',about:'surfaces are the brand colour, deep and dark',surface:30,ink:10,tone:10}};
+const STYLES={plain:{title:'Plain',about:'grey surfaces, the brand only on the buttons',surface:0,button:0,ink:0,tone:7,accent:12},neutral:{title:'Neutral',about:'Material: near-grey surfaces with a hint of the brand',surface:4,button:10,ink:4,tone:6},tinted:{title:'Tinted',about:'surfaces lean towards the brand',surface:14,button:18,ink:8,tone:8},branded:{title:'Branded',about:'surfaces are the brand colour, deep and dark',surface:30,button:30,ink:10,tone:10}};
 function fromPrimary(primary,style='neutral'){
  const st=STYLES[style]||STYLES.neutral;
  const [,,hue]=lch(primary);
  const surface=tone(hue,st.surface,st.tone),onSurface=tone(hue,st.ink,90);
  // Cash out is the brightest thing on the panel: the win green sits high on the tone scale.
  const success=readableTone(145,70,74,surface,4.5),danger=readableTone(25,60,80,surface,4.5),warning=readableTone(75,70,80,surface,4.5),info=readableTone(240,50,80,surface,4.5),tertiary=readableTone(hue+60,st.accent??24,80,surface,4.5);
- const secondary=tone(hue,st.surface,st.tone+11),onSecondary=onSurface;
+ const secondary=tone(hue,st.button,st.tone+11),onSecondary=onSurface;
  return repair({surface,onSurface,primary:readableTone(hue,lch(primary)[1],lch(primary)[0],surface,3),onPrimary:inkFor(primary),secondary,onSecondary,success,onSuccess:inkFor(success),danger,warning,info,tertiary});
 }
 // --- seasonal presets for themes ---------------------------------------------------------
@@ -163,9 +163,7 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
  const styleSel=$('#look-style');styleSel.replaceChildren(...Object.entries(STYLES).map(([id,st])=>Object.assign(new Option(st.title,id),{title:st.about})));try{styleSel.value=localStorage.getItem('crash-composer-palette-style')||'neutral'}catch{}
  styleSel.onchange=()=>{try{localStorage.setItem('crash-composer-palette-style',styleSel.value)}catch{}};
  $('#look-generate').onclick=()=>{const p=roles.primary;const generated=fromPrimary(p,styleSel.value);
-  // A theme keeps its brand's surfaces and text; only the actions and accents come from the primary.
-  if(editingTheme){for(const k of ['surface','onSurface'])delete generated[k]}
-  Object.assign(roles,generated);staged=false;dirty=true;mode();paint();apply();toast((editingTheme?'Accents generated from ':'Palette generated from ')+p+'. Adjust any role, then Save.')};
+  Object.assign(roles,generated);staged=false;dirty=true;mode();paint();apply();toast('Palette generated from '+p+'. Adjust any role, then Save.')};
  sheet.querySelectorAll('.role[data-role]').forEach(row=>{row.addEventListener('focusin',()=>highlightRole(row.dataset.role));row.addEventListener('focusout',()=>clearHighlight())});
  sheet.querySelectorAll('[data-role-key]').forEach(n=>n.oninput=()=>setRole(n.dataset.roleKey,n.value));
  sheet.querySelectorAll('[data-role-hex]').forEach(n=>n.onchange=()=>{const v=n.value.trim().toLowerCase();if(/^#[0-9a-f]{6}$/.test(v))setRole(n.dataset.roleHex,v);else n.value=roles[n.dataset.roleHex]});
@@ -231,7 +229,7 @@ function mode(){
  sheet.classList.toggle('theme-mode',editingTheme);
  // A new brand or theme starts from one colour: only the primary shows until the palette is generated.
  sheet.classList.toggle('staged',staged);
- $('#look-season').hidden=!editingTheme;$('#look-style').hidden=editingTheme;
+ $('#look-season').hidden=!editingTheme;
  sheet.querySelectorAll('.role-pair').forEach(pair=>pair.hidden=staged&&!pair.querySelector('[data-role-key="primary"]'));
  sheet.querySelectorAll('.role').forEach(row=>row.hidden=staged&&row.dataset.role!=='primary');
  $('#look-colours').hidden=staged;
