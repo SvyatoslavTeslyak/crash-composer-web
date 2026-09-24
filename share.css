@@ -45,3 +45,22 @@
 .cloud-dialog .wb-button.primary{background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:700;min-height:44px;padding:10px 20px}
 .cloud-dialog .wb-button.primary:hover:not(:disabled){background:var(--inspector-accent-hover);border-color:var(--inspector-accent-hover)}
 .cloud-dialog .wb-button.primary:focus-visible{outline:2px solid var(--inspector-accent-edge);outline-offset:3px}
+
+/* Player authentication uses the same entry-card language as Composer sign-in. */
+.share-dialog.lotomobil-dialog{width:min(var(--inspector-entry-width),calc(100vw - var(--space-32)));max-height:calc(100dvh - var(--space-32));padding:var(--space-32);border:var(--stroke-1) solid var(--border);border-radius:var(--inspector-radius-panel);background:linear-gradient(145deg,var(--inspector-card),var(--inspector-well));color:var(--text);font-family:var(--inspector-sans);box-shadow:var(--elevation-modal)}
+.share-dialog.lotomobil-dialog>header{position:relative;top:auto;display:block;margin:0 0 var(--space-24);padding:var(--space-48) 0 0;background:none;border:0}
+.share-dialog.lotomobil-dialog h2{margin:0;text-align:center;font-size:var(--type-24);font-weight:650;line-height:var(--leading-tight);letter-spacing:-.03em}
+.share-dialog.lotomobil-dialog>header [data-close]{position:absolute;right:calc(-1 * var(--space-16));top:calc(-1 * var(--space-16));width:var(--tap-min);height:var(--tap-min);padding:0;display:grid;place-items:center;border:0;background:transparent;color:var(--inspector-muted);font-size:var(--type-24)}
+.share-dialog.lotomobil-dialog>header [data-close]:hover{background:var(--inspector-surface-hover);color:var(--text)}
+.share-dialog.lotomobil-dialog>p{margin:0 0 var(--space-24);color:var(--inspector-muted);font-size:var(--type-14);line-height:var(--leading-relaxed)}
+.share-dialog.lotomobil-dialog form{gap:var(--space-24)}
+.share-dialog.lotomobil-dialog label{gap:var(--space-8);font-size:var(--type-14);line-height:var(--leading-relaxed)}
+.share-dialog.lotomobil-dialog input{min-height:var(--tap-min);padding:var(--space-12);border:var(--stroke-1) solid var(--inspector-border-strong);border-radius:var(--inspector-radius-card);background:var(--inspector-well);color:var(--text);font:var(--type-16) var(--inspector-sans)}
+.share-dialog.lotomobil-dialog button[type=submit]{display:flex;align-items:center;justify-content:space-between;min-height:var(--tap-min);padding:var(--space-12) var(--space-16);border:var(--stroke-1) solid var(--inspector-accent-edge);border-radius:var(--inspector-radius-card);background:var(--inspector-accent);color:var(--inspector-on-accent);font:650 var(--type-14) var(--inspector-sans)}
+.share-dialog.lotomobil-dialog button[type=submit]::after{content:'→';font-size:var(--type-20);line-height:1}
+.share-dialog.lotomobil-dialog button[type=submit]:disabled{opacity:.6;cursor:not-allowed}
+.share-dialog.lotomobil-dialog button[type=submit]:hover:not(:disabled){background:var(--inspector-accent-hover)}
+.share-dialog.lotomobil-dialog button.is-loading::after{content:none}
+.share-dialog.lotomobil-dialog #lotomobil-error{font-size:var(--type-14);margin:var(--space-16) 0 0}
+.share-dialog.lotomobil-dialog form>p{margin:0;color:var(--inspector-muted);font-size:var(--type-14)}
+@media(max-width:400px){.share-dialog.lotomobil-dialog{padding:var(--space-24)}.share-dialog.lotomobil-dialog>header [data-close]{top:calc(-1 * var(--space-12));right:calc(-1 * var(--space-12))}}

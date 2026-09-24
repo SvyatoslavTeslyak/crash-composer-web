@@ -244,7 +244,7 @@ class GameUI {
   this.bettingSound.setEnabled(s.settings?.sound===true);
   this.bettingSound.updateCashReady(s);
   this.state=s;currency=typeof s.currency==='string'?s.currency:'';this.host.hidden=false;this.host.classList.toggle('reduced',!!s.settings?.reduced_motion);
-  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',s.balanceKnown===false?'—':window.CrashI18n?.locale==='fr'?window.CrashI18n.number(Number(s.balance||0),{minimumFractionDigits:2,maximumFractionDigits:2}):Number(s.balance||0).toFixed(2));this.text('bet',wager(s.bet));
+  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',s.balanceKnown===false?'—':window.CrashI18n?.locale==='fr'?window.CrashI18n.number(Number(s.balance||0),{minimumFractionDigits:0,maximumFractionDigits:0}):Number(s.balance||0).toFixed(0));this.text('bet',wager(s.bet));
 
   this.text('personal',money(s.personal));this.text('top',money(s.record?.payout));this.text('owner',s.record?.name||'');this.q('.record-top').title=[s.record?.name,s.record?.date].filter(Boolean).join(' · ');
   const signature=JSON.stringify([s.players,s.record?.name]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players)}
@@ -369,7 +369,7 @@ class GameUI {
   // From the tabbed variant's side buttons these open as a sheet from the right on a wide
   // screen (the CSS decides the breakpoint); the same modal from the menu stays a popup.
   layer.classList.toggle('is-sheet',!drawer&&!!this.tabbed&&(kind==='topbets'||kind==='mybets'||(kind==='rules'&&this.rulesFrom==='tab')));this.q('.modal').classList.toggle('win-modal',kind==='win');
-  this.q('.modal h2').textContent={menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:'Choose difficulty',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top 25',mybets:'My bets'}[kind];
+  this.q('.modal h2').textContent={menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:'Choose difficulty',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top bets',mybets:'My bets'}[kind];
   this.q('[data-action=close]').hidden=kind==='win'&&!this.config.demo;
   const body=this.q('.modal-body');body.classList.toggle('rules-content',kind==='rules');
   if(kind==='difficulty'){
@@ -401,7 +401,7 @@ class GameUI {
    body.innerHTML='<div class="account-summary">'+avatar('You',s.players)+'<div><p>You · Level '+(1+Math.floor((s.xp||0)/10))+'</p><p class="modal-note">'+((s.xp||0)%10)+' / 10 XP</p></div></div>';
    if(this.tabbed)body.innerHTML='';
    const row=(k,v,tone='',monetary=false)=>'<div class="setting"><span>'+esc(k)+'</span><strong class="account-stat '+tone+'">'+esc(v)+(this.tabbed&&monetary?icon('coin.png'):'')+'</strong></div>';
-   body.innerHTML+=row('Balance',s.balanceKnown===false?'Not provided by API':money(s.balance),'',true)+row('Personal record',money(s.personal),'gold',true)+'<h3 class="modal-section-title">This session</h3>'+row('Completed rounds',s.rounds||0)+row('Successful cash outs',s.roundWins||0,'success')+row('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold');
+   body.innerHTML+=row('Balance',s.balanceKnown===false?'Not provided by API':money(s.balance,0),'',true)+row('Personal record',money(s.personal),'gold',true)+'<h3 class="modal-section-title">This session</h3>'+row('Completed rounds',s.rounds||0)+row('Successful cash outs',s.roundWins||0,'success')+row('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold');
    if(this.tabbed){
     const stat=(label,value,tone='',wide=false)=>'<div class="account-session-stat'+(wide?' account-session-wide':'')+'"><span>'+label+'</span><strong class="'+tone+'">'+esc(value)+'</strong></div>';
     body.innerHTML='<div class="account-record-card"><span class="account-record-label"><span>Personal record</span></span><strong>'+esc(money(s.personal))+icon('coin.png')+'</strong></div><h3 class="modal-section-title">This session</h3><div class="account-session-grid">'+stat('Completed rounds',s.rounds||0)+stat('Successful cash outs',s.roundWins||0,'success')+stat('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold',true)+'</div>';
@@ -425,6 +425,7 @@ class GameUI {
   }
   const tabView=!drawer&&!!this.tabbed&&['topbets','mybets','rules'].includes(kind)&&(kind!=='rules'||this.rulesFrom==='tab');
   layer.classList.toggle('is-tab-view',tabView);
+  layer.classList.toggle('is-bets-panel',!!this.tabbed&&['topbets','mybets'].includes(kind));
   const dialog=this.q('.modal');
   for(const node of [layer,dialog]){node.removeAttribute('role');node.removeAttribute('aria-modal');node.removeAttribute('aria-labelledby')}
   const owner=tabView?layer:dialog;owner.setAttribute('role','dialog');owner.setAttribute('aria-modal','true');owner.setAttribute('aria-labelledby','crash-modal-title');

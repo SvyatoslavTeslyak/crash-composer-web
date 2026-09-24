@@ -26,8 +26,8 @@
 .sound-card h3{font-size:var(--inspector-type-lg);margin:0 0 var(--space-4)}.sound-card code{font-size:var(--inspector-type-sm);color:var(--inspector-muted)}
 .sound-card-play{display:flex;gap:var(--space-6);flex:none}
 .sound-trigger{margin:0;color:var(--inspector-muted)}
-.sound-slider{display:grid;grid-template-columns:var(--space-48) minmax(0,1fr) var(--space-48);align-items:center;gap:var(--space-8);color:var(--inspector-muted)}
-.sound-slider output{font:var(--inspector-type-base) var(--inspector-mono);color:var(--inspector-text);text-align:right}
+.sound-slider{display:grid;grid-template-columns:auto minmax(0,1fr) max-content;align-items:center;gap:var(--space-8);color:var(--inspector-muted)}
+.sound-slider output{font:var(--inspector-type-base) var(--inspector-mono);color:var(--inspector-text);text-align:right;white-space:nowrap;min-width:7ch}
 .sound-takes{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-4)}
 .sound-takes li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:var(--space-8);padding:var(--space-4) var(--space-6);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius)}
 .sound-takes li>button{padding:0 var(--space-8)}
@@ -44,4 +44,4 @@
 .sound-prompt textarea{display:block;width:100%;margin:var(--space-8) 0;font:var(--inspector-type-base)/var(--leading-body) var(--inspector-sans);color:var(--inspector-text);background:var(--inspector-well);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius);padding:var(--space-8);resize:vertical}
 .sound-prompt-actions{display:flex;flex-wrap:wrap;gap:var(--space-8);align-items:center}
 .sound-prompt-actions a{color:var(--inspector-accent);font-size:var(--inspector-type-base)}
-@media(max-width:640px){.sound-grid{grid-template-columns:minmax(0,1fr)}.sound-slider{grid-template-columns:var(--space-48) minmax(0,1fr) var(--space-48)}}
+@media(max-width:640px){.sound-grid{grid-template-columns:minmax(0,1fr)}.sound-slider{grid-template-columns:auto minmax(0,1fr) max-content}}

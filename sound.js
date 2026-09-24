@@ -86,7 +86,7 @@ function sections(game,own){
  }
  const overrides=indexed(targetId()).filter(([e])=>e.group==='interface'),ids=new Set(overrides.map(([e])=>e.id));
  const kit=indexed(KIT).filter(([e])=>!ids.has(e.id)),named=kit.filter(([e])=>e.fallback),base=kit.filter(([e])=>!e.fallback);
- return grid(targetId(),overrides)+grid(KIT,named.concat(base));
+ return '<div class="sound-grid">'+overrides.map(([event,index])=>card(event,index,targetId())).join('')+named.concat(base).map(([event,index])=>card(event,index,KIT)).join('')+'</div>';
 }
 
 // The take list an event actually sounds like: its own, or its base sound's.

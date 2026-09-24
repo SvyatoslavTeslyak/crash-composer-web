@@ -52,4 +52,4 @@ color-scheme:dark;
 /* Workspace controls and player login sizing. */
 :root{--inspector-size-420:420px;--inspector-size-9:9px;--inspector-loading-duration:.8s;--inspector-size-76:76px;--inspector-size-30:30px;--inspector-overlay-shadow:#0005;}
 
-#workspace-avatar{--avatar-bg:hsl(var(--avatar-hue) 32% 19%);--avatar-fg:hsl(var(--avatar-hue) 75% 78%);--avatar-border:hsl(var(--avatar-hue) 55% 56%);--avatar-hover:hsl(var(--avatar-hue) 35% 25%)}
+#workspace-avatar{--avatar-bg:hsl(var(--avatar-hue) 32% 19%);--avatar-fg:hsl(var(--avatar-hue) 75% 78%);--avatar-border:hsl(var(--avatar-hue) 55% 56%)}

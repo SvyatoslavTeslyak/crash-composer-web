@@ -917,3 +917,18 @@
  .crash-ui .top-bets th:first-child{width:28%}
  .crash-ui .top-bets th:nth-child(4){width:32%}
 }
+
+/* Bets share one presentation; only the surrounding navigation differs. */
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel{display:flex;align-items:stretch;justify-content:flex-end;padding:var(--space-4);background:var(--scrim)}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal{position:relative;inset:auto;transform:none;animation:crash-sheet-in var(--motion-ms) ease-out;display:flex;flex-direction:column;gap:var(--space-16);width:min(100%,calc(var(--modal-max-width-px) - var(--space-48) - var(--space-32)));height:100%;max-height:100%;max-width:none;min-height:0;margin:0;padding:var(--space-16);border-radius:var(--radius-24);border:var(--stroke-1) solid color-mix(in srgb,var(--text) 16%,transparent);background:linear-gradient(160deg,color-mix(in srgb,var(--text) 5%,var(--surface)),var(--surface) 45%);box-shadow:var(--elevation-modal);--table-inset:var(--space-16)}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal>header{position:relative;flex:none;min-height:var(--tap-min);margin:0;padding:0 var(--tap-min);justify-content:center}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal>header h2{color:var(--text);text-align:center;margin:0;width:100%}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal>header [data-action=close]{position:absolute;top:0;right:0}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal>header .bet-detail-back{position:absolute;left:0;right:auto;top:0}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal-body{flex:1;min-height:0;overflow:auto;scrollbar-gutter:auto}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal-body:has(>.bets-table){margin-inline:calc(-1 * var(--table-inset))}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bets-table td{white-space:normal;overflow-wrap:anywhere}
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bet-player{gap:var(--space-8)}
+@media(max-width:599px){.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .bet-player{gap:var(--space-4)}}
+
+.crash-ui.has-tabbed-controls .modal-layer.is-bets-panel .modal:has(.bets-table){--table-inset:var(--space-16);padding-inline:var(--space-16)}
