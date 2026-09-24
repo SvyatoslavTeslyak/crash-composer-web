@@ -344,7 +344,7 @@ class GameUI {
    if(key!==day){day=key;heading='<tr class="bet-day"><th colspan="3" scope="rowgroup">'+'<time data-date-only datetime="'+date.toISOString()+'">'+esc(date.toLocaleDateString(window.CrashI18n?.locale==='fr'?'fr-FR':'en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}))+'</time>'+'</th></tr>'}
    return heading+row+'<td>'+trigger+'<time datetime="'+date.toISOString()+'">'+esc(date.toLocaleTimeString(window.CrashI18n?.locale==='fr'?'fr-FR':'en-US',{hour:'numeric',minute:'2-digit'}))+'</time></button></td><td>'+amount(v.wager,true)+'</td><td class="bet-prize">'+(v.payout>0?amount(v.payout):'—')+'</td></tr>';
   }).join('');
-  return '<table class="bets-table '+(top?'top-bets':'my-bets')+'"><caption class="bet-caption">'+(top?'Top 25':'My bets')+'</caption><thead><tr><th scope="col">'+(top?'Players':'Time')+'</th><th scope="col">Wager</th>'+(top?'<th scope="col">X</th>':'')+'<th scope="col">Prize</th></tr></thead><tbody>'+body+'</tbody></table>'+(!rows.length?'<p class="bets-empty">No bets yet.</p>':'');
+  return '<table class="bets-table '+(top?'top-bets':'my-bets')+'"><caption class="bet-caption">'+(top?'Top bets':'My bets')+'</caption><thead><tr><th scope="col">'+(top?'Players':'Time')+'</th><th scope="col">Wager</th>'+(top?'<th scope="col">X</th>':'')+'<th scope="col">Prize</th></tr></thead><tbody>'+body+'</tbody></table>'+(!rows.length?'<p class="bets-empty">No bets yet.</p>':'');
  }
  clearBetDetails(){this.betDetail=null;this.q('.modal').classList.remove('is-bet-detail');this.q('[data-action=betsBack]')?.remove()}
  showBetDetails(index){
@@ -427,7 +427,7 @@ class GameUI {
   const drawerBody=this.q('.modal-body');drawerBody.removeAttribute('role');drawerBody.removeAttribute('aria-labelledby');drawerBody.removeAttribute('id');
   if(drawer){
    const nav=document.createElement('div');nav.className='drawer-tabs';nav.setAttribute('role','tablist');nav.setAttribute('aria-label','Menu sections');
-   nav.innerHTML=[['topbets','Top bets'],['mybets','My bets'],['rules','Rules'],['menu','Settings']].map(([id,label])=>'<button type="button" class="drawer-tab" role="tab" id="drawer-tab-'+id+'" aria-controls="drawer-panel" aria-selected="'+(kind===id)+'" tabindex="'+(kind===id?'0':'-1')+'" data-action="drawerTab" data-value="'+id+'">'+label+'</button>').join('');
+   nav.innerHTML=[['topbets','Top bets'],['mybets','My bets'],['rules','Rules'],['menu','Settings']].map(([id,label])=>'<button type="button" class="drawer-tab" role="tab" id="drawer-tab-'+id+'" aria-controls="drawer-panel" aria-selected="'+(kind===id)+'" tabindex="'+(kind===id?'0':'-1')+'" data-action="drawerTab" data-value="'+id+'"><span class="drawer-tab-label">'+label+'</span></button>').join('');
    drawerBody.before(nav);drawerBody.id='drawer-panel';drawerBody.setAttribute('role','tabpanel');drawerBody.setAttribute('aria-labelledby','drawer-tab-'+kind);this.q('.modal h2').textContent=kind==='menu'?'Settings':kind==='rules'?'Rules':kind==='topbets'?'Top bets':'My bets';
   }
   const tabView=!drawer&&!!this.tabbed&&['topbets','mybets','rules'].includes(kind)&&(kind!=='rules'||this.rulesFrom==='tab');

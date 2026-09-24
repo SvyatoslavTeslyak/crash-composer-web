@@ -111,7 +111,8 @@
       "ht": "Pi gwo miz yo",
       "usage": [
         "aria-label",
-        "text"
+        "text",
+        "caption"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -665,12 +666,13 @@
       "games": [],
       "ht": "25 pi bon yo",
       "usage": [
-        "text"
+        "unused"
       ],
       "previewWindow": "topbets",
       "presets": [
         "tabbed-shell-v1"
-      ]
+      ],
+      "unusedReason": "Replaced by Top bets, shared with the window title."
     },
     "players_392fee": {
       "source": "Players",

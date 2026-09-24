@@ -51,11 +51,16 @@ function locate(key){
  const pattern=source.includes('{')?new RegExp('^'+source.split(/(\{\w+\})/).map(part=>/^\{/.test(part)?'.+?':escape(part)).join('')+'$'):null;
  const matches=value=>value!=null&&(value.trim()===source||pattern?.test(value.trim()));
  const found=[],walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let node;
- const visible=el=>{if(!el||el.closest('[data-no-translate]'))return false;for(let parent=el;parent;parent=parent.parentElement){const style=getComputedStyle(parent);if(style.visibility==='hidden'||style.display==='none'||style.opacity==='0'||style.clipPath==='inset(50%)')return false}return true};
+ const visible=el=>{if(!el||el.closest('[data-no-translate]'))return false;for(let parent=el;parent;parent=parent.parentElement){const style=getComputedStyle(parent);if(style.visibility==='hidden'||style.display==='none'||style.opacity==='0'||style.clipPath==='inset(50%)'||(['hidden','clip'].includes(style.overflow)&&(parent.clientWidth===0||parent.clientHeight===0)))return false}return true};
  const onScreen=rect=>rect.width&&rect.height&&rect.bottom>0&&rect.top<innerHeight&&rect.right>0&&rect.left<innerWidth;
  while((node=walker.nextNode())){if(!matches(originals.get(node)?.text?.source)||!visible(node.parentElement))continue;const range=document.createRange();range.selectNodeContents(node);found.push({kind:'text',rects:[...range.getClientRects()].filter(onScreen)})}
  for(const el of document.querySelectorAll('[aria-label],[title],[placeholder],[alt]')){
   if(!visible(el))continue;for(const attr of ['aria-label','title','placeholder','alt'])if(matches(originals.get(el)?.[attr]?.source??el.getAttribute(attr)))found.push({kind:attr,rects:[...el.getClientRects()].filter(onScreen)});
+ }
+ // A visually hidden caption names its table; outline that table, not clipped text.
+ for(const caption of document.querySelectorAll('caption')){
+  const table=caption.closest('table');if(!visible(table))continue;
+  if([...caption.childNodes].some(node=>matches(originals.get(node)?.text?.source??node.nodeValue)))found.push({kind:'caption',rects:[...table.getClientRects()].filter(onScreen)});
  }
  for(const el of document.querySelectorAll('[aria-labelledby]')){
   if(!visible(el))continue;
@@ -80,7 +85,7 @@ function paintHighlight(){
   mask.append(svgNode('rect',{x,y,width,height,rx:6,fill:'black'}));
   const box=document.createElement('div');Object.assign(box.style,{position:'absolute',boxSizing:'border-box',left:x+'px',top:y+'px',width:width+'px',height:height+'px',border:'3px '+(item.kind==='text'?'solid':'dashed')+' #6cccff',borderRadius:'6px',boxShadow:'0 0 0 1px #07131d, 0 0 16px rgba(108,204,255,.75)',pointerEvents:'none'});highlightLayer.append(box);
  }
- defs.append(mask);svg.append(defs,svgNode('rect',{width:'100%',height:'100%',fill:'rgba(0,0,0,.68)',mask:'url(#translation-spotlight-mask)'}));Object.assign(svg.style,{position:'absolute',inset:'0',pointerEvents:'none'});highlightLayer.prepend(svg);
+ defs.append(mask);svg.append(defs,svgNode('rect',{width:'100%',height:'100%',fill:'rgba(0,0,0,.40)',mask:'url(#translation-spotlight-mask)'}));Object.assign(svg.style,{position:'absolute',inset:'0',pointerEvents:'none'});highlightLayer.prepend(svg);
  document.body.append(highlightLayer);
 }
 function highlight(key){highlightKey=key||'';translate();return !!highlightLayer}
