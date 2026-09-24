@@ -937,12 +937,15 @@
 
 .crash-ui .history .history-result{display:inline-flex;align-items:center;gap:var(--space-6);flex-shrink:0;font-family:var(--font-numbers),var(--font-body),sans-serif}.crash-ui .history .history-result.is-cashout .history-result-icon{color:var(--success)}.crash-ui .history .history-result.is-loss .history-result-icon{color:var(--danger)}.crash-ui .history-result-icon{font-family:var(--font-body),sans-serif;font-size:.85em}.crash-ui button.history-result:hover{filter:brightness(1.12)}
 
-.crash-ui .win-toast{position:absolute;top:88px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:var(--space-12);max-width:calc(100% - 32px);padding:var(--space-12) var(--space-16);border:1px solid var(--gold);border-radius:999px;background:var(--surface);box-shadow:var(--elevation-panel);pointer-events:none}
+.crash-ui .win-toast{position:absolute;top:var(--win-toast-top,72px);left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:var(--space-12);max-width:calc(100% - 32px);padding:var(--space-12) var(--space-16);border:1px solid var(--gold);border-radius:999px;background:var(--surface);box-shadow:var(--elevation-panel);pointer-events:none}
 .crash-ui .win-toast .win-coin{width:36px;height:36px;object-fit:contain;animation:none;transform:none;margin:0}
 .crash-ui .win-toast strong{display:block;font-size:var(--type-14);white-space:nowrap;color:var(--text)}
 .crash-ui .win-toast span{display:block;color:var(--gold);font-family:var(--font-numbers),sans-serif;font-weight:700;font-size:var(--type-20);white-space:nowrap}
 
-@keyframes win-toast-enter{from{transform:translate(-50%,calc(-100% - 88px));opacity:0}to{transform:translate(-50%,0);opacity:1}}
+@keyframes win-toast-enter{from{transform:translate(-50%,calc(-100% - var(--win-toast-top,72px)));opacity:0}to{transform:translate(-50%,0);opacity:1}}
 .crash-ui .win-toast{animation:win-toast-enter 300ms cubic-bezier(.22,1,.36,1) both}
 .crash-ui.reduced .win-toast{animation:none}
 @media(prefers-reduced-motion:reduce){.crash-ui .win-toast{animation:none}}
+
+@keyframes win-toast-exit{from{transform:translate(-50%,0);opacity:1}to{transform:translate(-50%,calc(-100% - var(--win-toast-top,72px)));opacity:0}}
+.crash-ui .win-toast.is-leaving{animation:win-toast-exit 300ms cubic-bezier(.4,0,1,1) both}

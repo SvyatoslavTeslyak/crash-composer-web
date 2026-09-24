@@ -317,10 +317,16 @@ class GameUI {
   const id=s.winId;
   queueMicrotask(()=>{if(this.state.win&&this.state.winId===id)this.send('dismissWin',{})});
   this.toastFlightTimer=setTimeout(()=>{if(this.winToast!==toast)return;this.winSound.playTransfer();this.flyWinCoins(true)},200);
-  this.toastEndTimer=setTimeout(()=>{if(this.winToast===toast)this.finishWinToast()},2000);
+  this.toastEndTimer=setTimeout(()=>{if(this.winToast===toast)this.hideWinToast()},2000);
+ }
+ hideWinToast(){
+  const toast=this.winToast;if(!toast)return;
+  if(this.state.settings?.reduced_motion||matchMedia('(prefers-reduced-motion: reduce)').matches){this.finishWinToast();return}
+  toast.classList.add('is-leaving');
+  this.toastHideTimer=setTimeout(()=>{if(this.winToast===toast)this.finishWinToast()},300);
  }
  finishWinToast(){
-  clearTimeout(this.toastFlightTimer);clearTimeout(this.toastEndTimer);
+  clearTimeout(this.toastFlightTimer);clearTimeout(this.toastEndTimer);clearTimeout(this.toastHideTimer);
   if(this.winToast){this.clearWinCoins();this.winToast.remove();this.winToast=null}
   this.heldWinBalance=undefined;
  }
@@ -503,6 +509,8 @@ class GameUI {
    layer.append(tabs);
   }
   this.tabPresentation();
+  const history=this.q('.history'),historyRect=history.getBoundingClientRect();
+  this.host.style.setProperty('--win-toast-top',(historyRect.height>0?historyRect.top-this.host.getBoundingClientRect().top:72)+'px');
   requestAnimationFrame(()=>{const target=drawer?layer.querySelector('[role=tab][aria-selected=true]'):layer.querySelector('button:not([hidden]),input,select');if(target)target.focus({preventScroll:true});else{this.q('.modal').tabIndex=-1;this.q('.modal').focus()}});
  }
  tabPresentation(){
@@ -573,6 +581,8 @@ class GameUI {
   const a=this.q('.account-column').getBoundingClientRect(),b=this.q('.bottom').getBoundingClientRect();
   this.host.style.setProperty('--bet-controls-top',b.top+'px');
   this.tabPresentation();
+  const history=this.q('.history'),historyRect=history.getBoundingClientRect();
+  this.host.style.setProperty('--win-toast-top',(historyRect.height>0?historyRect.top-this.host.getBoundingClientRect().top:72)+'px');
   this.host.style.setProperty('--dev-top',(Math.max(a.bottom,wide?winners.getBoundingClientRect().bottom:0)+8)+'px');
   // The fishing boat occupies the right side; reserve the taller Live Wins panel too.
   const sceneTop=this.state.game==='gold'?account.getBoundingClientRect().bottom:
