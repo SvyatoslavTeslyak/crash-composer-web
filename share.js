@@ -15,20 +15,22 @@ dialog.innerHTML=`<header><div><small>PUBLISHED GAME</small><h2 id="share-title"
 <footer><button class="wb-button" type="button" data-copy="code">Copy iframe</button><button class="wb-button" type="button" id="share-download">Download HTML example</button></footer></div><p id="share-status" role="status" aria-live="polite"></p>`;
 document.body.append(dialog);let game,title,shareMode='iframe';
 const menu=document.createElement('div');menu.id='share-menu';menu.className='share-menu';menu.hidden=true;
-menu.innerHTML='<button type="button" class="wb-button" data-share-mode="iframe">Share iframe</button><button type="button" class="wb-button" data-share-mode="api">Share game with API</button>';
+menu.innerHTML='<button type="button" class="wb-button" data-share-mode="iframe">Game link &amp; embed</button><a class="wb-button" data-share-mode="api" target="_blank" rel="noopener">Play with Lotomobil account</a>';
+menu.querySelector('[data-share-mode=api]').href=new URL('player.html',window.ComposerCloudConfig.workspaceUrl).href;
+const showcase=$('#showcase-link');menu.insertBefore(showcase,menu.lastElementChild);showcase.title='Open the public game showcase';showcase.addEventListener('click',()=>closeMenu());
 document.body.append(menu);button.setAttribute('aria-controls',menu.id);button.setAttribute('aria-expanded','false');
 button.insertAdjacentHTML('beforeend',' <span aria-hidden="true">▾</span>');
 function closeMenu(focus=false){menu.hidden=true;button.setAttribute('aria-expanded','false');if(focus)button.focus()}
 function positionMenu(){const r=button.getBoundingClientRect();menu.style.left=Math.max(8,Math.min(r.left,innerWidth-menu.offsetWidth-8))+'px';menu.style.top=Math.max(8,Math.min(r.bottom+6,innerHeight-menu.offsetHeight-8))+'px'}
 button.onclick=()=>{if(!menu.hidden){closeMenu();return}menu.hidden=false;button.setAttribute('aria-expanded','true');positionMenu()};
-menu.onclick=event=>{const item=event.target.closest('[data-share-mode]');if(!item)return;closeMenu();openShare(item.dataset.shareMode)};
+menu.onclick=event=>{const item=event.target.closest('[data-share-mode]');if(!item)return;closeMenu();if(item.dataset.shareMode==='iframe')openShare('iframe')};
 document.addEventListener('click',event=>{if(!menu.contains(event.target)&&!button.contains(event.target))closeMenu()});
-document.addEventListener('keydown',event=>{if(menu.hidden)return;const items=[...menu.querySelectorAll('button')].filter(b=>!b.hidden);if(event.key==='Escape'){event.preventDefault();closeMenu(true)}else if(['ArrowDown','ArrowUp','Home','End'].includes(event.key)){event.preventDefault();let i=items.indexOf(document.activeElement);i=event.key==='Home'?0:event.key==='End'?items.length-1:(i+(event.key==='ArrowDown'?1:-1)+items.length)%items.length;items[i].focus()}});
+document.addEventListener('keydown',event=>{if(menu.hidden)return;const items=[...menu.querySelectorAll('button,a')].filter(b=>!b.hidden&&!b.disabled);if(event.key==='Escape'){event.preventDefault();closeMenu(true)}else if(['ArrowDown','ArrowUp','Home','End'].includes(event.key)){event.preventDefault();let i=items.indexOf(document.activeElement);i=event.key==='Home'?0:event.key==='End'?items.length-1:(i+(event.key==='ArrowDown'?1:-1)+items.length)%items.length;items[i].focus()}});
 document.addEventListener('focusin',event=>{if(!menu.hidden&&!menu.contains(event.target)&&event.target!==button)closeMenu()});
-button.addEventListener('keydown',event=>{if(menu.hidden&&['ArrowDown','ArrowUp'].includes(event.key)){event.preventDefault();button.click();const items=[...menu.querySelectorAll('button')].filter(b=>!b.hidden);items[event.key==='ArrowUp'?items.length-1:0].focus()}});
+button.addEventListener('keydown',event=>{if(menu.hidden&&['ArrowDown','ArrowUp'].includes(event.key)){event.preventDefault();button.click();const items=[...menu.querySelectorAll('button,a')].filter(b=>!b.hidden&&!b.disabled);items[event.key==='ArrowUp'?items.length-1:0].focus()}});
 window.addEventListener('resize',()=>closeMenu());window.addEventListener('scroll',()=>closeMenu(),true);
 dialog.addEventListener('close',()=>button.focus());
-const sync=()=>{closeMenu();menu.querySelector('[data-share-mode=api]').hidden=window.ComposerTarget?.value!=='road';const playable=!!window.ComposerTarget?.entry()?.live;button.disabled=!playable;button.title=playable?'Share a public game link or iframe':'Select a game to share'};
+const sync=()=>{closeMenu();menu.querySelector('[data-share-mode=api]').hidden=window.ComposerTarget?.value!=='road';const playable=!!window.ComposerTarget?.entry()?.live;menu.querySelector('[data-share-mode=iframe]').disabled=!playable;button.title='Share game or open showcase'};
 let brands=window.CrashTokens?.BRANDS||{default:'Lotomobil'},themes=window.CrashTokens?.THEMES||{};
 let brandSwatches={},themeSwatches={};
 const selection={language:'en',brand:'default',theme:''};
