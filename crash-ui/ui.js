@@ -67,12 +67,14 @@ const button=(action,text,cls='')=>'<button type="button" class="button '+cls+'"
 class BettingSound {
  constructor(overrides={}){this.enabled=false;this.last=-Infinity;this.next=0;this.pools={};this.plan={...overrides};
   for(const [name,volume] of [['click.ogg',0.14],['confirm.ogg',0.12]])this.pool(name,volume);
-  this.pressedGo=-1e9;soundLevels.then(plan=>{this.plan={...plan,...overrides};for(const spec of Object.values(this.plan))if(spec.file)this.pool(spec.file,spec.volume)});}
- // One pool per file, so eleven events that share a take share four clips rather than forty.
+  this.pressedGo=-1e9;soundLevels.then(plan=>{this.plan={...plan,...overrides}});}
+ // One pool per file, so eleven events that share a take share three clips rather than forty.
+ // A pool is built when its file is first played, inside that press, rather than for every
+ // take in the plan at load: a phone pays for each media element it holds, played or not.
  pool(file,volume){
   const have=this.pools[file];
   if(have)return have
-  return this.pools[file]=Array.from({length:4},()=>{const clip=new Audio(/^https?:/.test(file)?file:base+'assets/audio/'+file);clip.preload='auto';clip.preservesPitch=false;clip.volume=Number.isFinite(volume)?volume:0.14;return clip});
+  return this.pools[file]=Array.from({length:3},()=>{const clip=new Audio(/^https?:/.test(file)?file:base+'assets/audio/'+file);clip.preload='auto';clip.preservesPitch=false;clip.volume=Number.isFinite(volume)?volume:0.14;return clip});
  }
  // Games differ in when cashing out becomes possible: after the first hop in Goat Road, at
  // once in Fish Master. When it arrives on the press itself the chime would only double the
@@ -88,7 +90,9 @@ class BettingSound {
   }
   this.game=state.game;this.cashReady=active;
  }
- setEnabled(value){this.enabled=value;if(!value)for(const pool of Object.values(this.pools))for(const clip of pool)clip.pause()}
+ // Pausing a media element is not free on a phone - iOS goes through the audio session for
+ // every call - so only a clip that is actually playing is ever paused, and only on the switch.
+ setEnabled(value){if(this.enabled===value)return;this.enabled=value;if(!value)for(const pool of Object.values(this.pools))for(const clip of pool)if(!clip.paused)clip.pause()}
  // What the player pressed, named as the manifest names it.
  // How close to the PLAY press a cash-ready state still counts as part of that press.
  static PRESS_WINDOW_MS=400;
@@ -103,7 +107,7 @@ class BettingSound {
   const file=spec&&spec.file?spec.file:(ready?'confirm.ogg':'click.ogg');
   if(spec&&spec.volume===0)return;
   const pool=this.pool(file,spec&&Number.isFinite(spec.volume)?spec.volume:undefined);
-  const clip=pool[this.next++%4];clip.currentTime=0;if(spec&&Number.isFinite(spec.volume))clip.volume=spec.volume;
+  const clip=pool[this.next++%pool.length];clip.currentTime=0;if(spec&&Number.isFinite(spec.volume))clip.volume=spec.volume;
   // Without a take of their own the steps keep the pitch that told them apart.
   const own=spec&&spec.file&&spec.file!=='click.ogg';
   const spread=1+(Math.random()*2-1)*(spec&&spec.jitter||0);
@@ -115,7 +119,9 @@ class BettingSound {
 // Confetti announces the popup; coin clinks belong only to the wallet transfer.
 class WinSound {
  constructor(){this.clip=new Audio(base+'assets/audio/win-paper-pop.ogg');this.clip.preload='auto';this.clip.volume=0.44;this.transferClip=new Audio(base+'assets/audio/win.ogg');this.transferClip.preload='auto';this.transferClip.volume=0.20;this.enabled=false;this.active=false;this.jitter={};this.clip.preservesPitch=false;soundLevels.then(plan=>{const pick=(id,clip,fallback)=>{const spec=plan[id];if(!spec)return;if(spec.file&&spec.file!==fallback)clip.src=base+'assets/audio/'+spec.file;if(Number.isFinite(spec.volume))clip.volume=spec.volume;this.jitter[id]=spec.jitter||0};pick('win',this.clip,'win-paper-pop.ogg');pick('win_transfer',this.transferClip,'win.ogg')})}
- update(state){this.enabled=state.settings?.sound===true;if(!this.enabled){this.clip.pause();this.transferClip.pause()}const active=!!state.win;if(state.game==='road')this.clip.pause();if(state.game!=='road'&&this.game===state.game&&active&&(!this.active||(state.winId!==undefined&&state.winId!==this.winId)))this.play();this.game=state.game;this.active=active;this.winId=state.winId}
+ // This runs on every published state, many times a second: it must not touch the clips
+ // unless something has actually changed, or the phone spends the round in the audio session.
+ update(state){this.enabled=state.settings?.sound===true;if(!this.enabled){if(!this.clip.paused)this.clip.pause();if(!this.transferClip.paused)this.transferClip.pause()}const active=!!state.win;if(state.game==='road'&&!this.clip.paused)this.clip.pause();if(state.game!=='road'&&this.game===state.game&&active&&(!this.active||(state.winId!==undefined&&state.winId!==this.winId)))this.play();this.game=state.game;this.active=active;this.winId=state.winId}
  spread(id){const j=this.jitter[id]||0;return 1+(Math.random()*2-1)*j}
  play(){if(!this.enabled||document.hidden)return;this.clip.currentTime=0;this.clip.playbackRate=this.spread('win');this.clip.play().catch(()=>{})}
  playTransfer(){if(!this.enabled||document.hidden)return;this.transferClip.currentTime=0;this.transferClip.playbackRate=1.12*this.spread('win_transfer');this.transferClip.preservesPitch=false;this.transferClip.play().catch(()=>{})}
@@ -185,7 +191,7 @@ class TabbedControls {
   this.text('tbBet',coinAmount(s.bet));fitStake(this.slots.tbBet,this.slots.tbBet.textContent);for(const a of ['min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
   const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);
   const nextLane=s.game==='road'&&s.showCash;coinSlot(this.slots.tbGoAmount,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',s.goTitle||(nextLane?'GO':'BET'));this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
-  const cash=this.q('[data-action=cash]');if(s.game==='road'&&cash.nextElementSibling===go)cash.parentElement.append(cash);cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win;moneySlot(this.slots.tbCash,s.cash);for(const key of ['tbCash','tbGoAmount'])this.slots[key].classList.toggle('long-amount',(this.slots[key].querySelector('.money-unit')?this.slots[key].firstChild.textContent:this.slots[key].textContent).trim().length>7);
+  const cash=this.q('[data-action=cash]');cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win;moneySlot(this.slots.tbCash,s.cash);for(const key of ['tbCash','tbGoAmount'])this.slots[key].classList.toggle('long-amount',(this.slots[key].querySelector('.money-unit')?this.slots[key].firstChild.textContent:this.slots[key].textContent).trim().length>7);
   for(const t of this.tabs.children)t.disabled=!!s.win;
  }
 }
@@ -313,7 +319,7 @@ class GameUI {
   this.q('[data-action=auto]').setAttribute('aria-pressed',String(!!s.auto));
   for(const a of ['auto','difficulty','min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
   const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);this.slots.playIcon.hidden=asCash;
-  const cash=this.q('[data-action=cash]');if(s.game==='road'&&cash.nextElementSibling===go)cash.parentElement.append(cash);cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win; // Button visibility never changes the shared control layout.
+  const cash=this.q('[data-action=cash]');cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win; // Button visibility never changes the shared control layout.
   const presets=s.presets||[2,3,8,20];const presetKey=JSON.stringify(presets);if(presetKey!==this.lastPresets){this.lastPresets=presetKey;this.q('.presets').innerHTML=presets.map(v=>'<button class="button" data-action="preset" data-value="'+Number(v)+'"><span class="coin-amount">'+esc(coinAmount(v))+'</span></button>').join('')}
   for(const b of this.q('.presets').children){b.disabled=!s.canBet;b.setAttribute('aria-pressed',String(Number(b.dataset.value)===s.bet))}
   const flags=s.flags||{};this.q('.personal').hidden=false;this.q('.record-top').hidden=false;this.q('.records').hidden=!!this.tabbed||flags.personal_record===false;
