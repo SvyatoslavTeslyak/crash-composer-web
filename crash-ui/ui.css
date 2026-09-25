@@ -161,8 +161,10 @@
    NEXT LANE wraps rather than running into the edges. */
 .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action{white-space:normal;text-align:center;padding-inline:var(--space-8)}
 .crash-ui .tabbed-controls .actions .action{min-height:100%;flex-direction:column;gap:var(--space-4)}
-.crash-ui .tabbed-controls .actions .action .money{font-size:var(--type-32)}
+.crash-ui .tabbed-controls .actions .action .money:not(.long-amount){font-size:var(--type-32)}
 .crash-ui .tabbed-controls .actions .action .action-title{font-size:var(--type-24)}
+.crash-ui .actions .action .money{white-space:nowrap}
+.crash-ui .money-unit{font-size:var(--type-24);font-weight:inherit;margin-left:var(--space-4)}
 .crash-ui .tabbed-controls .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
 .crash-ui .tabbed-controls .tab{min-height:var(--web-control-height);border-radius:var(--radius-24);color:var(--text-muted)}
 .crash-ui .tabbed-controls .tab .icon{width:var(--web-icon-md);height:var(--web-icon-md)}
@@ -174,7 +176,7 @@
 .crash-ui .tabbed-controls .tabbed-main{display:grid;gap:var(--space-16);min-width:0}
 @media(max-width:599px){
  .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-16)}
- .crash-ui .tabbed-controls .actions .action .money{font-size:var(--type-32)}
+ .crash-ui .tabbed-controls .actions .action .money:not(.long-amount){font-size:var(--type-32)}
 }
 /* Anything but a phone: the tab bar leaves the bottom panel and becomes a vertical
    column on the left edge, centred on the screen's height. The threshold is the one where
@@ -622,14 +624,16 @@
 .crash-ui .bet-detail-row{position:relative}
 /* The hairline between rows fades out at both ends instead of hitting the card's edge. */
 .crash-ui .bet-detail-row+.bet-detail-row::before{content:"";position:absolute;left:0;right:0;top:0;height:var(--stroke-1);background:linear-gradient(90deg,transparent,var(--border) 18%,var(--border) 82%,transparent)}
-.crash-ui .bet-detail-icon{display:grid;place-items:center;width:var(--space-32);height:var(--space-32);flex:none;color:var(--gold)}
+/* Gold is for money only: the stake is gold, the prize green, everything else reads as text. */
+.crash-ui .bet-detail-icon{display:grid;place-items:center;width:var(--space-32);height:var(--space-32);flex:none;color:var(--text-muted)}
 .crash-ui .bet-detail-icon .icon{width:var(--space-24);height:var(--space-24)}
 .crash-ui .bet-detail-label{font-size:var(--type-12);letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
-.crash-ui .bet-detail-row strong{color:var(--gold);font:var(--type-20)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.crash-ui .bet-detail-row strong{color:var(--text);font:var(--type-20)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
 .crash-ui .bet-detail-row.is-prize strong{color:var(--success);font-size:var(--type-24)}
+.crash-ui .bet-detail-row:first-child strong{color:var(--gold)}
 .crash-ui .bet-detail-tile{display:flex;align-items:center;gap:var(--space-12);min-width:0;padding:var(--space-12) var(--space-16);border-radius:var(--radius-16);background:var(--surface-raised)}
 .crash-ui .bet-detail-tile>span:last-child{display:grid;gap:var(--space-4);min-width:0}
-.crash-ui .bet-detail-tile strong{color:var(--gold);font:var(--type-20)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.crash-ui .bet-detail-tile strong{color:var(--text);font:var(--type-20)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .crash-ui .bet-detail-result{margin-top:var(--space-8);justify-content:center}
 /* The result mark alone keeps a disc behind it: it is a badge, the figures' icons are glyphs. */
 .crash-ui .bet-detail-result .bet-detail-icon{width:var(--space-40);height:var(--space-40);border-radius:var(--radius-pill);background:var(--surface-inset)}
@@ -672,10 +676,10 @@
 /* Text labels share one size; currency retains the Play amount size in both states. */
 .crash-ui .tabbed-controls .actions .action .money.is-label{font-size:var(--type-24)}
 
-.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money{font-size:var(--type-32)}
+.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.long-amount){font-size:var(--type-32)}
 .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--type-24)}
 @media(max-width:599px){
- .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label){font-size:var(--type-32)}
+ .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label):not(.long-amount){font-size:var(--type-32)}
 }
 
 @media(min-width:600px){
@@ -727,7 +731,7 @@
  .crash-ui .tabbed-controls .actions{container-type:inline-size}
 }
 @container(max-width:200px){
- .crash-ui .tabbed-controls .actions .action .money,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money{font-size:var(--type-24)}
+ .crash-ui .tabbed-controls .actions .action .money:not(.long-amount),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.long-amount){font-size:var(--type-24)}
 }
 
 /* The shell can wrap another game's betting controls without replacing them. */
@@ -781,7 +785,7 @@
 .crash-ui .tabbed-controls .wager-amount{container-type:inline-size;width:100%}
 .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-24);white-space:nowrap}
 .crash-ui .tabbed-controls .actions .action{container-type:inline-size;--amount-max-size:var(--type-32)}
-.crash-ui .tabbed-controls .actions .action .money:not(.is-label),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label){font-size:var(--type-24)}
+.crash-ui .tabbed-controls .actions .action .money:not(.is-label):not(.long-amount),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label):not(.long-amount){font-size:var(--type-24)}
 @media(max-width:599px){
  .crash-ui .tabbed-controls .actions .action{--amount-max-size:var(--type-32)}
 }

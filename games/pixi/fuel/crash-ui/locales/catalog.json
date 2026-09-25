@@ -1382,53 +1382,6 @@
       "previewWindow": "dev",
       "developerOnly": true
     },
-    "first_step_82994c": {
-      "source": "FIRST STEP",
-      "en": "FIRST STEP",
-      "fr": "PREMIER PAS",
-      "group": "Difficulty & limits",
-      "games": [
-        "road"
-      ],
-      "ht": "PREMYE PA",
-      "usage": [
-        "text"
-      ],
-      "previewWindow": "difficulty",
-      "presetsByGame": {
-        "road": [
-          "standard"
-        ]
-      }
-    },
-    "your_road_best_b25299": {
-      "source": "Your road best",
-      "en": "Your road best",
-      "fr": "Votre record sur la route",
-      "group": "Header & account",
-      "games": [
-        "road"
-      ],
-      "ht": "Pi bon rezilta ou sou wout la",
-      "usage": [
-        "unused"
-      ],
-      "unusedReason": "Legacy personalTitle state field. The current UI does not render this field. The standard records panel uses “Your best”; the tabbed preset hides that panel."
-    },
-    "top_road_win_f1cb2b": {
-      "source": "Top road win",
-      "en": "Top road win",
-      "fr": "Meilleur gain sur la route",
-      "group": "Tabs & windows",
-      "games": [
-        "road"
-      ],
-      "ht": "Pi gwo gany sou wout la",
-      "usage": [
-        "unused"
-      ],
-      "unusedReason": "Legacy topTitle state field. The current UI does not render this field. The standard records panel uses “Top”; the tabbed preset hides that panel."
-    },
     "could_not_save_progress_on_this_device_5a08fc": {
       "source": "Could not save progress on this device.",
       "en": "Could not save progress on this device.",
@@ -1483,7 +1436,6 @@
       "fr": "Expert",
       "group": "Bet panel & messages",
       "games": [
-        "road",
         "fish",
         "gold",
         "fruits",
@@ -1493,34 +1445,6 @@
       "usage": [
         "text"
       ]
-    },
-    "extreme_55590e": {
-      "source": "Extreme",
-      "en": "Extreme",
-      "fr": "Extrême",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "ht": "Ekstrèm",
-      "usage": [
-        "text"
-      ],
-      "previewState": "API difficulty"
-    },
-    "insane_73b636": {
-      "source": "Insane",
-      "en": "Insane",
-      "fr": "Insensé",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "ht": "Fou nèt",
-      "usage": [
-        "text"
-      ],
-      "previewState": "API difficulty"
     },
     "added_to_balance_3bf207": {
       "source": "Added to balance!",
@@ -1555,8 +1479,7 @@
         "fruits",
         "fuel",
         "gold",
-        "market_stack",
-        "road"
+        "market_stack"
       ],
       "ht": "N ap ajoute nan balans ou…",
       "usage": [
@@ -1722,23 +1645,6 @@
         "tabbed-shell-v1"
       ],
       "previewState": "notification"
-    },
-    "next_lane_1111f9": {
-      "source": "NEXT LANE",
-      "en": "NEXT LANE",
-      "fr": "VOIE SUIVANTE",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "ht": "PWOCHEN LIY",
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "standard"
-      ],
-      "previewState": "round-dependent"
     },
     "insufficient_balance_auto_stopped_394b75": {
       "source": "Insufficient balance · Auto stopped",
@@ -3264,6 +3170,230 @@
       "previewWindow": "menu",
       "presets": [
         "menu-drawer-v1"
+      ]
+    },
+    "connecting_f361a7": {
+      "source": "CONNECTING…",
+      "en": "CONNECTING…",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "check_round_f2d124": {
+      "source": "CHECK ROUND",
+      "en": "CHECK ROUND",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "last_round_settled_by_the_server_baefc6": {
+      "source": "Last round settled by the server.",
+      "en": "Last round settled by the server.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "the_server_rolled_back_this_round_b075c1": {
+      "source": "The server rolled back this round.",
+      "en": "The server rolled back this round.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "round_finished_on_the_server_0202c3": {
+      "source": "Round finished on the server.",
+      "en": "Round finished on the server.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "cash_out_to_finish_this_round_55f464": {
+      "source": "Cash out to finish this round.",
+      "en": "Cash out to finish this round.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "could_not_verify_the_latest_round_41a831": {
+      "source": "Could not verify the latest round.",
+      "en": "Could not verify the latest round.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "runner_configuration_is_unavailable_735f8d": {
+      "source": "Runner configuration is unavailable.",
+      "en": "Runner configuration is unavailable.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "log_in_to_lotomobil_in_composer_887d0f": {
+      "source": "Log in to Lotomobil in Composer.",
+      "en": "Log in to Lotomobil in Composer.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "live_risk_is_supplied_by_the_runner_chec_d320ee": {
+      "source": "Live risk is supplied by the Runner checkout, not the payout table.",
+      "en": "Live risk is supplied by the Runner checkout, not the payout table.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "the_last_bet_has_not_been_confirmed_chec_c55b22": {
+      "source": "The last bet has not been confirmed. Check again before placing another bet.",
+      "en": "The last bet has not been confirmed. Check again before placing another bet.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "the_last_bet_is_still_unconfirmed_check__489d54": {
+      "source": "The last bet is still unconfirmed. Check again; no new bet was placed.",
+      "en": "The last bet is still unconfirmed. Check again; no new bet was placed.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "invalid_first_step_response_check_the_ro_95d48b": {
+      "source": "Invalid first-step response. Check the round before continuing.",
+      "en": "Invalid first-step response. Check the round before continuing.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "invalid_round_response_check_the_round_b_ea9f7e": {
+      "source": "Invalid round response. Check the round before continuing.",
+      "en": "Invalid round response. Check the round before continuing.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
       ]
     }
   }

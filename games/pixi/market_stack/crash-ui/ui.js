@@ -14,6 +14,9 @@ const multiplierColour=(m,game)=>game==='road'?(Number(m)<=0?'#ff9999':{gold:'#f
 const goIsCash=s=>s.goCash!==undefined?!!s.goCash:s.goTitle==='CASH OUT';
 const money=(v,digits=2)=>window.CrashI18n?.locale==='fr'?window.CrashI18n.number(Number(v||0),{minimumFractionDigits:digits,maximumFractionDigits:digits})+' '+(currency||'$'):currency?Number(v||0).toFixed(digits)+' '+currency:'$'+Number(v||0).toFixed(digits);
 const wager=v=>money(v,Number.isInteger(Number(v||0))?0:2);
+// On an action button the currency is a small unit after the figure, so a payout stays on one
+// line: the figure at the button's size, the unit at the title's.
+const moneySlot=(node,v)=>{const text=money(v);const html=currency&&text.endsWith(' '+currency)?esc(text.slice(0,-currency.length-1))+'<small class="money-unit">'+esc(currency)+'</small>':esc(text);if(node.dataset.html!==html){node.dataset.html=html;node.innerHTML=html}};
 // The stake is read beside the coin, the way the header balance is, so it carries the icon
 // instead of a currency mark.
 const coinAmount=v=>{const n=Number(v||0),digits=Number.isInteger(n)?0:2;return window.CrashI18n?.locale==='fr'?window.CrashI18n.number(n,{minimumFractionDigits:digits,maximumFractionDigits:digits}):n.toFixed(digits)};
@@ -180,7 +183,7 @@ class TabbedControls {
   this.text('tbBet',coinAmount(s.bet));fitStake(this.slots.tbBet,this.slots.tbBet.textContent);for(const a of ['min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
   const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);
   const nextLane=s.game==='road'&&s.showCash;coinSlot(this.slots.tbGoAmount,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',s.goTitle||(nextLane?'GO':'BET'));this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
-  const cash=this.q('[data-action=cash]');if(s.game==='road'&&cash.nextElementSibling===go)cash.parentElement.append(cash);cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win;this.text('tbCash',money(s.cash));for(const key of ['tbCash','tbGoAmount'])this.slots[key].classList.toggle('long-amount',this.slots[key].textContent.length>8);
+  const cash=this.q('[data-action=cash]');if(s.game==='road'&&cash.nextElementSibling===go)cash.parentElement.append(cash);cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win;moneySlot(this.slots.tbCash,s.cash);for(const key of ['tbCash','tbGoAmount'])this.slots[key].classList.toggle('long-amount',(this.slots[key].querySelector('.money-unit')?this.slots[key].firstChild.textContent:this.slots[key].textContent).trim().length>7);
   for(const t of this.tabs.children)t.disabled=!!s.win;
  }
 }
@@ -304,7 +307,7 @@ class GameUI {
 
   this.text('personal',money(s.personal));this.text('top',money(s.record?.payout));this.text('owner',s.record?.name||'');this.q('.record-top').title=[s.record?.name,s.record?.date].filter(Boolean).join(' · ');
   const signature=JSON.stringify([s.players,s.record?.name]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players)}
-  this.text('difficulty',s.difficulties?.[s.difficulty]||'Normal');this.text('cash',money(s.cash));this.text('goTitle',s.goTitle||'PLAY');coinSlot(this.slots.goSubtitle,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.text('online',(s.online||6)+' ONLINE');
+  this.text('difficulty',s.difficulties?.[s.difficulty]||'Normal');moneySlot(this.slots.cash,s.cash);this.text('goTitle',s.goTitle||'PLAY');coinSlot(this.slots.goSubtitle,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.text('online',(s.online||6)+' ONLINE');
   this.q('[data-action=auto]').setAttribute('aria-pressed',String(!!s.auto));
   for(const a of ['auto','difficulty','min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
   const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);this.slots.playIcon.hidden=asCash;
