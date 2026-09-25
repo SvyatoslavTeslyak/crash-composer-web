@@ -509,11 +509,11 @@
 .crash-ui .bets-table thead th{position:sticky;top:0;z-index:1;background:var(--surface);color:var(--text-muted);font-weight:inherit;border-bottom:var(--stroke-1) solid var(--border)}
 /* Top bets: rank, player, wager, multiplier, prize. The rank is a narrow muted number; the
    player's cell is the one that reads left like a first column. */
-.crash-ui .top-bets th:first-child{width:9%}
-.crash-ui .top-bets th:nth-child(2){width:31%}
-.crash-ui .top-bets th:nth-child(3){width:20%}
+.crash-ui .top-bets th:first-child{width:7%}
+.crash-ui .top-bets th:nth-child(2){width:26%}
+.crash-ui .top-bets th:nth-child(3){width:21%}
 .crash-ui .top-bets th:nth-child(4){width:14%}
-.crash-ui .top-bets th:nth-child(5){width:26%}
+.crash-ui .top-bets th:nth-child(5){width:32%}
 .crash-ui .top-bets th:nth-child(2),.crash-ui .top-bets td:nth-child(2){text-align:left;padding-left:0}
 .crash-ui .bets-table .bet-rank{color:var(--text-muted);font-family:var(--font-numbers),var(--font-body),sans-serif;text-align:left}
 .crash-ui .bets-table td.bet-rank,.crash-ui .bets-table th.bet-rank{padding-right:0}
@@ -956,11 +956,11 @@
 
 /* Keep short monetary values together on narrow phones. */
 @media(max-width:389px){
- .crash-ui .top-bets th:first-child{width:9%}
- .crash-ui .top-bets th:nth-child(2){width:24%}
+ .crash-ui .top-bets th:first-child{width:8%}
+ .crash-ui .top-bets th:nth-child(2){width:20%}
  .crash-ui .top-bets th:nth-child(3){width:22%}
  .crash-ui .top-bets th:nth-child(4){width:14%}
- .crash-ui .top-bets th:nth-child(5){width:31%}
+ .crash-ui .top-bets th:nth-child(5){width:36%}
 }
 
 /* Bets share one presentation; only the surrounding navigation differs. */
