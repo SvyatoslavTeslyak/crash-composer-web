@@ -658,22 +658,6 @@
         "standard"
       ]
     },
-    "top_25_957737": {
-      "source": "Top 25",
-      "en": "Top 25",
-      "fr": "Top 25",
-      "group": "Bet panel & messages",
-      "games": [],
-      "ht": "25 pi bon yo",
-      "usage": [
-        "unused"
-      ],
-      "previewWindow": "topbets",
-      "presets": [
-        "tabbed-shell-v1"
-      ],
-      "unusedReason": "Replaced by Top bets, shared with the window title."
-    },
     "players_392fee": {
       "source": "Players",
       "en": "Players",
@@ -2320,18 +2304,6 @@
       ],
       "unusedReason": "No standalone rendered label in the current games. Dynamic labels are edited through their complete text template."
     },
-    "collect_88b53a": {
-      "source": "COLLECT",
-      "en": "COLLECT",
-      "fr": "ENCAISSER",
-      "group": "Bet panel & messages",
-      "games": [],
-      "ht": "RANMASE",
-      "usage": [
-        "unused"
-      ],
-      "unusedReason": "No standalone rendered label in the current games. Dynamic labels are edited through their complete text template."
-    },
     "ready_20c7c5": {
       "source": "Ready",
       "en": "Ready",
@@ -3407,6 +3379,20 @@
         "text"
       ],
       "previewWindow": "betDetails",
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "cashed_out_value_f0e320": {
+      "source": "Cashed out · {value}×",
+      "en": "Cashed out · {value}×",
+      "fr": "Encaissé · {value}×",
+      "ht": "Lajan pran · {value}×",
+      "group": "Bet panel & messages",
+      "games": [],
+      "usage": [
+        "text"
+      ],
       "presets": [
         "tabbed-shell-v1"
       ]
