@@ -503,20 +503,18 @@
 .crash-ui .is-tab-view .modal h2{color:var(--gold);font-size:var(--type-24);text-align:center}
 .crash-ui .is-tab-view .modal header .icon-button{position:absolute;right:0;top:0;border-radius:var(--radius-pill)}
 .crash-ui .is-tab-view .modal-body{display:block;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
-.crash-ui .bets-table{width:100%;table-layout:fixed;border-collapse:collapse;font-family:var(--font-body),sans-serif;font-size:var(--type-14);font-variant-numeric:tabular-nums}
+.crash-ui .bets-table{width:100%;table-layout:auto;border-collapse:collapse;font-family:var(--font-body),sans-serif;font-size:var(--type-14);font-variant-numeric:tabular-nums}
 .crash-ui .bet-caption{position:absolute;width:0;height:0;overflow:hidden}
 .crash-ui .bets-table th,.crash-ui .bets-table td{padding:var(--space-12) var(--space-8);text-align:right;vertical-align:middle;line-height:1.4;white-space:nowrap}
 .crash-ui .bets-table tbody td{padding-block:var(--space-4)}
 .crash-ui .bets-table th:first-child,.crash-ui .bets-table td:first-child{text-align:left}
 .crash-ui .bets-table thead th{position:sticky;top:0;z-index:1;background:var(--surface);color:var(--text-muted);font-weight:inherit;border-bottom:var(--stroke-1) solid var(--border)}
-/* Top bets: rank, player, wager, multiplier, prize. The rank is a narrow muted number; the
-   player's cell is the one that reads left like a first column. */
-.crash-ui .top-bets th:first-child{width:7%}
-.crash-ui .top-bets th:nth-child(2){width:26%}
-.crash-ui .top-bets th:nth-child(3){width:21%}
-.crash-ui .top-bets th:nth-child(4){width:14%}
-.crash-ui .top-bets th:nth-child(5){width:32%}
-.crash-ui .top-bets th:nth-child(2),.crash-ui .top-bets td:nth-child(2){text-align:left;padding-left:0}
+/* Every figure takes the width it needs and no more, so the columns sit close together.
+   One column absorbs what is left over and truncates instead of pushing the rest wider:
+   the player in Top bets, the time in My bets. `max-width:0` keeps its own content from
+   claiming a width of its own. */
+.crash-ui .top-bets th:nth-child(2),.crash-ui .top-bets td:nth-child(2){width:100%;max-width:0;text-align:left;padding-left:0}
+.crash-ui .my-bets th:first-child,.crash-ui .my-bets td:first-child{width:100%;max-width:0}
 .crash-ui .bets-table .bet-rank{color:var(--text-muted);font-family:var(--font-numbers),var(--font-body),sans-serif;text-align:left}
 .crash-ui .bets-table td.bet-rank,.crash-ui .bets-table th.bet-rank{padding-right:0}
 .crash-ui .bet-player{display:flex;align-items:center;gap:var(--space-12);min-width:0}
@@ -960,15 +958,6 @@
 }
 .crash-ui .tabbed-controls .actions .action .money.long-amount{font-size:var(--type-16)}
 
-/* Keep short monetary values together on narrow phones. */
-@media(max-width:389px){
- .crash-ui .top-bets th:first-child{width:8%}
- .crash-ui .top-bets th:nth-child(2){width:20%}
- .crash-ui .top-bets th:nth-child(3){width:22%}
- .crash-ui .top-bets th:nth-child(4){width:14%}
- .crash-ui .top-bets th:nth-child(5){width:36%}
-}
-
 /* Bets share one presentation; only the surrounding navigation differs. */
 .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer){display:flex;align-items:stretch;justify-content:flex-end;padding:var(--space-4);background:var(--scrim)}
 .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal{position:relative;inset:auto;transform:none;animation:crash-sheet-in var(--motion-ms) ease-out;display:flex;flex-direction:column;gap:var(--space-16);width:min(100%,calc(var(--modal-max-width-px) - var(--space-48) - var(--space-32)));height:100%;max-height:100%;max-width:none;min-height:0;margin:0;padding:var(--space-16);border-radius:var(--radius-24);border:var(--stroke-1) solid color-mix(in srgb,var(--text) 16%,transparent);background:linear-gradient(160deg,color-mix(in srgb,var(--text) 5%,var(--surface)),var(--surface) 45%);box-shadow:var(--elevation-modal);--table-inset:var(--space-16)}
@@ -1037,13 +1026,8 @@
  .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal{width:100%;height:100%}
 }
 
-/* The narrowest phones: five columns in 256px, so the rank and the name give way to the figures. */
+/* The narrowest phones: five columns in 256px, so the table hugs its edges a little tighter. */
 @media(max-width:359px){
- .crash-ui .top-bets th:first-child{width:8%}
- .crash-ui .top-bets th:nth-child(2){width:21%}
- .crash-ui .top-bets th:nth-child(3){width:22%}
- .crash-ui .top-bets th:nth-child(4){width:15%}
- .crash-ui .top-bets th:nth-child(5){width:34%}
  .crash-ui .bets-table th:first-child,.crash-ui .bets-table td:first-child{padding-left:var(--space-8)}
  .crash-ui .bets-table th:last-child,.crash-ui .bets-table td:last-child{padding-right:var(--space-12)}
 }
