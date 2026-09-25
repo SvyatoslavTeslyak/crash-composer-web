@@ -363,7 +363,7 @@ class GameUI {
   // The game raises a notice; the kit decides how it looks and what it says.
   const notice=typeof s.notice==='string'?s.notice:s.notice?.kind;
   if(notice&&notice!==this.shownNotice){this.shownNotice=notice;this.noticeKind=notice;this.open('notice')}
-  else if(!notice){this.shownNotice=null;if(this.modal==='notice')this.close()}
+  else if(!notice){this.shownNotice=null;if(this.modal==='notice'&&this.noticeFromState)this.close()}
   if(s.game!=='road'&&s.win&&!this.dismissedWin&&this.modal!=='win')this.open('win');else if(!s.win&&this.modal==='win')this.close();
   if(this.modal==='win'){const total=this.q('.win-total');if(total)total.textContent=money(s.winAmount);const subtitle=this.q('.win-subtitle');if(subtitle)subtitle.textContent=s.winSubtitle||'Well played!'}
   if(this.modal==='difficulty'&&!s.canBet)this.close();
@@ -524,7 +524,7 @@ class GameUI {
  }
  open(kind){
   // Composer opens a notice to read it: `notice:funds` picks which of the three to show.
-  if(kind.startsWith('notice')){this.noticeKind=kind.slice(7)||this.noticeKind||'error';kind='notice'}
+  if(kind.startsWith('notice')){this.noticeKind=kind.slice(7)||this.noticeKind||'error';this.noticeFromState=!kind.includes(':');kind='notice'}
   const s=this.state,f=this.features();if(kind==='difficulty'&&(!s.canBet||!f.difficulty))return;if(kind.startsWith('limit:auto')&&!f.auto)return;if(s.win&&kind!=='win')return;
   const drawer=this.config.presentationPreset==='menu-drawer-v1'&&['menu','topbets','mybets','rules'].includes(kind);if(drawer){this.drawerSelection=kind;this.rulesFrom='tab'}
   this.clearBetDetails();
@@ -575,9 +575,14 @@ class GameUI {
   }
   if(kind==='notice'){
    const notice=NOTICES[this.noticeKind]||NOTICES.error,deposit=notice.intent==='deposit'&&s.canDeposit!==false;
-   body.innerHTML='<p class="modal-description">'+esc(notice.text)+'</p><div class="notice-actions">'
-    +button('notice',esc(deposit||notice.intent!=='deposit'?notice.cta:'OK'),'primary-button')
-    +(deposit?button('noticeDismiss','Not now','flat-button'):'')+'</div>';
+   // The mark, the one line, the one button: read top to bottom without a heading bar.
+   body.innerHTML='<div class="notice">'
+    +'<span class="notice-mark" aria-hidden="true">'+icon('notice-'+(this.noticeKind||'error')+'.webp')+'</span>'
+    +'<h3 class="notice-title">'+esc(notice.title)+'</h3>'
+    +'<p class="notice-text">'+esc(notice.text)+'</p>'
+    +'<div class="notice-actions">'+button('notice',esc(notice.intent!=='deposit'||deposit?notice.cta:'OK'),'primary-button')
+    +(deposit?'<button type="button" class="text-button notice-secondary" data-action="noticeDismiss">Not now</button>':'')
+    +'</div></div>';
   }
   if(kind==='wins')body.innerHTML=this.winRows(s.wins||[])||'<p class=muted>No wins yet.</p>';
   if(kind==='dev')body.innerHTML=Object.entries({leaderboard:'Leaderboard / live wins',history:'Round history',personal_record:'My record',online_count:'Online count',...(s.game==='market_stack'?{multiplier_ladder:'Multiplier ladder'}:{})}).map(([k,v])=>'<label class="setting">'+v+'<input class="switch" type="checkbox" role="switch" data-flag="'+k+'" '+(s.flags?.[k]!==false?'checked':'')+'></label>').join('');
