@@ -163,9 +163,9 @@
 .crash-ui .tabbed-controls .actions .action{min-height:100%;flex-direction:column;gap:var(--space-4)}
 .crash-ui .tabbed-controls .actions .action .money:not(.long-amount){font-size:var(--type-32)}
 .crash-ui .tabbed-controls .actions .action .action-title{font-size:var(--type-24)}
-/* GO alone on the button leaves room for the arrow beside it; with the stake above, the
-   button stacks as before and the arrow stays out of the way. */
-.crash-ui .go-arrow{display:none;width:var(--type-24);height:var(--type-24);flex:none}
+/* GO stays centred on its button and the arrow follows right beside it: the arrow gives
+   back its own width and gap as a negative margin, so the label centres as if alone. */
+.crash-ui .go-arrow{display:none;width:var(--type-24);height:var(--type-24);flex:none;margin-right:calc(-1 * (var(--type-24) + var(--space-8)))}
 .crash-ui .action-title.go-label~.go-arrow{display:block}
 .crash-ui .tabbed-controls .actions .action.go:has(.action-title.go-label){flex-direction:row;gap:var(--space-8)}
 .crash-ui .actions .action .money{white-space:nowrap}
