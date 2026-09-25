@@ -165,9 +165,10 @@
 .crash-ui .tabbed-controls .actions .action .action-title{font-size:var(--type-24)}
 /* GO stays centred on its button and the arrow follows right beside it: the arrow gives
    back its own width and gap as a negative margin, so the label centres as if alone. */
-.crash-ui .go-arrow{display:none;width:var(--type-24);height:var(--type-24);flex:none;margin-right:calc(-1 * (var(--type-24) + var(--space-8)))}
+.crash-ui .go-arrow{display:none;width:var(--type-24);height:var(--type-24);flex:none;margin-right:calc(-1 * var(--type-24))}
 .crash-ui .action-title.go-label~.go-arrow{display:block}
-.crash-ui .tabbed-controls .actions .action.go:has(.action-title.go-label){flex-direction:row;gap:var(--space-8)}
+/* The arrow's own artwork carries its breathing room, so the row itself adds none. */
+.crash-ui .tabbed-controls .actions .action.go:has(.action-title.go-label){flex-direction:row;gap:var(--space-0)}
 .crash-ui .actions .action .money{white-space:nowrap}
 .crash-ui .money-unit{font-size:var(--type-24);font-weight:inherit;margin-left:var(--space-4)}
 .crash-ui .tabbed-controls .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}

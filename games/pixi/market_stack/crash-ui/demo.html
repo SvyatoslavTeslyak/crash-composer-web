@@ -47,6 +47,7 @@ const ui=new CrashUI.GameUI(document.querySelector('#ui'),act,{demo:true});ui.up
 window.addEventListener('message',e=>{
  if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='crash-preview')return;
  const d=e.data;
+ if(d.presentationPreset)ui.setPresentationPreset(d.presentationPreset);
  if(d.controlsVariant){ui.setControlsVariant(d.controlsVariant);state.game=d.controlsVariant==='three-position'?'catch':'road';reset();state.multiBets={};if(ui.multiBet){for(const [key,c] of Object.entries(ui.multiBet.cards)){c.el.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{c.input.value=Math.max(1,Math.min(1000,Number(c.input.value)+Number(b.dataset.step)))});c.button.onclick=()=>{if(round&&key==='main'&&state.multiBets[key]&&state.canCash){settle();}else if(state.canBet){const amount=state.multiBets[key]||Math.max(1,Math.min(1000,Number(c.input.value)||1));if(state.multiBets[key]){state.balance+=amount;delete state.multiBets[key];}else if(state.balance>=amount){state.multiBets[key]=amount;state.balance-=amount;}}ui.update(state);syncMultiPreview();};}}}
 
  if(d.flags)for(const key of ['leaderboard','history','personal_record','online_count'])if(typeof d.flags[key]==='boolean')state.flags[key]=d.flags[key];
