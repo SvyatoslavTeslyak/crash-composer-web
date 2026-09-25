@@ -630,6 +630,8 @@
 .crash-ui .bet-detail-label{font-size:var(--type-12);letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
 .crash-ui .bet-detail-row strong{color:var(--text);font:var(--type-20)/var(--leading-tight) var(--font-numbers),var(--font-body),sans-serif;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
 .crash-ui .bet-detail-row.is-prize strong{color:var(--success);font-size:var(--type-24)}
+/* The currency after the prize sits at the size of the other figures, as on CASH OUT. */
+.crash-ui .bet-detail-row.is-prize .money-unit{font-size:var(--type-20)}
 .crash-ui .bet-detail-row:first-child strong{color:var(--gold)}
 .crash-ui .bet-detail-tile{display:flex;align-items:center;gap:var(--space-12);min-width:0;padding:var(--space-12) var(--space-16);border-radius:var(--radius-16);background:var(--surface-raised)}
 .crash-ui .bet-detail-tile>span:last-child{display:grid;gap:var(--space-4);min-width:0}
@@ -640,7 +642,7 @@
 .crash-ui .bet-detail-result.is-won .bet-detail-icon,.crash-ui .bet-detail-result.is-won strong{color:var(--success)}
 .crash-ui .bet-detail-result.is-lost .bet-detail-icon,.crash-ui .bet-detail-result.is-lost strong{color:var(--danger)}
 .crash-ui .bet-detail-extras{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-8);margin-top:var(--space-8)}
-@media(max-width:389px){.crash-ui .bet-detail-row strong{font-size:var(--type-16)}.crash-ui .bet-detail-row.is-prize strong{font-size:var(--type-20)}.crash-ui .bet-detail-tile strong{font-size:var(--type-16)}}
+@media(max-width:389px){.crash-ui .bet-detail-row strong{font-size:var(--type-16)}.crash-ui .bet-detail-row.is-prize strong{font-size:var(--type-20)}.crash-ui .bet-detail-row.is-prize .money-unit{font-size:var(--type-16)}.crash-ui .bet-detail-tile strong{font-size:var(--type-16)}}
 
 
 /* The tabbed configuration keeps records in its tabs and uses an edge-to-edge header. */

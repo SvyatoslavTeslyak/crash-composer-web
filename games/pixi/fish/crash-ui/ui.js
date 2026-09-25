@@ -16,7 +16,9 @@ const money=(v,digits=2)=>window.CrashI18n?.locale==='fr'?window.CrashI18n.numbe
 const wager=v=>money(v,Number.isInteger(Number(v||0))?0:2);
 // On an action button the currency is a small unit after the figure, so a payout stays on one
 // line: the figure at the button's size, the unit at the title's.
-const moneySlot=(node,v)=>{const text=money(v);const html=currency&&text.endsWith(' '+currency)?esc(text.slice(0,-currency.length-1))+'<small class="money-unit">'+esc(currency)+'</small>':esc(text);if(node.dataset.html!==html){node.dataset.html=html;node.innerHTML=html}};
+// The figure carries the currency as a smaller word after it, the way CASH OUT shows it.
+const moneyHtml=v=>{const text=money(v);return currency&&text.endsWith(' '+currency)?esc(text.slice(0,-currency.length-1))+'<small class="money-unit">'+esc(currency)+'</small>':esc(text)};
+const moneySlot=(node,v)=>{const html=moneyHtml(v);if(node.dataset.html!==html){node.dataset.html=html;node.innerHTML=html}};
 // The stake is read beside the coin, the way the header balance is, so it carries the icon
 // instead of a currency mark.
 const coinAmount=v=>{const n=Number(v||0),digits=Number.isInteger(n)?0:2;return window.CrashI18n?.locale==='fr'?window.CrashI18n.number(n,{minimumFractionDigits:digits,maximumFractionDigits:digits}):n.toFixed(digits)};
@@ -458,7 +460,7 @@ class GameUI {
   if(this.state.win||!['topbets','mybets'].includes(this.modal)||!this.betRows?.[index]||this.betDetail)return;
   const entry={...this.betRows[index]},body=this.q('.modal-body');
   this.betDetail={html:body.innerHTML,scroll:body.scrollTop,title:this.q('.modal h2').textContent,index};
-  const name=entry.name||'You',value=(n,stake=false)=>Number.isFinite(n)?esc(stake?wager(n):money(n)):'—';
+  const name=entry.name||'You',value=(n,stake=false)=>Number.isFinite(n)?stake?esc(wager(n)):moneyHtml(n):'—';
   const multiplier=Number.isFinite(entry.multiplier)?entry.multiplier:entry.payout>0&&entry.wager>0?entry.payout/entry.wager:null;
   const date=new Date(entry.time),hasDate=Number.isFinite(entry.time)&&!Number.isNaN(date.getTime());
   // One row per figure: an icon tile, the label, the value. The icons are keyed by the label the
