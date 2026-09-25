@@ -544,10 +544,13 @@
 .crash-ui .notice-actions{display:grid;justify-items:center;gap:var(--space-8);width:100%;max-width:var(--web-account-popover-width);margin-top:var(--space-16)}
 .crash-ui .notice-actions .button{width:100%;min-height:var(--tap-min);border-radius:var(--radius-pill);font-size:var(--type-18);font-weight:700}
 .crash-ui .notice-actions .primary-button{color:var(--on-go);border:var(--stroke-1) solid var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow)}
-.crash-ui .notice-secondary{margin:0;font-size:var(--type-16)}
+/* The arrow rides with the label, a little above its baseline, the way a link mark does. */
+.crash-ui .leave-arrow{width:var(--type-20);height:var(--type-20);flex:none;margin-left:var(--space-8)}
 /* The balance is the way to the wallet, so it is built like the buttons beside it: the same
    raised edge and the same give under a finger, in the header's own colour rather than gold. */
-.crash-ui button.balance{font:inherit;cursor:pointer;-webkit-appearance:none;appearance:none;
+/* A button does not inherit its colour: Safari draws the figures in its own system blue
+   unless the text is told to follow the shell. */
+.crash-ui button.balance{font:inherit;color:inherit;cursor:pointer;-webkit-appearance:none;appearance:none;
  background:linear-gradient(color-mix(in srgb,var(--surface-raised) 85%,var(--text)),var(--surface-raised));
  border:var(--stroke-1) solid color-mix(in srgb,var(--text) calc(var(--alpha-faint) * 100%),transparent);
  box-shadow:0 var(--stroke-3) 0 var(--button-shadow);
@@ -861,7 +864,7 @@
 .crash-ui.has-tabbed-controls .modal-layer.is-win .win-modal{
  position:relative;isolation:isolate;container-type:inline-size;overflow:hidden;
  width:min(100%,calc(var(--modal-max-width-px) - 2 * var(--space-48)));
- border:var(--stroke-2) solid var(--action-go-edge);border-radius:var(--radius-32);
+ border:var(--stroke-2) solid var(--action-go-edge);border-radius:var(--modal-radius);
  background:radial-gradient(ellipse at 50% 30%,color-mix(in srgb,var(--gold) 18%,var(--surface)),var(--surface) 75%);
  box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--gold) 18%,transparent),0 var(--web-control-depth) 0 var(--action-go-shadow),var(--elevation-modal);
  animation:win-plaque-in var(--motion-ms) ease-out;
@@ -961,7 +964,8 @@
 .crash-ui.has-menu-drawer .is-menu-drawer .modal>header [data-action=close]{position:absolute;top:calc(var(--drawer-menu-top,var(--space-12)) - var(--space-4) - var(--stroke-1));right:calc(var(--drawer-menu-right,var(--space-8)) - var(--space-4) - var(--stroke-1))}
 
 /* Compact account dropdown: aligned values and one session divider. */
-.crash-ui .modal-layer.is-account-popover .modal{width:min(var(--web-account-popover-width),calc(100% - 2 * var(--space-8)));padding:var(--space-16);border-radius:var(--radius-16);background:var(--surface);border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-modal)}
+/* Every window and popover is cut to the same corner: the shell sets --modal-radius. */
+.crash-ui .modal-layer.is-account-popover .modal{width:min(var(--web-account-popover-width),calc(100% - 2 * var(--space-8)));padding:var(--space-16);border-radius:var(--modal-radius);background:var(--surface);border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-modal)}
 .crash-ui .is-account-popover .modal-body{gap:var(--space-4)}
 .crash-ui .account-balance-card,.crash-ui .account-record-card,.crash-ui .account-session-stat{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--space-12);min-height:var(--space-40);font-size:var(--type-16)}
 .crash-ui .account-balance-card>span,.crash-ui .account-record-label,.crash-ui .account-session-stat>span{color:var(--text-muted);line-height:var(--leading-body)}

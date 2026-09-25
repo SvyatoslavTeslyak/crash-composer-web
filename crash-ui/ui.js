@@ -77,11 +77,13 @@ const avatar=(name,players=[])=>{const i=name==='You'?2:players.indexOf(name),[x
 // connection is gone, or something else went wrong. Anything the server says beyond that
 // belongs in the console, not in front of a player.
 const NOTICES={
- funds:{title:'Not enough funds',text:'Your balance is too low for this bet. Top up to keep playing.',cta:'Deposit',intent:'deposit'},
+ funds:{title:'Not enough funds',text:'Your balance is too low for this bet. Top up to keep playing.',cta:'Top up',intent:'deposit'},
  offline:{title:'No connection',text:'You seem to be offline. Check your connection and try again.',cta:'Try again',intent:'retry'},
  error:{title:'Something went wrong',text:'We could not reach the game just now. Try again in a moment.',cta:'Try again',intent:'retry'},
  // Not a failure: the balance itself opens this one.
- wallet:{title:'Top up your balance',text:'Add funds in your wallet, then come back to the round.',cta:'Go to wallet',intent:'deposit',mark:'funds'}};
+ wallet:{title:'Top up your balance',text:'Add funds in your wallet, then come back to the round.',cta:'Top up',intent:'deposit',mark:'funds'}};
+// Topping up happens elsewhere, so the button points the way on.
+const LEAVE_ARROW_SVG='<svg class="leave-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const button=(action,text,cls='')=>'<button type="button" class="button '+cls+'" data-action="'+action+'">'+text+'</button>';
 // Betting feedback belongs to the UI; the cashout-ready tone plays once per round, not on every re-enable between steps.
 class BettingSound {
@@ -116,7 +118,7 @@ class BettingSound {
  // What the player pressed, named as the manifest names it.
  // How close to the PLAY press a cash-ready state still counts as part of that press.
  static PRESS_WINDOW_MS=400;
- static EVENTS={go:'play',cash:'cashout',min:'stake_min',max:'stake_max',minus:'stake_minus',plus:'stake_plus',preset:'stake_preset',auto:'auto',difficulty:'difficulty',chooseDifficulty:'difficulty',pickDifficulty:'difficulty_pick',leave:'header_click',account:'header_click',menu:'header_click',wallet:'header_click',notice:'confirm',noticeDismiss:'click','cash-ready':'cash_ready'};
+ static EVENTS={go:'play',cash:'cashout',min:'stake_min',max:'stake_max',minus:'stake_minus',plus:'stake_plus',preset:'stake_preset',auto:'auto',difficulty:'difficulty',chooseDifficulty:'difficulty',pickDifficulty:'difficulty_pick',leave:'header_click',account:'header_click',menu:'header_click',wallet:'header_click',notice:'confirm','cash-ready':'cash_ready'};
  play(action){
   if(!this.enabled||document.hidden)return;
   const event=BettingSound.EVENTS[action];if(!event)return;
@@ -306,9 +308,8 @@ class GameUI {
   if(action==='historyDetails'){const entry=this.state.bets?.[Number(value)];if(!entry||this.state.win)return;this.open('mybets');const index=this.betRows?.findIndex(v=>v.time===entry.time&&v.multiplier===entry.multiplier);if(index>=0)this.showBetDetails(index);return}
   if(action==='betDetails'){this.showBetDetails(Number(value));return}
   if(action==='wallet'){this.open('notice:wallet');return}
-  if(action==='notice'||action==='noticeDismiss'){
-   const intent=action==='noticeDismiss'?'dismiss':(NOTICES[this.noticeKind]||NOTICES.error).intent;
-   this.shownNotice=null;this.close();this.send('notice',{kind:this.noticeKind,intent});return}
+  if(action==='notice'){
+   this.shownNotice=null;this.close();this.send('notice',{kind:this.noticeKind,intent:(NOTICES[this.noticeKind]||NOTICES.error).intent});return}
   if(action==='betsBack'){this.backToBets();return}
   if(['menu','account'].includes(action)&&this.tabbed&&this.modal===action){this.close();return}
   const tabKind=action==='rulesTab'?'rules':action;
@@ -585,8 +586,7 @@ class GameUI {
     +'<span class="notice-mark" aria-hidden="true">'+icon('notice-'+(notice.mark||this.noticeKind||'error')+'.webp')+'</span>'
     +'<h3 class="notice-title">'+esc(notice.title)+'</h3>'
     +'<p class="notice-text">'+esc(notice.text)+'</p>'
-    +'<div class="notice-actions">'+button('notice',esc(notice.intent!=='deposit'||deposit?notice.cta:'OK'),'primary-button')
-    +(deposit?'<button type="button" class="text-button notice-secondary" data-action="noticeDismiss">Not now</button>':'')
+    +'<div class="notice-actions">'+button('notice',esc(notice.cta)+(notice.intent==='deposit'?LEAVE_ARROW_SVG:''),'primary-button')
     +'</div></div>';
   }
   if(kind==='wins')body.innerHTML=this.winRows(s.wins||[])||'<p class=muted>No wins yet.</p>';

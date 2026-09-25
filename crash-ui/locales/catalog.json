@@ -3239,40 +3239,6 @@
         "tabbed-shell-v1"
       ]
     },
-    "deposit_e7b0b3": {
-      "source": "Deposit",
-      "en": "Deposit",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "previewWindow": "notice:funds",
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "not_now_e45714": {
-      "source": "Not now",
-      "en": "Not now",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "previewWindow": "notice:funds",
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
     "no_connection_e33899": {
       "source": "No connection",
       "en": "No connection",
@@ -3358,23 +3324,6 @@
         "tabbed-shell-v1"
       ]
     },
-    "ok_9ce3bd": {
-      "source": "OK",
-      "en": "OK",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "previewWindow": "notice:funds",
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
     "top_up_your_balance_c11873": {
       "source": "Top up your balance",
       "en": "Top up your balance",
@@ -3409,19 +3358,19 @@
         "tabbed-shell-v1"
       ]
     },
-    "go_to_wallet_6e0710": {
-      "source": "Go to wallet",
-      "en": "Go to wallet",
+    "top_up_91d42a": {
+      "source": "Top up",
+      "en": "Top up",
       "fr": "",
       "ht": "",
-      "group": "Header & account",
+      "group": "Bet panel & messages",
       "games": [
         "road"
       ],
       "usage": [
         "text"
       ],
-      "previewWindow": "notice:wallet",
+      "previewWindow": "notice:funds",
       "presets": [
         "tabbed-shell-v1"
       ]
