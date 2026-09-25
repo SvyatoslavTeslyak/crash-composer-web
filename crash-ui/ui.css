@@ -903,8 +903,13 @@
  .crash-ui.has-tabbed-controls .bottom>.controls:not(.navigation-only){border-bottom-left-radius:0;border-bottom-right-radius:0}
 }
 
-/* Stable action typography across idle, playing and viewport sizes. */
-.crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions .action .money.is-label,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--type-16)}
+/* Stable action typography across idle, playing and viewport sizes. The label and the
+   currency after the figure are the same voice, so both read one size from the button
+   itself rather than each carrying its own - and a taller button raises the pair with a
+   single line. The unit takes the label's face too: it is a word, not a figure. */
+.crash-ui .tabbed-controls .actions .action{--action-label-size:var(--type-16)}
+.crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions .action .money.is-label,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--action-label-size)}
+.crash-ui .tabbed-controls .actions .action .money-unit{font-size:var(--action-label-size);font-family:var(--font-body),sans-serif}
 .crash-ui .tabbed-controls .actions .action .money:not(.is-label):not(.long-amount),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label):not(.long-amount){font-size:var(--type-32)}
 
 /* GO has the same typographic emphasis as the cash-out amount. */
@@ -929,7 +934,7 @@
 /* A laptop's buttons are half again as tall as a phone's, so the words on them grow with
    them: the label a step, the figure and GO to the size the taller button can carry. */
 @media(min-width:960px){
- .crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title{font-size:var(--type-20)}
+ .crash-ui .tabbed-controls .actions .action{--action-label-size:var(--type-20)}
  .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title.go-label{font-size:var(--type-32)}
  .crash-ui .tabbed-controls .actions .action.cash{--amount-max-size:var(--type-32)}
  .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action.cash .money:not(.is-label):not(.long-amount){font-size:var(--type-32)}
@@ -1151,8 +1156,12 @@
    a rock about its own centre rather than a slide, small enough to move nothing around it
    and still be caught out of the corner of an eye. A press stops it, so the travel of the
    press still reads. */
-.crash-ui .action.is-urgent .go-dial::after{background:conic-gradient(var(--danger-strong) calc((1 - var(--countdown,1)) * 1turn),transparent 0)}
-.crash-ui .action.is-urgent .go-dial .go-arrow,.crash-ui .action.is-urgent .go-dial .icon{color:var(--danger-strong)}
+/* The alarm is the danger colour said against the face it lands on, which a brand or a
+   theme works out for that face: a red GO would otherwise swallow a red ring. */
+.crash-ui .action{--action-alarm:var(--action-go-urgent,var(--danger-strong))}
+.crash-ui .action.cash{--action-alarm:var(--action-cash-urgent,var(--danger-strong))}
+.crash-ui .action.is-urgent .go-dial::after{background:conic-gradient(var(--action-alarm) calc((1 - var(--countdown,1)) * 1turn),transparent 0)}
+.crash-ui .action.is-urgent .go-dial .go-arrow,.crash-ui .action.is-urgent .go-dial .icon{color:var(--action-alarm)}
 @keyframes go-timer-urgent{0%,100%{transform:rotate(0deg)}15%{transform:rotate(-1.3deg)}45%{transform:rotate(1.3deg)}70%{transform:rotate(-.8deg)}90%{transform:rotate(.45deg)}}
 .crash-ui .action.is-urgent{animation:go-timer-urgent calc(var(--motion-ms) * 2.5) ease-in-out infinite}
 .crash-ui .action.is-urgent:active{animation:none}

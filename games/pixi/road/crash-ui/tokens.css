@@ -221,6 +221,8 @@
 --danger-edge:#ffc7c7;
 --danger-shadow:#734545;
 --danger-side:#ad6969;
+--action-go-urgent:#e00000;
+--action-cash-urgent:#e00000;
 --shadow-soft:#00000040;
 --shadow-medium:#00000059;
 --shadow-strong:#00000073;
@@ -313,6 +315,8 @@
 --danger-edge:#ffc7c7;
 --danger-shadow:#734545;
 --danger-side:#ad6969;
+--action-go-urgent:#e00000;
+--action-cash-urgent:#e00000;
 --shadow-soft:#00000040;
 --shadow-medium:#00000059;
 --shadow-strong:#00000073;
@@ -405,6 +409,8 @@
 --danger-edge:#ffc7c7;
 --danger-shadow:#734545;
 --danger-side:#ad6969;
+--action-go-urgent:#e00000;
+--action-cash-urgent:#e00000;
 --shadow-soft:#00000040;
 --shadow-medium:#00000059;
 --shadow-strong:#00000073;
@@ -466,6 +472,8 @@
 --gold-edge:#ff9dc0;
 --gold-shadow:#73233f;
 --gold-side:#ad3460;
+--action-go-urgent:#ffd6d6;
+--action-cash-urgent:#ffd6d6;
 --surface-scrim:#291017a6;
 --gloss-ink:#ffffff73;
 --surface-hover-soft:#50303940;
@@ -518,6 +526,8 @@
 --gold-edge:#efa4ad;
 --gold-shadow:#662830;
 --gold-side:#9a3d48;
+--action-go-urgent:#ff9999;
+--action-cash-urgent:#ffd6d6;
 --surface-scrim:#29100ea6;
 --gloss-ink:#e9e0e173;
 --surface-hover-soft:#522f2c40;
@@ -554,5 +564,6 @@
 --gold-edge:#fff173;
 --gold-shadow:#736700;
 --gold-side:#ad9c00;
+--action-go-urgent:#e00000;
 --gloss-ink:#f1efda73;
 }

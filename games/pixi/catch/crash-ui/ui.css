@@ -1,5 +1,5 @@
 .crash-ui,.crash-ui *{box-sizing:border-box}.crash-ui{font:var(--body-type-px)/var(--leading-body) var(--font-body),sans-serif;font-synthesis:none;color:var(--text);position:fixed;inset:0;z-index:10;pointer-events:none;--edge:var(--space-16);--gap:var(--space-16);--button-radius:var(--radius-24);--panel-radius:var(--web-panel-radius);--control-h:var(--web-control-comfort-height)}.crash-ui button,.crash-ui input,.crash-ui select{font:inherit}.crash-ui{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.crash-ui input,.crash-ui textarea{-webkit-user-select:text;user-select:text}.crash-ui button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.crash-ui button:focus-visible,.crash-ui input:focus-visible,.crash-ui select:focus-visible{outline:var(--stroke-3) solid var(--focus);outline-offset:var(--stroke-3)}.crash-ui [hidden]{display:none!important}.crash-ui .panel{background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--panel-radius);padding:var(--space-16);box-shadow:var(--elevation-panel);pointer-events:auto}.crash-ui .button{display:flex;align-items:center;justify-content:center;gap:var(--space-8);min-height:var(--control-h);min-width:var(--tap-min);padding:var(--space-8) var(--space-12);border-radius:var(--button-radius);border:var(--stroke-2) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-button-depth) 0 var(--button-shadow);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms);white-space:nowrap}.crash-ui .button:hover:not(:disabled){filter:brightness(1.12)}.crash-ui .button:active:not(:disabled){transform:translateY(var(--web-button-depth));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}.crash-ui button:disabled{cursor:default}.crash-ui .button:disabled{background:var(--button-disabled);color:var(--disabled);box-shadow:inset 0 var(--web-button-depth) 0 var(--button-shadow);filter:none}.crash-ui .button[aria-pressed=true]{border-color:var(--focus)}.crash-ui .icon{width:var(--web-icon-md);height:var(--web-icon-md);object-fit:contain;flex:none}.crash-ui .chevron{display:block;width:var(--space-16);height:var(--space-16);flex:0 0 var(--space-16)}.crash-ui .money{font-family:var(--font-numbers),var(--font-body),sans-serif;font-size:var(--type-24);font-variant-numeric:tabular-nums}.crash-ui .muted{color:var(--text-muted);font-size:var(--type-12)}.crash-ui .avatar{--index:5;width:var(--web-avatar-xl);height:var(--web-avatar-xl);flex:none;border-radius:50%;border:var(--stroke-1) solid var(--gold);background-image:url('assets/avatars/players.webp');background-size:calc(100% * 1536 / 464) calc(100% * 1024 / 464);background-repeat:no-repeat;background-position:var(--avatar-x,100%) var(--avatar-y,100%)}.crash-ui .top{position:absolute;left:var(--edge);right:var(--edge);top:max(var(--edge),env(safe-area-inset-top));display:flex;gap:var(--space-16);align-items:flex-start;pointer-events:none}.crash-ui .account{width:100%;min-width:0}.crash-ui .profile{display:flex;align-items:center;gap:var(--space-12)}.crash-ui .identity{display:flex;align-items:center;gap:var(--space-12);border:0;background:none;color:inherit;text-align:left;padding:0;min-height:var(--tap-min)}.crash-ui .identity strong{display:block;font-size:var(--type-24)}.crash-ui .level{color:var(--gold);font-size:var(--type-12)}/* The coin follows the number, as it does beside every other amount. */
-.crash-ui .balance{margin-left:auto;display:flex;gap:var(--space-8);align-items:center;min-width:0}.crash-ui .balance>.icon{order:1}.crash-ui .balance .money{font-size:clamp(var(--type-24),5vw,var(--type-32))}.crash-ui .icon-button{width:var(--tap-min);height:var(--tap-min);border:0;background:none;color:inherit;padding:var(--space-8);flex:none}.crash-ui .records{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:var(--space-16);padding:var(--space-12);margin-top:var(--space-12);background:var(--surface-inset);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24)}.crash-ui .record{display:flex;gap:var(--space-8);align-items:flex-start;min-width:0}.crash-ui .record .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .record-title{font-size:var(--type-12);color:var(--text-muted)}.crash-ui .record-value{font-size:var(--type-24);color:var(--success)}.crash-ui .record-top{display:flex;gap:var(--space-16);flex-wrap:wrap;align-items:center;min-width:0}.crash-ui .record-top .record-value{color:var(--gold)}.crash-ui .owner{display:flex;gap:var(--space-8);align-items:center;min-width:0;flex:1 1 var(--web-owner-min-width)}.crash-ui .owner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md)}.crash-ui .owner-name{font-size:var(--type-12);overflow-wrap:anywhere}.crash-ui .owner-date{font:var(--type-12) var(--font-body),sans-serif;color:var(--text-muted);white-space:nowrap}.crash-ui .winners{width:100%;margin-top:var(--space-12)}.crash-ui .wins-head{display:flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-12);font-size:var(--type-16)}.crash-ui .online{font-size:var(--type-12);color:var(--switch-on);display:flex;align-items:center;gap:var(--space-6);white-space:nowrap}.crash-ui .dot{width:var(--web-status-dot);height:var(--web-status-dot);border-radius:50%;background:currentColor}.crash-ui .text-button{border:0;background:none;color:var(--text-muted);min-height:var(--tap-min);padding:0 var(--space-4);margin-left:auto;font-size:var(--type-12)}.crash-ui .wins-list{display:flex;gap:var(--space-8);overflow-x:auto;scrollbar-width:none}.crash-ui .winner{display:grid;align-items:center;grid-template-columns:var(--web-avatar-md) minmax(var(--web-winner-name-min-width),auto);gap:var(--space-4) var(--space-8);flex:1 0 var(--web-win-card-width);padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16)}.crash-ui .winner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md);grid-row:span 2;align-self:center}.crash-ui .winner-name{font-size:var(--type-12);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.crash-ui .winner .money{color:var(--success);white-space:nowrap}.crash-ui .win-multiple{display:none}.crash-ui .history{display:flex;gap:var(--space-8);overflow:auto;scrollbar-width:none;margin-top:var(--space-12)}.crash-ui .pill{border:var(--stroke-1) solid color-mix(in srgb,currentColor calc(var(--alpha-soft) * 100%),var(--border));border-radius:var(--radius-24);background:var(--surface-raised);color:var(--pill-cyan);padding:var(--space-6) var(--space-8);font-family:var(--font-numbers),var(--font-body),sans-serif;white-space:nowrap}.crash-ui .pill.tier-success{color:var(--pill-success)}.crash-ui .pill.tier-purple{color:var(--pill-purple)}.crash-ui .pill.tier-gold{color:var(--pill-gold)}.crash-ui .bottom{position:absolute;left:var(--edge);right:var(--edge);bottom:max(var(--edge),env(safe-area-inset-bottom));pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:var(--space-12)}/* The steps of a climbing round, beside the scene: the kit's panel, so a brand restyles it
+.crash-ui .balance{margin-left:auto;display:flex;gap:var(--space-8);align-items:center;min-width:0}.crash-ui .balance>.icon{order:1}.crash-ui .balance .money{font-size:clamp(var(--type-24),5vw,var(--type-32))}.crash-ui .icon-button{width:var(--tap-min);height:var(--tap-min);border:0;background:none;color:inherit;padding:var(--space-8);flex:none}.crash-ui .records{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:var(--space-16);padding:var(--space-12);margin-top:var(--space-12);background:var(--surface-inset);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24)}.crash-ui .record{display:flex;gap:var(--space-8);align-items:flex-start;min-width:0}.crash-ui .record .icon{width:var(--web-icon-md);height:var(--web-icon-md)}.crash-ui .record-title{font-size:var(--type-12);color:var(--text-muted)}.crash-ui .record-value{font-size:var(--type-24);color:var(--success)}.crash-ui .record-top{display:flex;gap:var(--space-16);flex-wrap:wrap;align-items:center;min-width:0}.crash-ui .record-top .record-value{color:var(--gold)}.crash-ui .owner{display:flex;gap:var(--space-8);align-items:center;min-width:0;flex:1 1 var(--web-owner-min-width)}.crash-ui .owner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md)}.crash-ui .owner-name{font-size:var(--type-12);overflow-wrap:anywhere}.crash-ui .owner-date{font:var(--type-12) var(--font-body),sans-serif;color:var(--text-muted);white-space:nowrap}.crash-ui .winners{width:100%;margin-top:var(--space-12)}.crash-ui .wins-head{display:flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-12);font-size:var(--type-16)}.crash-ui .online{font-size:var(--type-12);color:var(--switch-on);display:flex;align-items:center;gap:var(--space-6);white-space:nowrap}.crash-ui .dot{width:var(--web-status-dot);height:var(--web-status-dot);border-radius:50%;background:currentColor}.crash-ui .text-button{border:0;background:none;color:var(--text-muted);min-height:var(--tap-min);padding:0 var(--space-4);margin-left:auto;font-size:var(--type-12)}.crash-ui .wins-list{display:flex;gap:var(--space-8);overflow-x:auto;scrollbar-width:none}.crash-ui .winner{display:grid;align-items:center;grid-template-columns:var(--web-avatar-md) minmax(var(--web-winner-name-min-width),auto);gap:var(--space-4) var(--space-8);flex:1 0 var(--web-win-card-width);padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-16)}.crash-ui .winner .avatar{width:var(--web-avatar-md);height:var(--web-avatar-md);grid-row:span 2;align-self:center}.crash-ui .winner-name{font-size:var(--type-12);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.crash-ui .winner .money{color:var(--success);white-space:nowrap}.crash-ui .win-multiple{display:none}.crash-ui .history{display:flex;gap:var(--space-8);overflow:auto;scrollbar-width:none;margin-top:var(--space-12)}.crash-ui .pill{display:inline-flex;align-items:center;justify-content:center;min-height:var(--web-history-pill-height);box-sizing:border-box;border:var(--stroke-1) solid color-mix(in srgb,currentColor calc(var(--alpha-soft) * 100%),var(--border));border-radius:var(--radius-24);background:var(--surface-raised);color:var(--pill-cyan);padding:0 var(--space-8);font-size:var(--web-history-pill-size);font-family:var(--font-numbers),var(--font-body),sans-serif;white-space:nowrap}.crash-ui .pill.tier-success{color:var(--pill-success)}.crash-ui .pill.tier-purple{color:var(--pill-purple)}.crash-ui .pill.tier-gold{color:var(--pill-gold)}.crash-ui .bottom{position:absolute;left:var(--edge);right:var(--edge);bottom:max(var(--edge),env(safe-area-inset-bottom));pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:var(--space-12)}/* The steps of a climbing round, beside the scene: the kit's panel, so a brand restyles it
    with everything else. It stands in the band the scene was given, clear of both panels. */
 .crash-ui .ladder{position:absolute;left:var(--edge);top:var(--scene-top,0);height:calc(var(--scene-bottom,100%) - var(--scene-top,0));display:flex;align-items:center;pointer-events:none}
 .crash-ui .ladder-list{list-style:none;margin:0;padding:var(--space-16) var(--space-12);display:grid;gap:var(--space-8);background:var(--surface);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24);box-shadow:var(--elevation-panel,none)}
@@ -164,12 +164,16 @@
 .crash-ui .tabbed-controls .actions .action{min-height:100%;flex-direction:column;gap:var(--space-4)}
 .crash-ui .tabbed-controls .actions .action .money:not(.long-amount){font-size:var(--type-32)}
 .crash-ui .tabbed-controls .actions .action .action-title{font-size:var(--type-24)}
-/* GO stays centred on its button and the arrow follows right beside it: the arrow gives
-   back its own width and gap as a negative margin, so the label centres as if alone. */
-.crash-ui .go-arrow{display:none;width:var(--type-24);height:var(--type-24);flex:none;margin-right:calc(-1 * (var(--type-24) + var(--space-4)))}
-.crash-ui .action-title.go-label~.go-arrow{display:block}
+/* GO holds the middle of its button and the dial follows right beside it. The dial gives
+   back most of its own width and gap as a negative margin, so the label centres nearly as
+   if it were alone - eight pixels short of it, which leans the pair back towards the
+   middle instead of letting the ring weigh the button down on its right. */
+.crash-ui .go-arrow{display:block;width:var(--type-24);height:var(--type-24);flex:none}
+.crash-ui .action .go-dial:has(.go-arrow){display:none}
+.crash-ui .action-title.go-label~.go-dial:has(.go-arrow){display:inline-flex;
+ margin-right:calc(-1 * (var(--type-24) + var(--space-8)))}
 /* The artwork fills its box, so the row gives the pair the small gap between them. */
-.crash-ui .tabbed-controls .actions .action.go:has(.action-title.go-label){flex-direction:row;gap:var(--space-4)}
+.crash-ui .tabbed-controls .actions .action.go:has(.action-title.go-label){flex-direction:row;gap:var(--space-8)}
 .crash-ui .actions .action .money{white-space:nowrap}
 .crash-ui .money-unit{font-size:var(--type-24);font-weight:inherit;margin-left:var(--space-4)}
 .crash-ui .tabbed-controls .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
@@ -259,7 +263,7 @@
 /* A compact upper HUD with history outside the account surface. */
 .crash-ui .account-column{width:100%;min-width:0;display:flex;flex-direction:column;gap:var(--space-8)}
 .crash-ui .account-column .history{margin:0;padding:0 var(--space-8);background:none;border:0;box-shadow:none;max-width:100%;pointer-events:auto}
-.crash-ui .pill,.crash-ui .ladder-step{font-size:var(--web-hud-meta-size)}
+.crash-ui .ladder-step{font-size:var(--web-hud-meta-size)}
 .crash-ui .identity strong{font-size:var(--web-hud-profile-size)}
 .crash-ui .balance .money{font-size:var(--type-24)}
 .crash-ui .wins-head{font-size:var(--body-type-px)}
@@ -486,8 +490,7 @@
  .crash-ui .account .winners.panel,.crash-ui .account .records{margin-top:var(--space-6);padding-top:var(--space-6)}
  .crash-ui .top .records-line .record-value{font-size:var(--type-16)}
  .crash-ui .history{margin-top:var(--space-6)}
- .crash-ui .pill{padding:var(--space-4) var(--space-8);font-size:var(--type-12)}
- .crash-ui .ladder-step{font-size:var(--type-12)}
+  .crash-ui .ladder-step{font-size:var(--type-12)}
  .crash-ui .multiplier{font-size:var(--type-24);padding:var(--space-4) var(--space-16);min-width:var(--web-compact-control-width)}
  .crash-ui .auto,.crash-ui .settings-row>.button{min-height:var(--tap-min)}
  .crash-ui .auto .knob{height:var(--web-knob-compact-size);width:var(--web-knob-compact-size)}
@@ -900,8 +903,13 @@
  .crash-ui.has-tabbed-controls .bottom>.controls:not(.navigation-only){border-bottom-left-radius:0;border-bottom-right-radius:0}
 }
 
-/* Stable action typography across idle, playing and viewport sizes. */
-.crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions .action .money.is-label,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--type-16)}
+/* Stable action typography across idle, playing and viewport sizes. The label and the
+   currency after the figure are the same voice, so both read one size from the button
+   itself rather than each carrying its own - and a taller button raises the pair with a
+   single line. The unit takes the label's face too: it is a word, not a figure. */
+.crash-ui .tabbed-controls .actions .action{--action-label-size:var(--type-16)}
+.crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions .action .money.is-label,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money.is-label{font-size:var(--action-label-size)}
+.crash-ui .tabbed-controls .actions .action .money-unit{font-size:var(--action-label-size);font-family:var(--font-body),sans-serif}
 .crash-ui .tabbed-controls .actions .action .money:not(.is-label):not(.long-amount),.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .money:not(.is-label):not(.long-amount){font-size:var(--type-32)}
 
 /* GO has the same typographic emphasis as the cash-out amount. */
@@ -926,7 +934,7 @@
 /* A laptop's buttons are half again as tall as a phone's, so the words on them grow with
    them: the label a step, the figure and GO to the size the taller button can carry. */
 @media(min-width:960px){
- .crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title{font-size:var(--type-20)}
+ .crash-ui .tabbed-controls .actions .action{--action-label-size:var(--type-20)}
  .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title.go-label{font-size:var(--type-32)}
  .crash-ui .tabbed-controls .actions .action.cash{--amount-max-size:var(--type-32)}
  .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action.cash .money:not(.is-label):not(.long-amount){font-size:var(--type-32)}
@@ -1128,28 +1136,33 @@
  .crash-ui.has-tabbed-controls .modal-layer.is-context-panel .modal{width:var(--tab-window-width);max-width:var(--tab-window-width)}
 }
 
-/* The round's clock, pressed into the head of the button it belongs to: a short groove that
-   fills from the left as the seconds go, in the label's own ink held back a little, so it
-   darkens the face rather than printing a bar on it.
-   It sits above the label, on the line the gloss starts from, because a thumb on a phone
-   covers the foot of the button. Both the groove and what fills it are the face's own ink
-   at two steps of the alpha scale, so any brand or theme carries them without a rule of
-   its own. */
-.crash-ui .go-timer{position:absolute;left:50%;transform:translateX(-50%);top:var(--space-6);
- width:min(50%,var(--web-compact-control-width));height:var(--space-6);border-radius:var(--radius-pill);overflow:hidden;pointer-events:none;
- background:color-mix(in srgb,var(--on-go) calc(var(--alpha-hair) * 100%),transparent);
- box-shadow:inset 0 var(--stroke-1) var(--stroke-2) color-mix(in srgb,var(--on-go) calc(var(--alpha-hair) * 100%),transparent)}
-.crash-ui .go-timer i{display:block;height:100%;width:calc((1 - var(--countdown,1)) * 100%);border-radius:inherit;
- background:color-mix(in srgb,var(--on-go) calc(var(--alpha-scrim) * 100%),transparent);transition:width var(--motion-fast-ms) linear}
-.crash-ui.reduced .go-timer i{transition:none}
-@media(prefers-reduced-motion:reduce){.crash-ui .go-timer i{transition:none}}
+/* The round's clock, drawn where the button already looks like a dial: a ring around its
+   own icon, sweeping round clockwise as the seconds go. The groove and the sweep are the
+   face's own ink at two steps of the alpha scale, so any brand or theme carries them
+   without a rule of its own, and both only appear while a round is being counted.
+   The ring is masked out of a disc rather than stroked, so its weight comes from one
+   token and it stays round at any icon size. */
+.crash-ui .go-dial[hidden]{display:none}
+.crash-ui .go-dial{--dial-ring:var(--stroke-3);position:relative;display:inline-flex;align-items:center;justify-content:center;
+ flex:none;padding:var(--space-8);border-radius:var(--radius-pill);pointer-events:none}
+.crash-ui .go-dial::before,.crash-ui .go-dial::after{content:"";position:absolute;inset:0;border-radius:50%;opacity:0;
+ -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - var(--dial-ring)),#000 calc(100% - var(--dial-ring)));
+ mask:radial-gradient(farthest-side,transparent calc(100% - var(--dial-ring)),#000 calc(100% - var(--dial-ring)))}
+.crash-ui .go-dial::before{background:color-mix(in srgb,var(--on-go) calc(var(--alpha-hair) * 100%),transparent)}
+.crash-ui .go-dial::after{background:conic-gradient(color-mix(in srgb,var(--on-go) calc(var(--alpha-scrim) * 100%),transparent) calc((1 - var(--countdown,1)) * 1turn),transparent 0)}
+.crash-ui .action.is-timed .go-dial::before,.crash-ui .action.is-timed .go-dial::after{opacity:1}
 
 /* The last seconds: the rail turns to the danger colour and the button shivers in place,
    a rock about its own centre rather than a slide, small enough to move nothing around it
    and still be caught out of the corner of an eye. A press stops it, so the travel of the
    press still reads. */
-.crash-ui .action.is-urgent .go-timer i{background:var(--danger-strong)}
-@keyframes go-timer-urgent{0%,100%{transform:rotate(0deg)}15%{transform:rotate(-2.2deg)}45%{transform:rotate(2.2deg)}70%{transform:rotate(-1.4deg)}90%{transform:rotate(.8deg)}}
+/* The alarm is the danger colour said against the face it lands on, which a brand or a
+   theme works out for that face: a red GO would otherwise swallow a red ring. */
+.crash-ui .action{--action-alarm:var(--action-go-urgent,var(--danger-strong))}
+.crash-ui .action.cash{--action-alarm:var(--action-cash-urgent,var(--danger-strong))}
+.crash-ui .action.is-urgent .go-dial::after{background:conic-gradient(var(--action-alarm) calc((1 - var(--countdown,1)) * 1turn),transparent 0)}
+.crash-ui .action.is-urgent .go-dial .go-arrow,.crash-ui .action.is-urgent .go-dial .icon{color:var(--action-alarm)}
+@keyframes go-timer-urgent{0%,100%{transform:rotate(0deg)}15%{transform:rotate(-1.3deg)}45%{transform:rotate(1.3deg)}70%{transform:rotate(-.8deg)}90%{transform:rotate(.45deg)}}
 .crash-ui .action.is-urgent{animation:go-timer-urgent calc(var(--motion-ms) * 2.5) ease-in-out infinite}
 .crash-ui .action.is-urgent:active{animation:none}
 .crash-ui.reduced .action.is-urgent{animation:none}
