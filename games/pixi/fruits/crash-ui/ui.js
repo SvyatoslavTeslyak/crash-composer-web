@@ -2,7 +2,11 @@
 (function(){
 'use strict';
 const base=new URL('.',document.currentScript.src).href;
-if(!window.CrashI18n){const script=document.createElement('script');script.src=base+'i18n.js';document.head.append(script)}
+// A page that loads the kit as ui.js?v=<build> passes that same stamp on to everything the
+// kit fetches for itself, so a release is never half old: a cached catalog beside a fresh
+// ui.js would show last week's wording.
+const version=new URL(document.currentScript.src).search;
+if(!window.CrashI18n){const script=document.createElement('script');script.src=base+'i18n.js'+version;document.head.append(script)}
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let currency='';
 // The go button doubles as cash out when the game says so; older games are recognised
@@ -29,11 +33,17 @@ const PAIRED=/\.(webp|png)$/;
 let webp=(()=>{try{return document.createElement('canvas').toDataURL('image/webp').startsWith('data:image/webp')}catch{return false}})();
 const pick=name=>PAIRED.test(name)?name.replace(PAIRED,webp?'.webp':'.png'):name;
 const webpProbe=new Promise(resolve=>{const probe=new Image();probe.onload=probe.onerror=()=>resolve(probe.width===1);probe.src='data:image/webp;base64,UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA=='});
-webpProbe.then(decodes=>{if(decodes===webp)return;webp=decodes;document.querySelectorAll('.crash-ui img[data-pair]').forEach(img=>{img.src=base+img.dataset.pair.replace(/^(.*)\.(webp|png)$/,'$1'+(webp?'.webp':'.png'))});document.querySelectorAll('.crash-ui').forEach(host=>host.classList.toggle('no-webp',!webp))});
-const icon=(name)=>'<img class="icon" alt="" src="'+base+'assets/icons/'+pick(name)+(name==='play.svg'?'?v=ink-5':'')+'"'+(PAIRED.test(name)?' data-pair="assets/icons/'+name+'"':'')+'>';
+webpProbe.then(decodes=>{if(decodes===webp)return;webp=decodes;document.querySelectorAll('.crash-ui img[data-pair]').forEach(img=>{img.src=base+img.dataset.pair.replace(/^(.*)\.(webp|png)$/,'$1'+(webp?'.webp':'.png'))+version});document.querySelectorAll('.crash-ui').forEach(host=>host.classList.toggle('no-webp',!webp))});
+const icon=(name)=>'<img class="icon" alt="" src="'+base+'assets/icons/'+pick(name)+(name==='play.svg'?'?v=ink-5':version)+'"'+(PAIRED.test(name)?' data-pair="assets/icons/'+name+'"':'')+'>';
 // Discrete steps, never interpolation: the stake is the panel's largest figure while it is
 // short, and gives that up one step at a time as the amount grows.
 // The tabbed shell's top-right button opens the sound switches, so it is a speaker.
+// The step the button takes: an arrow beside GO, in the label's own colour, pointing the
+// way the goat moves. It belongs to the next-lane press only, not to PLAY or CHECK ROUND.
+const GO_ARROW_SVG='<svg class="go-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">'
++'<path fill="currentColor" d="M11.9069 6.80501C11.9492 6.83656 12.0748 6.93015 12.155 6.99073C12.3155 7.11194 12.5456 7.2875 12.8222 7.50331C13.3763 7.93574 14.1118 8.52596 14.8443 9.16197C15.5818 9.80229 16.2935 10.4694 16.813 11.0574C17.0738 11.3525 17.265 11.6042 17.3857 11.8043C17.4432 11.8996 17.4725 11.9636 17.4872 11.9998C17.4725 12.036 17.4432 12.0999 17.3857 12.1953C17.265 12.3954 17.0738 12.6471 16.813 12.9422C16.2935 13.5301 15.5818 14.1973 14.8443 14.8376C14.1118 15.4737 13.3763 16.0639 12.8222 16.4963C12.5457 16.7121 12.0674 17.0734 11.9069 17.1946C11.4622 17.5222 11.3672 18.1482 11.6948 18.5929C12.0223 19.0375 12.6488 19.1321 13.0935 18.8046L13.0966 18.8023C13.2673 18.6733 13.7685 18.2948 14.0527 18.073C14.6235 17.6275 15.3881 17.0142 16.1555 16.3478C16.918 15.6858 17.7063 14.9518 18.3118 14.2665C18.6135 13.925 18.891 13.572 19.0985 13.2278C19.2894 12.9111 19.4999 12.4759 19.4999 11.9998C19.4999 11.5236 19.2894 11.0884 19.0985 10.7717C18.891 10.4275 18.6135 10.0746 18.3118 9.73309C17.7063 9.04781 16.918 8.31379 16.1555 7.65176C15.388 6.98542 14.6235 6.37211 14.0526 5.9266C13.7667 5.70344 13.5281 5.52142 13.3604 5.3948C13.2773 5.33202 13.1414 5.23074 13.0947 5.19591L13.0934 5.19501C12.6488 4.8675 12.0222 4.9621 11.6947 5.4068C11.3672 5.8515 11.4622 6.47749 11.9069 6.80501Z"/>'
++'<path fill="currentColor" d="M5.04889 5.10738C4.71225 5.27754 4.5 5.62265 4.5 5.99985L4.50005 17.9999C4.50005 18.3771 4.7123 18.7222 5.04895 18.8923C5.38559 19.0625 5.78934 19.0287 6.09307 18.805L6.09561 18.8031C6.14356 18.7674 6.27823 18.667 6.36057 18.6048C6.52821 18.4782 6.76681 18.2962 7.05277 18.073C7.62364 17.6275 8.38817 17.0142 9.15563 16.3478C9.91813 15.6858 10.7064 14.9518 11.3119 14.2665C11.6136 13.925 11.8911 13.572 12.0986 13.2279C12.2895 12.9111 12.5 12.4759 12.5 11.9998C12.5 11.5237 12.2895 11.0885 12.0986 10.7718C11.8911 10.4276 11.6136 10.0746 11.3119 9.73314C10.7064 9.04786 9.91811 8.31383 9.15561 7.65181C8.38814 6.98546 7.6236 6.37215 7.05273 5.92665C6.76676 5.70348 6.52816 5.52147 6.36051 5.39484C6.27739 5.33206 6.14149 5.23078 6.09476 5.19595L6.09355 5.19505C5.78983 4.97137 5.38553 4.93722 5.04889 5.10738Z"/>'
++'</svg>';
 const SPEAKER_SVG='<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.99 3.98c.69-.53 1.5-.96 2.38-.59.86.36 1.14 1.24 1.26 2.11.12.88.12 2.1.12 3.62v5.76c0 1.52 0 2.74-.12 3.62-.12.87-.4 1.75-1.26 2.11-.88.37-1.69-.06-2.38-.59-.7-.54-1.6-1.45-2.64-2.52-.54-.55-.9-.82-1.26-.97-.37-.15-.81-.21-1.58-.21-.67 0-1.27 0-1.72-.05-.47-.05-.92-.16-1.31-.43-.76-.51-1.05-1.27-1.16-1.96-.08-.52-.07-1.09-.06-1.55v-.68c-.01-.46-.02-1.03.06-1.54.11-.7.4-1.45 1.16-1.97.39-.27.84-.38 1.31-.43.45-.04 1.05-.04 1.72-.04.77 0 1.21-.07 1.58-.22.36-.15.72-.41 1.26-.97 1.05-1.07 1.94-1.98 2.64-2.52Z"/><path fill="currentColor" fill-rule="evenodd" d="M16.39 8.2a1 1 0 0 1 1.4.19A5.98 5.98 0 0 1 19 12a5.98 5.98 0 0 1-1.2 3.6 1 1 0 1 1-1.6-1.2A3.98 3.98 0 0 0 17 12c0-.91-.3-1.75-.8-2.39a1 1 0 0 1 .19-1.4Z"/><path fill="currentColor" fill-rule="evenodd" d="M19.32 6.26a1 1 0 0 1 1.41.06A8.25 8.25 0 0 1 23 12a8.25 8.25 0 0 1-2.26 5.68 1 1 0 1 1-1.48-1.36A6.25 6.25 0 0 0 21 12a6.25 6.25 0 0 0-1.74-4.32 1 1 0 0 1 .06-1.42Z"/></svg>';
 // The cash-out toast's clock: the check pops for half a second, flips into the coin, the coins fly
 // (WEB_WIN_COIN_DURATION_MS plus their stagger), and the toast leaves once they have landed.
@@ -145,7 +155,7 @@ function soundPlan(manifest){
  }
  return plan;
 }
-const soundLevels=typeof fetch==='function'?fetch(base+'assets/audio/sounds.json',{cache:'no-store'}).then(r=>r.ok?r.json():{}).then(soundPlan).catch(()=>({})):Promise.resolve({});
+const soundLevels=typeof fetch==='function'?fetch(base+'assets/audio/sounds.json'+version,{cache:'no-store'}).then(r=>r.ok?r.json():{}).then(soundPlan).catch(()=>({})):Promise.resolve({});
 /**
  * The tabbed controls: a second shape for the same panel, chosen per game with
  * config.controlsVariant='tabbed'. The standard controls are untouched — they stay in the
@@ -170,7 +180,7 @@ class TabbedControls {
    '<div class="difficulty-row" role="radiogroup" aria-label="Difficulty"></div>'+
    '<div class="bet-grid">'+
     '<div class="wager"><div class="stake" aria-label="Bet amount">'+button('min','MIN')+button('minus','−')+'<div class="wager-amount"><output class="money coin-amount" data-slot="tbBet"></output></div>'+button('plus','+')+button('max','MAX')+'</div></div>'+
-    '<div class="actions">'+button('cash','<span class="action-title">CASH OUT</span><span class="money" data-slot="tbCash"></span>','action cash')+button('go','<span class="money" data-slot="tbGoAmount"></span><span class="action-title" data-slot="tbGoTitle"></span>','action go')+'</div>'+
+    '<div class="actions">'+button('cash','<span class="action-title">CASH OUT</span><span class="money" data-slot="tbCash"></span>','action cash')+button('go','<span class="money" data-slot="tbGoAmount"></span><span class="action-title" data-slot="tbGoTitle"></span>'+GO_ARROW_SVG,'action go')+'</div>'+
    '</div></div>'+
    '<div class="tabs">'+button('topbets',icon(trophy),'tab')+button('mybets',icon(receipt),'tab')+button('rulesTab',icon(doc),'tab')+'</div>';
   for(const [a,label] of [['topbets','Top bets'],['mybets','My bets'],['rulesTab','Rules']])this.element.querySelector('[data-action='+a+']').setAttribute('aria-label',label);
@@ -360,7 +370,7 @@ class GameUI {
   toast.style.setProperty('--win-flip-at',WIN_FLIP_AT+'ms');toast.style.setProperty('--win-flip-ms',WIN_FLIP_MS+'ms');
   // Splashes: a dozen drops thrown out from the centre as the card lands, each on its own bearing.
   const splash=Array.from({length:16},(_,i)=>{const a=(i/16)*Math.PI*2+(i%2?.2:0),d=(i%3?120:170);return '<i'+(i%4===3?' class="win-splash-star"':'')+' style="--dx:'+Math.round(Math.cos(a)*d)+'px;--dy:'+Math.round(Math.sin(a)*d*.7)+'px;--win-splash-delay:'+(i%4)*35+'ms">'+(i%4===3?'✦':'')+'</i>'}).join('');
-  toast.innerHTML='<span class="win-splash" aria-hidden="true">'+splash+'</span><div class="win-toast-card"><span class="win-flip" aria-hidden="true"><img class="win-mark" src="'+base+'assets/icons/'+pick('cashed-out.webp')+'" alt=""><img class="win-coin" src="'+base+'assets/icons/'+pick('coin.png')+'" alt=""></span><div><strong>Cashed out'+(Number.isFinite(multiplier)?' · '+Number(multiplier).toFixed(2)+'×':'')+'</strong><span>+'+money(amount)+'</span></div></div>';
+  toast.innerHTML='<span class="win-splash" aria-hidden="true">'+splash+'</span><div class="win-toast-card"><span class="win-flip" aria-hidden="true"><img class="win-mark" src="'+base+'assets/icons/'+pick('cashed-out.webp')+version+'" alt=""><img class="win-coin" src="'+base+'assets/icons/'+pick('coin.png')+'" alt=""></span><div><strong>Cashed out'+(Number.isFinite(multiplier)?' · '+Number(multiplier).toFixed(2)+'×':'')+'</strong><span>+'+money(amount)+'</span></div></div>';
   this.host.append(toast);this.winToast=toast;
   const id=s.winId;
   queueMicrotask(()=>{if(this.state.win&&this.state.winId===id)this.send('dismissWin',{})});
@@ -398,7 +408,7 @@ class GameUI {
   const source=toast?this.winToast?.querySelector('.win-coin'):this.q('.win-coin'),target=this.q('.balance .icon');
   if(!source||!target){if(toast)this.releaseWinBalance();return;}
   const layer=document.createElement('div');layer.className='win-coin-flight';layer.setAttribute('aria-hidden','true');this.host.append(layer);this.coinLayer=layer;
-  const coins=Array.from({length:CrashTokens.WEB_WIN_COIN_COUNT},()=>{const coin=document.createElement('img');coin.src=base+'assets/icons/'+pick('coin.png');coin.alt='';layer.append(coin);return coin});
+  const coins=Array.from({length:CrashTokens.WEB_WIN_COIN_COUNT},()=>{const coin=document.createElement('img');coin.src=base+'assets/icons/'+pick('coin.png')+version;coin.alt='';layer.append(coin);return coin});
   const speed=Math.max(0.5,Math.min(2,Number(this.config.winCoinSpeed)||1));
   const duration=CrashTokens.WEB_WIN_COIN_DURATION_MS/speed,stagger=CrashTokens.WEB_WIN_COIN_STAGGER_MS/speed;
   const arrived=new Set();
@@ -549,7 +559,7 @@ class GameUI {
   if(kind==='wins')body.innerHTML=this.winRows(s.wins||[])||'<p class=muted>No wins yet.</p>';
   if(kind==='dev')body.innerHTML=Object.entries({leaderboard:'Leaderboard / live wins',history:'Round history',personal_record:'My record',online_count:'Online count',...(s.game==='market_stack'?{multiplier_ladder:'Multiplier ladder'}:{})}).map(([k,v])=>'<label class="setting">'+v+'<input class="switch" type="checkbox" role="switch" data-flag="'+k+'" '+(s.flags?.[k]!==false?'checked':'')+'></label>').join('');
   if(kind==='win'){
-   body.innerHTML=(this.tabbed?'<div class="win-emblem" aria-hidden="true"><span class="win-spark win-spark-left">✦</span>':'')+'<img class="win-coin" src="'+base+'assets/icons/coin.png" alt="">'+(this.tabbed?'<span class="win-spark win-spark-right">✦</span></div>':'')+'<div class="win-total">'+money(s.winAmount)+'</div>'+(this.tabbed?'':'<div class="win-subtitle">'+esc(s.winSubtitle||'Well played!')+'</div>');
+   body.innerHTML=(this.tabbed?'<div class="win-emblem" aria-hidden="true"><span class="win-spark win-spark-left">✦</span>':'')+'<img class="win-coin" src="'+base+'assets/icons/coin.png'+version+'" alt="">'+(this.tabbed?'<span class="win-spark win-spark-right">✦</span></div>':'')+'<div class="win-total">'+money(s.winAmount)+'</div>'+(this.tabbed?'':'<div class="win-subtitle">'+esc(s.winSubtitle||'Well played!')+'</div>');
    if(!s.settings?.reduced_motion){const fx=document.createElement('div');fx.className='confetti';fx.innerHTML=Array.from({length:32},(_,i)=>'<i style="--angle:'+i*13+'deg;--x:'+((Math.random()-.5)*600)+'px;--y:'+(Math.random()*400-240)+'px"></i>').join('');layer.append(fx);setTimeout(()=>fx.remove(),2000)}
   }
   this.q('.drawer-tabs')?.remove();

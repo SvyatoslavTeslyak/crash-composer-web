@@ -1,7 +1,7 @@
 /* Shared EN/FR/HT localization. Source text remains the round-state contract. */
 (function(){
 'use strict';
-const base=new URL('.',document.currentScript.src), originals=new WeakMap(), listeners=new Set();
+const base=new URL('.',document.currentScript.src), version=new URL(document.currentScript.src).search, originals=new WeakMap(), listeners=new Set();
 let locale='en',catalog={entries:{}},overrides={},game='',revision=0,observer,scheduled=false,draftActive=false,index=new Map(),patterns=[];
 try{locale=new URLSearchParams(location.search).get('lang')||localStorage.getItem('crash-language')||'en'}catch{}
 if(!['en','fr','ht'].includes(locale))locale='en';
@@ -114,6 +114,6 @@ window.addEventListener('message',e=>{
  if(e.origin===location.origin&&e.data?.type==='crash-translations')setDraft(e.data);
 });
 function start(){observer=new MutationObserver(()=>{if(!scheduled){scheduled=true;queueMicrotask(()=>{scheduled=false;translate()})}});translate();window.dispatchEvent(new Event('crash-i18n-ready'));if(window.parent!==window)window.parent.postMessage({type:'crash-language-ready',locale},'*')}
-fetch(new URL('locales/catalog.json',base)).then(r=>{if(!r.ok)throw Error('Translation catalog unavailable');return r.json()}).then(data=>{if(!draftActive){catalog=data;rebuild();changed()}}).catch(error=>console.warn(error.message));
+fetch(new URL('locales/catalog.json'+version,base)).then(r=>{if(!r.ok)throw Error('Translation catalog unavailable');return r.json()}).then(data=>{if(!draftActive){catalog=data;rebuild();changed()}}).catch(error=>console.warn(error.message));
 if(document.body)start();else document.addEventListener('DOMContentLoaded',start,{once:true});
 })();
