@@ -89,7 +89,7 @@
 .crash-ui .controls .button{
  border-radius:var(--button-radius);
  border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);
- box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow);
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side);
 }
 .crash-ui .controls .button[aria-pressed=true]{outline:var(--stroke-2) solid var(--focus);outline-offset:calc(-1 * var(--stroke-2))}
 .crash-ui .controls .auto{border-radius:var(--radius-pill);padding-block:var(--space-4)}
@@ -132,7 +132,8 @@
 .crash-ui .tabbed-controls .risk-meter i.on.tier-high{background:var(--success)}
 .crash-ui .tabbed-controls .difficulty-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:var(--space-8)}
 .crash-ui .tabbed-controls .difficulty-row .button{min-height:var(--control-h);font-size:var(--type-24)}
-.crash-ui .tabbed-controls .difficulty-row .button[aria-pressed=true]{background:var(--gold);color:var(--on-go);outline:0}
+/* Every gold button is the same button: PLAY's face, edge and gold beneath it. */
+.crash-ui .tabbed-controls .difficulty-row .button[aria-pressed=true]{color:var(--on-go);border:var(--stroke-1) solid var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow);outline:0}
 /* The wager and the action buttons take a row each. Side by side they put three things
    across one row — stepper, cash, go — which crowds the stake and leaves the buttons
    narrow enough that their labels wrap. */
@@ -542,19 +543,21 @@
 .crash-ui .notice-text{margin:0;max-width:var(--web-account-popover-width);color:var(--text-muted);font-size:var(--type-16);line-height:var(--leading-body)}
 .crash-ui .notice-actions{display:grid;justify-items:center;gap:var(--space-8);width:100%;max-width:var(--web-account-popover-width);margin-top:var(--space-16)}
 .crash-ui .notice-actions .button{width:100%;min-height:var(--tap-min);border-radius:var(--radius-pill);font-size:var(--type-18);font-weight:700}
-.crash-ui .notice-actions .primary-button{background:var(--gold);border-color:var(--gold);color:var(--on-go)}
+.crash-ui .notice-actions .primary-button{color:var(--on-go);border:var(--stroke-1) solid var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow)}
 .crash-ui .notice-secondary{margin:0;font-size:var(--type-16)}
 /* The balance is the way to the wallet, so it is built like the buttons beside it: the same
    raised edge and the same give under a finger, in the header's own colour rather than gold. */
-.crash-ui button.balance,.crash-ui.has-tabbed-controls .profile>button.balance{font:inherit;cursor:pointer;-webkit-appearance:none;appearance:none;
+.crash-ui button.balance{font:inherit;cursor:pointer;-webkit-appearance:none;appearance:none;
  background:linear-gradient(color-mix(in srgb,var(--surface-raised) 85%,var(--text)),var(--surface-raised));
  border:var(--stroke-1) solid color-mix(in srgb,var(--text) calc(var(--alpha-faint) * 100%),transparent);
  box-shadow:0 var(--stroke-3) 0 var(--button-shadow);
  transition:transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms)}
-.crash-ui button.balance:active,.crash-ui.has-tabbed-controls .profile>button.balance:active{transform:translateY(var(--stroke-2));box-shadow:0 var(--stroke-1) 0 var(--button-shadow)}
 .crash-ui button.balance:focus-visible{outline:var(--stroke-2) solid var(--gold);outline-offset:var(--space-4)}
 .crash-ui .modal-footer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8);flex:none;padding-bottom:var(--web-button-depth)}
-.crash-ui .modal-footer .button[aria-pressed=true]{background:var(--gold);color:var(--on-go);border-color:var(--gold)}
+/* The tab you are on is built like GO: the same gold face, edge and depth beneath it, so a
+   chosen tab reads as pressed into the row rather than painted on it. */
+.crash-ui .modal-footer .button[aria-pressed=true]{color:var(--on-go);border-color:var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow)}
+.crash-ui .modal-footer .button[aria-pressed=true]:active{transform:translateY(var(--web-control-depth));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent)}
 @media(max-width:__PHONE_MAX__px){
  .crash-ui .modal-layer.is-tab-view{padding:var(--space-8);padding-top:max(var(--space-16),env(safe-area-inset-top));padding-bottom:max(var(--space-8),env(safe-area-inset-bottom))}
  .crash-ui .modal-layer.is-tab-view .modal{width:100%;max-width:100%;padding:var(--space-12)}
@@ -609,7 +612,8 @@
 
 /* Moving the navigation to the overlay must not resize or move its buttons. */
 @media(max-width:__PHONE_MAX__px){
- .crash-ui .tabbed-controls .tabs .tab,.crash-ui .modal-layer .modal-footer .tab{height:var(--web-control-comfort-height);min-height:var(--web-control-comfort-height);border-radius:var(--radius-24);border-width:var(--stroke-1);box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow)}
+ .crash-ui .tabbed-controls .tabs .tab,.crash-ui .modal-layer .modal-footer .tab{height:var(--web-control-comfort-height);min-height:var(--web-control-comfort-height);border-radius:var(--radius-24);border-width:var(--stroke-1);box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side)}
+ .crash-ui .tabbed-controls .tabs .tab[aria-pressed=true],.crash-ui .modal-layer .modal-footer .tab[aria-pressed=true]{box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow)}
  .crash-ui .modal-layer.is-tab-view>.modal-footer{position:fixed;left:var(--tabs-anchor-left);top:var(--tabs-anchor-top);right:auto;bottom:auto;width:var(--tabs-anchor-width);height:var(--tabs-anchor-height);padding:0;transform:none}
  .crash-ui .modal-layer.is-tab-view .modal{position:absolute;top:calc(max(var(--space-8),env(safe-area-inset-top)) + var(--web-control-comfort-height) + var(--space-16));bottom:calc(100% - var(--tabs-anchor-top) + var(--space-8));left:var(--edge);width:calc(100% - 2 * var(--edge));height:auto}
 }
@@ -720,15 +724,22 @@
 .crash-ui.has-tabbed-controls .profile>.icon-button{
  background:linear-gradient(var(--button-top),var(--button-bottom));
  border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);
- box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow);
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side);
 }
 .crash-ui.has-tabbed-controls :is(.profile,.account-summary)>.identity{
- background:linear-gradient(var(--action-go-top),var(--gold));
+ background:linear-gradient(var(--action-go-top),var(--action-go-bottom));
  border:var(--stroke-1) solid var(--action-go-edge);
  box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow);
 }
-.crash-ui.has-tabbed-controls .profile>.balance{min-height:var(--tap-min);border:var(--stroke-1) solid var(--border);box-shadow:var(--elevation-panel)}
+/* The balance belongs to the same family as the buttons on either side of it: one face, one
+   depth, gold kept for the level. */
+.crash-ui.has-tabbed-controls .profile>.balance{min-height:var(--tap-min);background:linear-gradient(var(--button-top),var(--button-bottom));border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side);transition:transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms)}
+/* A pixel wider than tall: enough to sit evenly between the pills without reading as an oval. */
+.crash-ui.has-tabbed-controls .profile>.icon-button{width:calc(var(--tap-min) + var(--stroke-1));min-width:calc(var(--tap-min) + var(--stroke-1));height:var(--tap-min);aspect-ratio:auto;border-radius:var(--radius-pill)}
 .crash-ui.has-tabbed-controls .profile>.icon-button:active,.crash-ui.has-tabbed-controls .profile>.identity:active{transform:translateY(var(--web-control-depth))}
+/* A press takes the depth with it: the pill sinks onto the row rather than sliding down it. */
+.crash-ui.has-tabbed-controls :is(.profile,.account-summary)>.identity{box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow);transition:transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms)}
+.crash-ui.has-tabbed-controls :is(.profile,.account-summary)>.identity:active{box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent)}
 
 .crash-ui .is-menu-popover .setting{gap:var(--space-24);padding-inline:var(--space-8)}
 
@@ -924,7 +935,7 @@
 .crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal{display:flex;flex-direction:column;gap:var(--space-16);width:min(100%,calc(var(--modal-max-width-px) - var(--space-48) - var(--space-32)));max-width:none;min-height:0;height:100%;max-height:100%;margin:0;border-radius:var(--radius-24);border:var(--stroke-1) solid color-mix(in srgb,var(--text) 16%,transparent);padding:var(--space-24);background:linear-gradient(160deg,color-mix(in srgb,var(--text) 5%,var(--surface)),var(--surface) 45%);box-shadow:var(--elevation-modal);overflow:hidden;animation:crash-sheet-in var(--motion-ms) ease-out}
 .crash-ui.has-menu-drawer .is-menu-drawer .modal>header{flex:none;margin:0;gap:var(--space-16)}
 .crash-ui.has-menu-drawer .is-menu-drawer .modal h2{font-size:var(--type-24);line-height:var(--leading-tight)}
-.crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button{display:grid;place-items:center;padding:0;line-height:0;flex:none;width:var(--tap-min);height:var(--tap-min);border-radius:var(--radius-pill);border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-shadow);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms)}
+.crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button{display:grid;place-items:center;padding:0;line-height:0;flex:none;width:var(--tap-min);height:var(--tap-min);border-radius:var(--radius-pill);border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms)}
 .crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button:hover{filter:brightness(1.12)}
 .crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button:active{transform:translateY(var(--web-control-depth));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}
 /* Window header glyphs match the game header's: 24 in a 44 button. */
@@ -971,11 +982,14 @@
 .crash-ui.has-tabbed-controls .profile>.icon-button,
 .crash-ui.has-tabbed-controls .modal>header .icon-button{
  flex-shrink:0;min-width:var(--tap-min);min-height:var(--tap-min);aspect-ratio:1;border-radius:50%;
- box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),inset 0 calc(-1 * var(--web-control-depth)) 0 var(--button-shadow);
+ /* The depth sits under the button, not inside it, so back and sound stand as tall as the
+    level pill and the balance across the row. */
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side);
 }
 .crash-ui.has-tabbed-controls .profile>.icon-button:active,
 .crash-ui.has-tabbed-controls .modal>header .icon-button:active{
- box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),inset 0 calc(-1 * var(--stroke-1)) 0 var(--button-shadow);
+ transform:translateY(var(--web-control-depth));
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent);
 }
 .crash-ui [data-action=betDetails],.crash-ui [data-action=back],.crash-ui .flat-button{min-width:var(--tap-min);min-height:var(--tap-min)}
 /* Inside a table the row is the tap target (the tr carries the action too): row padding plus
@@ -1072,4 +1086,32 @@
 @media(max-width:359px){
  .crash-ui .bets-table th:first-child,.crash-ui .bets-table td:first-child{padding-left:var(--space-8)}
  .crash-ui .bets-table th:last-child,.crash-ui .bets-table td:last-child{padding-right:var(--space-12)}
+}
+
+/* One press for every control, whatever colour its face is: it travels down by exactly the
+   depth it stands on and leaves that depth behind, so it sinks onto the surface instead of
+   sliding down the screen with its own side still under it. The ring stays: it is the
+   button's edge, not its depth. */
+.crash-ui .tabbed-controls .tabs .tab:active,
+.crash-ui .modal-layer .modal-footer .tab:active,
+.crash-ui.has-tabbed-controls .profile>.icon-button:active,
+.crash-ui.has-tabbed-controls .profile>button.balance:active,
+.crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button:active{
+ transform:translateY(var(--web-control-depth));
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent);
+}
+/* A chosen control that can no longer be pressed is sunk into the row, the way its quiet
+   neighbours are: the depth moves inside as a band along the top, in its own gold. */
+.crash-ui .controls .button[aria-pressed=true]:disabled,
+.crash-ui .tabbed-controls .difficulty-row .button[aria-pressed=true]:disabled{
+ transform:none;
+ box-shadow:inset 0 var(--web-control-depth) 0 var(--action-go-shadow);
+}
+.crash-ui .tabbed-controls .tabs .tab[aria-pressed=true]:active,
+.crash-ui .modal-layer .modal-footer .tab[aria-pressed=true]:active,
+.crash-ui .tabbed-controls .difficulty-row .button[aria-pressed=true]:active:not(:disabled),
+.crash-ui .notice-actions .primary-button:active,
+.crash-ui.has-tabbed-controls :is(.profile,.account-summary)>.identity:active{
+ transform:translateY(var(--web-control-depth));
+ box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent);
 }

@@ -116,7 +116,7 @@ class BettingSound {
  // What the player pressed, named as the manifest names it.
  // How close to the PLAY press a cash-ready state still counts as part of that press.
  static PRESS_WINDOW_MS=400;
- static EVENTS={go:'play',cash:'cashout',min:'stake_min',max:'stake_max',minus:'stake_minus',plus:'stake_plus',preset:'stake_preset',auto:'auto',difficulty:'difficulty',chooseDifficulty:'difficulty',pickDifficulty:'difficulty_pick',leave:'header_click',account:'header_click',menu:'header_click','cash-ready':'cash_ready'};
+ static EVENTS={go:'play',cash:'cashout',min:'stake_min',max:'stake_max',minus:'stake_minus',plus:'stake_plus',preset:'stake_preset',auto:'auto',difficulty:'difficulty',chooseDifficulty:'difficulty',pickDifficulty:'difficulty_pick',leave:'header_click',account:'header_click',menu:'header_click',wallet:'header_click',notice:'confirm',noticeDismiss:'click','cash-ready':'cash_ready'};
  play(action){
   if(!this.enabled||document.hidden)return;
   const event=BettingSound.EVENTS[action];if(!event)return;
