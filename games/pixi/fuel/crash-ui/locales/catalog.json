@@ -3144,22 +3144,6 @@
         "menu-drawer-v1"
       ]
     },
-    "connecting_f361a7": {
-      "source": "CONNECTING…",
-      "en": "CONNECTING…",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
     "check_round_f2d124": {
       "source": "CHECK ROUND",
       "en": "CHECK ROUND",
