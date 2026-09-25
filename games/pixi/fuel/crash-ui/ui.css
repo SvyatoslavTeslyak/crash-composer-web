@@ -1151,6 +1151,11 @@
 .crash-ui .go-dial::before{background:color-mix(in srgb,var(--on-go) calc(var(--alpha-hair) * 100%),transparent)}
 .crash-ui .go-dial::after{background:conic-gradient(color-mix(in srgb,var(--on-go) calc(var(--alpha-scrim) * 100%),transparent) calc((1 - var(--countdown,1)) * 1turn),transparent 0)}
 .crash-ui .action.is-timed .go-dial::before,.crash-ui .action.is-timed .go-dial::after{opacity:1}
+/* A press hands the button to the game for the length of a hop, and a clock on a button
+   nobody can press only nags: while it is disabled the ring goes and the arrow stands on
+   its own, as it does with no round running. Both come back with the button. */
+.crash-ui .action:disabled .go-dial::before,.crash-ui .action:disabled .go-dial::after{opacity:0}
+.crash-ui .action.is-urgent:disabled{animation:none}
 
 /* The last seconds: the rail turns to the danger colour and the button shivers in place,
    a rock about its own centre rather than a slide, small enough to move nothing around it
