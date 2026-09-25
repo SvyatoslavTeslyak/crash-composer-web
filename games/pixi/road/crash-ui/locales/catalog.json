@@ -3395,6 +3395,21 @@
       "presets": [
         "tabbed-shell-v1"
       ]
+    },
+    "multiplier_b94c55": {
+      "source": "MULTIPLIER",
+      "en": "MULTIPLIER",
+      "fr": "MULTIPLICATEUR",
+      "ht": "MILTIPLIKATÈ",
+      "group": "Bet panel & messages",
+      "games": [],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "betDetails",
+      "presets": [
+        "tabbed-shell-v1"
+      ]
     }
   }
 }
