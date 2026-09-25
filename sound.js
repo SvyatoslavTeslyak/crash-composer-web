@@ -8,6 +8,9 @@ const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const controls=$('#sound-controls'),report=$('#sound-report');
 const KIT='kit',AUDIO_ACCEPT='.wav,.ogg,.mp3,audio/*';
+// A take is uploaded into the kit checkout, so the control belongs to the editor that has
+// one: the local preview. The hosted Composer has the catalogue but nowhere to put a file.
+const LOCAL_EDITOR=/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 let drafts={},dirty=new Set(),player=null,stamp=Date.now(),loaded=false,group='interface';
 
 // The target is the global Composer game; target.js owns the catalog and the web-dev rebuild.
@@ -113,7 +116,7 @@ function card(event,index,sid){
   +(silent?'<p class="sound-warn">No sound chosen: this event is silent.</p>':'')
   +'<label class="sound-slider"><span>Volume</span><input type="range" data-volume min="-40" max="6" step="0.5" value="'+volume+'"><output>'+volume.toFixed(1)+' dB</output></label>'
   +'<ol class="sound-takes">'+rows.map(row=>takeRow(event,row,sid,chosen)).join('')+'</ol>'
-  +(window.ComposerDraftEditors?.enabled?'':'<div class="sound-card-actions"><label class="sound-replace">Add a sound<input type="file" data-take-add accept="'+AUDIO_ACCEPT+'"></label></div>')
+  +(LOCAL_EDITOR?'<div class="sound-card-actions"><label class="sound-replace">Add a sound<input type="file" data-take-add accept="'+AUDIO_ACCEPT+'"></label></div>':'')
   +'<details class="sound-prompt"><summary>Details</summary>'
    +'<p class="sound-meta">Event <code>'+esc(event.id)+'</code>'+(base?' · falls back to '+esc(base.label||base.id):'')+'</p>'
    +'<label class="sound-slider"><span>Pitch spread</span><input type="range" data-jitter min="0" max="0.2" step="0.01" value="'+(event.pitch_jitter||0)+'"><output>±'+Math.round((event.pitch_jitter||0)*100)+'%</output></label>'

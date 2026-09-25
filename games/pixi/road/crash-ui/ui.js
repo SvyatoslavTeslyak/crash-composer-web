@@ -84,6 +84,28 @@ const NOTICES={
  wallet:{title:'Top up your balance',text:'Add funds in your wallet, then come back to the round.',cta:'Top up',intent:'deposit',mark:'funds'}};
 // Topping up happens elsewhere, so the button points the way on.
 const LEAVE_ARROW_SVG='<svg class="leave-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+// A game announces a deadline as the seconds left and the seconds it started with; the ring
+// shows what is left of it, and nothing at all when there is no clock running.
+const countdownOf=s=>Number.isFinite(s.countdown)&&Number.isFinite(s.countdownTotal)&&s.countdownTotal>0&&s.countdown>0?s.countdown/s.countdownTotal:null;
+// The last few seconds are worth noticing: the rail turns to the danger colour and the
+// button shivers, which a player catches from the corner of an eye.
+const URGENT_SECONDS=3;
+const urgentOf=s=>Number.isFinite(s.countdown)&&s.countdown>0&&s.countdown<=URGENT_SECONDS;
+// A round has a clock, and it is drawn inside GO: a rail along the foot of the button that
+// empties as the seconds go. Nothing outside the button changes - not its size, not its
+// place, not the air around it - so the row cannot be thrown off balance by a countdown.
+function goTimerRing(button,fraction,urgent){
+ if(fraction===null||fraction===undefined){button.querySelector('.go-timer')?.remove();button.classList.remove('is-timed','is-urgent');return}
+ let bar=button.querySelector('.go-timer');
+ if(!bar){
+  button.classList.add('is-timed');
+  bar=document.createElement('span');bar.className='go-timer';bar.setAttribute('aria-hidden','true');
+  bar.append(document.createElement('i'));
+  button.append(bar);
+ }
+ bar.style.setProperty('--countdown',String(Math.max(0,Math.min(1,fraction))));
+ button.classList.toggle('is-urgent',!!urgent);
+}
 const button=(action,text,cls='')=>'<button type="button" class="button '+cls+'" data-action="'+action+'">'+text+'</button>';
 // Betting feedback belongs to the UI; the cashout-ready tone plays once per round, not on every re-enable between steps.
 class BettingSound {
@@ -211,7 +233,7 @@ class TabbedControls {
   this.q('.difficulty-row').hidden=!features.difficulty||names.length===0;
   for(const b of this.q('.difficulty-row').children){const on=Number(b.dataset.value)===s.difficulty;b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-checked',String(on));b.disabled=!s.canBet}
   this.text('tbBet',coinAmount(s.bet));fitStake(this.slots.tbBet,this.slots.tbBet.textContent);for(const a of ['min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
-  const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);
+  const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);goTimerRing(go,countdownOf(s),urgentOf(s));
   const nextLane=s.game==='road'&&s.showCash;coinSlot(this.slots.tbGoAmount,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',s.goTitle||(nextLane?'GO':'BET'));this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
   const cash=this.q('[data-action=cash]');cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win;moneySlot(this.slots.tbCash,s.cash);// Only the figure decides whether an amount is long: a leading $ is not a digit, and a
   // plain $1056.82 was being shrunk as if it were a million.
@@ -345,7 +367,7 @@ class GameUI {
   this.text('difficulty',s.difficulties?.[s.difficulty]||'Normal');moneySlot(this.slots.cash,s.cash);this.text('goTitle',s.goTitle||'PLAY');coinSlot(this.slots.goSubtitle,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.text('online',(s.online||6)+' ONLINE');
   this.q('[data-action=auto]').setAttribute('aria-pressed',String(!!s.auto));
   for(const a of ['auto','difficulty','min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
-  const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);this.slots.playIcon.hidden=asCash;
+  const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);goTimerRing(go,countdownOf(s),urgentOf(s));this.slots.playIcon.hidden=asCash;
   const cash=this.q('[data-action=cash]');cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win; // Button visibility never changes the shared control layout.
   const presets=s.presets||[2,3,8,20];const presetKey=JSON.stringify(presets);if(presetKey!==this.lastPresets){this.lastPresets=presetKey;this.q('.presets').innerHTML=presets.map(v=>'<button class="button" data-action="preset" data-value="'+Number(v)+'"><span class="coin-amount">'+esc(coinAmount(v))+'</span></button>').join('')}
   for(const b of this.q('.presets').children){b.disabled=!s.canBet;b.setAttribute('aria-pressed',String(Number(b.dataset.value)===s.bet))}
@@ -367,6 +389,10 @@ class GameUI {
   this.q('.toast').hidden=!s.toast;this.q('.toast').textContent=s.toast||'';
   if(!s.win||this.dismissedWinId!==s.winId||this.dismissedWinGame!==s.game)this.dismissedWin=false;this.dismissedWinId=s.winId;this.dismissedWinGame=s.game;
   // The game raises a notice; the kit decides how it looks and what it says.
+  // A press the game made on the player's behalf is shown and heard exactly as a finger's
+  // would be, so a round is never cashed out silently from nowhere.
+  const press=s.autoPress;
+  if(press&&press.count&&press.count!==this.lastAutoPress){this.lastAutoPress=press.count;this.showPress(press.action)}
   const notice=typeof s.notice==='string'?s.notice:s.notice?.kind;
   if(notice&&notice!==this.shownNotice){this.shownNotice=notice;this.noticeKind=notice;this.open('notice')}
   else if(!notice){this.shownNotice=null;if(this.modal==='notice'&&this.noticeFromState)this.close()}
@@ -491,6 +517,17 @@ class GameUI {
    return heading+row+'<td>'+trigger+'<time datetime="'+date.toISOString()+'">'+esc(date.toLocaleTimeString(window.CrashI18n?.locale==='fr'?'fr-FR':'en-US',{hour:'numeric',minute:'2-digit'}))+'</time></button></td><td>'+amount(v.wager,true)+'</td><td class="bet-prize">'+(v.payout>0?amount(v.payout):'—')+'</td></tr>';
   }).join('');
   return '<table class="bets-table '+(top?'top-bets':'my-bets')+'"><caption class="bet-caption">'+(top?'Top bets':'My bets')+'</caption><thead><tr>'+(top?'<th scope="col" class="bet-rank">#</th>':'')+'<th scope="col">'+(top?'Players':'Time')+'</th><th scope="col">Wager</th>'+(top?'<th scope="col">X</th>':'')+'<th scope="col">Prize</th></tr></thead><tbody>'+body+'</tbody></table>'+(!rows.length?'<p class="bets-empty">No bets yet.</p>':'');
+ }
+ /** The button dips as a press does, and sounds as a press does. */
+ showPress(action){
+  // Both control variants are in the page; press the one the player can actually see.
+  const name=action==='cash'?'cash':'go';
+  const button=[...this.host.querySelectorAll('[data-action='+name+']')].find(b=>!b.hidden&&b.getClientRects().length);
+  if(!button)return;
+  this.bettingSound.play(action);
+  button.classList.add('is-pressed');
+  clearTimeout(this.pressTimer);
+  this.pressTimer=setTimeout(()=>button.classList.remove('is-pressed'),CrashTokens.MOTION_MS);
  }
  clearBetDetails(){this.betDetail=null;this.q('.modal').classList.remove('is-bet-detail');this.q('[data-action=betsBack]')?.remove()}
  showBetDetails(index){
@@ -653,7 +690,7 @@ class GameUI {
   if(contextual&&innerWidth>=CrashTokens.CRASH_MEDIUM_BREAKPOINT){
    const rail=this.tabbed.tabs.getBoundingClientRect(),controls=(this.controlsVariant==='tabbed'?this.tabbed.element:this.multiBet?.element||this.standardControls).getBoundingClientRect();
    const css=getComputedStyle(this.host),token=name=>parseFloat(css.getPropertyValue(name));
-   const gap=token('--space-8'),edge=token('--space-16'),preferred=token('--modal-max-width-px');
+   const gap=token('--space-8'),edge=token('--space-16'),preferred=token('--web-context-panel-width');
    const left=rail.right+gap,beside=controls.left-left-gap;
    // Prefer the free column beside the betting controls. On narrower screens
    // the window may extend above them, but never across their action buttons.

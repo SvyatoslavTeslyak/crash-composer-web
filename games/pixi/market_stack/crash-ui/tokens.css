@@ -79,6 +79,7 @@
 --stroke-1:1px;
 --stroke-2:2px;
 --stroke-3:3px;
+--alpha-hair:0.08;
 --alpha-faint:0.15;
 --alpha-soft:0.25;
 --alpha-medium:0.35;
@@ -134,6 +135,7 @@
 --web-laptop-settings-column-width:212px;
 --web-laptop-stake-min-width:306px;
 --web-laptop-actions-min-width:260px;
+--web-context-panel-width:400px;
 --web-account-max-width:460px;
 --web-wins-column-width:300px;
 --web-wins-list-max-height:220px;
@@ -183,6 +185,10 @@
 --switch-border:#5c5c5c;
 --shadow:#000000;
 --highlight:#ffffff;
+--danger-strong:#e00000;
+--action-cash-strong:#14cc3e;
+--action-go-strong:#e09700;
+--gold-strong:#e09700;
 --button-top:#433f3a;
 --button-bottom:#2e2a25;
 --button-edge:#8f8c89;
@@ -208,6 +214,11 @@
 --gold-edge:#ffd98b;
 --gold-shadow:#735414;
 --gold-side:#ad7e1e;
+--danger-top:#ffaeae;
+--danger-bottom:#db8484;
+--danger-edge:#ffc7c7;
+--danger-shadow:#734545;
+--danger-side:#ad6969;
 --shadow-soft:#00000040;
 --shadow-medium:#00000059;
 --shadow-strong:#00000073;
@@ -266,6 +277,10 @@
 --switch-border:#5a5a5a;
 --shadow:#000000;
 --highlight:#ffffff;
+--danger-strong:#e00000;
+--action-cash-strong:#14cc3e;
+--action-go-strong:#a8e000;
+--gold-strong:#a8e000;
 --button-top:#3f403b;
 --button-bottom:#2a2b26;
 --button-edge:#8c8d8a;
@@ -291,6 +306,11 @@
 --gold-edge:#e6ff9c;
 --gold-shadow:#5e7322;
 --gold-side:#8fad33;
+--danger-top:#ffaeae;
+--danger-bottom:#db8484;
+--danger-edge:#ffc7c7;
+--danger-shadow:#734545;
+--danger-side:#ad6969;
 --shadow-soft:#00000040;
 --shadow-medium:#00000059;
 --shadow-strong:#00000073;
@@ -349,6 +369,10 @@
 --switch-border:#5a5a5a;
 --shadow:#000000;
 --highlight:#ffffff;
+--danger-strong:#e00000;
+--action-cash-strong:#14cc3e;
+--action-go-strong:#dde000;
+--gold-strong:#dde000;
 --button-top:#3d3d3d;
 --button-bottom:#282828;
 --button-edge:#8b8b8b;
@@ -374,6 +398,11 @@
 --gold-edge:#fdff8c;
 --gold-shadow:#717315;
 --gold-side:#abad1f;
+--danger-top:#ffaeae;
+--danger-bottom:#db8484;
+--danger-edge:#ffc7c7;
+--danger-shadow:#734545;
+--danger-side:#ad6969;
 --shadow-soft:#00000040;
 --shadow-medium:#00000059;
 --shadow-strong:#00000073;
@@ -412,6 +441,9 @@
 --pill-success:#3aac55;
 --pill-purple:#e9be9f;
 --pill-gold:#ff5794;
+--action-cash-strong:#14cc40;
+--action-go-strong:#e00051;
+--gold-strong:#e00051;
 --action-go-top:#ff5b96;
 --action-go-bottom:#e84680;
 --action-go-edge:#ff9dc0;
@@ -461,6 +493,9 @@
 --pill-success:#3aac55;
 --pill-purple:#dac49a;
 --pill-gold:#e67382;
+--action-cash-strong:#14cc40;
+--action-go-strong:#cc142c;
+--gold-strong:#cc142b;
 --action-go-top:#da374d;
 --action-go-bottom:#c42338;
 --action-go-edge:#e98894;
@@ -500,6 +535,8 @@
 --pill-gold:#ffe600;
 --switch-off:#433e29;
 --switch-border:#5b594e;
+--action-go-strong:#e0ca00;
+--gold-strong:#e0ca00;
 --button-top:#433f2c;
 --button-bottom:#2e2a18;
 --button-edge:#8f8c81;

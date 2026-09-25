@@ -523,7 +523,8 @@
 .crash-ui .top-bets th:nth-child(2),.crash-ui .top-bets td:nth-child(2){width:100%;max-width:0;text-align:left;padding-left:0}
 .crash-ui .my-bets th:first-child,.crash-ui .my-bets td:first-child{width:100%;max-width:0}
 .crash-ui .bets-table .bet-rank{color:var(--text-muted);font-family:var(--font-numbers),var(--font-body),sans-serif;text-align:left}
-.crash-ui .bets-table td.bet-rank,.crash-ui .bets-table th.bet-rank{padding-right:0}
+/* The number and the face are two things, not one: they keep a gap between them. */
+.crash-ui .bets-table td.bet-rank,.crash-ui .bets-table th.bet-rank{padding-right:var(--space-8)}
 .crash-ui .bet-player{display:flex;align-items:center;gap:var(--space-12);min-width:0}
 .crash-ui .bet-player>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .crash-ui .bet-player .avatar{width:var(--web-avatar-sm);height:var(--web-avatar-sm)}
@@ -935,7 +936,7 @@
 .crash-ui.has-menu-drawer .tabbed-controls>.tabs{display:none}
 .crash-ui.has-menu-drawer .tabbed-controls.navigation-only{display:none}
 .crash-ui.has-menu-drawer .modal-layer.is-menu-drawer{display:flex;align-items:stretch;justify-content:flex-end;padding:var(--space-4);pointer-events:auto;background:var(--scrim)}
-.crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal{display:flex;flex-direction:column;gap:var(--space-16);width:min(100%,calc(var(--modal-max-width-px) - var(--space-48) - var(--space-32)));max-width:none;min-height:0;height:100%;max-height:100%;margin:0;border-radius:var(--radius-24);border:var(--stroke-1) solid color-mix(in srgb,var(--text) 16%,transparent);padding:var(--space-24);background:linear-gradient(160deg,color-mix(in srgb,var(--text) 5%,var(--surface)),var(--surface) 45%);box-shadow:var(--elevation-modal);overflow:hidden;animation:crash-sheet-in var(--motion-ms) ease-out}
+.crash-ui.has-menu-drawer .modal-layer.is-menu-drawer .modal{display:flex;flex-direction:column;gap:var(--space-16);width:min(100%,var(--web-context-panel-width));max-width:none;min-height:0;height:100%;max-height:100%;margin:0;border-radius:var(--radius-24);border:var(--stroke-1) solid color-mix(in srgb,var(--text) 16%,transparent);padding:var(--space-24);background:linear-gradient(160deg,color-mix(in srgb,var(--text) 5%,var(--surface)),var(--surface) 45%);box-shadow:var(--elevation-modal);overflow:hidden;animation:crash-sheet-in var(--motion-ms) ease-out}
 .crash-ui.has-menu-drawer .is-menu-drawer .modal>header{flex:none;margin:0;gap:var(--space-16)}
 .crash-ui.has-menu-drawer .is-menu-drawer .modal h2{font-size:var(--type-24);line-height:var(--leading-tight)}
 .crash-ui.has-tabbed-controls .modal-layer .modal>header .icon-button{display:grid;place-items:center;padding:0;line-height:0;flex:none;width:var(--tap-min);height:var(--tap-min);border-radius:var(--radius-pill);border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);color:var(--on-button);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side);transition:filter var(--motion-fast-ms),transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms)}
@@ -1020,7 +1021,7 @@
 
 /* Bets share one presentation; only the surrounding navigation differs. */
 .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer){display:flex;align-items:stretch;justify-content:flex-end;padding:var(--space-4);background:var(--scrim)}
-.crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal{position:relative;inset:auto;transform:none;animation:crash-sheet-in var(--motion-ms) ease-out;display:flex;flex-direction:column;gap:var(--space-16);width:min(100%,calc(var(--modal-max-width-px) - var(--space-48) - var(--space-32)));height:100%;max-height:100%;max-width:none;min-height:0;margin:0;padding:var(--space-16);border-radius:var(--radius-24);border:var(--stroke-1) solid color-mix(in srgb,var(--text) 16%,transparent);background:linear-gradient(160deg,color-mix(in srgb,var(--text) 5%,var(--surface)),var(--surface) 45%);box-shadow:var(--elevation-modal);--table-inset:var(--space-16)}
+.crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal{position:relative;inset:auto;transform:none;animation:crash-sheet-in var(--motion-ms) ease-out;display:flex;flex-direction:column;gap:var(--space-16);width:min(100%,var(--web-context-panel-width));height:100%;max-height:100%;max-width:none;min-height:0;margin:0;padding:var(--space-16);border-radius:var(--radius-24);border:var(--stroke-1) solid color-mix(in srgb,var(--text) 16%,transparent);background:linear-gradient(160deg,color-mix(in srgb,var(--text) 5%,var(--surface)),var(--surface) 45%);box-shadow:var(--elevation-modal);--table-inset:var(--space-16)}
 .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal>header{position:relative;flex:none;min-height:var(--tap-min);margin:0;padding:0 var(--tap-min);justify-content:center}
 .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal>header h2{color:var(--text);text-align:center;margin:0;width:100%}
 .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer) .modal>header [data-action=close]{position:absolute;top:0;right:0}
@@ -1119,3 +1120,39 @@
  transform:translateY(var(--web-control-depth));
  box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent);
 }
+
+/* The window beside the tabs keeps the width the layout measured for it: the tabbed shell's
+   own sizing rule comes later in the sheet and would otherwise stretch it to the modal's
+   full width. */
+@media(min-width:__CRASH_MEDIUM_BREAKPOINT__px){
+ .crash-ui.has-tabbed-controls .modal-layer.is-context-panel .modal{width:var(--tab-window-width);max-width:var(--tab-window-width)}
+}
+
+/* The round's clock, pressed into the head of the button it belongs to: a short groove that
+   fills from the left as the seconds go, in the label's own ink held back a little, so it
+   darkens the face rather than printing a bar on it.
+   It sits above the label, on the line the gloss starts from, because a thumb on a phone
+   covers the foot of the button. Both the groove and what fills it are the face's own ink
+   at two steps of the alpha scale, so any brand or theme carries them without a rule of
+   its own. */
+.crash-ui .go-timer{position:absolute;left:50%;transform:translateX(-50%);top:var(--space-6);
+ width:min(50%,var(--web-compact-control-width));height:var(--space-6);border-radius:var(--radius-pill);overflow:hidden;pointer-events:none;
+ background:color-mix(in srgb,var(--on-go) calc(var(--alpha-hair) * 100%),transparent);
+ box-shadow:inset 0 var(--stroke-1) var(--stroke-2) color-mix(in srgb,var(--on-go) calc(var(--alpha-hair) * 100%),transparent)}
+.crash-ui .go-timer i{display:block;height:100%;width:calc((1 - var(--countdown,1)) * 100%);border-radius:inherit;
+ background:color-mix(in srgb,var(--on-go) calc(var(--alpha-scrim) * 100%),transparent);transition:width var(--motion-fast-ms) linear}
+.crash-ui.reduced .go-timer i{transition:none}
+@media(prefers-reduced-motion:reduce){.crash-ui .go-timer i{transition:none}}
+
+/* The last seconds: the rail turns to the danger colour and the button shivers in place,
+   a rock about its own centre rather than a slide, small enough to move nothing around it
+   and still be caught out of the corner of an eye. A press stops it, so the travel of the
+   press still reads. */
+.crash-ui .action.is-urgent .go-timer i{background:var(--danger-strong)}
+@keyframes go-timer-urgent{0%,100%{transform:rotate(0deg)}15%{transform:rotate(-2.2deg)}45%{transform:rotate(2.2deg)}70%{transform:rotate(-1.4deg)}90%{transform:rotate(.8deg)}}
+.crash-ui .action.is-urgent{animation:go-timer-urgent calc(var(--motion-ms) * 2.5) ease-in-out infinite}
+.crash-ui .action.is-urgent:active{animation:none}
+.crash-ui.reduced .action.is-urgent{animation:none}
+@media(prefers-reduced-motion:reduce){.crash-ui .action.is-urgent{animation:none}}
+/* A press the game makes for the player looks the same as one a finger makes. */
+.crash-ui .action.is-pressed{transform:translateY(var(--web-button-depth));box-shadow:inset 0 0 0 var(--stroke-3) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--stroke-1) 0 var(--button-shadow)}
