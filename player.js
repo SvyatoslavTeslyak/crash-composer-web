@@ -28,9 +28,11 @@ function openGame(){
 function controls(){document.querySelectorAll('button').forEach(b=>b.disabled=busy||!ready);document.querySelectorAll('input').forEach(i=>i.readOnly=busy)}
 function login(message){session=null;phone='';forgetSession();$('game-stage').hidden=true;$('game').hidden=true;$('game').removeAttribute('src');$('login').hidden=false;$('credentials').hidden=false;$('credentials').reset();$('status').textContent=message;controls()}
 async function request(base,path,options={}){
- let response;try{response=await fetch(endpoint(base,path),{...options,credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(20000)})}catch{throw Error('Connection lost. Please try again.')}
+ // The game only needs to know which of the three kinds of failure this was, so the network
+ // ones are marked as such and a refused request carries the service's own code.
+ let response;try{response=await fetch(endpoint(base,path),{...options,credentials:'omit',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(20000)})}catch{const offline=Error('Connection lost. Please try again.');offline.offline=true;throw offline}
  let data;try{data=await response.json()}catch{if(response.ok)throw Error('The service returned an invalid response.');data={}}
- if(!response.ok){const error=Error(response.status===429?'Too many attempts. Please wait and try again.':response.status===401||response.status===403?'Login was not accepted. Check your details and try again.':'The service is unavailable. Please try again.');error.status=response.status;throw error}return data;
+ if(!response.ok){const error=Error(response.status===429?'Too many attempts. Please wait and try again.':response.status===401||response.status===403?'Login was not accepted. Check your details and try again.':'The service is unavailable. Please try again.');error.status=response.status;error.code=data.code;throw error}return data;
 }
 async function run(action){if(busy||!ready)return;busy=true;controls();$('status').textContent='Connecting…';try{await action()}catch(error){$('status').textContent=error.message}finally{busy=false;controls()}}
 $('credentials').onsubmit=event=>{event.preventDefault();run(async()=>{
@@ -40,7 +42,9 @@ $('credentials').onsubmit=event=>{event.preventDefault();run(async()=>{
  session={auth:token};try{sessionStorage.setItem(sessionKey,JSON.stringify({auth:token,phone}))}catch{}
  openGame();
 })};
-window.Lotomobil={get player(){return phone},async request(path,options={}){
+// A deposit page is offered only when one is configured, and only over https.
+const depositUrl=(()=>{try{const url=new URL(config.depositUrl);return url.protocol==='https:'?url.href:''}catch{return ''}})();
+window.Lotomobil={get player(){return phone},...(depositUrl?{deposit(){window.open(depositUrl,'_blank','noopener')}}:{}),async request(path,options={}){
  if(!session)throw Error('Log in to Lotomobil first.');
  if(path!=='/payment/account'&&(!/^\/v[12]\/betting\/runner\/(game-configurations|checkouts)(?:[/?]|$)/.test(path)||path.includes('..')))throw Error('Unsupported game endpoint.');
  if(path==='/payment/account'&&options.method&&options.method!=='GET')throw Error('Unsupported account method.');

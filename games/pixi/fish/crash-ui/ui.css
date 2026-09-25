@@ -165,10 +165,10 @@
 .crash-ui .tabbed-controls .actions .action .action-title{font-size:var(--type-24)}
 /* GO stays centred on its button and the arrow follows right beside it: the arrow gives
    back its own width and gap as a negative margin, so the label centres as if alone. */
-.crash-ui .go-arrow{display:none;width:var(--type-24);height:var(--type-24);flex:none;margin-right:calc(-1 * var(--type-24))}
+.crash-ui .go-arrow{display:none;width:var(--type-24);height:var(--type-24);flex:none;margin-right:calc(-1 * (var(--type-24) + var(--space-4)))}
 .crash-ui .action-title.go-label~.go-arrow{display:block}
-/* The arrow's own artwork carries its breathing room, so the row itself adds none. */
-.crash-ui .tabbed-controls .actions .action.go:has(.action-title.go-label){flex-direction:row;gap:var(--space-0)}
+/* The artwork fills its box, so the row gives the pair the small gap between them. */
+.crash-ui .tabbed-controls .actions .action.go:has(.action-title.go-label){flex-direction:row;gap:var(--space-4)}
 .crash-ui .actions .action .money{white-space:nowrap}
 .crash-ui .money-unit{font-size:var(--type-24);font-weight:inherit;margin-left:var(--space-4)}
 .crash-ui .tabbed-controls .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
@@ -529,6 +529,10 @@
 .crash-ui .bets-table .bet-prize{color:var(--success);font-family:var(--font-numbers),var(--font-body),sans-serif}
 .crash-ui .bets-table .bet-day th{padding:var(--space-8);background:var(--surface-raised);color:var(--text-muted);font-weight:inherit}
 .crash-ui .bets-empty{text-align:center;color:var(--text-muted);padding:var(--space-24)}
+/* A notice is one sentence and one or two buttons: nothing to scroll, nothing to read twice. */
+.crash-ui .notice-actions{display:grid;gap:var(--space-8);margin-top:var(--space-16)}
+.crash-ui .notice-actions .button{min-height:var(--tap-min);width:100%}
+.crash-ui .notice-actions .primary-button{background:var(--gold);border-color:var(--gold);color:var(--on-go);font-weight:700}
 .crash-ui .modal-footer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8);flex:none;padding-bottom:var(--web-button-depth)}
 .crash-ui .modal-footer .button[aria-pressed=true]{background:var(--gold);color:var(--on-go);border-color:var(--gold)}
 @media(max-width:599px){

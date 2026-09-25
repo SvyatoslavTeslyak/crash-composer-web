@@ -3160,185 +3160,9 @@
         "tabbed-shell-v1"
       ]
     },
-    "last_round_settled_by_the_server_baefc6": {
-      "source": "Last round settled by the server.",
-      "en": "Last round settled by the server.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "the_server_rolled_back_this_round_b075c1": {
-      "source": "The server rolled back this round.",
-      "en": "The server rolled back this round.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "round_finished_on_the_server_0202c3": {
-      "source": "Round finished on the server.",
-      "en": "Round finished on the server.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
     "cash_out_to_finish_this_round_55f464": {
       "source": "Cash out to finish this round.",
       "en": "Cash out to finish this round.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "could_not_verify_the_latest_round_41a831": {
-      "source": "Could not verify the latest round.",
-      "en": "Could not verify the latest round.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "runner_configuration_is_unavailable_735f8d": {
-      "source": "Runner configuration is unavailable.",
-      "en": "Runner configuration is unavailable.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "log_in_to_lotomobil_in_composer_887d0f": {
-      "source": "Log in to Lotomobil in Composer.",
-      "en": "Log in to Lotomobil in Composer.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "live_risk_is_supplied_by_the_runner_chec_d320ee": {
-      "source": "Live risk is supplied by the Runner checkout, not the payout table.",
-      "en": "Live risk is supplied by the Runner checkout, not the payout table.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "the_last_bet_has_not_been_confirmed_chec_c55b22": {
-      "source": "The last bet has not been confirmed. Check again before placing another bet.",
-      "en": "The last bet has not been confirmed. Check again before placing another bet.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "the_last_bet_is_still_unconfirmed_check__489d54": {
-      "source": "The last bet is still unconfirmed. Check again; no new bet was placed.",
-      "en": "The last bet is still unconfirmed. Check again; no new bet was placed.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "invalid_first_step_response_check_the_ro_95d48b": {
-      "source": "Invalid first-step response. Check the round before continuing.",
-      "en": "Invalid first-step response. Check the round before continuing.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
-    "invalid_round_response_check_the_round_b_ea9f7e": {
-      "source": "Invalid round response. Check the round before continuing.",
-      "en": "Invalid round response. Check the round before continuing.",
       "fr": "",
       "ht": "",
       "group": "Bet panel & messages",
@@ -3374,6 +3198,166 @@
       "ht": "Lajan pran · {value}×",
       "group": "Bet panel & messages",
       "games": [],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "your_previous_round_is_a_e01d8f": {
+      "source": "Your previous round is already finished. Your balance is up to date.",
+      "en": "Your previous round is already finished. Your balance is up to date.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "not_enough_funds_631600": {
+      "source": "Not enough funds",
+      "en": "Not enough funds",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "your_balance_is_too_low_ece4eb": {
+      "source": "Your balance is too low for this bet. Top up to keep playing.",
+      "en": "Your balance is too low for this bet. Top up to keep playing.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "deposit_e7b0b3": {
+      "source": "Deposit",
+      "en": "Deposit",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "not_now_e45714": {
+      "source": "Not now",
+      "en": "Not now",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "no_connection_e33899": {
+      "source": "No connection",
+      "en": "No connection",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "you_seem_to_be_offline_c_e08e0d": {
+      "source": "You seem to be offline. Check your connection and try again.",
+      "en": "You seem to be offline. Check your connection and try again.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "try_again_042c86": {
+      "source": "Try again",
+      "en": "Try again",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "something_went_wrong_8d886c": {
+      "source": "Something went wrong",
+      "en": "Something went wrong",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "we_could_not_reach_the_g_999757": {
+      "source": "We could not reach the game just now. Try again in a moment.",
+      "en": "We could not reach the game just now. Try again in a moment.",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
       "usage": [
         "text"
       ],

@@ -40,7 +40,8 @@ const icon=(name)=>'<img class="icon" alt="" src="'+base+'assets/icons/'+pick(na
 // The tabbed shell's top-right button opens the sound switches, so it is a speaker.
 // The step the button takes: an arrow beside GO, in the label's own colour, pointing the
 // way the goat moves. It belongs to the next-lane press only, not to PLAY or CHECK ROUND.
-const GO_ARROW_SVG='<svg class="go-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">'
+// The box is cropped to the artwork so the arrow fills it rather than floating in padding.
+const GO_ARROW_SVG='<svg class="go-arrow" viewBox="3 3 18 18" fill="none" aria-hidden="true" focusable="false">'
 +'<path fill="currentColor" d="M11.9069 6.80501C11.9492 6.83656 12.0748 6.93015 12.155 6.99073C12.3155 7.11194 12.5456 7.2875 12.8222 7.50331C13.3763 7.93574 14.1118 8.52596 14.8443 9.16197C15.5818 9.80229 16.2935 10.4694 16.813 11.0574C17.0738 11.3525 17.265 11.6042 17.3857 11.8043C17.4432 11.8996 17.4725 11.9636 17.4872 11.9998C17.4725 12.036 17.4432 12.0999 17.3857 12.1953C17.265 12.3954 17.0738 12.6471 16.813 12.9422C16.2935 13.5301 15.5818 14.1973 14.8443 14.8376C14.1118 15.4737 13.3763 16.0639 12.8222 16.4963C12.5457 16.7121 12.0674 17.0734 11.9069 17.1946C11.4622 17.5222 11.3672 18.1482 11.6948 18.5929C12.0223 19.0375 12.6488 19.1321 13.0935 18.8046L13.0966 18.8023C13.2673 18.6733 13.7685 18.2948 14.0527 18.073C14.6235 17.6275 15.3881 17.0142 16.1555 16.3478C16.918 15.6858 17.7063 14.9518 18.3118 14.2665C18.6135 13.925 18.891 13.572 19.0985 13.2278C19.2894 12.9111 19.4999 12.4759 19.4999 11.9998C19.4999 11.5236 19.2894 11.0884 19.0985 10.7717C18.891 10.4275 18.6135 10.0746 18.3118 9.73309C17.7063 9.04781 16.918 8.31379 16.1555 7.65176C15.388 6.98542 14.6235 6.37211 14.0526 5.9266C13.7667 5.70344 13.5281 5.52142 13.3604 5.3948C13.2773 5.33202 13.1414 5.23074 13.0947 5.19591L13.0934 5.19501C12.6488 4.8675 12.0222 4.9621 11.6947 5.4068C11.3672 5.8515 11.4622 6.47749 11.9069 6.80501Z"/>'
 +'<path fill="currentColor" d="M5.04889 5.10738C4.71225 5.27754 4.5 5.62265 4.5 5.99985L4.50005 17.9999C4.50005 18.3771 4.7123 18.7222 5.04895 18.8923C5.38559 19.0625 5.78934 19.0287 6.09307 18.805L6.09561 18.8031C6.14356 18.7674 6.27823 18.667 6.36057 18.6048C6.52821 18.4782 6.76681 18.2962 7.05277 18.073C7.62364 17.6275 8.38817 17.0142 9.15563 16.3478C9.91813 15.6858 10.7064 14.9518 11.3119 14.2665C11.6136 13.925 11.8911 13.572 12.0986 13.2279C12.2895 12.9111 12.5 12.4759 12.5 11.9998C12.5 11.5237 12.2895 11.0885 12.0986 10.7718C11.8911 10.4276 11.6136 10.0746 11.3119 9.73314C10.7064 9.04786 9.91811 8.31383 9.15561 7.65181C8.38814 6.98546 7.6236 6.37215 7.05273 5.92665C6.76676 5.70348 6.52816 5.52147 6.36051 5.39484C6.27739 5.33206 6.14149 5.23078 6.09476 5.19595L6.09355 5.19505C5.78983 4.97137 5.38553 4.93722 5.04889 5.10738Z"/>'
 +'</svg>';
@@ -72,6 +73,13 @@ const coinSlot=(node,v)=>{const n=amountOf(v);const amount=Number.isFinite(n);no
 // The artwork is not an evenly spaced 3 x 2 grid; its second row sits higher.
 const avatarCrops=[[25,11],[537,10],[1045,10],[26,489],[530,489],[1045,490]];
 const avatar=(name,players=[])=>{const i=name==='You'?2:players.indexOf(name),[x,y]=avatarCrops[i]||avatarCrops[5];return '<span class="avatar" role="img" aria-label="'+esc(name)+'" style="--avatar-x:'+(x/(1536-464)*100)+'%;--avatar-y:'+(y/(1024-464)*100)+'%"></span>'};
+// Three things can stop a round, and each is said plainly: the balance is short, the
+// connection is gone, or something else went wrong. Anything the server says beyond that
+// belongs in the console, not in front of a player.
+const NOTICES={
+ funds:{title:'Not enough funds',text:'Your balance is too low for this bet. Top up to keep playing.',cta:'Deposit',intent:'deposit'},
+ offline:{title:'No connection',text:'You seem to be offline. Check your connection and try again.',cta:'Try again',intent:'retry'},
+ error:{title:'Something went wrong',text:'We could not reach the game just now. Try again in a moment.',cta:'Try again',intent:'retry'}};
 const button=(action,text,cls='')=>'<button type="button" class="button '+cls+'" data-action="'+action+'">'+text+'</button>';
 // Betting feedback belongs to the UI; the cashout-ready tone plays once per round, not on every re-enable between steps.
 class BettingSound {
@@ -293,6 +301,9 @@ class GameUI {
   if(action==='menu'&&this.config.presentationPreset==='menu-drawer-v1'){if(this.q('.modal-layer').classList.contains('is-menu-drawer')&&this.modal)this.close();else this.open(this.drawerSelection||'topbets');return}
   if(action==='historyDetails'){const entry=this.state.bets?.[Number(value)];if(!entry||this.state.win)return;this.open('mybets');const index=this.betRows?.findIndex(v=>v.time===entry.time&&v.multiplier===entry.multiplier);if(index>=0)this.showBetDetails(index);return}
   if(action==='betDetails'){this.showBetDetails(Number(value));return}
+  if(action==='notice'||action==='noticeDismiss'){
+   const intent=action==='noticeDismiss'?'dismiss':(NOTICES[this.noticeKind]||NOTICES.error).intent;
+   this.shownNotice=null;this.close();this.send('notice',{kind:this.noticeKind,intent});return}
   if(action==='betsBack'){this.backToBets();return}
   if(['menu','account'].includes(action)&&this.tabbed&&this.modal===action){this.close();return}
   const tabKind=action==='rulesTab'?'rules':action;
@@ -349,6 +360,10 @@ class GameUI {
   this.q('.multiplier').hidden=s.game==='road';this.q('.multiplier').textContent=Number(s.multiplier||1).toFixed(2)+'×';
   this.q('.toast').hidden=!s.toast;this.q('.toast').textContent=s.toast||'';
   if(!s.win||this.dismissedWinId!==s.winId||this.dismissedWinGame!==s.game)this.dismissedWin=false;this.dismissedWinId=s.winId;this.dismissedWinGame=s.game;
+  // The game raises a notice; the kit decides how it looks and what it says.
+  const notice=typeof s.notice==='string'?s.notice:s.notice?.kind;
+  if(notice&&notice!==this.shownNotice){this.shownNotice=notice;this.noticeKind=notice;this.open('notice')}
+  else if(!notice){this.shownNotice=null;if(this.modal==='notice')this.close()}
   if(s.game!=='road'&&s.win&&!this.dismissedWin&&this.modal!=='win')this.open('win');else if(!s.win&&this.modal==='win')this.close();
   if(this.modal==='win'){const total=this.q('.win-total');if(total)total.textContent=money(s.winAmount);const subtitle=this.q('.win-subtitle');if(subtitle)subtitle.textContent=s.winSubtitle||'Well played!'}
   if(this.modal==='difficulty'&&!s.canBet)this.close();
@@ -516,7 +531,7 @@ class GameUI {
   // From the tabbed variant's side buttons these open as a sheet from the right on a wide
   // screen (the CSS decides the breakpoint); the same modal from the menu stays a popup.
   layer.classList.toggle('is-sheet',!drawer&&!!this.tabbed&&(kind==='topbets'||kind==='mybets'||(kind==='rules'&&this.rulesFrom==='tab')));this.q('.modal').classList.toggle('win-modal',kind==='win');
-  this.q('.modal h2').textContent={menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:'Choose difficulty',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top bets',mybets:'My bets'}[kind];
+  this.q('.modal h2').textContent={notice:NOTICES[this.noticeKind]?.title||NOTICES.error.title,menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:'Choose difficulty',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top bets',mybets:'My bets'}[kind];
   this.q('[data-action=close]').hidden=kind==='win'&&!this.config.demo;
   const body=this.q('.modal-body');body.classList.toggle('rules-content',kind==='rules');
   if(kind==='difficulty'){
@@ -555,6 +570,12 @@ class GameUI {
     body.innerHTML='<div class="account-record-card"><span class="account-record-label"><span>Personal record</span></span><strong>'+esc(money(s.personal))+'</strong></div><h3 class="modal-section-title">This session</h3><div class="account-session-grid">'+stat('Completed rounds',s.rounds||0)+stat('Successful cash outs',s.roundWins||0,'success')+stat('Best cashed-out multiplier',s.roundWins?Number(s.bestMultiplier||0).toFixed(2)+'×':'—','gold',true)+'</div>';
    }
 
+  }
+  if(kind==='notice'){
+   const notice=NOTICES[this.noticeKind]||NOTICES.error,deposit=notice.intent==='deposit'&&s.canDeposit!==false;
+   body.innerHTML='<p class="modal-description">'+esc(notice.text)+'</p><div class="notice-actions">'
+    +button('notice',esc(deposit||notice.intent!=='deposit'?notice.cta:'OK'),'primary-button')
+    +(deposit?button('noticeDismiss','Not now','flat-button'):'')+'</div>';
   }
   if(kind==='wins')body.innerHTML=this.winRows(s.wins||[])||'<p class=muted>No wins yet.</p>';
   if(kind==='dev')body.innerHTML=Object.entries({leaderboard:'Leaderboard / live wins',history:'Round history',personal_record:'My record',online_count:'Online count',...(s.game==='market_stack'?{multiplier_ladder:'Multiplier ladder'}:{})}).map(([k,v])=>'<label class="setting">'+v+'<input class="switch" type="checkbox" role="switch" data-flag="'+k+'" '+(s.flags?.[k]!==false?'checked':'')+'></label>').join('');
