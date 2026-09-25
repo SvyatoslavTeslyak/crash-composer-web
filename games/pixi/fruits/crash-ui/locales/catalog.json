@@ -3205,22 +3205,6 @@
         "tabbed-shell-v1"
       ]
     },
-    "your_previous_round_is_a_e01d8f": {
-      "source": "Your previous round is already finished. Your balance is up to date.",
-      "en": "Your previous round is already finished. Your balance is up to date.",
-      "fr": "",
-      "ht": "",
-      "group": "Bet panel & messages",
-      "games": [
-        "road"
-      ],
-      "usage": [
-        "text"
-      ],
-      "presets": [
-        "tabbed-shell-v1"
-      ]
-    },
     "not_enough_funds_631600": {
       "source": "Not enough funds",
       "en": "Not enough funds",
@@ -3370,6 +3354,74 @@
         "text"
       ],
       "previewWindow": "notice:error",
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "ok_9ce3bd": {
+      "source": "OK",
+      "en": "OK",
+      "fr": "",
+      "ht": "",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "notice:funds",
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "top_up_your_balance_c11873": {
+      "source": "Top up your balance",
+      "en": "Top up your balance",
+      "fr": "",
+      "ht": "",
+      "group": "Header & account",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "notice:wallet",
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "add_funds_in_your_wallet_12526b": {
+      "source": "Add funds in your wallet, then come back to the round.",
+      "en": "Add funds in your wallet, then come back to the round.",
+      "fr": "",
+      "ht": "",
+      "group": "Header & account",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "notice:wallet",
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "go_to_wallet_6e0710": {
+      "source": "Go to wallet",
+      "en": "Go to wallet",
+      "fr": "",
+      "ht": "",
+      "group": "Header & account",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "notice:wallet",
       "presets": [
         "tabbed-shell-v1"
       ]

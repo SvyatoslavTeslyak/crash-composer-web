@@ -38,7 +38,7 @@
  function syncInspector(){
   const road=game()==='road';
   const modalSelect=document.querySelector('#modal'),selected=modalSelect.value;
-  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details'],['notice:funds','Notice · not enough funds'],['notice:offline','Notice · no connection'],['notice:error','Notice · something went wrong']]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
+  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details'],['notice:funds','Notice · not enough funds'],['notice:offline','Notice · no connection'],['notice:error','Notice · something went wrong'],['notice:wallet','Notice · top up balance']]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
   if(modalSelect.dataset.game!==game()){
    modalSelect.replaceChildren(...modalOptions.map(([value,label])=>new Option(label,value)));modalSelect.dataset.game=game();modalSelect.value=modalOptions.some(([value])=>value===selected)?selected:'';
   }

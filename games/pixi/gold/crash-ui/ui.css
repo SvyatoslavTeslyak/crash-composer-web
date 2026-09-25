@@ -544,6 +544,15 @@
 .crash-ui .notice-actions .button{width:100%;min-height:var(--tap-min);border-radius:var(--radius-pill);font-size:var(--type-18);font-weight:700}
 .crash-ui .notice-actions .primary-button{background:var(--gold);border-color:var(--gold);color:var(--on-go)}
 .crash-ui .notice-secondary{margin:0;font-size:var(--type-16)}
+/* The balance is the way to the wallet, so it is built like the buttons beside it: the same
+   raised edge and the same give under a finger, in the header's own colour rather than gold. */
+.crash-ui button.balance,.crash-ui.has-tabbed-controls .profile>button.balance{font:inherit;cursor:pointer;-webkit-appearance:none;appearance:none;
+ background:linear-gradient(color-mix(in srgb,var(--surface-raised) 85%,var(--text)),var(--surface-raised));
+ border:var(--stroke-1) solid color-mix(in srgb,var(--text) calc(var(--alpha-faint) * 100%),transparent);
+ box-shadow:0 var(--stroke-3) 0 var(--button-shadow);
+ transition:transform var(--motion-fast-ms),box-shadow var(--motion-fast-ms)}
+.crash-ui button.balance:active,.crash-ui.has-tabbed-controls .profile>button.balance:active{transform:translateY(var(--stroke-2));box-shadow:0 var(--stroke-1) 0 var(--button-shadow)}
+.crash-ui button.balance:focus-visible{outline:var(--stroke-2) solid var(--gold);outline-offset:var(--space-4)}
 .crash-ui .modal-footer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8);flex:none;padding-bottom:var(--web-button-depth)}
 .crash-ui .modal-footer .button[aria-pressed=true]{background:var(--gold);color:var(--on-go);border-color:var(--gold)}
 @media(max-width:599px){
@@ -899,6 +908,15 @@
 .crash-ui .tabbed-controls .actions .action.cash{--amount-max-size:var(--type-24)}
 .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action.cash .money:not(.is-label):not(.long-amount){font-size:var(--type-24)}
 
+/* A laptop's buttons are half again as tall as a phone's, so the words on them grow with
+   them: the label a step, the figure and GO to the size the taller button can carry. */
+@media(min-width:960px){
+ .crash-ui .tabbed-controls .actions .action .action-title,.crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title{font-size:var(--type-20)}
+ .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action .action-title.go-label{font-size:var(--type-32)}
+ .crash-ui .tabbed-controls .actions .action.cash{--amount-max-size:var(--type-32)}
+ .crash-ui .tabbed-controls .actions:has(>[data-action=cash]:not([hidden])) .action.cash .money:not(.is-label):not(.long-amount){font-size:var(--type-32)}
+}
+
 /* Optional menu drawer: navigation moves out of the betting controls. */
 .crash-ui.has-menu-drawer .tabbed-controls>.tabs{display:none}
 .crash-ui.has-menu-drawer .tabbed-controls.navigation-only{display:none}
@@ -978,6 +996,9 @@
  .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-20)}
 }
 .crash-ui .tabbed-controls .actions .action .money.long-amount{font-size:var(--type-16)}
+/* A long figure is the one thing on its button, and a laptop has room to read it. */
+@media(min-width:960px){.crash-ui .tabbed-controls .actions .action .money.long-amount{font-size:var(--type-24)}}
+@media(min-width:600px) and (max-width:calc(960px - 1px)){.crash-ui .tabbed-controls .actions .action .money.long-amount{font-size:var(--type-20)}}
 
 /* Bets share one presentation; only the surrounding navigation differs. */
 .crash-ui.has-tabbed-controls .modal-layer:is(.is-bets-panel,.is-rules-panel,.is-menu-drawer){display:flex;align-items:stretch;justify-content:flex-end;padding:var(--space-4);background:var(--scrim)}

@@ -3,7 +3,7 @@
 'use strict';
 const langs=['en','fr','ht'],headers=['game','preset','key','area','section','source','EN','FR','CR'];
 const context=(entry,game)=>({...entry,usage:entry.usageByGame?.[game]||entry.usage,group:entry.groupByGame?.[game]||entry.group,presets:entry.presetsByGame?.[game]||entry.presets});
-const roadWindows=new Set(['','menu','account','rules','topbets','mybets','betDetails','topBetDetails','win','notice:funds','notice:offline','notice:error']);
+const roadWindows=new Set(['','menu','account','rules','topbets','mybets','betDetails','topBetDetails','win','notice:funds','notice:offline','notice:error','notice:wallet']);
 const windowAllowed=(game,kind)=>game!=='road'||roadWindows.has(kind||'');
 const obsoleteRoadText=new Set(['Normal','Expert','Extreme','Insane','Reduce motion']);
 const applicable=(entry,game,preset)=>{
