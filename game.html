@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="inspection.css?v=1790343537">
+<link rel="stylesheet" href="inspection.css?v=1790344068">
 <title>Crash UI — shared component preview</title>
-<link rel="stylesheet" href="crash-ui/tokens.css?v=1790343537"><link rel="stylesheet" href="crash-ui/ui.css?v=1790343537">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790344068"><link rel="stylesheet" href="crash-ui/ui.css?v=1790344068">
 <style>html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 50% 50%,#1c5261,#071824);color:#e8eef3}#scene{position:absolute;inset:40% 0 auto;text-align:center;font:16px system-ui;opacity:.5;pointer-events:none}
 #scene{inset:35% 16px 25%;display:flex;align-items:center;justify-content:center;border:1px dashed #71d5ff55;border-radius:16px;background:repeating-linear-gradient(45deg,transparent,transparent 24px,#ffffff03 24px,#ffffff03 48px);font:14px/1.5 system-ui;opacity:1;color:#a4b8c8}
 </style>
 <div id="scene">Game scene placeholder · no game engine</div><div id="ui"></div>
-<script src="crash-ui/tokens.js?v=1790343537"></script><script src="crash-ui/ui.js?v=1790343537"></script>
+<script src="crash-ui/tokens.js?v=1790344068"></script><script src="crash-ui/ui.js?v=1790344068"></script>
 <script>
 const state={game:'road',debug:false,balance:1000,level:'LVL 10',bet:8,presets:[2,3,8,20],difficulty:1,difficulties:['Easy','Normal','Hard','Expert'],auto:false,canBet:true,canGo:true,canCash:false,showCash:false,cash:8,goTitle:'PLAY',goSubtitle:'$8.00',personal:23.43,personalTitle:'Your road best',topTitle:'Top road win',record:{name:'RoadRunner',payout:2487.94,date:'2026-09-15'},players:['Harlequin Sun','Maya','RoadRunner','Lucky Leo','Nina','Golden Goat'],wins:[{name:'RoadRunner',payout:2487.94,multiplier:2.13},{name:'Maya',payout:123.45,multiplier:1.54},{name:'Nina',payout:61.1,multiplier:1.22},{name:'Lucky Leo',payout:319.6,multiplier:3.41},{name:'Golden Goat',payout:68.2,multiplier:1.08}],history:[{multiplier:1.38},{multiplier:2.15}],settings:{sound:true,haptics:true,reduced_motion:false,auto_steps:0,auto_cashout:0},flags:{},features:{auto:true,difficulty:true,presets:true},online:6,win:false,multiplier:1};
 let round=false,winTimer,transferTimer;
