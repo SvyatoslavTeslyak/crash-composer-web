@@ -523,6 +523,8 @@ class GameUI {
   body.querySelector('button[data-value="'+previous.index+'"]')?.focus({preventScroll:true});body.scrollTop=previous.scroll;
  }
  open(kind){
+  // Composer opens a notice to read it: `notice:funds` picks which of the three to show.
+  if(kind.startsWith('notice')){this.noticeKind=kind.slice(7)||this.noticeKind||'error';kind='notice'}
   const s=this.state,f=this.features();if(kind==='difficulty'&&(!s.canBet||!f.difficulty))return;if(kind.startsWith('limit:auto')&&!f.auto)return;if(s.win&&kind!=='win')return;
   const drawer=this.config.presentationPreset==='menu-drawer-v1'&&['menu','topbets','mybets','rules'].includes(kind);if(drawer){this.drawerSelection=kind;this.rulesFrom='tab'}
   this.clearBetDetails();

@@ -3233,6 +3233,7 @@
       "usage": [
         "text"
       ],
+      "previewWindow": "notice:funds",
       "presets": [
         "tabbed-shell-v1"
       ]
@@ -3249,6 +3250,7 @@
       "usage": [
         "text"
       ],
+      "previewWindow": "notice:funds",
       "presets": [
         "tabbed-shell-v1"
       ]
@@ -3265,6 +3267,7 @@
       "usage": [
         "text"
       ],
+      "previewWindow": "notice:funds",
       "presets": [
         "tabbed-shell-v1"
       ]
@@ -3281,6 +3284,7 @@
       "usage": [
         "text"
       ],
+      "previewWindow": "notice:funds",
       "presets": [
         "tabbed-shell-v1"
       ]
@@ -3297,6 +3301,7 @@
       "usage": [
         "text"
       ],
+      "previewWindow": "notice:offline",
       "presets": [
         "tabbed-shell-v1"
       ]
@@ -3313,6 +3318,7 @@
       "usage": [
         "text"
       ],
+      "previewWindow": "notice:offline",
       "presets": [
         "tabbed-shell-v1"
       ]
@@ -3329,6 +3335,7 @@
       "usage": [
         "text"
       ],
+      "previewWindow": "notice:offline",
       "presets": [
         "tabbed-shell-v1"
       ]
@@ -3345,6 +3352,7 @@
       "usage": [
         "text"
       ],
+      "previewWindow": "notice:error",
       "presets": [
         "tabbed-shell-v1"
       ]
@@ -3361,6 +3369,7 @@
       "usage": [
         "text"
       ],
+      "previewWindow": "notice:error",
       "presets": [
         "tabbed-shell-v1"
       ]
