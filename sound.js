@@ -84,7 +84,7 @@ function sections(game,own){
  const grid=(sid,list)=>'<div class="sound-grid">'+list.map(([event,index])=>card(event,index,sid)).join('')+'</div>';
  const indexed=sid=>events(sid).map((event,index)=>[event,index]);
  if(group==='scene'){
-  if(!own)return '<p class="sound-note">This game has no assets/audio/sounds.json yet. Add one in the Explosive Fruits format, point LocalFeedback.play_event at SOUNDS.EVENTS, then reload.</p>';
+  if(!own)return '<p class="sound-note">This game has no assets/audio/sounds.json yet. Add one in the Fruit Boom format, point LocalFeedback.play_event at SOUNDS.EVENTS, then reload.</p>';
   return grid(targetId(),indexed(targetId()).filter(([e])=>e.group!=='interface'&&!e.runtime_unused));
  }
  const overrides=indexed(targetId()).filter(([e])=>e.group==='interface'),ids=new Set(overrides.map(([e])=>e.id));

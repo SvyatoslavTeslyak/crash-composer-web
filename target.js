@@ -9,15 +9,15 @@ const $=s=>document.querySelector(s);
 const TARGETS=[
  {id:'kit',title:'Shared · UI kit',live:false,math:false},
  {id:'road',title:'Goat Road',live:true,math:true},
- {id:'fish',title:'Fish Master',live:true,math:true},
+ {id:'haul',title:'Big Haul',live:true,math:true},
  {id:'gold',title:'Goat Gold',live:true,math:true},
- {id:'fruits',title:'Explosive Fruits',live:true,math:true},
+ {id:'boom',title:'Fruit Boom',live:true,math:true},
  {id:'catch',title:'Catch Clash',live:true,math:true},
  {id:'market_stack',title:'Market Stack',live:true,math:false},
  {id:'fuel',title:'Fuel Run',live:true,math:true}
 ];
 // Off, the list keeps the shared kit, the two featured games and whatever is selected.
-const FEATURED=['kit','road','fruits'];
+const FEATURED=['kit','road','boom'];
 const KEYS={target:'crash-composer-target',all:'crash-composer-show-all-games',engine:'crash-composer-engine'};
 // The same game exists once per engine. Which engines a game actually has comes from the
 // catalog, so a game that has not been ported yet simply never offers the choice.

@@ -1,0 +1,27 @@
+{
+  "author": "Kenney",
+  "license": "CC0",
+  "sources": {
+    "interface": "https://kenney.nl/assets/interface-sounds",
+    "impact": "https://kenney.nl/assets/impact-sounds",
+    "jingles": "https://opengameart.org/content/85-short-music-jingles"
+  },
+  "files": {
+    "win": "jingles/OGG/jingles_PIZZA/jingles_PIZZA10.ogg",
+    "toggle": "interface/Audio/toggle_001.ogg",
+    "start": "interface/Audio/confirmation_001.ogg",
+    "coins": "interface/Audio/select_001.ogg",
+    "refill": "interface/Audio/confirmation_002.ogg",
+    "hit": "impact/Audio/impactWood_heavy_000.ogg",
+    "collapse": "impact/Audio/impactWood_medium_000.ogg",
+    "tap_0": "interface/Audio/click_001.ogg",
+    "step_0": "impact/Audio/footstep_concrete_000.ogg",
+    "safe_0": "interface/Audio/tick_001.ogg",
+    "tap_1": "interface/Audio/click_002.ogg",
+    "step_1": "impact/Audio/footstep_concrete_001.ogg",
+    "safe_1": "interface/Audio/tick_002.ogg",
+    "tap_2": "interface/Audio/click_003.ogg",
+    "step_2": "impact/Audio/footstep_concrete_002.ogg",
+    "safe_2": "interface/Audio/tick_004.ogg"
+  }
+}

@@ -116,7 +116,7 @@ class BettingSound {
   return this.pools[file]=Array.from({length:3},()=>{const clip=new Audio(/^https?:/.test(file)?file:base+'assets/audio/'+file);clip.preload='auto';clip.preservesPitch=false;clip.volume=Number.isFinite(volume)?volume:0.14;return clip});
  }
  // Games differ in when cashing out becomes possible: after the first hop in Goat Road, at
- // once in Fish Master. When it arrives on the press itself the chime would only double the
+ // once in Big Haul. When it arrives on the press itself the chime would only double the
  // play sound, and the button has already changed under the finger, so it is skipped.
  updateCashReady(state){
   const active=!!state.canCash&&(!!state.showCash||goIsCash(state))&&!state.win;
@@ -487,10 +487,10 @@ class GameUI {
   return '<button type="button" class="radio-option" role="radio" data-action="'+action+'" data-value="'+esc(value)+'" aria-checked="'+selected+'" tabindex="'+(selected?0:-1)+'"><span class="radio-marker" aria-hidden="true"></span><span class="option-details"><span class="option-title">'+esc(title)+'</span>'+(description?'<span class="option-description">'+esc(description)+'</span>':'')+'</span>'+(reward?'<span class="option-reward"><span class="money">'+esc(reward)+'</span><span class="option-caption">'+esc(rewardLabel)+'</span></span>':'')+'</button>';
  }
  limitOptions(){
-  const s=this.state,result={auto_steps:{title:'Cash out after',values:[0,3,5,10,15,20],suffix:s.game==='road'?' steps':s.game==='fruits'?' slices':' sec'},auto_cashout:{title:'Cash out at',values:[0,1.25,1.5,2,3,5,10,20],suffix:'×'}};
+  const s=this.state,result={auto_steps:{title:'Cash out after',values:[0,3,5,10,15,20],suffix:s.game==='road'?' steps':s.game==='boom'?' slices':' sec'},auto_cashout:{title:'Cash out at',values:[0,1.25,1.5,2,3,5,10,20],suffix:'×'}};
   // Only for games whose scene actually repaints: Fuel Run draws painted art layers that a
   // palette no longer touches, so the row offered a choice that changed nothing.
-  if(!['road','fuel'].includes(s.game))result.theme={title:s.game==='fruits'?'Atmosphere':'Next session atmosphere',values:s.game==='fish'?['Caribbean','Sunset']:s.game==='fruits'?['Tropical','Sunset']:['Treasure','Market'],suffix:''};
+  if(!['road','fuel'].includes(s.game))result.theme={title:s.game==='boom'?'Atmosphere':'Next session atmosphere',values:s.game==='haul'?['Caribbean','Sunset']:s.game==='boom'?['Tropical','Sunset']:['Treasure','Market'],suffix:''};
   return result;
  }
  limitText(value,suffix){return value===0?'Off':String(value)+suffix}
@@ -732,7 +732,7 @@ class GameUI {
   this.host.style.setProperty('--dev-top',(Math.max(a.bottom,wide?winners.getBoundingClientRect().bottom:0)+8)+'px');
   // The fishing boat occupies the right side; reserve the taller Live Wins panel too.
   const sceneTop=this.state.game==='gold'?account.getBoundingClientRect().bottom:
-   ['fish','catch'].includes(this.state.game)&&wide?Math.max(a.bottom,winners.getBoundingClientRect().bottom):a.bottom;
+   ['haul','catch'].includes(this.state.game)&&wide?Math.max(a.bottom,winners.getBoundingClientRect().bottom):a.bottom;
   const bounds={top:Math.round(sceneTop+12),bottom:Math.round(b.top),width:innerWidth,height:innerHeight};
   this.host.style.setProperty('--scene-top',bounds.top+'px');
   this.host.style.setProperty('--scene-bottom',bounds.bottom+'px');

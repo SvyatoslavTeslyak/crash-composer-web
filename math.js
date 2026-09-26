@@ -77,7 +77,7 @@ function fill(){
 function unsupported(){
  const title=window.ComposerTarget.entry().title;
  controls.querySelectorAll('.toolbar,details').forEach(node=>node.hidden=true);
- report.innerHTML='<div class="math-card"><h2>No model for '+title+'</h2><p>Math covers Goat Road, Fish Master, Goat Gold, Explosive Fruits and Catch Clash. Choose one of those above, or use Layout and Sound effects for '+title+'.</p></div>';
+ report.innerHTML='<div class="math-card"><h2>No model for '+title+'</h2><p>Math covers Goat Road, Big Haul, Goat Gold, Fruit Boom and Catch Clash. Choose one of those above, or use Layout and Sound effects for '+title+'.</p></div>';
 }
 function load(){if(!modelled()){unsupported();return}
  controls.querySelectorAll('.toolbar,details').forEach(node=>node.hidden=false);

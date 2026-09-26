@@ -35,8 +35,8 @@
         }
       ]
     },
-    "fish": {
-      "name": "Fish Master",
+    "haul": {
+      "name": "Big Haul",
       "model": "crash",
       "maxPayout": 1000000.0,
       "minBet": 1.0,
@@ -91,8 +91,8 @@
         }
       ]
     },
-    "fruits": {
-      "name": "Explosive Fruits",
+    "boom": {
+      "name": "Fruit Boom",
       "model": "fruits",
       "maxPayout": 1000000.0,
       "minBet": 1.0,

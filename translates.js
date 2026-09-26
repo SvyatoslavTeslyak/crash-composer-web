@@ -87,7 +87,7 @@ function inspectAction(source,entry){
  const inspection={ui,update:ui.update,send:ui.send,latest:historyPreview?.ui===ui?historyPreview.latest:ui.state};stateInspection=inspection;
  ui.send=()=>{};
  ui.update=function(state){
-  inspection.latest=state;if(historyPreview?.ui===ui)historyPreview.latest=state;const preview=structuredClone(state),stepped=['road','fruits','market_stack'].includes(state.game);
+  inspection.latest=state;if(historyPreview?.ui===ui)historyPreview.latest=state;const preview=structuredClone(state),stepped=['road','boom','market_stack'].includes(state.game);
   Object.assign(preview,{win:false,auto:false,canBet:!active,canGo:true,canCash:active,showCash:active&&stepped,cash:Math.max(Number(state.cash)||0,Number(state.bet)||1),toast:''});
   if(historyLabel){preview.flags={...preview.flags,history:true};preview.history=state.history?.length?state.history:[{multiplier:1.13,cashed_out:true},{multiplier:2.04,cashed_out:true}] }
   if(emptyBets)preview.bets=[];
@@ -99,7 +99,7 @@ function inspectAction(source,entry){
    preview.bets=[sample];preview.topBets=[{...sample,name:'Lucky Leo'}];
   }
   preview.settings={...preview.settings,sound:false,music:false,reduced_motion:true};
-  preview.goTitle=active?(state.game==='road'?'GO':state.game==='fruits'?'SLICE':state.game==='market_stack'?'PLACE':state.game==='fuel'?'SELL FUEL':'CASH OUT'):(state.game==='fruits'?'SLICE':'PLAY');
+  preview.goTitle=active?(state.game==='road'?'GO':state.game==='boom'?'SLICE':state.game==='market_stack'?'PLACE':state.game==='fuel'?'SELL FUEL':'CASH OUT'):(state.game==='boom'?'SLICE':'PLAY');
   preview.goSubtitle=active&&stepped?(state.game==='road'?'NEXT LANE':'NEXT FRUIT'):'$'+Number(active?preview.cash:preview.bet).toFixed(2);
   return inspection.update.call(this,preview);
  };

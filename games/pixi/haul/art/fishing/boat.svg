@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="300" viewBox="0 0 780 300">
+<defs><linearGradient id="h" x2="0" y2="1"><stop stop-color="#fff2cc"/><stop offset="1" stop-color="#89b7b5"/></linearGradient><linearGradient id="y" x2="1" y2="1"><stop stop-color="#ffd45a"/><stop offset="1" stop-color="#e59a26"/></linearGradient></defs>
+<!-- working Caribbean fishing boat -->
+<g stroke="#183c48" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+<path d="M230 221V61L133 48 98 204" fill="none" stroke="#567276" stroke-width="10"/>
+<path d="M133 48L224 69M127 53L170 185" fill="none" stroke="#e4c18a" stroke-width="3"/>
+<circle cx="132" cy="48" r="13" fill="#304a50"/><circle cx="132" cy="48" r="5" fill="#d7bc84"/>
+<path d="M472 202V117H585L607 219" fill="url(#h)"/><path d="M461 117H591" stroke="#df6243" stroke-width="13"/>
+<path d="M487 137H520V177H487ZM537 137H571V177H537Z" fill="#164e66"/><path d="M492 143L514 143M543 143H566" stroke="#67c1ce" stroke-width="3"/>
+<path d="M559 114V93H577V114" fill="#708f94"/><path d="M458 211V49M450 67H478" fill="none" stroke="#607b7e"/>
+<path d="M460 49V29" stroke-width="3"/><path d="M462 55H490V68H462Z" fill="#266fb2" stroke="none"/><path d="M462 68H490V81H462Z" fill="#d65049" stroke="none"/>
+<!-- boots, yellow overalls and linen shirt -->
+<path d="M326 213L322 170H367L377 214" fill="url(#y)" stroke-width="7"/><path d="M347 180V216" fill="none"/>
+<path d="M319 217H340M357 218H382" stroke="#293f46" stroke-width="12"/>
+<path d="M319 176L311 121Q334 107 354 116L372 159 362 177Z" fill="#f5ead0"/>
+<path d="M324 119L330 150 352 146 349 117M327 149L328 178H364L360 145" fill="url(#y)"/>
+<circle cx="334" cy="148" r="2" fill="#94652d" stroke="none"/>
+<path d="M317 130L296 158 270 164" fill="none" stroke="#784a32" stroke-width="14"/><path d="M355 134L339 164 291 173" fill="none" stroke="#975e3d" stroke-width="14"/>
+<path d="M322 111L322 99 344 96 344 118" fill="#975e3d"/>
+<path d="M344 79Q347 110 326 110L314 101 309 91 315 73Z" fill="#a86c45"/>
+<path d="M317 96Q330 103 342 91L341 108Q326 119 316 102Z" fill="#293330" stroke-width="2"/>
+<path d="M314 81L308 90 319 92" fill="#a86c45" stroke-width="3"/><circle cx="319" cy="82" r="2.6" fill="#162b30" stroke="none"/>
+<path d="M310 71L315 43Q332 34 350 49L358 77" fill="url(#y)"/>
+<path d="M313 62L353 68" stroke="#987135" stroke-width="7"/>
+<path d="M290 66Q327 66 374 82" stroke="#efc56a" stroke-width="10"/>
+<!-- winch and deck equipment -->
+<path d="M254 215V180" stroke="#58777b" stroke-width="10"/><circle cx="254" cy="176" r="28" fill="#486c77"/><circle cx="254" cy="176" r="17" fill="#86a3a4"/><path d="M254 176L278 162 292 174" fill="none"/>
+<path d="M628 218V182H678V220M630 194H676M648 184V218" fill="#b98148" stroke="#71553c" stroke-width="4"/>
+<path d="M199 221L185 210 200 267Q423 307 693 264L726 211Q490 237 199 221Z" fill="url(#h)"/>
+<path d="M185 210Q427 249 726 211" fill="none" stroke="#d9533d" stroke-width="14"/>
+<path d="M202 256Q446 292 697 254" fill="none" stroke="#377884" stroke-width="5"/>
+<path d="M236 236L244 260M299 241L304 271M621 238L615 270M682 229L672 262" stroke="#98b2a8" stroke-width="2"/>
+<path d="M385 232V198M424 234V199M606 227V194M697 217V184M379 198L702 185" fill="none" stroke="#746e57" stroke-width="4"/>
+<circle cx="564" cy="214" r="22" fill="#f9e7c7"/><circle cx="564" cy="214" r="12" fill="#507b83"/><path d="M563 192V201M563 227V236M542 214H551M577 214H586" stroke="#e36947" stroke-width="8"/>
+</g></svg>

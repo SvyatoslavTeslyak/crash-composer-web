@@ -8,9 +8,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack"
       ],
       "ht": "PRAN LAJAN",
@@ -40,9 +40,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -58,7 +58,7 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "RISK",
@@ -73,9 +73,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -91,9 +91,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -325,9 +325,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Oto",
@@ -402,9 +402,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Nòmal",
@@ -419,7 +419,7 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
         "fuel"
       ],
@@ -478,9 +478,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Pran lajan apre",
@@ -499,9 +499,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Pran lajan nan",
@@ -519,7 +519,7 @@
       "fr": "Ambiance",
       "group": "Bet panel & messages",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "Anbyans",
       "usage": [
@@ -536,7 +536,7 @@
       "fr": "Ambiance de la prochaine session",
       "group": "Header & account",
       "games": [
-        "fish",
+        "haul",
         "gold",
         "market_stack"
       ],
@@ -555,7 +555,7 @@
       "fr": "Caraïbes",
       "group": "Settings",
       "games": [
-        "fish"
+        "haul"
       ],
       "ht": "Karayib",
       "usage": [
@@ -572,8 +572,8 @@
       "fr": "Coucher de soleil",
       "group": "Settings",
       "games": [
-        "fish",
-        "fruits"
+        "haul",
+        "boom"
       ],
       "ht": "Kouche solèy",
       "usage": [
@@ -590,7 +590,7 @@
       "fr": "Tropical",
       "group": "Settings",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "Twopikal",
       "usage": [
@@ -644,9 +644,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Dezaktive",
@@ -799,9 +799,9 @@
       "fr": "Gagné",
       "group": "Bet panel & messages",
       "games": [
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "catch",
         "market_stack",
         "fuel"
@@ -821,9 +821,9 @@
       "fr": "Perdu",
       "group": "Bet panel & messages",
       "games": [
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "catch",
         "market_stack",
         "fuel"
@@ -872,9 +872,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Chwazi difikilte",
@@ -952,9 +952,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Plis risk. Pi gwo rekonpans.",
@@ -999,9 +999,9 @@
       "group": "Settings",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -1023,9 +1023,9 @@
       "group": "Settings",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -1055,9 +1055,9 @@
       "group": "Settings",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Limit oto",
@@ -1076,9 +1076,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Premye limit ki rive a fè ou pran lajan an.",
@@ -1113,9 +1113,9 @@
       "fr": "Le mode auto lance la manche suivante jusqu’à sa désactivation ou si le solde est insuffisant.",
       "group": "Header & account",
       "games": [
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Mòd oto kòmanse pwochen tou a jiskaske ou dezaktive li oswa balans lan twò ba.",
@@ -1134,9 +1134,9 @@
       "group": "Settings",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -1169,9 +1169,9 @@
       "fr": "Aucune règle disponible.",
       "group": "Bet panel & messages",
       "games": [
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel",
         "market_stack"
       ],
@@ -1191,9 +1191,9 @@
       "group": "Header & account",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -1213,9 +1213,9 @@
       "group": "Header & account",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -1232,9 +1232,9 @@
       "group": "Header & account",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -1251,9 +1251,9 @@
       "group": "Header & account",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -1270,9 +1270,9 @@
       "group": "Header & account",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -1289,9 +1289,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -1387,9 +1387,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Fasil",
@@ -1404,9 +1404,9 @@
       "group": "Bet panel & messages",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Difisil",
@@ -1420,9 +1420,9 @@
       "fr": "Expert",
       "group": "Bet panel & messages",
       "games": [
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "fuel"
       ],
       "ht": "Ekspè",
@@ -1436,8 +1436,8 @@
       "fr": "Ajouté au solde !",
       "group": "Header & account",
       "games": [
-        "fish",
-        "fruits",
+        "haul",
+        "boom",
         "fuel",
         "gold",
         "market_stack",
@@ -1459,8 +1459,8 @@
       "fr": "Ajout à votre solde…",
       "group": "Header & account",
       "games": [
-        "fish",
-        "fruits",
+        "haul",
+        "boom",
         "fuel",
         "gold",
         "market_stack"
@@ -1636,8 +1636,8 @@
       "fr": "Solde insuffisant · Mode auto arrêté",
       "group": "Header & account",
       "games": [
-        "fish",
-        "fruits",
+        "haul",
+        "boom",
         "fuel",
         "gold"
       ],
@@ -1653,8 +1653,8 @@
       "fr": "Terminez cette manche avant de recharger",
       "group": "Bet panel & messages",
       "games": [
-        "fish",
-        "fruits",
+        "haul",
+        "boom",
         "fuel",
         "gold"
       ],
@@ -1670,7 +1670,7 @@
       "fr": "Manche continue · Gain jusqu’à 1 000 000 $",
       "group": "Difficulty & limits",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "ht": "Tou san rete · Gany jiska $1,000,000",
@@ -1690,7 +1690,7 @@
       "fr": "Doux",
       "group": "Difficulty & limits",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "ht": "Dousman",
@@ -1711,7 +1711,7 @@
       "fr": "Régulier",
       "group": "Difficulty & limits",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "ht": "Regilye",
@@ -1732,7 +1732,7 @@
       "fr": "Rapide",
       "group": "Difficulty & limits",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "ht": "Rapid",
@@ -1753,7 +1753,7 @@
       "fr": "Très rapide",
       "group": "Difficulty & limits",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "ht": "Trè rapid",
@@ -1774,7 +1774,7 @@
       "fr": "HAUSSE / SEC",
       "group": "Difficulty & limits",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "ht": "KWASANS / SEG",
@@ -1794,7 +1794,7 @@
       "fr": "PREMIÈRE COUPE",
       "group": "Difficulty & limits",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "PREMYE KOUPE",
       "usage": [
@@ -1813,7 +1813,7 @@
       "fr": "COUPER",
       "group": "Bet panel & messages",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "KOUPE",
       "usage": [
@@ -1827,7 +1827,7 @@
       "fr": "FRUIT SUIVANT",
       "group": "Bet panel & messages",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "PWOCHEN FWI",
       "usage": [
@@ -1841,7 +1841,7 @@
       "fr": "Balayez un fruit ou appuyez sur COUPER",
       "group": "Scene",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "Glise dwèt ou sou yon fwi oswa peze KOUPE",
       "usage": [
@@ -1854,7 +1854,7 @@
       "fr": "ENCAISSÉ",
       "group": "Scene",
       "games": [
-        "fruits",
+        "boom",
         "catch"
       ],
       "ht": "LAJAN PRAN",
@@ -1877,7 +1877,7 @@
       "fr": "POURRI",
       "group": "Scene",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "POURI",
       "usage": [
@@ -1890,7 +1890,7 @@
       "fr": "RALENTI",
       "group": "Scene",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "RALANTI",
       "usage": [
@@ -1903,7 +1903,7 @@
       "fr": "Explosion dès la première coupe",
       "group": "Scene",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "Eksplozyon depi premye koupe a",
       "usage": [
@@ -2372,7 +2372,7 @@
       "fr": "BOUM",
       "group": "Scene",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "BOUM",
       "usage": [
@@ -2386,9 +2386,9 @@
       "group": "Header & account",
       "games": [
         "road",
-        "fish",
+        "haul",
         "gold",
-        "fruits",
+        "boom",
         "market_stack",
         "fuel"
       ],
@@ -2435,7 +2435,7 @@
       "fr": "Vous avez atteint {value}×",
       "group": "Scene",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "Ou rive nan {value}×",
       "usage": [
@@ -2834,7 +2834,7 @@
       "fr": "DORÉ {value}",
       "group": "Scene",
       "games": [
-        "fruits"
+        "boom"
       ],
       "ht": "ANNÒ {value}",
       "usage": [
@@ -2884,7 +2884,7 @@
       "en": "{slices} slices max · Payout up to $1,000,000",
       "fr": "{slices} coupes maximum · Gain jusqu’à 1 000 000 $",
       "games": [
-        "fruits"
+        "boom"
       ],
       "group": "Difficulty & limits",
       "ht": "{slices} koupe maksimòm · Gany jiska $1,000,000",
@@ -2903,7 +2903,7 @@
       "en": "{risk}% boom risk / slice · hot fruit {hot}%",
       "fr": "{risk} % de risque par coupe · Fruit brûlant {hot} %",
       "games": [
-        "fruits"
+        "boom"
       ],
       "group": "Difficulty & limits",
       "ht": "{risk}% risk eksplozyon / koupe · fwi cho {hot}%",
@@ -2976,7 +2976,7 @@
       "en": "{value} slices",
       "fr": "{value} coupes",
       "games": [
-        "fruits"
+        "boom"
       ],
       "group": "Difficulty & limits",
       "ht": "{value} koupe",
@@ -2992,7 +2992,7 @@
       "en": "{value} sec",
       "fr": "{value} s",
       "games": [
-        "fish",
+        "haul",
         "gold",
         "fuel"
       ],
@@ -3010,7 +3010,7 @@
       "en": "Gentle growth",
       "fr": "Progression douce",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "group": "Difficulty & limits",
@@ -3030,7 +3030,7 @@
       "en": "Steady growth",
       "fr": "Progression régulière",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "group": "Difficulty & limits",
@@ -3050,7 +3050,7 @@
       "en": "Fast growth",
       "fr": "Progression rapide",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "group": "Difficulty & limits",
@@ -3070,7 +3070,7 @@
       "en": "Very fast growth",
       "fr": "Progression très rapide",
       "games": [
-        "fish",
+        "haul",
         "gold"
       ],
       "group": "Difficulty & limits",
