@@ -140,7 +140,7 @@ async function applyVersion(versionId,id){
 function reviewStatus(status,count){const accepted=status==='approved';return '<span class="review-status '+(accepted?'accepted':'awaiting')+'"'+(accepted?' title="Accepted by Admin; not published yet"':'')+'>'+(accepted?'Accepted':'Awaiting review')+(count?' · '+count:'')+'</span>'}
 function publicationHistory(){
  const items=versions.filter(v=>v.status==='published');if(published&&!items.some(v=>v.id===published.id))items.unshift(published);
- return items.length?'<details class="review-history"><summary>Published history · '+items.length+'</summary>'+items.map(v=>{const r=releases.find(r=>r.version_id===v.id);return '<p>Revision '+esc(v.revision)+(r?.published_at?' · '+esc(new Date(r.published_at).toLocaleString()):'')+'</p>'}).join('')+'<a target="_blank" rel="noopener" href="https://svyatoslavteslyak.github.io/crash-showcase/games/'+encodeURIComponent(game())+'/index.html">Open published game ↗</a></details>':'';
+ return items.length?'<details class="review-history"><summary>Published history · '+items.length+'</summary>'+items.map(v=>{const r=releases.find(r=>r.version_id===v.id);return '<p>Revision '+esc(v.revision)+(r?.published_at?' · '+esc(new Date(r.published_at).toLocaleString()):'')+'</p>'}).join('')+'<a target="_blank" rel="noopener" href="https://svyatoslavteslyak.github.io/game-showcase/games/'+encodeURIComponent(game())+'/index.html">Open published game ↗</a></details>':'';
 }
 function reviewVersions(){
  const groups=[['submitted','Needs review','Apply locally accepts this version. Use Discard all changes to reset unpublished changes for this game.'],['approved','Accepted · not published','Already accepted. Apply locally if needed, then commit and push to publish.']];

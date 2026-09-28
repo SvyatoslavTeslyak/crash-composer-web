@@ -1272,6 +1272,14 @@
    more room, as a desktop's two-row panel does, it sits in the middle of it. */
 .crash-ui .tabbed-controls .actions{min-height:0;height:calc(var(--web-control-action-height) + var(--space-8));align-self:center}
 .crash-ui .tabbed-controls .actions .action{min-height:0}
+/* Holding the main action (config.goRepeat): a light bar sweeps across it while the pour
+   gets ready (--charge-ms), then stays lit and breathes while it pours. */
+.crash-ui .action .go-charge{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,color-mix(in srgb,#fff calc(var(--alpha-soft) * 100%),transparent),color-mix(in srgb,#fff calc(var(--alpha-medium) * 100%),transparent));transform:scaleX(0);transform-origin:left center;opacity:0;pointer-events:none;transition:opacity var(--motion-fast-ms)}
+.crash-ui .action.is-charging .go-charge{opacity:1;transform:scaleX(1);transition:transform var(--charge-ms,350ms) linear,opacity var(--motion-fast-ms)}
+.crash-ui .action.is-pouring .go-charge{animation:go-pour 0.6s ease-in-out infinite alternate}
+@keyframes go-pour{from{opacity:.55}to{opacity:1}}
+.crash-ui .action>:not(.go-charge){position:relative}
+@media(prefers-reduced-motion:reduce){.crash-ui .action.is-charging .go-charge{transition:none}.crash-ui .action.is-pouring .go-charge{animation:none}}
 /* A long press on the main action (config.goRepeat) must not open the phone's callout. */
 .crash-ui [data-action=go]{-webkit-touch-callout:none;touch-action:manipulation}
 /* A title shown with its icon (GO beside CASH OUT, or state.goLabelOnly) reads at the action's size. */
@@ -1280,3 +1288,11 @@
 .crash-ui .tabbed-controls .actions .action.go.is-stop:not(:disabled){color:var(--on-cash);border-color:var(--danger-edge);background:linear-gradient(var(--danger-top),var(--danger-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--danger-edge) calc(var(--alpha-medium) * 100%),transparent),0 var(--web-control-depth) 0 var(--danger-shadow)}
 .crash-ui .tabbed-controls .actions .action.go.is-skip:not(:disabled){color:var(--on-button);border-color:color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side)}
 .crash-ui .tabbed-controls .actions .action.go.is-skip::before{display:none}
+/* The bet panel's sections - the choice row, the stake, the action row, the tabs - stand 12px
+   apart, in every game and at every width. Only the vertical gap: a desktop's columns keep theirs. */
+.crash-ui .controls.tabbed-controls,.crash-ui .tabbed-controls .tabbed-main,.crash-ui .tabbed-controls .bet-grid{row-gap:var(--space-12)}
+/* AUTO CASHOUT stands as tall as the action row beside it (80px), so the panel keeps its
+   12px between sections: a tighter switch row and presets. */
+.crash-ui .tabbed-controls .auto-cashout-panel{height:calc(var(--web-control-action-height) + var(--space-8));align-content:space-between;align-self:center;padding:var(--space-6) var(--space-8);gap:var(--space-4)}
+.crash-ui .tabbed-controls .auto-cashout-panel .auto-cashout-toggle{min-height:calc(var(--space-24) + var(--space-8))}
+.crash-ui .tabbed-controls .auto-cashout-panel .ac-presets .button{min-height:var(--space-32)}

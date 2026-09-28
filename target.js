@@ -1,4 +1,4 @@
-/* Crash Composer: one active game for the whole workspace.
+/* Game Composer: one active game for the whole workspace.
    Layout, Math and Sound effects all work on the game chosen here, so switching a tab
    never means picking the same game again. This module also owns the shared studio/catalog
    snapshot, which Sound effects reads: the manifests belong to the game, not to one tab. */

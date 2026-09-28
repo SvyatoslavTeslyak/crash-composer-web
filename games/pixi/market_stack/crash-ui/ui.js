@@ -81,7 +81,10 @@ const coinSlot=(node,v)=>{const n=amountOf(v);const amount=Number.isFinite(n);no
 // Pixel crop origins of the six painted circles in the 1536 x 1024 atlas.
 // The artwork is not an evenly spaced 3 x 2 grid; its second row sits higher.
 const avatarCrops=[[25,11],[537,10],[1045,10],[26,489],[530,489],[1045,490]];
-const avatar=(name,players=[])=>{const i=name==='You'?2:players.indexOf(name),[x,y]=avatarCrops[i]||avatarCrops[5];return '<span class="avatar" role="img" aria-label="'+esc(name)+'" style="--avatar-x:'+(x/(1536-464)*100)+'%;--avatar-y:'+(y/(1024-464)*100)+'%"></span>'};
+// A host that knows a player's own picture passes it as `avatars: {name: url}`; anyone else keeps a
+// face from the roster. Only a plain https address is taken, so nothing can break out of the style.
+let avatarUrls={};
+const avatar=(name,players=[])=>{const url=avatarUrls[name];if(typeof url==='string'&&/^https:\/\/[^\s"'()\\<>]+$/.test(url))return '<span class="avatar" role="img" aria-label="'+esc(name)+'" style="background-image:url('+url+');background-size:cover;background-position:center"></span>';const i=name==='You'?2:players.indexOf(name),[x,y]=avatarCrops[i]||avatarCrops[5];return '<span class="avatar" role="img" aria-label="'+esc(name)+'" style="--avatar-x:'+(x/(1536-464)*100)+'%;--avatar-y:'+(y/(1024-464)*100)+'%"></span>'};
 // Three things can stop a round, and each is said plainly: the balance is short, the
 // connection is gone, or something else went wrong. Anything the server says beyond that
 // belongs in the console, not in front of a player.
@@ -338,10 +341,13 @@ class GameUI {
   // it and balls pour), {delay, interval} in ms or true for the defaults. Never as STOP, and
   // a hold that has poured swallows the click that ends it.
   if(config.goRepeat){
-   const rep=config.goRepeat===true?{}:config.goRepeat,delay=Number(rep.delay)||350,every=Number(rep.interval)||140;let timer=0,repeated=false;
-   const stop=()=>{clearTimeout(timer);clearInterval(timer);timer=0};
+   const rep=config.goRepeat===true?{}:config.goRepeat,delay=Number(rep.delay)||350,every=Number(rep.interval)||140;let timer=0,repeated=false,held=null;
+   // The hold shows itself: a bar fills the button while the pour gets ready, then stays lit and
+   // breathes while the balls pour.
+   const stop=()=>{clearTimeout(timer);clearInterval(timer);timer=0;if(held){held.classList.remove('is-charging','is-pouring');held=null}};
    host.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-action=go]');if(!b||b.disabled||e.button>0)return;repeated=false;stop();
-    timer=setTimeout(()=>{timer=setInterval(()=>{const go=this.q('[data-action=go]');if(!go||go.disabled||this.state?.goFace==='stop'||this.modal){stop();return}repeated=true;this.send('go',{})},every)},delay)});
+    if(this.state?.goFace!=='stop'){if(!b.querySelector('.go-charge'))b.insertAdjacentHTML('afterbegin','<span class="go-charge" aria-hidden="true"></span>');b.style.setProperty('--charge-ms',delay+'ms');void b.offsetWidth;b.classList.add('is-charging');held=b}
+    timer=setTimeout(()=>{held?.classList.add('is-pouring');timer=setInterval(()=>{const go=this.q('[data-action=go]');if(!go||go.disabled||this.state?.goFace==='stop'||this.modal){stop();return}repeated=true;this.send('go',{})},every)},delay)});
    for(const type of ['pointerup','pointercancel','blur'])(type==='blur'?window:document).addEventListener(type,stop);
    host.addEventListener('pointerout',e=>{if(e.target.closest?.('[data-action=go]')&&!e.target.closest('[data-action=go]').contains(e.relatedTarget))stop()});
    host.addEventListener('click',e=>{if(repeated&&e.target.closest('[data-action=go]')){repeated=false;e.stopImmediatePropagation()}},true);
@@ -468,11 +474,11 @@ class GameUI {
   const toastWin=s.winToast&&s.win&&(!this.state.win||this.state.winId!==s.winId);
   if(toastWin)this.showWinToast(s);
   if(this.state.game&&this.state.game!==s.game)this.finishWinToast();
-  this.state=s;currency=typeof s.currency==='string'?s.currency:'';this.host.hidden=false;this.host.classList.toggle('reduced',!!s.settings?.reduced_motion);
-  this.text('level',this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',this.heldWinBalance!==undefined?this.heldWinBalance:s.balanceKnown===false?'—':(window.CrashI18n?.number?window.CrashI18n.number(Number(s.balance||0),{useGrouping:true,minimumFractionDigits:0,maximumFractionDigits:0}):new Intl.NumberFormat('en-US',{useGrouping:true,maximumFractionDigits:0}).format(Number(s.balance||0))));this.text('bet',coinAmount(s.bet));fitStake(this.slots.bet,this.slots.bet.textContent);
+  this.state=s;currency=typeof s.currency==='string'?s.currency:'';avatarUrls=s.avatars&&typeof s.avatars==='object'?s.avatars:{};this.host.hidden=false;this.host.classList.toggle('reduced',!!s.settings?.reduced_motion);
+  this.text('level',s.rank!==undefined&&s.rank!==null?'#'+String(s.rank):this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',this.heldWinBalance!==undefined?this.heldWinBalance:s.balanceKnown===false?'—':(window.CrashI18n?.number?window.CrashI18n.number(Number(s.balance||0),{useGrouping:true,minimumFractionDigits:0,maximumFractionDigits:0}):new Intl.NumberFormat('en-US',{useGrouping:true,maximumFractionDigits:0}).format(Number(s.balance||0))));this.text('bet',coinAmount(s.bet));fitStake(this.slots.bet,this.slots.bet.textContent);
 
   this.text('personal',money(s.personal));this.text('top',money(s.record?.payout));this.text('owner',s.record?.name||'');this.q('.record-top').title=[s.record?.name,s.record?.date].filter(Boolean).join(' · ');
-  const signature=JSON.stringify([s.players,s.record?.name]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players)}
+  const signature=JSON.stringify([s.players,s.record?.name,s.avatars]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players)}
   this.text('difficulty',s.difficulties?.[s.difficulty]||'Normal');moneySlot(this.slots.cash,s.cash);this.text('goTitle',s.goTitle||'PLAY');coinSlot(this.slots.goSubtitle,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.text('online',(s.online||6)+' ONLINE');
   this.q('[data-action=auto]').setAttribute('aria-pressed',String(!!s.auto));
   for(const a of ['auto','difficulty','min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
@@ -751,7 +757,8 @@ class GameUI {
    body.innerHTML='<button class="text-button back-button" data-action="back">← Back to menu</button><div class="option-list" role="radiogroup" aria-label="'+esc(option.title)+'">'+option.values.map(v=>this.radioOption('chooseLimit',JSON.stringify([key,v]),String(s.settings?.[key]??option.values[0])===String(v),this.limitText(v,option.suffix))).join('')+'</div>';
   }
   if(kind==='account'){
-   body.innerHTML='<div class="account-summary">'+avatar('You',s.players)+'<div><p>You · Level '+(1+Math.floor((s.xp||0)/10))+'</p><p class="modal-note">'+((s.xp||0)%10)+' / 10 XP</p></div></div>';
+   // A game with no levels (flags.level false) shows the player alone.
+   body.innerHTML='<div class="account-summary">'+avatar('You',s.players)+'<div>'+(s.flags?.level===false?'<p>You</p>':'<p>You · Level '+(1+Math.floor((s.xp||0)/10))+'</p><p class="modal-note">'+((s.xp||0)%10)+' / 10 XP</p>')+'</div></div>';
    if(this.tabbed)body.innerHTML='';
    // Winnings are paid in the currency, so a money() figure carries its unit and never the coin.
    const row=(k,v,tone='')=>'<div class="setting"><span>'+esc(k)+'</span><strong class="account-stat '+tone+'">'+esc(v)+'</strong></div>';

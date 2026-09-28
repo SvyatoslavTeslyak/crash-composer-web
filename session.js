@@ -77,7 +77,7 @@ auth.ready=(async()=>{
  forgot.hidden=setup;
  if(setup){
   document.querySelector('#entry-title').textContent=recovery?'Reset your password':changingPassword?'Change password':'Create your password';
-  document.querySelector('#entry-hint').textContent='Choose a password to access Crash Composer. Next time, sign in with your email and password.';
+  document.querySelector('#entry-hint').textContent='Choose a password to access Game Composer. Next time, sign in with your email and password.';
   document.querySelector('#email-field').hidden=true;email.required=false;
   document.querySelector('#confirm-field').hidden=false;confirm.required=true;
   password.autocomplete='new-password';password.minLength=10;

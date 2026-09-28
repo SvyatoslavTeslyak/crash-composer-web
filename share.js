@@ -1,7 +1,7 @@
 // Public embeds use stable game URLs; each deployment redirects to versioned assets.
 (()=>{
 'use strict';
-const $=s=>document.querySelector(s),button=$('#share-game'),root='https://svyatoslavteslyak.github.io/crash-showcase/';
+const $=s=>document.querySelector(s),button=$('#share-game'),root='https://svyatoslavteslyak.github.io/game-showcase/';
 const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const dialog=document.createElement('dialog');dialog.className='share-dialog';dialog.setAttribute('aria-labelledby','share-title');
 dialog.innerHTML=`<header><div><small>PUBLISHED GAME</small><h2 id="share-title">Embed game</h2></div><button class="wb-button" type="button" data-close aria-label="Close share window">✕</button></header>
