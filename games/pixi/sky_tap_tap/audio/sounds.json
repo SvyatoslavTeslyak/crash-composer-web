@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "game": "sky_tap_tap",
+  "title": "Sky Tap-Tap",
+  "owner": "",
+  "events": [
+    {
+      "id": "start",
+      "label": "Round start",
+      "trigger": "PLAY is pressed and the stake is taken.",
+      "volume_db": -9.0,
+      "pitch_jitter": 0.03,
+      "takes": [
+        {
+          "file": "assets/audio/eleven/start_0.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/TA9HqoQUqXV2EZXt0pWl"
+    },
+    {
+      "id": "cash",
+      "label": "Cash out",
+      "trigger": "The player takes the money before the crash.",
+      "volume_db": -8.0,
+      "pitch_jitter": 0.02,
+      "takes": [
+        {
+          "file": "assets/audio/eleven/cash_0.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/TA9HqoQUqXV2EZXt0pWl"
+    },
+    {
+      "id": "crash",
+      "label": "Crash",
+      "trigger": "The round ends without a cash-out.",
+      "volume_db": -7.0,
+      "pitch_jitter": 0.0,
+      "takes": [
+        {
+          "file": "assets/audio/eleven/crash_0.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/TA9HqoQUqXV2EZXt0pWl"
+    },
+    {
+      "id": "tap",
+      "label": "Button tap",
+      "trigger": "Any control in the panel.",
+      "volume_db": -16.0,
+      "pitch_jitter": 0.04,
+      "takes": [
+        {
+          "file": "assets/audio/eleven/tap_0.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/TA9HqoQUqXV2EZXt0pWl"
+    },
+    {
+      "id": "win",
+      "label": "Win screen",
+      "trigger": "The win popup opens.",
+      "volume_db": -8.0,
+      "pitch_jitter": 0.0,
+      "takes": [
+        {
+          "file": "assets/audio/eleven/win_0.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/TA9HqoQUqXV2EZXt0pWl"
+    },
+    {
+      "id": "music",
+      "label": "Background music",
+      "trigger": "Loops while the game is open, when music is on.",
+      "volume_db": -20.0,
+      "pitch_jitter": 0.0,
+      "takes": [
+        {
+          "file": "assets/audio/music/theme.mp3",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "generator": "ElevenLabs eleven_music_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/TA9HqoQUqXV2EZXt0pWl"
+    }
+  ]
+}

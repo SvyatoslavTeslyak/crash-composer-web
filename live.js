@@ -6,6 +6,8 @@
  const game=()=>window.ComposerTarget.value,playable=()=>window.ComposerTarget.entry().live;
  // Each engine has its own build of the same game, mounted side by side by preview.py.
  const engine=()=>window.ComposerTarget.engine;
+ // The games that use Goat Road's tabbed shell: its panel, its windows, rules as a tab.
+ const TABBED_GAMES=['road','boom'];
  let timer,generation=0;
  const applied={};
  const presetSelect=document.querySelector('#presentation-preset');
@@ -36,9 +38,12 @@
  const amountPresets=document.querySelector('[data-feature=presets]');
  let amountOverride=null;
  function syncInspector(){
-  const road=game()==='road';
+  // Goat Road and Fruit Boom share the tabbed shell and its windows.
+  const candy=game()==='candy_cascade';
+  const road=TABBED_GAMES.includes(game())||candy;
+  document.querySelector('.preview-navigation').hidden=candy;
   const modalSelect=document.querySelector('#modal'),selected=modalSelect.value;
-  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details'],['notice:funds','Notice · not enough funds'],['notice:offline','Notice · no connection'],['notice:error','Notice · something went wrong'],['notice:wallet','Notice · top up balance']]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
+  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details'],...(candy?[['autoSpin','Auto Spin'],['candyPays','Candy payouts']]:[]),['notice:funds','Notice · not enough funds'],['notice:offline','Notice · no connection'],['notice:error','Notice · something went wrong'],['notice:wallet','Notice · top up balance'],...(['road','candy_cascade'].includes(game())?[]:[['difficulty','Difficulty sheet']])]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
   if(modalSelect.dataset.game!==game()){
    modalSelect.replaceChildren(...modalOptions.map(([value,label])=>new Option(label,value)));modalSelect.dataset.game=game();modalSelect.value=modalOptions.some(([value])=>value===selected)?selected:'';
   }
@@ -48,10 +53,14 @@
   else if(!standard){const option=document.createElement('option');option.value='standard';option.textContent='Game default';presetSelect.prepend(option);presetSelect.value=savedPreset()}
   const shell=['tabbed-shell-v1','menu-drawer-v1'].includes(presetSelect.value);
   const noAmountPresets=(road&&engine()==='pixi')||document.querySelector('#control-variant').value==='tabbed';
-  document.querySelectorAll('[data-visibility-heading]').forEach(n=>n.hidden=shell&&(n.dataset.visibilityHeading!=='features'||noAmountPresets));
+  // The tabbed shell has no Live wins, record or history panels to hide, and no preset
+  // amounts; what it can show or hide is Auto and the difficulty levels.
+  const tabbedFeatures=shell&&noAmountPresets;
+  document.querySelectorAll('[data-visibility-heading]').forEach(n=>n.hidden=candy||(shell&&n.dataset.visibilityHeading!=='features'));
   document.querySelectorAll('.visibility-option').forEach(label=>{
    const input=label.querySelector('input');
-   label.hidden=(input===amountPresets&&noAmountPresets)||(shell&&input!==amountPresets)||(input.dataset.flag==='multiplier_ladder'&&game()!=='market_stack')||(live()&&game()==='catch'&&!!input.dataset.feature)||(live()&&game()==='market_stack'&&['auto','difficulty'].includes(input.dataset.feature));
+   // Goat Road's levels are compulsory, so there is nothing to switch.
+   label.hidden=candy||(game()==='road'&&input.dataset.feature==='difficulty')||(input===amountPresets&&noAmountPresets)||(shell&&!!input.dataset.flag)||(shell&&!tabbedFeatures&&input!==amountPresets)||(input.dataset.flag==='multiplier_ladder'&&game()!=='market_stack')||(live()&&game()==='catch'&&!!input.dataset.feature)||(live()&&game()==='market_stack'&&['auto','difficulty'].includes(input.dataset.feature));
   });
   if(amountOverride===null)amountPresets.checked=frame.clientWidth>=600;
   syncPresetTags();
@@ -59,9 +68,10 @@
  new ResizeObserver(()=>{syncInspector();if(!live())sendFeatures()}).observe(frame);
 
  const presetKey=()=> 'crash-composer-presentation:'+engine()+':'+game();
- const savedPreset=()=>{try{const saved=localStorage.getItem(presetKey());if(['tabbed-shell-v1','menu-drawer-v1'].includes(saved))return saved}catch{}return game()==='road'?'tabbed-shell-v1':'standard'};
+ const savedPreset=()=>{try{const saved=localStorage.getItem(presetKey());if(['tabbed-shell-v1','menu-drawer-v1'].includes(saved))return saved}catch{}return TABBED_GAMES.includes(game())?'tabbed-shell-v1':'standard'};
  function applyPresentation(){
   syncInspector();
+  if(game()==='candy_cascade')return true;
   if(!live()){demo({presentationPreset:presetSelect.value});return true}
   const ui=instance();if(!ui?.setPresentationPreset)return false;
   if(!nativePresets.has(ui))nativePresets.set(ui,ui.config.presentationPreset||'standard');
@@ -77,17 +87,19 @@
  // Live games read features at startup, exactly like an operator iframe URL.
  // Leave preset amounts to the shared responsive default until explicitly toggled:
  // hidden on phones, visible on larger screens. Only an override adds presets=0/1.
- const featureQuery=()=>[...document.querySelectorAll('[data-feature]')].filter(n=>n!==amountPresets||amountOverride!==null).map(n=>'&'+n.dataset.feature+'='+(n.checked?'1':'0')).join('');
- function flags(){if(!live()){sendFlags();return}const ui=instance();if(ui)document.querySelectorAll('[data-flag]').forEach(n=>ui.send('flag',{key:n.dataset.flag,value:n.checked}))}
+ const switchable=n=>game()!=='candy_cascade'&&!(game()==='road'&&n.dataset.feature==='difficulty');
+ const featureQuery=()=>[...document.querySelectorAll('[data-feature]')].filter(switchable).filter(n=>n!==amountPresets||amountOverride!==null).map(n=>'&'+n.dataset.feature+'='+(n.checked?'1':'0')).join('');
+ function flags(){if(game()==='candy_cascade')return;if(!live()){sendFlags();return}const ui=instance();if(ui)document.querySelectorAll('[data-flag]').forEach(n=>ui.send('flag',{key:n.dataset.flag,value:n.checked}))}
  function modal(){const kind=document.querySelector('#modal').value;if(!TranslationTable.windowAllowed(game(),kind))return;if(!live()){demo({modal:kind});return}const ui=instance();if(!ui)return;
+  if(game()==='candy_cascade'&&frame.contentWindow.candyCascade?.previewWindow(kind))return;
   if(kind==='betDetails'||kind==='topBetDetails'){
    ui.open(kind==='topBetDetails'?'topbets':'mybets');
    // A presentation-only sample makes an empty account's detail layout inspectable.
    // Do not insert sample bets into the game state, storage or API.
-   if(!ui.betRows?.length)ui.betRows=[{name:'Preview player',time:Date.now(),wager:3,payout:4.83,multiplier:1.61,details:[{label:'RESULT',value:'Cashed out'},{label:'DIFFICULTY',value:'Medium'},{label:'LANES CROSSED',value:'3 / 20'}]}];
+   if(!ui.betRows?.length&&game()!=='candy_cascade')ui.betRows=[{name:'Preview player',time:Date.now(),wager:3,payout:4.83,multiplier:1.61,details:[{label:'RESULT',value:'Cashed out'},{label:'DIFFICULTY',value:'Medium'},{label:'LANES CROSSED',value:'3 / 20'}]}];
    ui.showBetDetails(0);return;
   }
-  if(kind){if(game()==='road'&&kind==='rules')ui.rulesFrom='tab';ui.open(kind)}else ui.close()}
+  if(kind){if(TABBED_GAMES.includes(game())&&kind==='rules')ui.rulesFrom='tab';ui.open(kind)}else ui.close()}
  async function load(){
   clearInterval(timer);const request=++generation;
   presetSelect.value=savedPreset();presetSelect.disabled=live();syncInspector();
@@ -101,9 +113,9 @@
   }
   // Blank the frame first: a Godot export left running would keep its audio going under the next game.
   if(frame.src&&!frame.src.endsWith('about:blank')){frame.src='about:blank';await new Promise(r=>setTimeout(r,60));if(request!==generation)return}
-  const off=[...document.querySelectorAll('[data-feature]')].filter(n=>!n.checked).map(n=>n.dataset.feature);status.textContent='Loading local web export'+(off.length?' without '+off.join(', ')+'…':'…');
+  const off=[...document.querySelectorAll('[data-feature]')].filter(switchable).filter(n=>!n.checked).map(n=>n.dataset.feature);status.textContent='Loading local web export'+(off.length?' without '+off.join(', ')+'…':'…');
   const custom=game()==='catch';
-  document.querySelector('#control-variant').value=custom?'three-position':game()==='road'&&engine()==='pixi'?'tabbed':'standard';document.querySelector('#control-variant').disabled=true;
+  document.querySelector('#control-variant').value=custom?'three-position':TABBED_GAMES.includes(game())&&engine()==='pixi'?'tabbed':'standard';document.querySelector('#control-variant').disabled=true;
   syncInspector();
   document.querySelector('#modal-controls').hidden=false;
   const url='games/'+engine()+'/'+game()+'/index.html';

@@ -44,12 +44,24 @@
         "gold",
         "boom",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "Kontwòl miz",
       "usage": [
         "aria-label"
-      ]
+      ],
+      "usageByGame": {
+        "candy_cascade": [
+          "text",
+          "aria-label"
+        ]
+      },
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      }
     },
     "risk_4138cc": {
       "source": "RISK",
@@ -77,12 +89,24 @@
         "gold",
         "boom",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "MIN",
       "usage": [
         "text"
-      ]
+      ],
+      "usageByGame": {
+        "candy_cascade": [
+          "text",
+          "aria-label"
+        ]
+      },
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      }
     },
     "max_7b186e": {
       "source": "MAX",
@@ -95,12 +119,24 @@
         "gold",
         "boom",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "MAKS",
       "usage": [
         "text"
-      ]
+      ],
+      "usageByGame": {
+        "candy_cascade": [
+          "text",
+          "aria-label"
+        ]
+      },
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      }
     },
     "top_bets_4e2703": {
       "source": "Top bets",
@@ -791,7 +827,12 @@
       "previewWindow": "betDetails",
       "presets": [
         "tabbed-shell-v1"
-      ]
+      ],
+      "usageByGame": {
+        "candy_cascade": [
+          "unused"
+        ]
+      }
     },
     "won_b273fb": {
       "source": "Won",
@@ -804,7 +845,8 @@
         "boom",
         "catch",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "Genyen",
       "usage": [
@@ -813,7 +855,17 @@
       "previewWindow": "betDetails",
       "presets": [
         "tabbed-shell-v1"
-      ]
+      ],
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      },
+      "usageByGame": {
+        "candy_cascade": [
+          "unused"
+        ]
+      }
     },
     "lost_75a7bf": {
       "source": "Lost",
@@ -826,7 +878,8 @@
         "boom",
         "catch",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "Pèdi",
       "usage": [
@@ -835,7 +888,17 @@
       "previewWindow": "betDetails",
       "presets": [
         "tabbed-shell-v1"
-      ]
+      ],
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      },
+      "usageByGame": {
+        "candy_cascade": [
+          "unused"
+        ]
+      }
     },
     "menu_57f5f5": {
       "source": "Menu",
@@ -1027,13 +1090,19 @@
         "gold",
         "boom",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "Remete balans lan a $1,000",
       "usage": [
         "text"
       ],
-      "previewWindow": "menu"
+      "previewWindow": "menu",
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      }
     },
     "reduce_motion_25a5ae": {
       "source": "Reduce motion",
@@ -1195,7 +1264,8 @@
         "gold",
         "boom",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "Balans",
       "usage": [
@@ -1204,7 +1274,12 @@
       "previewWindow": "account",
       "presets": [
         "standard"
-      ]
+      ],
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      }
     },
     "personal_record_24e81d": {
       "source": "Personal record",
@@ -1217,13 +1292,19 @@
         "gold",
         "boom",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "Rekò pèsonèl",
       "usage": [
         "text"
       ],
-      "previewWindow": "account"
+      "previewWindow": "account",
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      }
     },
     "this_session_48c2a1": {
       "source": "This session",
@@ -1236,13 +1317,19 @@
         "gold",
         "boom",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "Sesyon sa a",
       "usage": [
         "text"
       ],
-      "previewWindow": "account"
+      "previewWindow": "account",
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      }
     },
     "completed_rounds_5d1a91": {
       "source": "Completed rounds",
@@ -1255,13 +1342,19 @@
         "gold",
         "boom",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "Tou fini",
       "usage": [
         "text"
       ],
-      "previewWindow": "account"
+      "previewWindow": "account",
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      }
     },
     "successful_cash_outs_12a6d2": {
       "source": "Successful cash outs",
@@ -2390,7 +2483,8 @@
         "gold",
         "boom",
         "market_stack",
-        "fuel"
+        "fuel",
+        "candy_cascade"
       ],
       "ht": "Ou · Nivo {value}",
       "usage": [
@@ -2399,7 +2493,17 @@
       "previewWindow": "account",
       "presets": [
         "standard"
-      ]
+      ],
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      },
+      "usageByGame": {
+        "candy_cascade": [
+          "unused"
+        ]
+      }
     },
     "value_online_b9743a": {
       "source": "{value} ONLINE",
@@ -2820,13 +2924,24 @@
       "fr": "Solde : {value}",
       "group": "Header & account",
       "games": [
-        "catch"
+        "catch",
+        "candy_cascade"
       ],
       "ht": "Balans: {value}",
       "usage": [
         "text"
       ],
-      "previewWindow": "account"
+      "previewWindow": "account",
+      "presetsByGame": {
+        "candy_cascade": [
+          "tabbed-shell-v1"
+        ]
+      },
+      "usageByGame": {
+        "candy_cascade": [
+          "unused"
+        ]
+      }
     },
     "golden_value_8d8cb2": {
       "source": "GOLDEN {value}",
@@ -3371,6 +3486,1847 @@
         "text"
       ],
       "previewWindow": "notice:funds",
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "candy_796403b5d5be": {
+      "source": "If your first board has no win, you get a Bonus Wheel that can award 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%) free games, or no bonus (79%). Each free game starts on a new board at 1x. Free games cannot win more free games.",
+      "en": "If your first board has no win, you get a Bonus Wheel that can award 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%) free games, or no bonus (79%). Each free game starts on a new board at 1x. Free games cannot win more free games.",
+      "fr": "Si le premier plateau ne rapporte aucun gain, la roue bonus peut offrir 1 (10 %), 2 (5 %), 3 (2 %), 4 (1 %) ou 5 (3 %) tours gratuits, ou aucun bonus (79 %). Chaque tour gratuit commence sur un nouveau plateau à 1×. Il ne peut pas offrir d’autres tours gratuits.",
+      "ht": "Si premye tablo a pa bay genyen, wou bonis la ka bay 1 (10%), 2 (5%), 3 (2%), 4 (1%) oswa 5 (3%) tou gratis, oswa pa bay bonis (79%). Chak tou gratis kòmanse sou yon nouvo tablo a 1×. Tou gratis pa ka bay lòt tou gratis.",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_b8526a51da54": {
+      "source": "5 or more matching candies touching up, down, left or right form a cluster. Every cluster on the board pays at the same time.",
+      "en": "5 or more matching candies touching up, down, left or right form a cluster. Every cluster on the board pays at the same time.",
+      "fr": "Au moins 5 bonbons identiques reliés par leurs côtés forment un groupe gagnant. Tous les groupes du plateau rapportent un gain en même temps.",
+      "ht": "Omwen 5 sirèt menm kalite ki touche anlè, anba, agoch oswa adwat fòme yon gwoup. Tout gwoup sou tablo a peye an menm tan.",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_dc248242d467": {
+      "source": "Winning clusters disappear, candies fall down and new ones drop in. Each new winning cascade raises the multiplier.",
+      "en": "Winning clusters disappear, candies fall down and new ones drop in. Each new winning cascade raises the multiplier.",
+      "fr": "Les groupes gagnants disparaissent, les bonbons descendent et de nouveaux arrivent. Chaque nouvelle cascade gagnante augmente le multiplicateur.",
+      "ht": "Gwoup ki genyen yo disparèt, sirèt yo desann epi lòt tonbe pou ranplase yo. Chak nouvo kaskad ki genyen ogmante miltiplikatè a.",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_d21eff652b09": {
+      "source": "Enter an amount of at least 0.01 P, with up to 2 decimal places.",
+      "en": "Enter an amount of at least 0.01 P, with up to 2 decimal places.",
+      "fr": "Saisissez au moins 0,01 P, avec 2 décimales maximum.",
+      "ht": "Antre omwen 0.01 P, ak 2 chif apre vigil la maksimòm.",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_cfebf6a65fe0": {
+      "source": "Payouts are multiplied by the current cascade multiplier.",
+      "en": "Payouts are multiplied by the current cascade multiplier.",
+      "fr": "Les gains sont multipliés par le multiplicateur de cascade actuel.",
+      "ht": "Genyen yo miltipliye pa miltiplikatè kaskad aktyèl la.",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "candyPays"
+    },
+    "candy_f3156f1e050e": {
+      "source": "Amounts at bet {bet} P · before cascade multiplier",
+      "en": "Amounts at bet {bet} P · before cascade multiplier",
+      "fr": "Gains pour une mise de {bet} P · avant le multiplicateur de cascade",
+      "ht": "Kantite pou miz {bet} P · anvan miltiplikatè kaskad la",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_0922105a7d92": {
+      "source": "Multiples of your bet · before cascade multiplier",
+      "en": "Multiples of your bet · before cascade multiplier",
+      "fr": "Multiples de la mise · avant le multiplicateur de cascade",
+      "ht": "Miltip miz la · anvan miltiplikatè kaskad la",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_4bcc9cfcf4c1": {
+      "source": "Calculation bet {bet} P · Free game, no charge",
+      "en": "Calculation bet {bet} P · Free game, no charge",
+      "fr": "Mise de calcul {bet} P · Tour gratuit, sans débit",
+      "ht": "Miz pou kalkil {bet} P · Tou gratis, pa gen debi",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_3cd6b6fe20cc": {
+      "source": "Preview only · your game bet stays unchanged.",
+      "en": "Preview only · your game bet stays unchanged.",
+      "fr": "Aperçu uniquement · votre mise reste inchangée.",
+      "ht": "Se yon apèsi sèlman · miz ou pa chanje.",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_416ce883bf7e": {
+      "source": "Not enough balance · top up to keep spinning",
+      "en": "Not enough balance · top up to keep spinning",
+      "fr": "Solde insuffisant · rechargez pour continuer",
+      "ht": "Balans lan pa sifi · ajoute lajan pou kontinye",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_4cebbee2b1d3": {
+      "source": "Return to player: [RTP after certification].",
+      "en": "Return to player: [RTP after certification].",
+      "fr": "Retour au joueur : [RTP après certification].",
+      "ht": "Retou pou jwè : [RTP apre sètifikasyon].",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_bbb20c0bfc06": {
+      "source": "Try a free Test Spin · No bet or payout",
+      "en": "Try a free Test Spin · No bet or payout",
+      "fr": "Essayez gratuitement · Sans mise ni gain réel",
+      "ht": "Eseye gratis · Pa gen miz ni peman",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_7032a9bf0e14": {
+      "source": "Free game {number} · Cascade {index}",
+      "en": "Free game {number} · Cascade {index}",
+      "fr": "Tour gratuit {number} · Cascade {index}",
+      "ht": "Tou gratis {number} · Kaskad {index}",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_f58ca78c93b6": {
+      "source": "5+ matching candies touching sides",
+      "en": "5+ matching candies touching sides",
+      "fr": "5+ bonbons identiques reliés par les côtés",
+      "ht": "5+ sirèt menm kalite kòtakòt",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "candyPays"
+    },
+    "candy_55b3ad8b38bc": {
+      "source": "Free game {number} · Initial board",
+      "en": "Free game {number} · Initial board",
+      "fr": "Tour gratuit {number} · Plateau initial",
+      "ht": "Tou gratis {number} · Premye tablo",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_3b2aa2d0792a": {
+      "source": "Finish this spin before refilling",
+      "en": "Finish this spin before refilling",
+      "fr": "Terminez ce tour avant de recharger",
+      "ht": "Fini tou sa a anvan ou ajoute lajan",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_578928461a08": {
+      "source": "Not enough balance for Auto Spin",
+      "en": "Not enough balance for Auto Spin",
+      "fr": "Solde insuffisant pour les tours auto",
+      "ht": "Balans lan pa sifi pou tou oto",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_a65c5623393f": {
+      "source": "Next winning cascade → {value}×",
+      "en": "Next winning cascade → {value}×",
+      "fr": "Prochaine cascade gagnante → {value}×",
+      "ht": "Pwochen kaskad ki genyen → {value}×",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_b3549461de0d": {
+      "source": "FREE GAME {current} OF {total}",
+      "en": "FREE GAME {current} OF {total}",
+      "fr": "TOUR GRATUIT {current} SUR {total}",
+      "ht": "TOU GRATIS {current} SOU {total}",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_7a59654e5dd2": {
+      "source": "Auto Spin stopped · free games",
+      "en": "Auto Spin stopped · free games",
+      "fr": "Tours auto arrêtés · tours gratuits",
+      "ht": "Tou oto kanpe · tou gratis",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_08ed9f94ebfc": {
+      "source": "Cascades have no extra charge",
+      "en": "Cascades have no extra charge",
+      "fr": "Les cascades ne coûtent rien de plus",
+      "ht": "Kaskad yo pa gen frè anplis",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_6afcbe8c872f": {
+      "source": "Test Spin · No bet or payout",
+      "en": "Test Spin · No bet or payout",
+      "fr": "Tour d’essai · Sans mise ni gain réel",
+      "ht": "Tou tès · Pa gen miz ni peman",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_82c88d882d7f": {
+      "source": "FREE GAME {current}/{total}",
+      "en": "FREE GAME {current}/{total}",
+      "fr": "TOUR GRATUIT {current}/{total}",
+      "ht": "TOU GRATIS {current}/{total}",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_ce45b1d7c5e8": {
+      "source": "Level up · you are #{level}",
+      "en": "Level up · you are #{level}",
+      "fr": "Niveau supérieur · vous êtes n° {level}",
+      "ht": "Nouvo nivo · ou nan #{level}",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_9dbe95362a88": {
+      "source": "Decrease calculation amount",
+      "en": "Decrease calculation amount",
+      "fr": "Réduire le montant du calcul",
+      "ht": "Diminye kantite pou kalkil la",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_7e7a641378e9": {
+      "source": "Increase calculation amount",
+      "en": "Increase calculation amount",
+      "fr": "Augmenter le montant du calcul",
+      "ht": "Ogmante kantite pou kalkil la",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_730aafd70995": {
+      "source": "Bet {bet} P · Charged once",
+      "en": "Bet {bet} P · Charged once",
+      "fr": "Mise {bet} P · Débitée une seule fois",
+      "ht": "Miz {bet} P · Retire yon sèl fwa",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_d307d22fe657": {
+      "source": "Match 5+ touching candies",
+      "en": "Match 5+ touching candies",
+      "fr": "5+ bonbons identiques côte à côte",
+      "ht": "5+ sirèt menm kalite kòtakòt",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_73a8a8241144": {
+      "source": "Maximum multiplier · 10×",
+      "en": "Maximum multiplier · 10×",
+      "fr": "Multiplicateur maximal · 10×",
+      "ht": "Miltiplikatè maksimòm · 10×",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_0cca39595e41": {
+      "source": "Free game {number} total",
+      "en": "Free game {number} total",
+      "fr": "Total du tour gratuit {number}",
+      "ht": "Total tou gratis {number}",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_bb2c42b84084": {
+      "source": "✕ Diagonal only: no win",
+      "en": "✕ Diagonal only: no win",
+      "fr": "✕ Diagonale seule : aucun gain",
+      "ht": "✕ Dyagonal sèlman : pa genyen",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_03863a095878": {
+      "source": "Maximum affordable bet",
+      "en": "Maximum affordable bet",
+      "fr": "Mise maximale disponible",
+      "ht": "Pi gwo miz ou ka fè",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_5da7fb20d692": {
+      "source": "Calculation amount (P)",
+      "en": "Calculation amount (P)",
+      "fr": "Montant du calcul (P)",
+      "ht": "Kantite pou kalkil la (P)",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_71f462ff20bd": {
+      "source": "No winning combination",
+      "en": "No winning combination",
+      "fr": "Aucune combinaison gagnante",
+      "ht": "Pa gen konbinezon ki genyen",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_66b2ff3a200d": {
+      "source": "✓ Touching sides: win",
+      "en": "✓ Touching sides: win",
+      "fr": "✓ Côtés adjacents : gain",
+      "ht": "✓ Kòtakòt : genyen",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_8518704fad32": {
+      "source": "+{count} FREE GAMES",
+      "en": "+{count} FREE GAMES",
+      "fr": "+{count} TOURS GRATUITS",
+      "ht": "+{count} TOU GRATIS",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_f38e76c0dcdf": {
+      "source": "START {count} SPINS",
+      "en": "START {count} SPINS",
+      "fr": "LANCER {count} TOURS",
+      "ht": "KÒMANSE {count} TOU",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "autoSpin"
+    },
+    "candy_fa6667187e0b": {
+      "source": "CASCADE MULTIPLIER",
+      "en": "CASCADE MULTIPLIER",
+      "fr": "MULTIPLICATEUR DE CASCADE",
+      "ht": "MILTIPLIKATÈ KASKAD",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_0307d6bebb11": {
+      "source": "+{count} FREE GAME",
+      "en": "+{count} FREE GAME",
+      "fr": "+{count} TOUR GRATUIT",
+      "ht": "+{count} TOU GRATIS",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_b77a0febdf70": {
+      "source": "Cascade multiplier",
+      "en": "Cascade multiplier",
+      "fr": "Multiplicateur de cascade",
+      "ht": "Miltiplikatè kaskad",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_ad831a2eaf8f": {
+      "source": "Skip to the result",
+      "en": "Skip to the result",
+      "fr": "Passer au résultat",
+      "ht": "Ale nan rezilta a",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_4a3cb6f06b31": {
+      "source": "Auto Spin finished",
+      "en": "Auto Spin finished",
+      "fr": "Tours auto terminés",
+      "ht": "Tou oto yo fini",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_af53b638dcc2": {
+      "source": "Stop on free games",
+      "en": "Stop on free games",
+      "fr": "Arrêter aux tours gratuits",
+      "ht": "Kanpe lè gen tou gratis",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "autoSpin"
+    },
+    "candy_5e439537d4c6": {
+      "source": "{count} free games",
+      "en": "{count} free games",
+      "fr": "{count} tours gratuits",
+      "ht": "{count} tou gratis",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_b647f92e57a1": {
+      "source": "{count} free game",
+      "en": "{count} free game",
+      "fr": "{count} tour gratuit",
+      "ht": "{count} tou gratis",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_3b4c4d1751fe": {
+      "source": "Cascade progress",
+      "en": "Cascade progress",
+      "fr": "Progression des cascades",
+      "ht": "Pwogrè kaskad",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_f1a36d75a923": {
+      "source": "No win this spin",
+      "en": "No win this spin",
+      "fr": "Aucun gain ce tour",
+      "ht": "Pa gen genyen nan tou sa a",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_dc8f3409484e": {
+      "source": "{value}× cascade",
+      "en": "{value}× cascade",
+      "fr": "Cascade {value}×",
+      "ht": "Kaskad {value}×",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_faa9781e592a": {
+      "source": "NUMBER OF SPINS",
+      "en": "NUMBER OF SPINS",
+      "fr": "NOMBRE DE TOURS",
+      "ht": "KANTITE TOU",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "autoSpin"
+    },
+    "candy_a13690527fa9": {
+      "source": "{count} candies",
+      "en": "{count} candies",
+      "fr": "{count} bonbons",
+      "ht": "{count} sirèt",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "candyPays"
+    },
+    "candy_3d904a645684": {
+      "source": "Cascade {index}",
+      "en": "Cascade {index}",
+      "fr": "Cascade {index}",
+      "ht": "Kaskad {index}",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_8f1a58230bf0": {
+      "source": "Chocolate candy",
+      "en": "Chocolate candy",
+      "fr": "Bonbon au chocolat",
+      "ht": "Sirèt chokola",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_2e54b50c61a1": {
+      "source": "Stop Auto Spin",
+      "en": "Stop Auto Spin",
+      "fr": "Arrêter les tours auto",
+      "ht": "Kanpe tou oto",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_0738b37a97c7": {
+      "source": "Payout display",
+      "en": "Payout display",
+      "fr": "Affichage des gains",
+      "ht": "Afichaj genyen",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_6765975c383f": {
+      "source": "Spin breakdown",
+      "en": "Spin breakdown",
+      "fr": "Détail du tour",
+      "ht": "Detay tou a",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_748c13f0889f": {
+      "source": "Candy Cascade",
+      "en": "Candy Cascade",
+      "fr": "Candy Cascade",
+      "ht": "Candy Cascade",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_176ad411cf37": {
+      "source": "Test complete",
+      "en": "Test complete",
+      "fr": "Essai terminé",
+      "ht": "Tès la fini",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_5b5987dda1d6": {
+      "source": "Candy payouts",
+      "en": "Candy payouts",
+      "fr": "Gains des bonbons",
+      "ht": "Gen sirèt yo",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "candyPays"
+    },
+    "candy_aaeb53ce6d0d": {
+      "source": "Initial board",
+      "en": "Initial board",
+      "fr": "Plateau initial",
+      "ht": "Premye tablo",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_f3a9a16520fc": {
+      "source": "Coconut candy",
+      "en": "Coconut candy",
+      "fr": "Bonbon à la noix de coco",
+      "ht": "Sirèt kokoye",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_3129fb244f6a": {
+      "source": "Caramel candy",
+      "en": "Caramel candy",
+      "fr": "Bonbon au caramel",
+      "ht": "Sirèt karamèl",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_f35a471227d2": {
+      "source": "Wrapped candy",
+      "en": "Wrapped candy",
+      "fr": "Bonbon emballé",
+      "ht": "Sirèt nan papye",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_cc4769f3e334": {
+      "source": "CLUSTER PAYS",
+      "en": "CLUSTER PAYS",
+      "fr": "GAINS PAR GROUPE",
+      "ht": "GEN PA GWOUP",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_01f20462f88e": {
+      "source": "Enter amount",
+      "en": "Enter amount",
+      "fr": "Saisir un montant",
+      "ht": "Antre kantite a",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "placeholder"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_dc8f7815b8aa": {
+      "source": "{value}× bet",
+      "en": "{value}× bet",
+      "fr": "{value}× la mise",
+      "ht": "{value}× miz la",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_b2deaa6ed271": {
+      "source": "Peanut candy",
+      "en": "Peanut candy",
+      "fr": "Bonbon aux arachides",
+      "ht": "Sirèt pistach",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_86940fe7c35a": {
+      "source": "BONUS WHEEL",
+      "en": "BONUS WHEEL",
+      "fr": "ROUE BONUS",
+      "ht": "WOU BONIS",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_576969601f23": {
+      "source": "Minimum bet",
+      "en": "Minimum bet",
+      "fr": "Mise minimale",
+      "ht": "Miz minimòm",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_6325cb301781": {
+      "source": "Bonus Wheel",
+      "en": "Bonus Wheel",
+      "fr": "Roue bonus",
+      "ht": "Wou bonis",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_69965e87261e": {
+      "source": "Fruit jelly",
+      "en": "Fruit jelly",
+      "fr": "Pâte de fruits",
+      "ht": "Pat fwi",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_25bf05522314": {
+      "source": "Bet amount",
+      "en": "Bet amount",
+      "fr": "Montant de la mise",
+      "ht": "Kantite miz",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_d06400f175a7": {
+      "source": "HOW TO WIN",
+      "en": "HOW TO WIN",
+      "fr": "COMMENT GAGNER",
+      "ht": "KIJAN POU GENYEN",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_41ec3e751c60": {
+      "source": "FREE GAMES",
+      "en": "FREE GAMES",
+      "fr": "TOURS GRATUITS",
+      "ht": "TOU GRATIS",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_40e4138c7193": {
+      "source": "Star candy",
+      "en": "Star candy",
+      "fr": "Bonbon étoile",
+      "ht": "Sirèt zetwal",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_37053c68cb98": {
+      "source": "STAGE WIN",
+      "en": "STAGE WIN",
+      "fr": "GAIN D’ÉTAPE",
+      "ht": "GEN ETAP",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_280556a83961": {
+      "source": "TOTAL WIN",
+      "en": "TOTAL WIN",
+      "fr": "GAIN TOTAL",
+      "ht": "GEN TOTAL",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_b14bbe785a6a": {
+      "source": "Stage win",
+      "en": "Stage win",
+      "fr": "Gain d’étape",
+      "ht": "Gen etap",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_434158cde5a7": {
+      "source": "TEST SPIN",
+      "en": "TEST SPIN",
+      "fr": "TOUR D’ESSAI",
+      "ht": "TOU TÈS",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_02ccd0a09017": {
+      "source": "FREE DEMO",
+      "en": "FREE DEMO",
+      "fr": "DÉMO GRATUITE",
+      "ht": "DEMO GRATIS",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_a83a8a4edfba": {
+      "source": "STOP AUTO",
+      "en": "STOP AUTO",
+      "fr": "ARRÊTER AUTO",
+      "ht": "KANPE OTO",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_c7a194f6882f": {
+      "source": "Lower bet",
+      "en": "Lower bet",
+      "fr": "Réduire la mise",
+      "ht": "Diminye miz",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_c2aaee8b5f74": {
+      "source": "Raise bet",
+      "en": "Raise bet",
+      "fr": "Augmenter la mise",
+      "ht": "Ogmante miz",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_1501d843ad16": {
+      "source": "Auto Spin",
+      "en": "Auto Spin",
+      "fr": "Tours automatiques",
+      "ht": "Tou otomatik",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "autoSpin"
+    },
+    "candy_e07a455e48c7": {
+      "source": "PLAYING…",
+      "en": "PLAYING…",
+      "fr": "EN COURS…",
+      "ht": "AP JWE…",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_1b0a718468da": {
+      "source": "MEGA WIN",
+      "en": "MEGA WIN",
+      "fr": "GAIN MÉGA",
+      "ht": "MEGA GENYEN",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "unused"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "unusedReason": "Candy Cascade renders the complete win caption with its multiplier; edit that caption instead."
+    },
+    "candy_0c68cbc0d9eb": {
+      "source": "EPIC WIN",
+      "en": "EPIC WIN",
+      "fr": "GAIN ÉPIQUE",
+      "ht": "GENYEN EKSTRA",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "unused"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "unusedReason": "Candy Cascade renders the complete win caption with its multiplier; edit that caption instead."
+    },
+    "candy_78e92f5612ab": {
+      "source": "CASCADES",
+      "en": "CASCADES",
+      "fr": "CASCADES",
+      "ht": "KASKAD",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_3621211f962f": {
+      "source": "No bonus",
+      "en": "No bonus",
+      "fr": "Aucun bonus",
+      "ht": "Pa gen bonis",
+      "group": "Tabs & windows",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "candy_87ab3caf4ebc": {
+      "source": "You won",
+      "en": "You won",
+      "fr": "Vous avez gagné",
+      "ht": "Ou genyen",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "unused"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "unusedReason": "Candy Cascade renders the complete win caption with its multiplier; edit that caption instead."
+    },
+    "candy_ca5f86adf218": {
+      "source": "BIG WIN",
+      "en": "BIG WIN",
+      "fr": "GROS GAIN",
+      "ht": "GWO GENYEN",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "unused"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "unusedReason": "Candy Cascade renders the complete win caption with its multiplier; edit that caption instead."
+    },
+    "candy_abd20c69e9b1": {
+      "source": "AMOUNT",
+      "en": "AMOUNT",
+      "fr": "MONTANT",
+      "ht": "KANTITE",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_e879b0be0190": {
+      "source": "Board",
+      "en": "Board",
+      "fr": "Plateau",
+      "ht": "Tablo",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_643d72091452": {
+      "source": "TURBO",
+      "en": "TURBO",
+      "fr": "TURBO",
+      "ht": "TIBO",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_209ddfa82a58": {
+      "source": "× BET",
+      "en": "× BET",
+      "fr": "× MISE",
+      "ht": "× MIZ",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_9623247c883d": {
+      "source": "SPIN",
+      "en": "SPIN",
+      "fr": "JOUER",
+      "ht": "JWE",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_4a6c11ab8104": {
+      "source": "Spin",
+      "en": "Spin",
+      "fr": "Jouer",
+      "ht": "Jwe",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_431de839c3cf": {
+      "source": "SKIP",
+      "en": "SKIP",
+      "fr": "PASSER",
+      "ht": "PASE",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_3259ad677ea8": {
+      "source": "STOP",
+      "en": "STOP",
+      "fr": "ARRÊTER",
+      "ht": "KANPE",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_50c3f10f5b1c": {
+      "source": "AUTO",
+      "en": "AUTO",
+      "fr": "AUTO",
+      "ht": "OTO",
+      "group": "Bet panel & messages",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_88087292ed82": {
+      "source": "SIZE",
+      "en": "SIZE",
+      "fr": "TAILLE",
+      "ht": "GWOSÈ",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_b241c15d7ee4": {
+      "source": "Test Spin. Free demo, no bet or payout.",
+      "en": "Test Spin. Free demo, no bet or payout.",
+      "fr": "Tour d’essai. Démo gratuite, sans mise ni gain réel.",
+      "ht": "Tou tès. Demo gratis, pa gen miz ni peman.",
+      "games": [
+        "candy_cascade"
+      ],
+      "group": "Bet panel & messages",
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_662fae5f621a": {
+      "source": "WIN",
+      "en": "WIN",
+      "fr": "GAIN",
+      "ht": "GENYEN",
+      "games": [
+        "candy_cascade"
+      ],
+      "group": "Bet panel & messages",
+      "usage": [
+        "unused"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "unusedReason": "Candy Cascade renders the complete win caption with its multiplier; edit that caption instead."
+    },
+    "candy_fae23b60ca0c": {
+      "source": "WIN · {value}×",
+      "en": "WIN · {value}×",
+      "fr": "GAIN · {value}×",
+      "ht": "GENYEN · {value}×",
+      "games": [
+        "candy_cascade"
+      ],
+      "group": "Bet panel & messages",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_eb88eb7ee9f7": {
+      "source": "BIG WIN · {value}×",
+      "en": "BIG WIN · {value}×",
+      "fr": "GROS GAIN · {value}×",
+      "ht": "GWO GENYEN · {value}×",
+      "games": [
+        "candy_cascade"
+      ],
+      "group": "Bet panel & messages",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_e2204e18fa4b": {
+      "source": "MEGA WIN · {value}×",
+      "en": "MEGA WIN · {value}×",
+      "fr": "GAIN MÉGA · {value}×",
+      "ht": "MEGA GENYEN · {value}×",
+      "games": [
+        "candy_cascade"
+      ],
+      "group": "Bet panel & messages",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_0a04916e8a11": {
+      "source": "EPIC WIN · {value}×",
+      "en": "EPIC WIN · {value}×",
+      "fr": "GAIN ÉPIQUE · {value}×",
+      "ht": "GENYEN EKSTRA · {value}×",
+      "games": [
+        "candy_cascade"
+      ],
+      "group": "Bet panel & messages",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "candy_12a6d25279bf": {
+      "source": "Successful cash outs",
+      "en": "Winning spins",
+      "fr": "Tours gagnants",
+      "ht": "Tou ki genyen",
+      "games": [
+        "candy_cascade"
+      ],
+      "group": "Header & account",
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "account",
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "candy_ad36c03baf66": {
+      "source": "Best cashed-out multiplier",
+      "en": "Best spin multiplier",
+      "fr": "Meilleur multiplicateur",
+      "ht": "Pi bon miltiplikatè",
+      "games": [
+        "candy_cascade"
+      ],
+      "group": "Header & account",
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "account",
       "presets": [
         "tabbed-shell-v1"
       ]

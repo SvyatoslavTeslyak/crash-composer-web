@@ -134,6 +134,28 @@
 .crash-ui .tabbed-controls .difficulty-row .button{min-height:var(--control-h);font-size:var(--type-24)}
 /* Every gold button is the same button: PLAY's face, edge and gold beneath it. */
 .crash-ui .tabbed-controls .difficulty-row .button[aria-pressed=true]{color:var(--on-go);border:var(--stroke-1) solid var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--action-go-edge) calc(var(--alpha-soft) * 100%),transparent),0 var(--web-control-depth) 0 var(--action-go-shadow);outline:0}
+/* With Auto the row holds two halves: the Auto switch, and the level that opens as a sheet. */
+.crash-ui .tabbed-controls .difficulty-row.with-auto{grid-template-columns:repeat(2,minmax(0,1fr))}
+/* The Auto button is a label with a small switch at its end: the knob travels only inside
+   that track, and the track lights when Auto is on. The button itself stays a button. */
+/* A game with no levels may put a Turbo switch in the level's place; with neither, Auto takes the row. */
+.crash-ui .tabbed-controls .difficulty-row.with-auto:not(:has(.turbo-switch)):has(.level-pick[hidden]){grid-template-columns:minmax(0,1fr)}
+.crash-ui .tabbed-controls .difficulty-row.with-auto .auto,
+.crash-ui .tabbed-controls .difficulty-row.with-auto .auto[aria-pressed=true]{min-width:0;justify-content:space-between;gap:var(--space-8);padding:var(--space-8) var(--space-8) var(--space-8) var(--space-16);color:var(--on-button);outline:0;border-radius:var(--radius-16);border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side)}
+.crash-ui .tabbed-controls .difficulty-row.with-auto .auto .auto-label{flex:1 1 auto;min-width:0;padding:0;text-align:left;overflow:hidden;text-overflow:ellipsis}
+/* Track and knob share a centre and their corners are concentric: the track's radius is
+   the knob's plus the gap between them. */
+.crash-ui .tabbed-controls .difficulty-row.with-auto .auto-switch{position:relative;flex:none;width:calc(2 * var(--space-24) + var(--space-8));height:calc(var(--space-24) + var(--space-8));border-radius:calc(var(--radius-8) + var(--space-4));background:var(--surface-inset);box-shadow:inset 0 0 0 var(--stroke-1) var(--switch-border);transition:background var(--motion-ms) ease}
+.crash-ui .tabbed-controls .difficulty-row.with-auto .auto .knob{position:absolute;top:var(--space-4);left:var(--space-4);width:var(--space-24);height:var(--space-24);border-radius:var(--radius-8);background:var(--knob);box-shadow:0 var(--stroke-1) var(--stroke-2) var(--button-side);transform:none;transition:left var(--motion-ms) ease}
+.crash-ui .tabbed-controls .difficulty-row.with-auto .auto[aria-pressed=true] .auto-switch{background:var(--switch-on);box-shadow:none}
+.crash-ui .tabbed-controls .difficulty-row.with-auto .auto[aria-pressed=true] .knob{left:calc(100% - var(--space-24) - var(--space-4))}
+.crash-ui .tabbed-controls .difficulty-row .level-pick{justify-content:space-between;min-width:0;padding-inline:var(--space-16)}
+.crash-ui .tabbed-controls .difficulty-row .level-pick [data-slot=tbDifficulty]{overflow:hidden;text-overflow:ellipsis}
+/* The tabbed shell's difficulty sheet: the levels run edge to edge of the window, and one
+   caption over the multipliers says what they are, instead of one under each. */
+.crash-ui .level-sheet-head{margin-bottom:calc(-1 * var(--space-8));text-align:right;font-size:var(--type-12);letter-spacing:0.08em;color:var(--text-muted)}
+.crash-ui .option-list.level-sheet{gap:0;margin-inline:calc(-1 * var(--modal-padding))}
+.crash-ui .option-list.level-sheet .radio-option{border-radius:0;padding-inline:var(--modal-padding)}
 /* The wager and the action buttons take a row each. Side by side they put three things
    across one row — stepper, cash, go — which crowds the stake and leaves the buttons
    narrow enough that their labels wrap. */

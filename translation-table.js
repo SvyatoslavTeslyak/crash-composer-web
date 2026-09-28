@@ -4,11 +4,13 @@
 const langs=['en','fr','ht'],headers=['game','preset','key','area','section','source','EN','FR','CR'];
 const context=(entry,game)=>({...entry,usage:entry.usageByGame?.[game]||entry.usage,group:entry.groupByGame?.[game]||entry.group,presets:entry.presetsByGame?.[game]||entry.presets});
 const roadWindows=new Set(['','menu','account','rules','topbets','mybets','betDetails','topBetDetails','win','notice:funds','notice:offline','notice:error','notice:wallet']);
-const windowAllowed=(game,kind)=>game!=='road'||roadWindows.has(kind||'');
+const candyWindows=new Set([...roadWindows].filter(kind=>kind!=='win').concat(['autoSpin','candyPays']));
+const windowAllowed=(game,kind)=>game==='candy_cascade'?candyWindows.has(kind||''):game!=='road'||roadWindows.has(kind||'');
+const candyExcluded=new Set(['Bet panels','Your best','Top','Live Wins','See all ›','Round history','{value} ONLINE','Cashed out · {value}×']);
 const obsoleteRoadText=new Set(['Normal','Expert','Extreme','Insane','Reduce motion']);
 const applicable=(entry,game,preset)=>{
- const scoped=context(entry,game),activePreset=game==='road'&&preset!=='menu-drawer-v1'?'tabbed-shell-v1':preset;
- return !scoped.excludedPresets?.includes(activePreset)&&windowAllowed(game,entry.previewWindow)&&(game!=='road'||!obsoleteRoadText.has(entry.source))&&!entry.developerOnly&&entry.previewWindow!=='dev'&&(activePreset==='all'||!scoped.presets||scoped.presets.includes(activePreset)||(activePreset==='menu-drawer-v1'&&scoped.presets.includes('tabbed-shell-v1')))&&!scoped.usage?.includes('unused')&&(!entry.games?.length||game==='kit'||entry.games.includes(game));
+ const scoped=context(entry,game),activePreset=['road','candy_cascade'].includes(game)&&preset!=='menu-drawer-v1'?'tabbed-shell-v1':preset;
+ return !(game==='candy_cascade'&&candyExcluded.has(entry.source))&&!scoped.excludedPresets?.includes(activePreset)&&windowAllowed(game,entry.previewWindow)&&(game!=='road'||!obsoleteRoadText.has(entry.source))&&!entry.developerOnly&&entry.previewWindow!=='dev'&&(activePreset==='all'||!scoped.presets||scoped.presets.includes(activePreset)||(activePreset==='menu-drawer-v1'&&scoped.presets.includes('tabbed-shell-v1')))&&!scoped.usage?.includes('unused')&&(!entry.games?.length||game==='kit'||entry.games.includes(game));
 };
 const effective=(data,key)=>({...data.catalog.entries[key],...data.overrides[key]});
 // An apostrophe prevents spreadsheet formula execution and is removed on import.

@@ -11,7 +11,7 @@ let saving=false,activeKey='',previousDevice=null,previousZoom=null,importReview
 const live=()=>$('#translates-tab').getAttribute('aria-pressed')==='true';
 function previewData(d){const result=structuredClone(d);for(const [key,edit] of Object.entries(d.edits||{})){if(edit.custom)result.overrides[key]=texts(edit);else{delete result.overrides[key];Object.assign(result.catalog.entries[key],texts(edit))}}return result}
 function apply(){bindPreviewDismiss();if(live())ensureHistoryPreview();const d=current();try{const api=frame.contentWindow.CrashI18n;if(api){if(d)api.setDraft(previewData(d));api.setLanguage(language.value);if(live())highlightText()}}catch{}}
-const windowNames={menu:'Settings',account:'Account',rules:'How to play',topbets:'Top bets',mybets:'My bets',betDetails:'My bet details',topBetDetails:'Top bet details',wins:'Live wins',win:'Win',difficulty:'Difficulty','limit:theme':'Atmosphere','limit:auto_steps':'Auto steps','limit:auto_cashout':'Auto cash out','notice:funds':'Notice · not enough funds','notice:offline':'Notice · no connection','notice:error':'Notice · something went wrong','notice:wallet':'Notice · top up balance'};
+const windowNames={autoSpin:'Auto Spin',candyPays:'Candy payouts',menu:'Settings',account:'Account',rules:'How to play',topbets:'Top bets',mybets:'My bets',betDetails:'My bet details',topBetDetails:'Top bet details',wins:'Live wins',win:'Win',difficulty:'Difficulty','limit:theme':'Atmosphere','limit:auto_steps':'Auto steps','limit:auto_cashout':'Auto cash out','notice:funds':'Notice · not enough funds','notice:offline':'Notice · no connection','notice:error':'Notice · something went wrong','notice:wallet':'Notice · top up balance'};
 function usageMarkup(entry){
  if(entry.usage?.includes('unused'))return '<div class="translation-usage"><span>Unused · Not rendered</span></div><p class="translation-usage-note">'+esc(entry.unusedReason)+'</p>';
  const usage=entry.usage||[],attribute=usage.filter(x=>!['text','scene'].includes(x)),onlyAttribute=attribute.length&&!usage.includes('text');
@@ -23,7 +23,7 @@ function highlightText(){
  api?.highlight?.(activeKey);const info=api?.describe?.(activeKey);
  const ui=frame.contentWindow?.CrashUI?.instance,view=ui?.betDetail?(ui.modal==='topbets'?'topBetDetails':'betDetails'):ui?.modal||'';if([...$('#translation-preview-view').options].some(o=>o.value===view))$('#translation-preview-view').value=view;
  const onlyAttribute=entry?.usage?.length&&!entry.usage.includes('text')&&!entry.usage.includes('scene');
- $('#translation-preview-note').textContent=!entry?'Select a text to locate it in the preview.':entry.usage?.includes('unused')?entry.unusedReason:info?.visibleText?(stateInspection?'UI state preview · Betting actions are disabled.':'Highlighted text · Changes appear as you type.'):onlyAttribute||info?.visibleAttribute?'Label type: '+(info?.attributes?.join(', ')||entry.usage.join(', '))+'. No visible caption. '+(info?.visibleAttribute?'The associated control has a dashed outline.':'Its control is not present in this preview state.'):entry.group==='Scene'?'Scene text updates live when it appears in the game.':entry.previewWindow?'This text belongs to '+(windowNames[entry.previewWindow]||entry.previewWindow)+'. It may need round data or a different UI preset to appear.':'Text is not visible in this state. Choose a window or interact with the preview.';
+ $('#translation-preview-note').textContent=!entry?'Select a text to locate it in the preview.':entry.usage?.includes('unused')?entry.unusedReason:info?.visibleText?(stateInspection||frame.contentWindow.document.documentElement.hasAttribute('data-translation-preview')?'UI state preview · Betting actions are disabled.':'Highlighted text · Changes appear as you type.'):onlyAttribute||info?.visibleAttribute?'Label type: '+(info?.attributes?.join(', ')||entry.usage.join(', '))+'. No visible caption. '+(info?.visibleAttribute?'The associated control has a dashed outline.':'Its control is not present in this preview state.'):entry.group==='Scene'?'Scene text updates live when it appears in the game.':entry.previewWindow?'This text belongs to '+(windowNames[entry.previewWindow]||entry.previewWindow)+'. It may need round data or a different UI preset to appear.':'Text is not visible in this state. Choose a window or interact with the preview.';
 }
 function enforcePreviewWindow(){
  if(!live())return;const ui=frame.contentWindow?.CrashUI?.instance;
@@ -42,6 +42,8 @@ function previewWindow(kind){
  if(kind&&![...$('#translation-preview-view').options].some(option=>option.value===kind))kind='';
  try{const ui=frame.contentWindow.CrashUI?.instance;if(!ui)return;
  const focused=document.activeElement;
+ const custom=target==='candy_cascade'&&frame.contentWindow.candyCascade?.previewWindow(kind);
+ if(custom){if(ui.modal)ui.close();$('#translation-preview-view').value=kind;apply();if(focused?.matches('textarea,.translation-row'))frame.contentWindow.requestAnimationFrame(()=>setTimeout(()=>focused.isConnected&&focused.focus({preventScroll:true}),0));return}
  if(kind==='betDetails'||kind==='topBetDetails'){const parent=kind==='topBetDetails'?'topbets':'mybets';if(ui.modal!==parent)ui.open(parent);if(ui.betRows?.length&&!ui.betDetail)ui.showBetDetails(0)}
  else if(kind.startsWith('limit:')&&!ui.limitOptions?.()[kind.slice(6)]){if(ui.modal!=='menu')ui.open('menu')}
  else if(kind){if(ui.betDetail)ui.backToBets();if(ui.modal!==kind){ui.rulesFrom='tab';ui.open(kind)}}else if(ui.modal)ui.close();
@@ -56,6 +58,7 @@ function stopHistoryPreview(){
  preview.ui.update=preview.update;preview.update.call(preview.ui,preview.latest);
 }
 function ensureHistoryPreview(){
+ if(target==='candy_cascade')return;
  const ui=frame.contentWindow?.CrashUI?.instance;if(!ui?.state||typeof ui.update!=='function'||ui.multiBet||historyPreview?.ui===ui)return;
  stopHistoryPreview();
  const preview={ui,update:ui.update,latest:ui.state};historyPreview=preview;
@@ -77,7 +80,7 @@ function stopStateInspection(){
  try{ui.close();update.call(ui,latest)}finally{ui.send=send}
 }
 function inspectAction(source,entry){
- stopStateInspection();const ui=frame.contentWindow?.CrashUI?.instance;if(!ui||typeof ui.update!=='function'||ui.multiBet)return;
+ stopStateInspection();if(target==='candy_cascade')return;const ui=frame.contentWindow?.CrashUI?.instance;if(!ui||typeof ui.update!=='function'||ui.multiBet)return;
  const active=['GO','CASH OUT','SELL FUEL','NEXT LANE','NEXT FRUIT'].includes(source),idle=['PLAY','SLICE'].includes(source);
  const notification=entry?.previewState==='notification',winTransfer=entry?.previewState==='win-transfer';
  const betPreview=['betDetails','topBetDetails'].includes(entry?.previewWindow);
@@ -108,7 +111,7 @@ function inspectAction(source,entry){
 function syncSelection(){for(const row of report.querySelectorAll('[data-translation]')){const selected=row.dataset.translation===activeKey;row.classList.toggle('is-selected',selected);if(selected)row.setAttribute('aria-current','true');else row.removeAttribute('aria-current')}}
 function clearSelection(){
  if(!live()||!activeKey)return;
- activeKey='';syncSelection();highlightText();
+ clearTimeout(revealTimer);activeKey='';syncSelection();highlightText();
 }
 // Iframe clicks do not bubble to Composer; listen in both documents.
 const dismissDocuments=new WeakSet();
@@ -120,17 +123,23 @@ document.addEventListener('pointerdown',event=>{
  if(event.target.closest('.translation-row'))return;
  clearSelection();
 },true);
+let revealTimer;
 function focusText(key,lang){
  const entry=available().find(([id])=>id===key)?.[1];if(!entry)return;
+ clearTimeout(revealTimer);
+ if(target==='candy_cascade')frame.contentWindow.candyCascade?.clearTranslationPreview();
  activeKey=key;syncSelection();if(lang&&language.value!==lang){language.value=lang;try{localStorage.setItem('crash-language',lang)}catch{}}
  stopStateInspection();inspectAction(entry.source,entry);
- previewWindow(entry.previewWindow||'');apply();
+ previewWindow(entry.previewWindow||'');
+ if(target==='candy_cascade')frame.contentWindow.candyCascade?.previewTranslation(entry.source,entry);
+ apply();
+ revealTimer=setTimeout(()=>{frame.contentWindow.CrashI18n?.reveal?.(key);highlightText()},350);
 }
-$('#translation-preview-view').onchange=e=>{const kind=e.target.value;activeKey='';syncSelection();stopStateInspection();inspectAction('',{previewWindow:kind});previewWindow(kind)};
+$('#translation-preview-view').onchange=e=>{clearTimeout(revealTimer);frame.contentWindow.candyCascade?.clearTranslationPreview();const kind=e.target.value;activeKey='';syncSelection();stopStateInspection();inspectAction('',{previewWindow:kind});previewWindow(kind)};
 window.addEventListener('composer-workspace',e=>{
  $('#room').classList.toggle('translations-workspace',e.detail==='translates');
  if(e.detail==='translates'){if(!previousDevice){previousDevice={...theStage.device};previousZoom=devices.zoom||'fit'}theStage.set({device:'mobile',zoom:'fit'});apply()}
- else{stopStateInspection();stopHistoryPreview();try{frame.contentWindow.CrashI18n?.highlight?.('')}catch{}if(previousDevice){theStage.set({device:previousDevice.id==='custom'?previousDevice:previousDevice.id,zoom:previousZoom});previousDevice=null}}
+ else{clearTimeout(revealTimer);frame.contentWindow.candyCascade?.clearTranslationPreview();stopStateInspection();stopHistoryPreview();try{frame.contentWindow.CrashI18n?.highlight?.('')}catch{}if(previousDevice){theStage.set({device:previousDevice.id==='custom'?previousDevice:previousDevice.id,zoom:previousZoom});previousDevice=null}}
 });
 function exportTable(){
  const blob=new Blob([TranslationTable.encode(current(),target,currentPreset())],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='translations-'+target+'-'+currentPreset()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('CSV downloaded · Saved texts for this game.');

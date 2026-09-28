@@ -4,6 +4,8 @@ const snapshot=await fetch(new URL('math-baseline.json',import.meta.url),{cache:
 
 let runnerError='';
 const offlineRoad=structuredClone(snapshot.games.road);offlineRoad.risks=offlineRoad.risks.slice(0,3);snapshot.games.road=structuredClone(offlineRoad);
+// Fruit Boom's port keeps the original's first three levels; the snapshot is read from the Godot original, which still has Expert.
+snapshot.games.boom.risks=snapshot.games.boom.risks.slice(0,3);
 async function refreshRunner(){
  snapshot.games.road=structuredClone(offlineRoad);
  try{
@@ -44,7 +46,7 @@ for(const [key,label,min,max,step] of fields){
 }
 function fill(){
  const runner=base().model==='runner';
- $('#math-risk-preset').innerHTML=runner?base().payouts.map(p=>`<option value="${p.level}">${p.level[0]+p.level.slice(1).toLowerCase()}</option>`).join(''):'<option value="0">Easy</option><option value="1">Normal</option><option value="2">Hard</option><option value="3">Expert</option><option value="custom">Custom</option>';
+ $('#math-risk-preset').innerHTML=runner?base().payouts.map(p=>`<option value="${p.level}">${p.level[0]+p.level.slice(1).toLowerCase()}</option>`).join(''):['Easy','Normal','Hard','Expert'].slice(0,base().risks?.length??4).map((name,i)=>`<option value="${i}">${name}</option>`).join('')+'<option value="custom">Custom</option>';
  if(!runner&&game.value==='road')$('#math-risk-preset').innerHTML='<option value="0">Easy</option><option value="1">Medium</option><option value="2">Hard</option><option value="custom">Custom</option>';
  if(runner){
   $('#math-mode-note').textContent=(base().apiMode==='mock'?'Local Runner mock':'Runner API')+' configuration · analysis uses published multipliers. Inputs do not change server rules.';

@@ -14,7 +14,9 @@ const TARGETS=[
  {id:'boom',title:'Fruit Boom',live:true,math:true},
  {id:'catch',title:'Catch Clash',live:true,math:true},
  {id:'market_stack',title:'Market Stack',live:true,math:false},
- {id:'fuel',title:'Fuel Run',live:true,math:true}
+ {id:'fuel',title:'Fuel Run',live:true,math:true},
+ {id:'sky_tap_tap',title:'Sky Tap-Tap',live:true,math:false},
+ {id:'candy_cascade',title:'Candy Cascade',live:true,math:false}
 ];
 // Off, the list keeps the shared kit, the two featured games and whatever is selected.
 const FEATURED=['kit','road','boom'];
@@ -24,7 +26,9 @@ const KEYS={target:'crash-composer-target',all:'crash-composer-show-all-games',e
 // PixiJS is the product; the Godot games are frozen and Composer no longer offers them.
 const ENGINES=[{id:'pixi',title:'PixiJS'}];
 const DEFAULT_ENGINE='pixi';
-const select=$('#target'),showAll=$('#show-all-games');
+const select=$('#target'),showAll=$('#show-all-games'),kindSelect=$('#game-kind');
+const category=id=>id==='candy_cascade'?'slots':'crash';
+let kind='crash';
 const engineRow=$('#engine-row'),engineSelect=$('#engine');
 const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}}};
 const known=id=>TARGETS.some(t=>t.id===id);
@@ -60,7 +64,8 @@ function engineOptions(){
  engineSelect.value=engine;
 }
 function options(){
- select.replaceChildren(...TARGETS.filter(t=>window.ComposerAuth?.canRead(t.id)).filter(t=>showAll.checked||FEATURED.includes(t.id)||t.id===value)
+ if(kindSelect){kindSelect.value=kind;for(const option of kindSelect.options)option.disabled=!TARGETS.some(t=>t.live&&category(t.id)===option.value&&window.ComposerAuth?.canRead(t.id))}
+ select.replaceChildren(...TARGETS.filter(t=>t.id==='kit'||category(t.id)===kind).filter(t=>window.ComposerAuth?.canRead(t.id)).filter(t=>showAll.checked||FEATURED.includes(t.id)||t.id===value)
   .map(t=>new Option(workspace==='math'&&!t.math?t.title+' · no model':t.title,t.id)));
  select.value=value;
 }
@@ -82,7 +87,7 @@ function allowed(reason){return guards.every(guard=>guard(reason)!==false)}
 function set(id){
  if(!known(id)||id===value||!window.ComposerAuth?.canRead(id))return false;
  if(!allowed('switch'))return false;
- value=id;store.set(KEYS.target,id);
+ value=id;if(id!=='kit')kind=category(id);store.set(KEYS.target,id);
  options();engineOptions();writeHash();
  window.dispatchEvent(new CustomEvent('composer-target',{detail:id}));
  refresh().catch(error=>say(error.message,true));
@@ -105,9 +110,15 @@ function setEngine(id){
 showAll.checked=store.get(KEYS.all)!=='0';
 const opening=hash();
 value=known(opening.game)?opening.game:known(store.get(KEYS.target))?store.get(KEYS.target):'kit';
+kind=category(value);
 const wantedEngine=opening.engine||store.get(KEYS.engine);
 if(ENGINES.some(e=>e.id===wantedEngine))engine=wantedEngine;
 options();engineOptions();
+if(kindSelect)kindSelect.onchange=()=>{
+ const wanted=kindSelect.value;
+ const next=TARGETS.find(t=>t.live&&category(t.id)===wanted&&window.ComposerAuth?.canRead(t.id));
+ if(!next||!set(next.id)){kindSelect.value=kind;return}
+};
 select.onchange=()=>{const wanted=select.value;if(!set(wanted))select.value=value};
 if(engineSelect)engineSelect.onchange=()=>{const wanted=engineSelect.value;if(!setEngine(wanted))engineSelect.value=engine};
 showAll.onchange=()=>{store.set(KEYS.all,showAll.checked?'1':'0');options()};

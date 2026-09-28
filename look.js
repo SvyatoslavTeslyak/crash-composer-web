@@ -309,7 +309,7 @@ function apply(){
  for(const [k,v] of Object.entries(derivedVars(all)))root.style.setProperty(k,v);
  applyFaces(root);
 }
-function clear(){const root=frame.contentDocument?.documentElement;if(!root)return;frame.contentDocument.getElementById('crash-look-faces')?.remove();for(const role of ['body','numbers'])root.style.removeProperty('--font-'+role);for(const k of Object.keys(derive(roles)))root.style.removeProperty(cssName(k));for(const k of Object.keys(derivedVars(colors())))root.style.removeProperty(k)}
+function clear(){const root=frame.contentDocument?.documentElement;if(!root||!roles.surface)return;frame.contentDocument.getElementById('crash-look-faces')?.remove();for(const role of ['body','numbers'])root.style.removeProperty('--font-'+role);for(const k of Object.keys(derive(roles)))root.style.removeProperty(cssName(k));for(const k of Object.keys(derivedVars(colors())))root.style.removeProperty(k)}
 // --- feedback, fonts, save --------------------------------------------------------------------------
 let toastTimer=0;
 function toast(text,error){let t=$('#look-toast');if(!t){t=document.createElement('div');t.id='look-toast';t.setAttribute('role','status');document.body.append(t)}t.textContent=text;t.classList.toggle('sound-error',!!error);t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3600)}

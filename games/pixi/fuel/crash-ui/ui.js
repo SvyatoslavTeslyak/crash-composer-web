@@ -160,7 +160,7 @@ class WinSound {
  constructor(){this.clip=new Audio(base+'assets/audio/win-paper-pop.ogg');this.clip.preload='auto';this.clip.volume=0.44;this.transferClip=new Audio(base+'assets/audio/win.ogg');this.transferClip.preload='auto';this.transferClip.volume=0.20;this.enabled=false;this.active=false;this.jitter={};this.clip.preservesPitch=false;soundLevels.then(plan=>{const pick=(id,clip,fallback)=>{const spec=plan[id];if(!spec)return;if(spec.file&&spec.file!==fallback)clip.src=base+'assets/audio/'+spec.file;if(Number.isFinite(spec.volume))clip.volume=spec.volume;this.jitter[id]=spec.jitter||0};pick('win',this.clip,'win-paper-pop.ogg');pick('win_transfer',this.transferClip,'win.ogg')})}
  // This runs on every published state, many times a second: it must not touch the clips
  // unless something has actually changed, or the phone spends the round in the audio session.
- update(state){this.enabled=state.settings?.sound===true;if(!this.enabled){if(!this.clip.paused)this.clip.pause();if(!this.transferClip.paused)this.transferClip.pause()}const active=!!state.win;if(state.game==='road'&&!this.clip.paused)this.clip.pause();if(state.game!=='road'&&this.game===state.game&&active&&(!this.active||(state.winId!==undefined&&state.winId!==this.winId)))this.play();this.game=state.game;this.active=active;this.winId=state.winId}
+ update(state){this.enabled=state.settings?.sound===true;if(!this.enabled){if(!this.clip.paused)this.clip.pause();if(!this.transferClip.paused)this.transferClip.pause()}const active=!!state.win;if(state.winToast&&!this.clip.paused)this.clip.pause();if(!state.winToast&&this.game===state.game&&active&&(!this.active||(state.winId!==undefined&&state.winId!==this.winId)))this.play();this.game=state.game;this.active=active;this.winId=state.winId}
  spread(id){const j=this.jitter[id]||0;return 1+(Math.random()*2-1)*j}
  play(){if(!this.enabled||document.hidden)return;this.clip.currentTime=0;this.clip.playbackRate=this.spread('win');this.clip.play().catch(()=>{})}
  playTransfer(){if(!this.enabled||document.hidden)return;this.transferClip.currentTime=0;this.transferClip.playbackRate=1.12*this.spread('win_transfer');this.transferClip.preservesPitch=false;this.transferClip.play().catch(()=>{})}
@@ -192,7 +192,8 @@ const soundLevels=typeof fetch==='function'?fetch(base+'assets/audio/sounds.json
  *
  * Top to bottom: a risk meter and the difficulty row, the wager stepper beside one large
  * action button, and three tabs that open Top bets, My bets and the rules as modals.
- * There are no presets and no Auto switch in this shape; that is the design, not a gap.
+ * There are no presets in this shape. A game that offers Auto (features.auto) keeps the one
+ * row: the Auto switch beside a button naming the level, which opens the levels as a sheet.
  *
  * It reads the game's state; optional `risk` (0..1) fills the risk meter.
  */
@@ -220,16 +221,25 @@ class TabbedControls {
  q(sel){return this.element.querySelector(sel)}
  text(key,value){if(this.slots[key].textContent!==String(value))this.slots[key].textContent=value}
  /** One flat state object per frame, the same one the standard controls read. */
- sync(s,features){
+ sync(s,features,config={}){
   const risk=this.q('.risk');const hasRisk=typeof s.risk==='number'&&Number.isFinite(s.risk);risk.hidden=!hasRisk&&s.game!=='road';risk.style.visibility='';
   if(hasRisk){const pct=Math.round(Math.min(1,Math.max(0,s.risk))*100);this.text('riskPct',pct+' %');const lit=Math.round(pct/10);[...this.q('.risk-meter').children].forEach((seg,i)=>{seg.className=i<lit?'on tier-'+(i<3?'low':i<6?'mid':'high'):''})}else{this.text('riskPct','0 %');for(const seg of this.q('.risk-meter').children)seg.className=''}
-  const names=s.difficulties||[];const key=JSON.stringify(names);
-  if(key!==this.lastDifficulties){this.lastDifficulties=key;this.q('.difficulty-row').innerHTML=names.map((n,i)=>'<button type="button" class="button" role="radio" data-action="pickDifficulty" data-value="'+i+'">'+esc(n)+'</button>').join('')}
-  this.q('.difficulty-row').hidden=!features.difficulty||names.length===0;
-  for(const b of this.q('.difficulty-row').children){const on=Number(b.dataset.value)===s.difficulty;b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-checked',String(on));b.disabled=!s.canBet}
+  const names=s.difficulties||[],withAuto=!!features.auto,row=this.q('.difficulty-row'),key=JSON.stringify([names,withAuto,config.autoLabel,!!config.turboSwitch]);
+  if(key!==this.lastDifficulties){this.lastDifficulties=key;row.classList.toggle('with-auto',withAuto);row.setAttribute('role',withAuto?'group':'radiogroup');
+   row.innerHTML=withAuto
+    ?button('auto','<span class="auto-label">'+esc(config.autoLabel||'Auto')+'</span><span class="auto-switch" aria-hidden="true"><span class="knob"></span></span>','auto')+(config.turboSwitch?button('turbo','<span class="auto-label">Turbo</span><span class="auto-switch" aria-hidden="true"><span class="knob"></span></span>','auto turbo-switch'):'')+button('difficulty','<span data-slot="tbDifficulty"></span><svg class="chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6 8 10 12 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>','level-pick')
+    :names.map((n,i)=>'<button type="button" class="button" role="radio" data-action="pickDifficulty" data-value="'+i+'">'+esc(n)+'</button>').join('')}
+  const pick=row.querySelector('[data-action=difficulty]');
+  row.hidden=withAuto?false:!features.difficulty||names.length===0;
+  const turbo=row.querySelector('[data-action=turbo]');if(turbo){turbo.setAttribute('aria-pressed',String(!!s.turbo));pick.hidden=true}
+  if(withAuto){const auto=row.querySelector('[data-action=auto]');auto.setAttribute('aria-pressed',String(!!s.auto));auto.disabled=!s.canBet&&!s.auto;if(!turbo)pick.hidden=!features.difficulty||names.length===0;pick.disabled=!s.canBet;pick.setAttribute('aria-label','Difficulty: '+(names[s.difficulty]||''));const label=pick.querySelector('[data-slot=tbDifficulty]');if(label.textContent!==String(names[s.difficulty]||''))label.textContent=names[s.difficulty]||''}
+  else for(const b of row.children){const on=Number(b.dataset.value)===s.difficulty;b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-checked',String(on));b.disabled=!s.canBet}
   this.text('tbBet',coinAmount(s.bet));fitStake(this.slots.tbBet,this.slots.tbBet.textContent);for(const a of ['min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
+  // A game may draw its own action on the button (config.goIcon, an SVG with class go-arrow); GO's arrow otherwise.
+  if(config.goIcon&&this.goIcon!==config.goIcon){this.goIcon=config.goIcon;this.q('[data-action=go] .go-dial').innerHTML=config.goIcon}
   const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);goTimerRing(go,countdownOf(s),urgentOf(s));
-  const nextLane=s.game==='road'&&s.showCash;coinSlot(this.slots.tbGoAmount,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',s.goTitle||(nextLane?'GO':'BET'));this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
+  // Mid-round the button is a step, not a stake: Goat Road's GO, and any game that sends no subtitle.
+  const nextLane=s.showCash&&(s.game==='road'||s.goSubtitle==='');coinSlot(this.slots.tbGoAmount,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',s.goTitle||(nextLane?'GO':'BET'));this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
   const cash=this.q('[data-action=cash]');cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win;moneySlot(this.slots.tbCash,s.cash);// Only the figure decides whether an amount is long: a leading $ is not a digit, and a
   // plain $1056.82 was being shrunk as if it were a million.
   for(const key of ['tbCash','tbGoAmount'])this.slots[key].classList.toggle('long-amount',(this.slots[key].textContent.match(/\d/g)||[]).length>7);
@@ -278,7 +288,8 @@ class GameUI {
   const embed=new URLSearchParams(location.search);
   if(['standard','tabbed-shell-v1','menu-drawer-v1'].includes(embed.get('preset')))this.config.presentationPreset=embed.get('preset');
   this.embedFlags=Object.fromEntries(['leaderboard','history','personal_record','online_count','multiplier_ladder'].filter(key=>['0','1'].includes(embed.get(key))).map(key=>[key,embed.get(key)==='1']));
-  this.embedFeatures=Object.fromEntries(['auto','difficulty','presets'].filter(key=>['0','1'].includes(embed.get(key))).map(key=>[key,embed.get(key)==='1']));
+  // A game can make a feature compulsory (config.requiredFeatures): the embed's ?key=0 cannot switch it off.
+  this.embedFeatures=Object.fromEntries(['auto','difficulty','presets'].filter(key=>['0','1'].includes(embed.get(key))&&!(this.config.requiredFeatures||[]).includes(key)).map(key=>[key,embed.get(key)==='1']));
   this.standardControls=this.q('.controls');this.betSettings=this.q('.settings-row');this.setControlsVariant(config.controlsVariant);
   this.resize=new ResizeObserver(()=>this.layout());this.resize.observe(host);this.resize.observe(host.querySelector('.account'));this.resize.observe(column);this.resize.observe(host.querySelector('.controls'));if(this.multiBet)this.resize.observe(this.multiBet.element);
  }
@@ -310,7 +321,8 @@ class GameUI {
   if(multi)this.multiBet.element.prepend(this.betSettings);
   else this.standardControls.prepend(this.betSettings);
   if(!multi&&this.multiBet){this.resize?.unobserve(this.multiBet.element);this.multiBet.element.remove();this.multiBet=null}
-  this.standardControls.hidden=multi||variant==='tabbed';
+  // 'none': the kit keeps its header and tabs, and the game draws its own bet panel (a slot's, say).
+  this.standardControls.hidden=multi||variant==='tabbed'||variant==='none';
  }
  q(s){return this.host.querySelector(s)}
  features(){return {auto:true,difficulty:true,presets:true,...(this.state?.features||{})}}
@@ -346,12 +358,14 @@ class GameUI {
   this.send(action,{});
  }
  update(s){
-  s={...s,flags:{...s.flags,...this.embedFlags},features:{...s.features,...this.embedFeatures}};
+  // A win shows as a toast over the scene rather than as the win window: Goat Road's way, and
+  // any game's that asks for it with config.winPresentation='toast'.
+  s={...s,flags:{...s.flags,...this.embedFlags},features:{...s.features,...this.embedFeatures},winToast:s.game==='road'||this.config.winPresentation==='toast'};
   window.CrashI18n?.setGame(s.game);
   this.winSound.update(s);
   this.bettingSound.setEnabled(s.settings?.sound===true);
   this.bettingSound.updateCashReady(s);
-  const toastWin=s.game==='road'&&s.win&&(!this.state.win||this.state.winId!==s.winId);
+  const toastWin=s.winToast&&s.win&&(!this.state.win||this.state.winId!==s.winId);
   if(toastWin)this.showWinToast(s);
   if(this.state.game&&this.state.game!==s.game)this.finishWinToast();
   this.state=s;currency=typeof s.currency==='string'?s.currency:'';this.host.hidden=false;this.host.classList.toggle('reduced',!!s.settings?.reduced_motion);
@@ -369,7 +383,7 @@ class GameUI {
   const flags=s.flags||{};this.q('.personal').hidden=false;this.q('.record-top').hidden=false;this.q('.records').hidden=!!this.tabbed||flags.personal_record===false;
   this.q('.winners').hidden=!!this.tabbed||flags.leaderboard===false;this.q('.history').hidden=flags.history===false;this.q('.online').hidden=flags.online_count===false;this.q('.dev').hidden=true;
   this.ladder(s.ladder,flags.multiplier_ladder!==false);
-  if(this.tabbed)this.tabbed.sync(s,this.features());
+  if(this.tabbed)this.tabbed.sync(s,this.features(),this.config);
   // Operator features remove whole groups; the grid releases their tracks.
   const features=this.features(),controls=this.multiBet?.element||this.standardControls,settingsVisible=features.auto||features.difficulty;
   // On a phone the preset row stays away unless the embed asks for it (?presets=1): the bet stepper is enough there.
@@ -380,7 +394,7 @@ class GameUI {
   const winsKey=JSON.stringify(s.wins);if(winsKey!==this.lastWins){this.lastWins=winsKey;this.q('.wins-list').innerHTML=this.winRows((s.wins||[]).slice(0,5));if(this.modal==='wins')this.q('.modal-body').innerHTML=this.winRows(s.wins||[])||'<p class=muted>No wins yet.</p>'}
   const histKey=JSON.stringify([s.game,s.history,s.bets?.map(v=>v.time)]);if(histKey!==this.lastHistory){this.lastHistory=histKey;this.q('.history').innerHTML=(s.history||[]).slice(0,15).map((v,i)=>{const value=Number(v.multiplier).toFixed(2)+'×',colour=multiplierColour(v.multiplier,s.game);if(typeof v.cashed_out!=='boolean')return '<span style="color:'+colour+'" class="pill tier-'+tintFor(v.multiplier)+'">'+value+'</span>';const label=v.cashed_out?'Cashed out':'Lost',linked=!!s.bets?.[i],tag=linked?'button':'span';return '<'+tag+(linked?' type="button" data-action="historyDetails" data-value="'+i+'"':'')+' style="color:'+colour+'" class="pill history-result tier-'+tintFor(v.multiplier)+' '+(v.cashed_out?'is-cashout':'is-loss')+'" title="'+label+'" aria-label="'+label+', '+value+'"><span class="history-result-icon" aria-hidden="true">'+(v.cashed_out?'✓':'✕')+'</span><span>'+value+'</span></'+tag+'>'}).join('')}
   this.q('.multiplier').style.setProperty('--multiplier-color',multiplierColour(s.multiplier,s.game));
-  this.q('.multiplier').hidden=s.game==='road';this.q('.multiplier').textContent=Number(s.multiplier||1).toFixed(2)+'×';
+  this.q('.multiplier').hidden=s.game==='road'||this.config.multiplierPill===false;this.q('.multiplier').textContent=Number(s.multiplier||1).toFixed(2)+'×';
   this.q('.toast').hidden=!s.toast;this.q('.toast').textContent=s.toast||'';
   if(!s.win||this.dismissedWinId!==s.winId||this.dismissedWinGame!==s.game)this.dismissedWin=false;this.dismissedWinId=s.winId;this.dismissedWinGame=s.game;
   // The game raises a notice; the kit decides how it looks and what it says.
@@ -391,14 +405,14 @@ class GameUI {
   const notice=typeof s.notice==='string'?s.notice:s.notice?.kind;
   if(notice&&notice!==this.shownNotice){this.shownNotice=notice;this.noticeKind=notice;this.open('notice')}
   else if(!notice){this.shownNotice=null;if(this.modal==='notice'&&this.noticeFromState)this.close()}
-  if(s.game!=='road'&&s.win&&!this.dismissedWin&&this.modal!=='win')this.open('win');else if(!s.win&&this.modal==='win')this.close();
+  if(!s.winToast&&s.win&&!this.dismissedWin&&this.modal!=='win')this.open('win');else if(!s.win&&this.modal==='win')this.close();
   if(this.modal==='win'){const total=this.q('.win-total');if(total)total.textContent=money(s.winAmount);const subtitle=this.q('.win-subtitle');if(subtitle)subtitle.textContent=s.winSubtitle||'Well played!'}
   if(this.modal==='difficulty'&&!s.canBet)this.close();
   const transfer=s.winTransferId||0;
-  if(this.lastTransferId!==undefined&&transfer!==this.lastTransferId&&s.win&&s.game!=='road'){this.winSound.playTransfer();requestAnimationFrame(()=>this.flyWinCoins())}
+  if(this.lastTransferId!==undefined&&transfer!==this.lastTransferId&&s.win&&!s.winToast){this.winSound.playTransfer();requestAnimationFrame(()=>this.flyWinCoins())}
   this.lastTransferId=transfer;
   if(s.settings?.reduced_motion){this.clearWinCoins();if(this.winToast)this.releaseWinBalance()}
-  this.standardControls.hidden=!!this.multiBet||this.controlsVariant==='tabbed';
+  this.standardControls.hidden=!!this.multiBet||this.controlsVariant==='tabbed'||this.controlsVariant==='none';
   this.layout();
  }
  showWinToast(s){
@@ -412,12 +426,30 @@ class GameUI {
   toast.style.setProperty('--win-flip-at',WIN_FLIP_AT+'ms');toast.style.setProperty('--win-flip-ms',WIN_FLIP_MS+'ms');
   // Splashes: a dozen drops thrown out from the centre as the card lands, each on its own bearing.
   const splash=Array.from({length:16},(_,i)=>{const a=(i/16)*Math.PI*2+(i%2?.2:0),d=(i%3?120:170);return '<i'+(i%4===3?' class="win-splash-star"':'')+' style="--dx:'+Math.round(Math.cos(a)*d)+'px;--dy:'+Math.round(Math.sin(a)*d*.7)+'px;--win-splash-delay:'+(i%4)*35+'ms">'+(i%4===3?'✦':'')+'</i>'}).join('');
-  toast.innerHTML='<span class="win-splash" aria-hidden="true">'+splash+'</span><div class="win-toast-card"><span class="win-flip" aria-hidden="true"><img class="win-mark" src="'+base+'assets/icons/'+pick('cashed-out.webp')+version+'" alt=""><img class="win-coin" src="'+base+'assets/icons/'+pick('coin.png')+'" alt=""></span><div><strong>Cashed out'+(Number.isFinite(multiplier)?' · '+Number(multiplier).toFixed(2)+'×':'')+'</strong><span>+'+money(amount)+'</span></div></div>';
+  toast.innerHTML='<span class="win-splash" aria-hidden="true">'+splash+'</span><div class="win-toast-card"><span class="win-flip" aria-hidden="true"><img class="win-mark" src="'+base+'assets/icons/'+pick('cashed-out.webp')+version+'" alt=""><img class="win-coin" src="'+base+'assets/icons/'+pick('coin.png')+'" alt=""></span><div><strong>'+esc(s.winToastLabel||'Cashed out')+(Number.isFinite(multiplier)?' · '+Number(multiplier).toFixed(2)+'×':'')+'</strong><span>+'+money(amount)+'</span></div></div>';
   this.host.append(toast);this.winToast=toast;
   const id=s.winId;
   queueMicrotask(()=>{if(this.state.win&&this.state.winId===id)this.send('dismissWin',{})});
   this.toastFlightTimer=setTimeout(()=>{if(this.winToast!==toast)return;this.winSound.playTransfer();this.flyWinCoins(true)},WIN_FLIP_AT+WIN_FLIP_MS);
   this.toastEndTimer=setTimeout(()=>{if(this.winToast===toast)this.hideWinToast()},WIN_TOAST_MS);
+ }
+ // Update a running result in the original toast; transfer only after settlement.
+ updateWinToast(s,progress=false){
+  if(!this.winToast)this.showWinToast(s);
+  const toast=this.winToast;
+  clearTimeout(this.toastFlightTimer);clearTimeout(this.toastEndTimer);clearTimeout(this.toastHideTimer);
+  toast.classList.remove('is-leaving');toast.classList.toggle('is-progress',progress);
+  const content=toast.querySelector('.win-toast-card>div');
+  const multiplier=s.history?.[0]?.multiplier;
+  content.querySelector('strong').textContent=(s.winToastLabel||'WIN')+(Number.isFinite(multiplier)?' · '+Number(multiplier).toFixed(2)+'×':'');
+  content.querySelector('span').textContent='+'+money(s.winToastAmount??s.winAmount);
+  let detail=content.querySelector('.win-detail');
+  if(!detail){detail=document.createElement('small');detail.className='win-detail';content.append(detail)}
+  detail.textContent=s.winToastDetail||'';detail.hidden=!s.winToastDetail;
+  if(!progress){
+   this.toastFlightTimer=setTimeout(()=>{if(this.winToast!==toast)return;this.winSound.playTransfer();this.flyWinCoins(true)},WIN_FLIP_AT+WIN_FLIP_MS);
+   this.toastEndTimer=setTimeout(()=>{if(this.winToast===toast)this.hideWinToast()},WIN_TOAST_MS);
+  }
  }
  hideWinToast(){
   const toast=this.winToast;if(!toast)return;
@@ -484,7 +516,7 @@ class GameUI {
   this.coinFrame=requestAnimationFrame(tick);
  }
  radioOption(action,value,selected,title,description='',reward='',rewardLabel=''){
-  return '<button type="button" class="radio-option" role="radio" data-action="'+action+'" data-value="'+esc(value)+'" aria-checked="'+selected+'" tabindex="'+(selected?0:-1)+'"><span class="radio-marker" aria-hidden="true"></span><span class="option-details"><span class="option-title">'+esc(title)+'</span>'+(description?'<span class="option-description">'+esc(description)+'</span>':'')+'</span>'+(reward?'<span class="option-reward"><span class="money">'+esc(reward)+'</span><span class="option-caption">'+esc(rewardLabel)+'</span></span>':'')+'</button>';
+  return '<button type="button" class="radio-option" role="radio" data-action="'+action+'" data-value="'+esc(value)+'" aria-checked="'+selected+'" tabindex="'+(selected?0:-1)+'"><span class="radio-marker" aria-hidden="true"></span><span class="option-details"><span class="option-title">'+esc(title)+'</span>'+(description?'<span class="option-description">'+esc(description)+'</span>':'')+'</span>'+(reward?'<span class="option-reward"><span class="money">'+esc(reward)+'</span>'+(rewardLabel?'<span class="option-caption">'+esc(rewardLabel)+'</span>':'')+'</span>':'')+'</button>';
  }
  limitOptions(){
   const s=this.state,result={auto_steps:{title:'Cash out after',values:[0,3,5,10,15,20],suffix:s.game==='road'?' steps':s.game==='boom'?' slices':' sec'},auto_cashout:{title:'Cash out at',values:[0,1.25,1.5,2,3,5,10,20],suffix:'×'}};
@@ -552,7 +584,7 @@ class GameUI {
   body.innerHTML='<div class="bet-detail-hero">'+hero+'</div><h3 class="bet-detail-title">'+(mine?(won?'Prize':'Wager'):esc(name))+'</h3>'+(hasDate?'<p class="bet-detail-date"><time datetime="'+date.toISOString()+'">'+esc(date.toLocaleString(window.CrashI18n?.locale==='fr'?'fr-FR':'en-GB',{weekday:'long',day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'}))+'</time></p>':'')
    +'<div class="bet-detail-list">'+row('WAGER',Number.isFinite(entry.wager)?esc(coinAmount(entry.wager)):'—','',Number.isFinite(entry.wager))+row('MULTIPLIER',multiplier!==null?esc(multiplier.toFixed(2))+'×':'—')+row('PRIZE',value(entry.payout),'is-prize')+'</div>'
    +(result&&!mine?tile(esc(result.label),esc(result.value),'bet-detail-result'+(won?' is-won':' is-lost'),!won):'')
-   +(rest.length?'<div class="bet-detail-extras">'+rest.map(d=>tile(esc(d.label),esc(d.value))).join('')+'</div>':'');
+   +(this.config.renderBetExtras?.(entry) ?? (rest.length?'<div class="bet-detail-extras">'+rest.map(d=>tile(esc(d.label),esc(d.value))).join('')+'</div>':''));
   body.scrollTop=0;back.focus();
  }
  backToBets(){
@@ -571,12 +603,15 @@ class GameUI {
   // From the tabbed variant's side buttons these open as a sheet from the right on a wide
   // screen (the CSS decides the breakpoint); the same modal from the menu stays a popup.
   layer.classList.toggle('is-sheet',!drawer&&!!this.tabbed&&(kind==='topbets'||kind==='mybets'||(kind==='rules'&&this.rulesFrom==='tab')));this.q('.modal').classList.toggle('win-modal',kind==='win');
-  this.q('.modal h2').textContent={notice:NOTICES[this.noticeKind]?.title||NOTICES.error.title,menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:'Choose difficulty',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top bets',mybets:'My bets'}[kind];
+  this.q('.modal h2').textContent={notice:NOTICES[this.noticeKind]?.title||NOTICES.error.title,menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:this.tabbed?'Difficulty':'Choose difficulty',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top bets',mybets:'My bets'}[kind];
   this.q('[data-action=close]').hidden=kind==='win'&&!this.config.demo;
   const body=this.q('.modal-body');body.classList.toggle('rules-content',kind==='rules');
   if(kind==='difficulty'){
    const content=s.difficultyContent||{};
-   body.innerHTML='<p class="modal-description">'+esc(content.description||'Higher risk. Bigger rewards.')+'</p><p class="modal-note">'+esc(content.limits||'')+'</p><div class="option-list" role="radiogroup" aria-label="Difficulty">'+(content.options||[]).map((v,i)=>this.radioOption('chooseDifficulty',i,i===s.difficulty,v.title,v.description,v.reward,v.rewardLabel)).join('')+'</div>';
+   // The tabbed shell's sheet is just the levels and what each pays; the rules tab explains the rest.
+   body.innerHTML=this.tabbed
+    ?(content.options?.[0]?.rewardLabel?'<div class="level-sheet-head" aria-hidden="true">'+esc(content.options[0].rewardLabel)+'</div>':'')+'<div class="option-list level-sheet" role="radiogroup" aria-label="Difficulty">'+(content.options||[]).map((v,i)=>this.radioOption('chooseDifficulty',i,i===s.difficulty,v.title,'',v.reward,'')).join('')+'</div>'
+    :'<p class="modal-description">'+esc(content.description||'Higher risk. Bigger rewards.')+'</p><p class="modal-note">'+esc(content.limits||'')+'</p><div class="option-list" role="radiogroup" aria-label="Difficulty">'+(content.options||[]).map((v,i)=>this.radioOption('chooseDifficulty',i,i===s.difficulty,v.title,v.description,v.reward,v.rewardLabel)).join('')+'</div>';
   }
   if(kind==='menu'&&this.tabbed){body.innerHTML=(this.config.menuSettings||['sound','music','haptics']).map(k=>'<label class="setting">'+({sound:'Sound',music:'Music',haptics:'Vibration'}[k])+'<input class="switch" type="checkbox" role="switch" data-setting="'+k+'" '+(s.settings?.[k]?'checked':'')+'></label>').join('')+(this.config.refill!==false&&this.state?.refill!==false?button('refill','Refill to $1,000','flat-button'):'')}
   if(kind==='menu'&&!this.tabbed){

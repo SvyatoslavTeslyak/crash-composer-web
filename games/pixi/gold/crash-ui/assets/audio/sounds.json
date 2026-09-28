@@ -40,7 +40,7 @@
     },
     {
       "id": "win",
-      "label": "Win popup \u00b7 paper pop",
+      "label": "Win popup · paper pop",
       "trigger": "The win popup opens with confetti.",
       "volume_db": -7.13,
       "pitch_jitter": 0,
@@ -305,7 +305,7 @@
       "takes": [
         {
           "file": "web/assets/audio/difficulty_0.mp3",
-          "enabled": true,
+          "enabled": false,
           "source": "elevenlabs"
         },
         {
@@ -322,7 +322,7 @@
       "prompt": "Soft woody tap opening a small panel, muted interface click with a short tail, close-mic, dry",
       "generator": "ElevenLabs eleven_text_to_sound_v2",
       "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
-      "volume_db": -21.54
+      "volume_db": null
     },
     {
       "id": "cash_ready",

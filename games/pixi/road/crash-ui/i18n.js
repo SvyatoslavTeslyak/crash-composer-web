@@ -69,6 +69,15 @@ function locate(key){
  }
  return found;
 }
+function reveal(key){
+ translate();const source=catalog.entries[key]?.source;if(!source)return false;
+ const pattern=new RegExp('^'+source.split(/(\{\w+\})/).map(part=>/^\{/.test(part)?'.+?':escape(part)).join('')+'$');
+ const matches=value=>value!=null&&pattern.test(value.trim());
+ const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let node;
+ while((node=walker.nextNode()))if(matches(originals.get(node)?.text?.source)&&node.parentElement?.getClientRects().length){node.parentElement.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});return true}
+ for(const el of document.querySelectorAll('[aria-label],[title],[placeholder],[alt]'))if(el.getClientRects().length&&['aria-label','title','placeholder','alt'].some(attr=>matches(originals.get(el)?.[attr]?.source??el.getAttribute(attr)))){el.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});return true}
+ return false;
+}
 function describe(key){const found=locate(key);return {visibleText:found.some(x=>x.kind==='text'&&x.rects.length),attributes:[...new Set(found.filter(x=>x.kind!=='text').map(x=>x.kind))],visibleAttribute:found.some(x=>x.kind!=='text'&&x.rects.length)}}
 function paintHighlight(){
  highlightLayer?.remove();highlightLayer=null;if(!highlightKey)return;
@@ -104,7 +113,7 @@ function changed(){revision++;document.documentElement.lang=locale;translate();f
 function setLanguage(value){locale=['en','fr','ht'].includes(value)?value:'en';try{localStorage.setItem('crash-language',locale)}catch{}changed()}
 function setDraft(data){draftActive=true;catalog=data.catalog||catalog;overrides=data.overrides||{};rebuild();changed()}
 async function setGame(id){if(!id||id===game)return;game=id;rebuild();changed();if(/(?:^|\/)(?:demo|game)\.html$/.test(location.pathname))return;const current=id;try{const r=await fetch(new URL('../locales/overrides.json',base));if(r.ok&&current===game&&!draftActive){overrides=(await r.json()).entries||{};rebuild();changed()}}catch{}}
-const api={t,markdown,highlight,describe,setLanguage,setDraft,setGame,translate,get locale(){return locale},get revision(){return revision},get catalog(){return catalog},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn)},number(value,options={}){return new Intl.NumberFormat(locale==='fr'?'fr-FR':'en-US',options).format(value)}};
+const api={t,markdown,highlight,describe,reveal,setLanguage,setDraft,setGame,translate,get locale(){return locale},get revision(){return revision},get catalog(){return catalog},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn)},number(value,options={}){return new Intl.NumberFormat(locale==='fr'?'fr-FR':'en-US',options).format(value)}};
 window.CrashI18n=api;
 // Any embedding site can select a supported language, but only our immediate
 // parent may do so. Editable dictionaries remain restricted to same-origin Composer.
