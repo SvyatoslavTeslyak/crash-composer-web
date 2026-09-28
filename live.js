@@ -7,7 +7,7 @@
  // Each engine has its own build of the same game, mounted side by side by preview.py.
  const engine=()=>window.ComposerTarget.engine;
  // The games that use Goat Road's tabbed shell: its panel, its windows, rules as a tab.
- const TABBED_GAMES=['road','boom','plinko'];
+ const TABBED_GAMES=['road','boom','plinko','candy_cascade'];
  // Games whose bet panel the game itself configures: nothing in it to switch from here.
  const OWN_PANEL=['candy_cascade','plinko'];
  let timer,generation=0;
@@ -43,7 +43,6 @@
   // Goat Road and Fruit Boom share the tabbed shell and its windows.
   const candy=game()==='candy_cascade';
   const road=TABBED_GAMES.includes(game())||candy;
-  document.querySelector('.preview-navigation').hidden=candy;
   const modalSelect=document.querySelector('#modal'),selected=modalSelect.value;
   const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details'],...(candy?[['autoSpin','Auto Spin'],['candyPays','Candy payouts']]:[]),...(game()==='plinko'?[['plinkoRows','Rows'],['stake','Bet amount']]:[]),['notice:funds','Notice · not enough funds'],['notice:offline','Notice · no connection'],['notice:error','Notice · something went wrong'],['notice:wallet','Notice · top up balance'],...(['road','candy_cascade','plinko'].includes(game())?[]:[['difficulty','Difficulty sheet']])]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
   if(modalSelect.dataset.game!==game()){
@@ -74,7 +73,6 @@
  const savedPreset=()=>{try{const saved=localStorage.getItem(presetKey());if(['tabbed-shell-v1','menu-drawer-v1'].includes(saved))return saved}catch{}return TABBED_GAMES.includes(game())?'tabbed-shell-v1':'standard'};
  function applyPresentation(){
   syncInspector();
-  if(game()==='candy_cascade')return true;
   if(!live()){demo({presentationPreset:presetSelect.value});return true}
   const ui=instance();if(!ui?.setPresentationPreset)return false;
   if(!nativePresets.has(ui))nativePresets.set(ui,ui.config.presentationPreset||'standard');
