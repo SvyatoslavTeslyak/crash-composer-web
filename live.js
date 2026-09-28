@@ -7,7 +7,9 @@
  // Each engine has its own build of the same game, mounted side by side by preview.py.
  const engine=()=>window.ComposerTarget.engine;
  // The games that use Goat Road's tabbed shell: its panel, its windows, rules as a tab.
- const TABBED_GAMES=['road','boom'];
+ const TABBED_GAMES=['road','boom','plinko'];
+ // Games whose bet panel the game itself configures: nothing in it to switch from here.
+ const OWN_PANEL=['candy_cascade','plinko'];
  let timer,generation=0;
  const applied={};
  const presetSelect=document.querySelector('#presentation-preset');
@@ -43,7 +45,7 @@
   const road=TABBED_GAMES.includes(game())||candy;
   document.querySelector('.preview-navigation').hidden=candy;
   const modalSelect=document.querySelector('#modal'),selected=modalSelect.value;
-  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details'],...(candy?[['autoSpin','Auto Spin'],['candyPays','Candy payouts']]:[]),['notice:funds','Notice · not enough funds'],['notice:offline','Notice · no connection'],['notice:error','Notice · something went wrong'],['notice:wallet','Notice · top up balance'],...(['road','candy_cascade'].includes(game())?[]:[['difficulty','Difficulty sheet']])]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
+  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details'],...(candy?[['autoSpin','Auto Spin'],['candyPays','Candy payouts']]:[]),...(game()==='plinko'?[['plinkoRows','Rows'],['stake','Bet amount']]:[]),['notice:funds','Notice · not enough funds'],['notice:offline','Notice · no connection'],['notice:error','Notice · something went wrong'],['notice:wallet','Notice · top up balance'],...(['road','candy_cascade','plinko'].includes(game())?[]:[['difficulty','Difficulty sheet']])]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
   if(modalSelect.dataset.game!==game()){
    modalSelect.replaceChildren(...modalOptions.map(([value,label])=>new Option(label,value)));modalSelect.dataset.game=game();modalSelect.value=modalOptions.some(([value])=>value===selected)?selected:'';
   }
@@ -56,11 +58,12 @@
   // The tabbed shell has no Live wins, record or history panels to hide, and no preset
   // amounts; what it can show or hide is Auto and the difficulty levels.
   const tabbedFeatures=shell&&noAmountPresets;
-  document.querySelectorAll('[data-visibility-heading]').forEach(n=>n.hidden=candy||(shell&&n.dataset.visibilityHeading!=='features'));
+  const own=OWN_PANEL.includes(game());
+  document.querySelectorAll('[data-visibility-heading]').forEach(n=>n.hidden=own||(shell&&n.dataset.visibilityHeading!=='features'));
   document.querySelectorAll('.visibility-option').forEach(label=>{
    const input=label.querySelector('input');
    // Goat Road's levels are compulsory, so there is nothing to switch.
-   label.hidden=candy||(game()==='road'&&input.dataset.feature==='difficulty')||(input===amountPresets&&noAmountPresets)||(shell&&!!input.dataset.flag)||(shell&&!tabbedFeatures&&input!==amountPresets)||(input.dataset.flag==='multiplier_ladder'&&game()!=='market_stack')||(live()&&game()==='catch'&&!!input.dataset.feature)||(live()&&game()==='market_stack'&&['auto','difficulty'].includes(input.dataset.feature));
+   label.hidden=own||(game()==='road'&&input.dataset.feature==='difficulty')||(input===amountPresets&&noAmountPresets)||(shell&&!!input.dataset.flag)||(shell&&!tabbedFeatures&&input!==amountPresets)||(input.dataset.flag==='multiplier_ladder'&&game()!=='market_stack')||(live()&&game()==='catch'&&!!input.dataset.feature)||(live()&&game()==='market_stack'&&['auto','difficulty'].includes(input.dataset.feature));
   });
   if(amountOverride===null)amountPresets.checked=frame.clientWidth>=600;
   syncPresetTags();
@@ -87,15 +90,17 @@
  // Live games read features at startup, exactly like an operator iframe URL.
  // Leave preset amounts to the shared responsive default until explicitly toggled:
  // hidden on phones, visible on larger screens. Only an override adds presets=0/1.
- const switchable=n=>game()!=='candy_cascade'&&!(game()==='road'&&n.dataset.feature==='difficulty');
+ const switchable=n=>!OWN_PANEL.includes(game())&&!(game()==='road'&&n.dataset.feature==='difficulty');
  const featureQuery=()=>[...document.querySelectorAll('[data-feature]')].filter(switchable).filter(n=>n!==amountPresets||amountOverride!==null).map(n=>'&'+n.dataset.feature+'='+(n.checked?'1':'0')).join('');
- function flags(){if(game()==='candy_cascade')return;if(!live()){sendFlags();return}const ui=instance();if(ui)document.querySelectorAll('[data-flag]').forEach(n=>ui.send('flag',{key:n.dataset.flag,value:n.checked}))}
+ function flags(){if(OWN_PANEL.includes(game()))return;if(!live()){sendFlags();return}const ui=instance();if(ui)document.querySelectorAll('[data-flag]').forEach(n=>ui.send('flag',{key:n.dataset.flag,value:n.checked}))}
  function modal(){const kind=document.querySelector('#modal').value;if(!TranslationTable.windowAllowed(game(),kind))return;if(!live()){demo({modal:kind});return}const ui=instance();if(!ui)return;
   if(game()==='candy_cascade'&&frame.contentWindow.candyCascade?.previewWindow(kind))return;
+  if(game()==='plinko'&&frame.contentWindow.plinko?.previewWindow?.(kind))return;
   if(kind==='betDetails'||kind==='topBetDetails'){
    ui.open(kind==='topBetDetails'?'topbets':'mybets');
    // A presentation-only sample makes an empty account's detail layout inspectable.
    // Do not insert sample bets into the game state, storage or API.
+   if(!ui.betRows?.length&&game()==='plinko')ui.betRows=[{name:'Preview player',time:Date.now(),wager:10,payout:20.9,multiplier:2.09,details:[{label:'Risk',value:'Medium'},{label:'Rows',value:'12'},{label:'Bucket',value:'4 of 13'}]}];
    if(!ui.betRows?.length&&game()!=='candy_cascade')ui.betRows=[{name:'Preview player',time:Date.now(),wager:3,payout:4.83,multiplier:1.61,details:[{label:'RESULT',value:'Cashed out'},{label:'DIFFICULTY',value:'Medium'},{label:'LANES CROSSED',value:'3 / 20'}]}];
    ui.showBetDetails(0);return;
   }
