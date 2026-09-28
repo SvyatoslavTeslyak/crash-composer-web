@@ -10,8 +10,9 @@ async function refreshRunner(){
  snapshot.games.road=structuredClone(offlineRoad);
  try{
   if(!window.Lotomobil?.connected)throw Error('Demo mode · log in to Lotomobil to load the current server configuration.');
-  const configs=await window.Lotomobil.request('/v1/betting/runner/game-configurations?type=RUNNER');
-  snapshot.games.road=runnerBase(configs[0],window.Lotomobil.mode);runnerError='';
+  const initial=await window.Lotomobil.request('/v1/betting/runner/initial-state');
+  if(!initial?.gameConfiguration)throw Error('No active Runner configuration for this account.');
+  snapshot.games.road=runnerBase(initial.gameConfiguration,window.Lotomobil.mode);runnerError='';
  }catch(error){runnerError=error.message}
 }
 await refreshRunner();

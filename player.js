@@ -46,7 +46,7 @@ $('credentials').onsubmit=event=>{event.preventDefault();run(async()=>{
 const depositUrl=(()=>{try{const url=new URL(config.depositUrl);return url.protocol==='https:'?url.href:''}catch{return ''}})();
 window.Lotomobil={get player(){return phone},...(depositUrl?{deposit(){window.open(depositUrl,'_blank','noopener')}}:{}),async request(path,options={}){
  if(!session)throw Error('Log in to Lotomobil first.');
- if(path!=='/payment/account'&&(!/^\/v[12]\/betting\/runner\/(game-configurations|checkouts)(?:[/?]|$)/.test(path)||path.includes('..')))throw Error('Unsupported game endpoint.');
+ if(path!=='/payment/account'&&(!/^\/v[12]\/betting\/runner\/(initial-state|top-bets|game-configurations|checkouts)(?:[/?]|$)/.test(path)||path.includes('..')))throw Error('Unsupported game endpoint.');
  if(path==='/payment/account'&&options.method&&options.method!=='GET')throw Error('Unsupported account method.');
  const current=session;
  try{return await request(config.apiBaseUrl,path,{...options,headers:{...options.headers,Authentication:current.auth}})}catch(error){if((error.status===401||error.status===403)&&session===current)login('Your session expired. Log in again to resume your game.');throw error}

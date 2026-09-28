@@ -51,7 +51,7 @@ credentials.onsubmit=event=>{event.preventDefault();run(async()=>{
  if(!verificationStatus.authenticationReturned)throw Error('Login did not return an authentication token.');
  const candidate={owner:window.ComposerAuth.session.user.id,auth:token,phone};
  progress('Connecting account…');
- await json('api/v1/betting/runner/game-configurations?type=RUNNER',{headers:{Authentication:token}});
+ await json('api/v1/betting/runner/initial-state',{headers:{Authentication:token}});
  verificationStatus.verified=true;session=candidate;sessionStorage.setItem(key,JSON.stringify(session));dialog.close();credentials.reset();notify();
 },'Checking credentials…')};
 const close=()=>{if(busy)return;dialog.close();credentials.reset();};dialog.querySelector('[data-close]').onclick=close;dialog.addEventListener('cancel',event=>{if(busy)event.preventDefault();else close()});
