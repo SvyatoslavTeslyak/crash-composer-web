@@ -6,19 +6,20 @@
   "events": [
     {
       "id": "start",
-      "label": "Round start",
-      "trigger": "PLAY is pressed and the stake is taken.",
-      "volume_db": -9.0,
-      "pitch_jitter": 0.03,
+      "label": "Engine startup",
+      "trigger": "2.48-second mechanical crank and ignition, then crossfade into flight hum.",
+      "volume_db": -17,
+      "pitch_jitter": 0,
       "takes": [
         {
-          "file": "assets/audio/eleven/start_0.mp3",
+          "file": "assets/audio/eleven/engine_start_v5.ogg",
           "enabled": true,
           "source": "elevenlabs"
         }
       ],
       "generator": "ElevenLabs eleven_text_to_sound_v2",
-      "flow_url": "https://elevenlabs.io/app/flows/TA9HqoQUqXV2EZXt0pWl"
+      "generation_id": "rMR9c21KIbpJHrJCr5YX",
+      "flow_url": "https://elevenlabs.io/app/flows/ybDYmapE6eXHG7LLOQId"
     },
     {
       "id": "cash",
@@ -38,19 +39,21 @@
     },
     {
       "id": "crash",
-      "label": "Crash",
-      "trigger": "The round ends without a cash-out.",
-      "volume_db": -7.0,
-      "pitch_jitter": 0.0,
+      "label": "Engine seizure",
+      "trigger": "Initial engine-failure clunk only, with the final falling/wind-down tail removed.",
+      "volume_db": -12,
+      "pitch_jitter": 0,
       "takes": [
         {
-          "file": "assets/audio/eleven/crash_0.mp3",
+          "file": "assets/audio/eleven/engine_failure_v6.ogg",
           "enabled": true,
           "source": "elevenlabs"
         }
       ],
       "generator": "ElevenLabs eleven_text_to_sound_v2",
-      "flow_url": "https://elevenlabs.io/app/flows/TA9HqoQUqXV2EZXt0pWl"
+      "flow_url": "https://elevenlabs.io/app/flows/Ffnb8Ipp9ZzKi9kbju1u",
+      "generation_id": "o1jpEC3msO54pznMgQ6K",
+      "processing": "First 0.65s of engine_failure_v5; fade out from 0.4s to 0.65s."
     },
     {
       "id": "tap",
@@ -99,6 +102,23 @@
       ],
       "generator": "ElevenLabs eleven_music_v2",
       "flow_url": "https://elevenlabs.io/app/flows/TA9HqoQUqXV2EZXt0pWl"
+    },
+    {
+      "id": "engine",
+      "label": "Propeller engine",
+      "trigger": "Continuous during the active round; smooth RPM ramp during takeoff and fade out on settlement.",
+      "volume_db": -20,
+      "pitch_jitter": 0,
+      "takes": [
+        {
+          "file": "assets/audio/eleven/engine_v2.ogg",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ],
+      "generator": "ElevenLabs eleven_text_to_sound_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/BeUF54JFqJrfj1wMwqv2",
+      "generation_id": "qEJQOv1dcFXLWyhtmTGM"
     }
   ]
 }

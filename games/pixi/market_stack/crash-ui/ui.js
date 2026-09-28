@@ -25,6 +25,13 @@ const moneyHtml=v=>{const text=money(v);return currency&&text.endsWith(' '+curre
 const moneySlot=(node,v)=>{const html=moneyHtml(v);if(node.dataset.html!==html){node.dataset.html=html;node.innerHTML=html}};
 // The stake is read beside the coin, the way the header balance is, so it carries the icon
 // instead of a currency mark.
+// The stake sheet's amounts when a game names none of its own.
+const STAKE_OPTIONS=[1,2,5,10,20,50,100,500,1000];
+// The lowest and highest stake, for greying MIN / − and + / MAX at the ends. A game may say
+// (state.betMin, state.betMax); otherwise the first ready amount, and the last one or the
+// balance, whichever is lower.
+const betLimits=s=>{const o=Array.isArray(s.stakeOptions)&&s.stakeOptions.length?s.stakeOptions:STAKE_OPTIONS,top=Number(o[o.length-1]);
+ return [Number.isFinite(s.betMin)?Number(s.betMin):Number(o[0]),Number.isFinite(s.betMax)?Number(s.betMax):s.balanceKnown===false?top:Math.min(top,Number(s.balance))]};
 const coinAmount=v=>{const n=Number(v||0),digits=Number.isInteger(n)?0:2;return window.CrashI18n?.locale==='fr'?window.CrashI18n.number(n,{minimumFractionDigits:digits,maximumFractionDigits:digits}):n.toFixed(digits)};
 // Every raster the kit draws ships twice, as WebP and as PNG, and the browser gets the one it
 // decodes: the canvas encoder answers at once, the decode probe confirms and re-points any image
@@ -50,17 +57,19 @@ const SPEAKER_SVG='<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><pat
 // (WEB_WIN_COIN_DURATION_MS plus their stagger), and the toast leaves once they have landed.
 const WIN_FLIP_AT=500,WIN_FLIP_MS=250,WIN_TOAST_MS=1800;
 // Bet details icons, keyed by the label a game sends (matched loosely, case-free). The filled
-// ones are Hugeicons; the result marks are the kit's own strokes.
+// ones are Hugeicons; the result marks are the kit's own strokes. Bucket and rows are Plinko's (Hugeicons).
 const DETAIL_ICONS={
  wager:'<path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M3.5767 1.71402C4.88361 1.26163 6.62427 1 8.5 1C10.3757 1 12.1164 1.26163 13.4233 1.71402C14.072 1.93857 14.6685 2.22871 15.1225 2.60032C15.5692 2.9659 16 3.51776 16 4.25V6.00576C16 6.18564 16 6.27558 15.9642 6.34214C15.9359 6.39468 15.8947 6.43592 15.8421 6.46419C15.7756 6.5 15.6837 6.5 15.5 6.5C13.5031 6.5 11.5889 6.77632 10.086 7.29654C9.34635 7.55259 8.56918 7.91433 7.92746 8.43951C7.53926 8.75721 7.07625 9.24386 6.78513 9.90045C6.72098 10.0451 6.68891 10.1175 6.63388 10.15C6.57884 10.1826 6.50741 10.1766 6.36456 10.1645C4.6083 10.0157 3.12662 9.673 2.01286 9.13675C1.79088 9.02987 1.58514 8.91641 1.39569 8.79618C1.21436 8.68112 1.1237 8.62359 1.06185 8.51109C1 8.39858 1 8.27636 1 8.03192V4.25004C1 3.51781 1.43077 2.9659 1.87746 2.60032C2.33153 2.22871 2.928 1.93857 3.5767 1.71402ZM3.14414 4.14807C3.34791 3.98131 3.70334 3.78662 4.23092 3.604C5.27654 3.24205 6.78588 3 8.5 3C10.2141 3 11.7235 3.24205 12.7691 3.604C13.2967 3.78662 13.6521 3.98131 13.8559 4.14807C13.9217 4.20195 13.9217 4.29805 13.8559 4.35193C13.6521 4.51869 13.2967 4.71338 12.7691 4.896C11.7235 5.25795 10.2141 5.5 8.5 5.5C6.78588 5.5 5.27654 5.25795 4.23092 4.896C3.70334 4.71338 3.34791 4.51869 3.14414 4.35193C3.07831 4.29805 3.07831 4.20195 3.14414 4.14807Z"/><path fill="currentColor" d="M6.5 12.0516C6.5 11.8759 6.5 11.7881 6.44759 11.7308C6.39518 11.6735 6.30663 11.6656 6.12952 11.6497C4.29374 11.4854 2.66 11.1131 1.36214 10.4883C1.29931 10.458 1.2679 10.4429 1.24756 10.4379C1.13472 10.4103 1.0284 10.4771 1.00434 10.5907C1 10.6112 1 10.644 1 10.7095V13.8304C1 14.0954 1 14.2278 1.07203 14.347C1.14405 14.4663 1.24658 14.5202 1.45164 14.628C1.61214 14.7123 1.78497 14.7924 1.97047 14.8679C3.0317 15.3003 4.42548 15.5546 6.07777 15.6717C6.27437 15.6856 6.37267 15.6925 6.43633 15.6332C6.5 15.5739 6.5 15.4744 6.5 15.2754V12.0516Z"/><path fill="currentColor" d="M6.5 17.5801C6.5 17.401 6.5 17.3114 6.44597 17.2537C6.39195 17.196 6.3017 17.1901 6.1212 17.1783C4.30971 17.0595 2.69148 16.7814 1.40453 16.2571C1.29425 16.2121 1.23911 16.1897 1.19986 16.1897C1.11611 16.1898 1.04649 16.2366 1.01483 16.3141C1 16.3505 1 16.4073 1 16.521V19C1 19.7494 1.49085 20.2732 1.92253 20.5872C2.3761 20.9172 2.96813 21.1726 3.60972 21.37C4.39924 21.613 5.34972 21.7938 6.39416 21.898C6.75899 21.9344 6.9414 21.9526 7.00865 21.8574C7.07589 21.7623 6.98834 21.5762 6.81325 21.204C6.62477 20.8034 6.5 20.3357 6.5 19.8002V17.5801Z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M15.5 8C13.6243 8 11.8836 8.26163 10.5767 8.71402C9.928 8.93857 9.33153 9.22871 8.87746 9.60032C8.43077 9.9659 8 10.5178 8 11.25V13.8808C8 14.3335 8 14.5599 8.12455 14.7855C8.24911 15.0111 8.40346 15.1083 8.71216 15.3027C10.2251 16.2552 12.5583 16.7498 15.5001 16.7498C18.4419 16.7498 20.7751 16.2552 22.288 15.3027C22.5966 15.1084 22.7509 15.0112 22.8754 14.7856C23 14.56 23 14.3336 23 13.8808V11.2502C23 10.518 22.5692 9.9659 22.1225 9.60032C21.6685 9.22871 21.072 8.93857 20.4233 8.71402C19.1164 8.26163 17.3757 8 15.5 8ZM11.2309 10.604C10.7033 10.7866 10.3479 10.9813 10.1441 11.1481C10.0783 11.202 10.0783 11.298 10.1441 11.3519C10.3479 11.5187 10.7033 11.7134 11.2309 11.896C12.2765 12.258 13.7859 12.5 15.5 12.5C17.2141 12.5 18.7235 12.258 19.7691 11.896C20.2967 11.7134 20.6521 11.5187 20.8559 11.3519C20.9217 11.298 20.9217 11.202 20.8559 11.1481C20.6521 10.9813 20.2967 10.7866 19.7691 10.604C18.7235 10.242 17.2141 10 15.5 10C13.7859 10 12.2765 10.242 11.2309 10.604Z"/><path fill="currentColor" d="M15.5001 18.2499C18.348 18.2499 20.8565 17.8117 22.6917 16.8046C22.8318 16.7277 22.9019 16.6893 22.9509 16.7183C23 16.7474 23 16.8258 23 16.9826V19.8003C23 20.5352 22.5585 21.0817 22.114 21.4375C21.6598 21.8009 21.0641 22.0841 20.4168 22.3032C19.1121 22.7448 17.3738 23.0003 15.5 23.0003C13.6262 23.0003 11.8879 22.7448 10.5832 22.3032C9.93591 22.0841 9.34016 21.8009 8.88601 21.4375C8.44147 21.0817 8 20.5352 8 19.8003V16.9825C8 16.8257 8 16.7473 8.04906 16.7182C8.09813 16.6892 8.16817 16.7276 8.30826 16.8045C10.1436 17.8116 12.6521 18.2499 15.5001 18.2499Z"/>',
  multiplier:'<path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M16.4983 1.75C15.946 1.75 15.4983 2.19772 15.4983 2.75C15.4983 3.30228 15.946 3.75 16.4983 3.75H17.1067C16.6145 4.19841 15.9502 4.75662 15.0963 5.37971C12.8642 7.00856 9.33094 9.08504 4.18209 10.8013C3.65815 10.976 3.37499 11.5423 3.54964 12.0662C3.72428 12.5902 4.2906 12.8733 4.81455 12.6987C10.1657 10.915 13.8824 8.74144 16.2753 6.99529C17.215 6.30955 17.9497 5.69037 18.4983 5.18757V5.75C18.4983 6.30228 18.946 6.75 19.4983 6.75C20.0506 6.75 20.4983 6.30228 20.4983 5.75V2.75C20.4983 2.19772 20.0506 1.75 19.4983 1.75H16.4983ZM19 8.75H18.9782C18.7639 8.74999 18.5671 8.74998 18.4018 8.76126C18.2242 8.77338 18.0288 8.80099 17.8303 8.88321C17.4015 9.06083 17.0608 9.40151 16.8832 9.83031C16.801 10.0288 16.7734 10.2241 16.7613 10.4018C16.75 10.5671 16.75 10.7639 16.75 10.9782V11V20.0218C16.75 20.2361 16.75 20.4329 16.7613 20.5982C16.7734 20.7759 16.801 20.9712 16.8832 21.1697C17.0608 21.5985 17.4015 21.9392 17.8303 22.1168C18.0288 22.199 18.2242 22.2266 18.4018 22.2387C18.5671 22.25 18.764 22.25 18.9782 22.25H19.0218C19.236 22.25 19.4329 22.25 19.5982 22.2387C19.7759 22.2266 19.9712 22.199 20.1697 22.1168C20.5985 21.9392 20.9392 21.5985 21.1168 21.1697C21.199 20.9712 21.2266 20.7759 21.2387 20.5982C21.25 20.4329 21.25 20.2361 21.25 20.0219V10.9782C21.25 10.764 21.25 10.5671 21.2387 10.4018C21.2266 10.2241 21.199 10.0288 21.1168 9.83031C20.9392 9.40151 20.5985 9.06083 20.1697 8.88321C19.9712 8.80099 19.7759 8.77338 19.5982 8.76126C19.4329 8.74998 19.2361 8.74999 19.0218 8.75H19ZM11.9782 12.25H12H12.0218C12.2361 12.25 12.4329 12.25 12.5982 12.2613C12.7759 12.2734 12.9712 12.301 13.1697 12.3832C13.5985 12.5608 13.9392 12.9015 14.1168 13.3303C14.199 13.5288 14.2266 13.7241 14.2387 13.9018C14.25 14.0671 14.25 14.2639 14.25 14.4782V20.0218C14.25 20.2361 14.25 20.4329 14.2387 20.5982C14.2266 20.7759 14.199 20.9712 14.1168 21.1697C13.9392 21.5985 13.5985 21.9392 13.1697 22.1168C12.9712 22.199 12.7759 22.2266 12.5982 22.2387C12.4329 22.25 12.236 22.25 12.0218 22.25H11.9782C11.764 22.25 11.5671 22.25 11.4018 22.2387C11.2242 22.2266 11.0288 22.199 10.8303 22.1168C10.4015 21.9392 10.0608 21.5985 9.88321 21.1697C9.80099 20.9712 9.77338 20.7759 9.76126 20.5982C9.74998 20.4329 9.74999 20.2361 9.75 20.0218V14.5V14.4782C9.74999 14.2639 9.74998 14.0671 9.76126 13.9018C9.77338 13.7241 9.80099 13.5288 9.88321 13.3303C10.0608 12.9015 10.4015 12.5608 10.8303 12.3832C11.0288 12.301 11.2242 12.2734 11.4018 12.2613C11.5671 12.25 11.7639 12.25 11.9782 12.25ZM5 14.75H4.97825C4.76399 14.75 4.56711 14.75 4.40179 14.7613C4.22415 14.7734 4.02881 14.801 3.83031 14.8832C3.40151 15.0608 3.06083 15.4015 2.88321 15.8303C2.80099 16.0288 2.77338 16.2241 2.76126 16.4018C2.74998 16.5671 2.74999 16.7639 2.75 16.9782V17V20.0218C2.74999 20.2361 2.74998 20.4329 2.76126 20.5982C2.77338 20.7759 2.80099 20.9712 2.88321 21.1697C3.06083 21.5985 3.40151 21.9392 3.83031 22.1168C4.02881 22.199 4.22415 22.2266 4.40179 22.2387C4.5671 22.25 4.76393 22.25 4.97819 22.25H5.02176C5.23601 22.25 5.4329 22.25 5.59821 22.2387C5.77585 22.2266 5.97119 22.199 6.1697 22.1168C6.5985 21.9392 6.93918 21.5985 7.11679 21.1697C7.19901 20.9712 7.22663 20.7759 7.23875 20.5982C7.25003 20.4329 7.25002 20.236 7.25 20.0218V16.9782C7.25002 16.764 7.25003 16.5671 7.23875 16.4018C7.22663 16.2241 7.19901 16.0288 7.11679 15.8303C6.93918 15.4015 6.5985 15.0608 6.1697 14.8832C5.97119 14.801 5.77585 14.7734 5.59821 14.7613C5.4329 14.75 5.23606 14.75 5.0218 14.75H5Z"/>',
  prize:'<path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M12 1.24927C7.44365 1.24927 3.75 4.94292 3.75 9.49927C3.75 14.0556 7.44365 17.7493 12 17.7493C16.5563 17.7493 20.25 14.0556 20.25 9.49927C20.25 4.94292 16.5563 1.24927 12 1.24927ZM15.3003 8.45436C15.8271 8.28852 16.1197 7.72702 15.9538 7.20023C15.788 6.67343 15.2265 6.38082 14.6997 6.54666C13.3701 6.96524 12.0909 8.14537 11.2267 9.06618C10.9596 9.35079 10.7173 9.62709 10.5084 9.87523C10.3297 9.70787 10.1516 9.57612 9.97855 9.47355C9.95822 9.46151 9.93783 9.44914 9.91717 9.43662C9.70847 9.31009 9.47274 9.16718 9 9.16718C8.44772 9.16718 8 9.61489 8 10.1672C8 10.684 8.39207 11.1093 8.89501 11.1617C9.00137 11.2248 9.32472 11.4509 9.62842 11.9908C9.79609 12.2888 10.1045 12.4806 10.446 12.4991C10.7874 12.5175 11.1149 12.3598 11.3138 12.0817C11.5581 11.7741 12.2785 10.8681 12.6851 10.4348C13.5415 9.52232 14.5122 8.70246 15.3003 8.45436Z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M17.8617 14.5459L18.5451 17.819C18.7492 18.7964 18.9204 19.6164 18.978 20.2511C19.0334 20.8602 19.025 21.6313 18.4981 22.2135C18.2223 22.5183 17.8638 22.6996 17.4587 22.7411C17.0955 22.7782 16.7527 22.697 16.4722 22.6018C15.9491 22.4242 15.3086 22.0735 14.608 21.6899C14.5821 21.6757 14.5561 21.6615 14.5301 21.6472L12.2566 20.4028C12.1635 20.3519 12.0926 20.3131 12.0311 20.2809C12.0201 20.2751 12.0099 20.2698 12.0003 20.2649C11.9907 20.2698 11.9805 20.2751 11.9694 20.2809C11.9079 20.3131 11.837 20.3519 11.744 20.4028L9.47052 21.6472C9.44444 21.6615 9.41845 21.6757 9.39254 21.6899C8.692 22.0735 8.05151 22.4242 7.52839 22.6018C7.24788 22.697 6.90507 22.7782 6.54193 22.7411C6.13674 22.6996 5.77824 22.5183 5.50248 22.2135C4.97562 21.6313 4.96723 20.8602 5.02254 20.2511C5.08018 19.6164 5.25142 18.7964 5.45551 17.819C5.4599 17.798 5.4643 17.777 5.46871 17.7558L6.13892 14.5459L8.0967 14.9547L7.42649 18.1646C7.20576 19.2218 7.06021 19.9269 7.01434 20.432C7.00587 20.5253 7.00193 20.6024 7.00081 20.6654C7.33078 20.535 7.79276 20.2856 8.51023 19.8929L10.7837 18.6484C10.7924 18.6437 10.8011 18.6389 10.8099 18.6341C10.9683 18.5473 11.1408 18.4529 11.299 18.3844C11.4832 18.3046 11.7177 18.2275 12.0003 18.2275C12.2829 18.2275 12.5173 18.3046 12.7016 18.3844C12.8598 18.4529 13.0323 18.5473 13.1907 18.6341C13.1994 18.6389 13.2082 18.6437 13.2169 18.6484L15.4903 19.8929C16.2078 20.2856 16.6698 20.535 16.9998 20.6654C16.9987 20.6024 16.9947 20.5253 16.9862 20.432C16.9404 19.9269 16.7948 19.2218 16.5741 18.1646L15.9039 14.9547L17.8617 14.5459Z"/>',
  difficulty:'<path fill="currentColor" d="M18.5448 2.75C18.9776 2.74995 19.3744 2.74991 19.6972 2.79331C20.0527 2.8411 20.4284 2.95355 20.7374 3.26257C21.0465 3.57159 21.1589 3.94732 21.2067 4.3028C21.2501 4.62561 21.2501 5.02244 21.25 5.45526V16.552C21.25 17.4505 21.2501 18.1997 21.1701 18.7945C21.0857 19.4223 20.9 19.9891 20.4445 20.4446C19.9891 20.9 19.4223 21.0857 18.7945 21.1701C18.1997 21.2501 17.4505 21.25 16.552 21.25H5.45526C5.02244 21.2501 4.62561 21.2501 4.3028 21.2067C3.94732 21.1589 3.57159 21.0465 3.26257 20.7374C2.95355 20.4284 2.8411 20.0527 2.79331 19.6972C2.74991 19.3744 2.74995 18.9776 2.75 18.5448V17.4553C2.74995 17.0224 2.74991 16.6256 2.79331 16.3028C2.8411 15.9473 2.95355 15.5716 3.26257 15.2626C3.57159 14.9535 3.94732 14.8411 4.3028 14.7933C4.62561 14.7499 5.02244 14.75 5.45525 14.75H6.75001L6.75 13.4553C6.74995 13.0224 6.74991 12.6256 6.79331 12.3028C6.8411 11.9473 6.95355 11.5716 7.26257 11.2626C7.57159 10.9535 7.94732 10.8411 8.3028 10.7933C8.62561 10.7499 9.02244 10.75 9.45525 10.75H10.75V9.50001V9.45526C10.75 9.02245 10.7499 8.62561 10.7933 8.3028C10.8411 7.94732 10.9535 7.57159 11.2626 7.26257C11.5716 6.95355 11.9473 6.8411 12.3028 6.79331C12.6256 6.74991 13.0224 6.74995 13.4553 6.75L14.75 6.75001V5.45526C14.75 5.02245 14.7499 4.62561 14.7933 4.3028C14.8411 3.94732 14.9535 3.57159 15.2626 3.26257C15.5716 2.95355 15.9473 2.8411 16.3028 2.79331C16.6256 2.74991 17.0224 2.74995 17.4553 2.75H18.5448Z"/>',
  lanes:'<path fill="currentColor" d="M16.3892 7.24988C17.1028 7.24885 17.7021 7.24799 18.2372 7.5205C18.533 7.67115 18.764 7.87727 18.9801 8.11548C19.1832 8.33928 19.4027 8.62576 19.6589 8.96004C19.8737 9.24025 20.329 9.83418 20.4696 10.0718C20.6261 10.3364 20.75 10.637 20.75 11C20.75 11.363 20.6261 11.6636 20.4696 11.9282C20.329 12.1658 19.8737 12.7598 19.6589 13.04C19.4027 13.3743 19.1832 13.6607 18.9801 13.8845C18.764 14.1227 18.533 14.3289 18.2372 14.4795C17.7021 14.752 17.1028 14.7512 16.3891 14.7501L15 14.75C14.5858 14.75 14.25 14.4142 14.25 14V8.00001C14.25 7.5858 14.5858 7.25001 15 7.25001L16.3892 7.24988Z"/><path fill="currentColor" d="M10.2067 2.00025L7.61085 2.00012C6.89723 1.99909 6.29793 1.99823 5.7628 2.27074C5.46698 2.4214 5.23601 2.62751 5.01987 2.86572C4.81681 3.08952 4.59726 3.376 4.34107 3.71028C4.12626 3.99048 3.67099 4.58442 3.53044 4.82204C3.37392 5.08663 3.25 5.38727 3.25 5.75025C3.25 6.11323 3.37392 6.41387 3.53044 6.67846C3.67099 6.91608 3.87074 7.17663 4.08555 7.45684C4.34174 7.79112 4.81681 8.41098 5.01987 8.63478C5.23601 8.87299 5.46698 9.0791 5.7628 9.22976C6.29793 9.50227 6.89723 9.50141 7.61085 9.50038L11 9.50029L11.0001 20.9737C11.0001 21.5405 11.4478 22 12.0001 22C12.5524 22 13.0001 21.5405 13.0001 20.9737L13 3.27656C13 2.70974 12.5894 2.04475 11.2783 2.04475C11.2783 2.04475 10.6003 2.00018 10.2067 2.00025Z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M8 21C8 20.4477 8.44772 20 9 20H15C15.5523 20 16 20.4477 16 21C16 21.5523 15.5523 22 15 22H9C8.44772 22 8 21.5523 8 21Z"/>',
+ bucket:'<path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M12 3.25C9.79086 3.25 8 5.04086 8 7.25V7.75C8 8.30228 7.55228 8.75 7 8.75C6.44772 8.75 6 8.30228 6 7.75V7.25C6 3.93629 8.68629 1.25 12 1.25C15.3137 1.25 18 3.93629 18 7.25V7.75C18 8.30228 17.5523 8.75 17 8.75C16.4477 8.75 16 8.30228 16 7.75V7.25C16 5.04086 14.2091 3.25 12 3.25Z"/><path fill="currentColor" d="M5.03918 6.75C4.54569 6.74993 4.09347 6.74988 3.73122 6.80486C3.32906 6.86589 2.90613 7.01213 2.59554 7.40758C2.29245 7.79347 2.2384 8.2371 2.25186 8.64362C2.26442 9.02282 2.34242 9.48822 2.43027 10.0123L3.43315 15.9991C3.47323 16.2384 3.49326 16.358 3.57716 16.429C3.66106 16.5 3.78234 16.5 4.02491 16.5H19.9751C20.2177 16.5 20.3389 16.5 20.4228 16.429C20.5067 16.358 20.5268 16.2384 20.5668 15.9991L21.5697 10.0124C21.6576 9.48825 21.7356 9.02281 21.7481 8.64362C21.7616 8.2371 21.7075 7.79347 21.4045 7.40758C21.0939 7.01213 20.6709 6.86589 20.2688 6.80486C19.9065 6.74988 19.4543 6.74993 18.9608 6.75H5.03918Z"/><path fill="currentColor" d="M19.999 19.2079C20.0697 18.8852 20.1051 18.7239 20.015 18.6119C19.9249 18.5 19.7563 18.5 19.419 18.5H4.58335C4.24608 18.5 4.07744 18.5 3.98738 18.6119C3.89731 18.7239 3.93267 18.8852 4.00337 19.2079C4.06045 19.4683 4.12003 19.7096 4.18466 19.9321C4.4085 20.703 4.71667 21.3411 5.26985 21.8348C5.82813 22.3331 6.48642 22.5511 7.25631 22.6529C7.99035 22.75 8.90658 22.75 10.0292 22.75H13.9732C15.0958 22.75 16.012 22.75 16.7461 22.6529C17.5159 22.5511 18.1742 22.3331 18.7325 21.8348C19.2857 21.3411 19.5939 20.703 19.8177 19.9321C19.8823 19.7096 19.9419 19.4683 19.999 19.2079Z"/>',
+ rows:'<path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M12 3.25H12.0218C12.2361 3.24999 12.4329 3.24998 12.5982 3.26126C12.7759 3.27338 12.9712 3.30099 13.1697 3.38321C13.5985 3.56083 13.9392 3.90151 14.1168 4.33031C14.199 4.52881 14.2266 4.72415 14.2387 4.90179C14.25 5.06711 14.25 5.26394 14.25 5.4782V5.5V18.5213C14.25 18.7356 14.25 18.9324 14.2387 19.0977C14.2266 19.2754 14.199 19.4707 14.1168 19.6692C13.9392 20.098 13.5985 20.4387 13.1697 20.6163C12.9712 20.6985 12.7759 20.7261 12.5982 20.7383C12.4329 20.7495 12.236 20.7495 12.0218 20.7495H11.9782C11.764 20.7495 11.5671 20.7495 11.4018 20.7383C11.2241 20.7261 11.0288 20.6985 10.8303 20.6163C10.4015 20.4387 10.0608 20.098 9.88321 19.6692C9.80099 19.4707 9.77337 19.2754 9.76125 19.0977C9.74997 18.9324 9.74999 18.7355 9.75 18.5213V5.47824C9.74999 5.26397 9.74997 5.06712 9.76125 4.90179C9.77337 4.72415 9.80099 4.52881 9.88321 4.33031C10.0608 3.90151 10.4015 3.56083 10.8303 3.38321C11.0288 3.30099 11.2241 3.27338 11.4018 3.26126C11.5671 3.24998 11.7639 3.24999 11.9782 3.25H12ZM4.97825 7.25H5.02176C5.23602 7.24999 5.4329 7.24998 5.59821 7.26126C5.77586 7.27338 5.9712 7.30099 6.1697 7.38321C6.5985 7.56083 6.93918 7.90151 7.11679 8.33031C7.19902 8.52881 7.22663 8.72415 7.23875 8.90179C7.25003 9.06711 7.25002 9.26399 7.25 9.47825V18.5218C7.25002 18.7361 7.25003 18.9329 7.23875 19.0982C7.22663 19.2759 7.19902 19.4712 7.11679 19.6697C6.93918 20.0985 6.5985 20.4392 6.1697 20.6168C5.9712 20.699 5.77586 20.7266 5.59821 20.7387C5.43296 20.75 5.2362 20.75 5.02203 20.75H4.97823C4.76407 20.75 4.56705 20.75 4.40179 20.7387C4.22415 20.7266 4.02881 20.699 3.83031 20.6168C3.40151 20.4392 3.06083 20.0985 2.88321 19.6697C2.80099 19.4712 2.77338 19.2759 2.76126 19.0982C2.74998 18.9329 2.74999 18.7361 2.75 18.5218V9.47824C2.74999 9.26398 2.74998 9.06711 2.76126 8.90179C2.77338 8.72415 2.80099 8.52881 2.88321 8.33031C3.06083 7.90151 3.40151 7.56083 3.83031 7.38321C4.02881 7.30099 4.22415 7.27338 4.40179 7.26126C4.56711 7.24998 4.76399 7.24999 4.97825 7.25ZM18.9782 10.25H19.0218C19.236 10.25 19.4329 10.25 19.5982 10.2613C19.7759 10.2734 19.9712 10.301 20.1697 10.3832C20.5985 10.5608 20.9392 10.9015 21.1168 11.3303C21.199 11.5288 21.2266 11.7241 21.2387 11.9018C21.25 12.067 21.25 12.2638 21.25 12.478V18.5218C21.25 18.736 21.25 18.933 21.2387 19.0982C21.2266 19.2759 21.199 19.4712 21.1168 19.6697C20.9392 20.0985 20.5985 20.4392 20.1697 20.6168C19.9712 20.699 19.7759 20.7266 19.5982 20.7387C19.4329 20.75 19.236 20.75 19.0218 20.75H18.9782C18.764 20.75 18.5671 20.75 18.4018 20.7387C18.2242 20.7266 18.0288 20.699 17.8303 20.6168C17.4015 20.4392 17.0608 20.0985 16.8832 19.6697C16.801 19.4712 16.7734 19.2759 16.7613 19.0982C16.75 18.9329 16.75 18.736 16.75 18.5218V12.4782C16.75 12.264 16.75 12.0671 16.7613 11.9018C16.7734 11.7241 16.801 11.5288 16.8832 11.3303C17.0608 10.9015 17.4015 10.5608 17.8303 10.3832C18.0288 10.301 18.2242 10.2734 18.4018 10.2613C18.5671 10.25 18.764 10.25 18.9782 10.25Z"/>',
  result:'<path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
  crashed:'<path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
  default:'<path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" fill="currentColor"/>'};
-const detailIcon=(label,lost=false)=>{const key=String(label||'').toLowerCase();const name=key.includes('wager')||key.includes('stake')?'wager':key.includes('multipl')||key==='x'?'multiplier':key.includes('prize')||key.includes('payout')||key.includes('win')?'prize':key.includes('result')?(lost?'crashed':'result'):key.includes('difficult')||key.includes('risk')||key.includes('level')?'difficulty':key.includes('lane')||key.includes('step')||key.includes('cross')?'lanes':'default';
+const detailIcon=(label,lost=false)=>{const key=String(label||'').toLowerCase();const name=key.includes('wager')||key.includes('stake')?'wager':key.includes('multipl')||key==='x'?'multiplier':key.includes('prize')||key.includes('payout')||key.includes('win')?'prize':key.includes('result')?(lost?'crashed':'result'):key.includes('difficult')||key.includes('risk')||key.includes('level')?'difficulty':key.includes('lane')||key.includes('step')||key.includes('cross')?'lanes':key.includes('bucket')?'bucket':key==='rows'||key==='row'?'rows':'default';
  return '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">'+DETAIL_ICONS[name]+'</svg>'};
 const fitStake=(node,text)=>{node.dataset.fit=text.length>4?'long':text.length>2?'mid':'short'};
 // The player stakes coins and is paid in the currency: the bet, the presets and the amount on
@@ -135,7 +144,7 @@ class BettingSound {
  // What the player pressed, named as the manifest names it.
  // How close to the PLAY press a cash-ready state still counts as part of that press.
  static PRESS_WINDOW_MS=400;
- static EVENTS={go:'play',cash:'cashout',min:'stake_min',max:'stake_max',minus:'stake_minus',plus:'stake_plus',preset:'stake_preset',auto:'auto',difficulty:'difficulty',chooseDifficulty:'difficulty',pickDifficulty:'difficulty_pick',leave:'header_click',account:'header_click',menu:'header_click',wallet:'header_click',notice:'confirm','cash-ready':'cash_ready'};
+ static EVENTS={go:'play',cash:'cashout',min:'stake_min',max:'stake_max',minus:'stake_minus',plus:'stake_plus',preset:'stake_preset',auto:'auto',turbo:'auto',difficulty:'difficulty',chooseDifficulty:'difficulty',rows:'difficulty',chooseOption:'difficulty',stake:'difficulty',chooseStake:'stake_preset',pickDifficulty:'difficulty_pick',leave:'header_click',account:'header_click',menu:'header_click',wallet:'header_click',notice:'confirm','cash-ready':'cash_ready'};
  play(action){
   if(!this.enabled||document.hidden)return;
   const event=BettingSound.EVENTS[action];if(!event)return;
@@ -209,7 +218,7 @@ class TabbedControls {
    '<div class="tabbed-main"><div class="risk" hidden><div class="risk-label">RISK <span data-slot="riskPct"></span></div><div class="risk-meter" aria-hidden="true">'+'<i></i>'.repeat(10)+'</div></div>'+
    '<div class="difficulty-row" role="radiogroup" aria-label="Difficulty"></div>'+
    '<div class="bet-grid">'+
-    '<div class="wager"><div class="stake" aria-label="Bet amount">'+button('min','MIN')+button('minus','−')+'<div class="wager-amount"><output class="money coin-amount" data-slot="tbBet"></output></div>'+button('plus','+')+button('max','MAX')+'</div></div>'+
+    '<div class="wager"><div class="stake" aria-label="Bet amount">'+button('min','MIN')+button('minus','−')+'<button type="button" class="wager-amount stake-pick" data-action="stake" aria-label="Choose bet amount"><output class="money coin-amount" data-slot="tbBet"></output><svg class="chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6 8 10 12 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'+button('plus','+')+button('max','MAX')+'</div></div>'+
     '<div class="actions">'+button('cash','<span class="action-title">CASH OUT</span><span class="money" data-slot="tbCash"></span>','action cash')+button('go','<span class="money" data-slot="tbGoAmount"></span><span class="action-title" data-slot="tbGoTitle"></span><span class="go-dial" aria-hidden="true">'+GO_ARROW_SVG+'</span>','action go')+'</div>'+
    '</div></div>'+
    '<div class="tabs">'+button('topbets',icon(trophy),'tab')+button('mybets',icon(receipt),'tab')+button('rulesTab',icon(doc),'tab')+'</div>';
@@ -218,13 +227,52 @@ class TabbedControls {
   this.tabs=this.q('.tabs');this.tabs.setAttribute('role','navigation');this.tabs.setAttribute('aria-label','Bet panels');
   this.lastDifficulties='';
  }
- q(sel){return this.element.querySelector(sel)}
+ // The stake section may live in a game's own panel (GameUI.mountStake); it is still this panel's.
+ q(sel){return this.element.querySelector(sel)||this.mounted?.querySelector(sel)||null}
  text(key,value){if(this.slots[key].textContent!==String(value))this.slots[key].textContent=value}
+ // The stake on show. After MIN or MAX (rollArm, set by the press) it rolls to the new amount
+ // like a counter, in time with the double tick; any other change simply shows.
+ showBet(bet){
+  const from=this.betShown,armed=this.rollArm&&performance.now()-this.rollArm<600;this.betTarget=bet;
+  if(armed&&Number.isFinite(from)&&from!==bet&&!matchMedia('(prefers-reduced-motion: reduce)').matches){this.rollArm=0;this.rollBet(from,bet);return}
+  if(this.rolling)return;
+  this.setBet(bet);
+ }
+ setBet(v){this.betShown=v;this.text('tbBet',coinAmount(v));fitStake(this.slots.tbBet,this.slots.tbBet.textContent)}
+ // Along a log scale, so 1 → 1000 reads as an even climb, easing out onto the amount.
+ rollBet(from,to){
+  cancelAnimationFrame(this.rollFrame);clearTimeout(this.rollDone);this.rolling=true;const start=performance.now(),span=250,slot=this.slots.tbBet;
+  const finish=()=>{cancelAnimationFrame(this.rollFrame);clearTimeout(this.rollDone);this.rolling=false;this.setBet(this.betTarget)};
+  // Frames can be sparse on a busy page; the amount lands on time regardless.
+  this.rollDone=setTimeout(finish,span+80);
+  const frame=now=>{const t=Math.min(1,(now-start)/span),e=1-Math.pow(1-t,3);
+   if(t>=1){finish();return}
+   let v=from>0&&to>0?from*Math.pow(to/from,e):from+(to-from)*e;v=v>=1?Math.round(v):Math.round(v*100)/100;
+   this.text('tbBet',coinAmount(v));fitStake(slot,slot.textContent);this.rollFrame=requestAnimationFrame(frame)};
+  this.rollFrame=requestAnimationFrame(frame);
+ }
+ // Side actions (config.sideActions): square buttons beside the main action - AUTO, ROWS,
+ // TURBO - each {action, label, icon, place: 'before' | 'after'}. state.sides[action] gives
+ // {pressed, value, pending, disabled}; a value (12, ∞) stands where the icon is.
+ syncSides(s,sides){
+  const actions=this.q('.actions'),key=JSON.stringify(sides.map(x=>[x.action,x.label,x.icon,x.place]));
+  if(key!==this.sideKey){this.sideKey=key;actions.querySelectorAll('.side-action').forEach(n=>n.remove());actions.classList.toggle('with-sides',sides.length>0);
+   const go=actions.querySelector('[data-action=go]');let last=go;
+   for(const x of sides){const b=document.createElement('button');b.type='button';b.className='button side-action';b.dataset.action=x.action;b.setAttribute('aria-label',x.label||x.action);
+    b.innerHTML='<span class="side-icon" aria-hidden="true">'+(x.icon||'')+'</span><b class="side-value"></b><span class="side-label">'+esc(x.label||'')+'</span>';
+    if(x.place==='after'){last.after(b);last=b}else go.before(b)}}
+  for(const x of sides){const b=actions.querySelector('.side-action[data-action="'+x.action+'"]');if(!b)continue;const st=(s.sides||{})[x.action]||{};
+   b.setAttribute('aria-pressed',String(!!st.pressed));b.disabled=!!st.disabled||!!s.win;
+   const value=st.value===undefined||st.value===null?'':String(st.value),v=b.querySelector('.side-value');if(v.textContent!==value)v.textContent=value;
+   b.classList.toggle('has-value',value!=='');b.classList.toggle('is-pending',!!st.pending)}
+ }
  /** One flat state object per frame, the same one the standard controls read. */
  sync(s,features,config={}){
   const risk=this.q('.risk');const hasRisk=typeof s.risk==='number'&&Number.isFinite(s.risk);risk.hidden=!hasRisk&&s.game!=='road';risk.style.visibility='';
   if(hasRisk){const pct=Math.round(Math.min(1,Math.max(0,s.risk))*100);this.text('riskPct',pct+' %');const lit=Math.round(pct/10);[...this.q('.risk-meter').children].forEach((seg,i)=>{seg.className=i<lit?'on tier-'+(i<3?'low':i<6?'mid':'high'):''})}else{this.text('riskPct','0 %');for(const seg of this.q('.risk-meter').children)seg.className=''}
-  const names=s.difficulties||[],withAuto=!!features.auto,row=this.q('.difficulty-row'),key=JSON.stringify([names,withAuto,config.autoLabel,!!config.turboSwitch]);
+  // With AUTO as a square beside the main action, the choice row keeps its plain choices.
+  const sides=Array.isArray(config.sideActions)?config.sideActions:[];this.syncSides(s,sides);
+  const names=s.difficulties||[],withAuto=!!features.auto&&!sides.some(x=>x.action==='auto'),row=this.q('.difficulty-row'),key=JSON.stringify([names,withAuto,config.autoLabel,!!config.turboSwitch]);
   if(key!==this.lastDifficulties){this.lastDifficulties=key;row.classList.toggle('with-auto',withAuto);row.setAttribute('role',withAuto?'group':'radiogroup');
    row.innerHTML=withAuto
     ?button('auto','<span class="auto-label">'+esc(config.autoLabel||'Auto')+'</span><span class="auto-switch" aria-hidden="true"><span class="knob"></span></span>','auto')+(config.turboSwitch?button('turbo','<span class="auto-label">Turbo</span><span class="auto-switch" aria-hidden="true"><span class="knob"></span></span>','auto turbo-switch'):'')+button('difficulty','<span data-slot="tbDifficulty"></span><svg class="chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6 8 10 12 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>','level-pick')
@@ -234,12 +282,16 @@ class TabbedControls {
   const turbo=row.querySelector('[data-action=turbo]');if(turbo){turbo.setAttribute('aria-pressed',String(!!s.turbo));pick.hidden=true}
   if(withAuto){const auto=row.querySelector('[data-action=auto]');auto.setAttribute('aria-pressed',String(!!s.auto));auto.disabled=!s.canBet&&!s.auto;if(!turbo)pick.hidden=!features.difficulty||names.length===0;pick.disabled=!s.canBet;pick.setAttribute('aria-label','Difficulty: '+(names[s.difficulty]||''));const label=pick.querySelector('[data-slot=tbDifficulty]');if(label.textContent!==String(names[s.difficulty]||''))label.textContent=names[s.difficulty]||''}
   else for(const b of row.children){const on=Number(b.dataset.value)===s.difficulty;b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-checked',String(on));b.disabled=!s.canBet}
-  this.text('tbBet',coinAmount(s.bet));fitStake(this.slots.tbBet,this.slots.tbBet.textContent);for(const a of ['min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
-  // A game may draw its own action on the button (config.goIcon, an SVG with class go-arrow); GO's arrow otherwise.
-  if(config.goIcon&&this.goIcon!==config.goIcon){this.goIcon=config.goIcon;this.q('[data-action=go] .go-dial').innerHTML=config.goIcon}
-  const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);go.classList.toggle('cash',asCash);goTimerRing(go,countdownOf(s),urgentOf(s));
+  this.showBet(Number(s.bet));const [lo,hi]=betLimits(s),bet=Number(s.bet);for(const [a,off] of [['min',bet<=lo],['minus',bet<=lo],['plus',bet>=hi],['max',bet>=hi],['stake',false]])this.q('[data-action='+a+']').disabled=!s.canBet||off;
+  // A game may draw its own action on the button (state.goIcon for the moment, or config.goIcon,
+  // an SVG with class go-arrow); GO's arrow otherwise.
+  const dial=s.goIcon||config.goIcon||GO_ARROW_SVG;if(this.goIcon!==dial){this.goIcon=dial;this.q('[data-action=go] .go-dial').innerHTML=dial}
+  const go=this.q('[data-action=go]');go.disabled=!s.canGo||!!s.win;const asCash=goIsCash(s);
+  // state.goFace: 'stop' (a running Auto, in the danger colours), 'skip' (a plain button), 'free' (a free round, in cash green).
+  go.classList.toggle('cash',asCash||s.goFace==='free');go.classList.toggle('is-stop',s.goFace==='stop');go.classList.toggle('is-skip',s.goFace==='skip');goTimerRing(go,countdownOf(s),urgentOf(s));
   // Mid-round the button is a step, not a stake: Goat Road's GO, and any game that sends no subtitle.
-  const nextLane=s.showCash&&(s.game==='road'||s.goSubtitle==='');coinSlot(this.slots.tbGoAmount,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash);this.text('tbGoTitle',s.goTitle||(nextLane?'GO':'BET'));this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
+  // state.goLabelOnly shows the title with its icon, and no amount, at any time (Plinko's DROP).
+  const nextLane=!!s.goLabelOnly||s.showCash&&(s.game==='road'||s.goSubtitle==='');const goFigure=(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet);coinSlot(this.slots.tbGoAmount,goFigure);this.slots.tbGoAmount.hidden=nextLane;this.slots.tbGoAmount.classList.toggle('is-label',!!s.showCash||!!s.goSubtitleIsLabel);this.text('tbGoTitle',s.goTitle||(nextLane?'GO':'BET'));this.slots.tbGoTitle.classList.toggle('go-label',!!nextLane);
   const cash=this.q('[data-action=cash]');cash.hidden=!s.showCash;cash.disabled=!s.canCash||!!s.win;moneySlot(this.slots.tbCash,s.cash);// Only the figure decides whether an amount is long: a leading $ is not a digit, and a
   // plain $1056.82 was being shrunk as if it were a million.
   for(const key of ['tbCash','tbGoAmount'])this.slots[key].classList.toggle('long-amount',(this.slots[key].textContent.match(/\d/g)||[]).length>7);
@@ -278,6 +330,18 @@ class GameUI {
   column.className='account-column';account.before(column);column.append(account,history);
   this.slots=Object.fromEntries([...host.querySelectorAll('[data-slot]')].map(n=>[n.dataset.slot,n]));
   host.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b&&!b.disabled)this.action(b.dataset.action,b.dataset.value);else {const control=e.target.closest('.bet-step,.bet-action');if(control&&!control.disabled)this.bettingSound.play(control.dataset.step==='-1'?'minus':control.dataset.step?'plus':'go')}});
+  // config.goRepeat: holding the main action repeats it after a moment (Plinko's DROP: hold
+  // it and balls pour), {delay, interval} in ms or true for the defaults. Never as STOP, and
+  // a hold that has poured swallows the click that ends it.
+  if(config.goRepeat){
+   const rep=config.goRepeat===true?{}:config.goRepeat,delay=Number(rep.delay)||350,every=Number(rep.interval)||140;let timer=0,repeated=false;
+   const stop=()=>{clearTimeout(timer);clearInterval(timer);timer=0};
+   host.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-action=go]');if(!b||b.disabled||e.button>0)return;repeated=false;stop();
+    timer=setTimeout(()=>{timer=setInterval(()=>{const go=this.q('[data-action=go]');if(!go||go.disabled||this.state?.goFace==='stop'||this.modal){stop();return}repeated=true;this.send('go',{})},every)},delay)});
+   for(const type of ['pointerup','pointercancel','blur'])(type==='blur'?window:document).addEventListener(type,stop);
+   host.addEventListener('pointerout',e=>{if(e.target.closest?.('[data-action=go]')&&!e.target.closest('[data-action=go]').contains(e.relatedTarget))stop()});
+   host.addEventListener('click',e=>{if(repeated&&e.target.closest('[data-action=go]')){repeated=false;e.stopImmediatePropagation()}},true);
+  }
   host.addEventListener('change',e=>{if(e.target.dataset.setting==='sound')this.bettingSound.setEnabled(e.target.checked);if(e.target.dataset.setting)this.send('setting',{key:e.target.dataset.setting,value:e.target.type==='checkbox'?e.target.checked:Number(e.target.value)});if(e.target.dataset.flag)this.send('flag',{key:e.target.dataset.flag,value:e.target.checked})});
   this.dismissWinClick=e=>{if(this.modal!=='win')return;e.preventDefault();e.stopImmediatePropagation();this.dismissedWin=true;this.close(false);this.send('dismissWin',{})};document.addEventListener('click',this.dismissWinClick,true);
   host.querySelector('.modal-layer').addEventListener('click',e=>{if(e.target===e.currentTarget&&this.modal!=='win')this.close()});
@@ -325,10 +389,37 @@ class GameUI {
   this.standardControls.hidden=multi||variant==='tabbed'||variant==='none';
  }
  q(s){return this.host.querySelector(s)}
+ /**
+  * A game's own choice in the kit's option sheet, the one Goat Road's levels use: {title,
+  * head, options: [{title, reward, html}], selected, action}. A pick reaches the game as
+  * `action` (default 'option') with {index}.
+  */
+ openOptions(spec){this.optionSpec=spec||{};this.open('options')}
+ /**
+  * The kit's stake section - MIN, −, the stake (it opens the sheet of ready amounts), +, MAX -
+  * placed in a game's own bet panel, for a game on controlsVariant 'none'. It is the very
+  * section the kit's panel shows: the same look, sounds, sheet and greyed ends, kept in step
+  * by update(); presses go to the game as the panel's do. Returns the section, or null when
+  * the preset has no tabbed panel to take it from.
+  */
+ mountStake(container){
+  if(!this.tabbed||!container)return null;
+  const wager=this.tabbed.element.querySelector('.wager')||this.tabbed.mounted?.querySelector('.wager');
+  if(!wager)return null;
+  const mount=document.createElement('div');mount.className='crash-ui stake-mount'+(this.host.classList.contains('no-webp')?' no-webp':'');
+  const frame=document.createElement('div');frame.className='controls tabbed-controls navigation-only';frame.append(wager);mount.append(frame);container.append(mount);
+  this.tabbed.mounted=mount;
+  // Outside the kit's host, so it forwards its own presses; they stop here, not in the game's panel too.
+  mount.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;e.stopPropagation();if(!b.disabled)this.action(b.dataset.action,b.dataset.value)});
+  if(this.state)this.tabbed.sync(this.state,this.features(),this.config);
+  return wager;
+ }
  features(){return {auto:true,difficulty:true,presets:true,...(this.state?.features||{})}}
  text(key,value){if(this.slots[key].textContent!==String(value))this.slots[key].textContent=value}
  action(action,value){
   if(action==='go'&&this.winToast)this.finishWinToast();
+  // MIN and MAX roll the stake to its new amount (TabbedControls.showBet).
+  if((action==='min'||action==='max')&&this.tabbed)this.tabbed.rollArm=performance.now();
   // Header back navigation is inactive until the host exit flow is defined.
   if(action==='leave')return;
   this.bettingSound.play(action);
@@ -352,6 +443,11 @@ class GameUI {
   if(action==='back'){this.open('menu');return}
   if(action==='limit'){this.open('limit:'+value);return}
   if(action==='chooseLimit'){const [key,raw]=JSON.parse(value);const chosen=key==='theme'?raw:Number(raw);this.state.settings={...this.state.settings,[key]:chosen};this.send('setting',{key,value:chosen});this.open('menu');return}
+  if(action==='stake'){if(this.state?.canBet)this.open('stake');return}
+  if(action==='chooseStake'){this.send('bet',{value:Number(value)});this.close();return}
+  if(action==='chooseOption'){this.send(this.optionSpec?.action||'option',{index:Number(value)});this.close();return}
+  // MIN and MAX from the stake sheet do what the panel's do, then the sheet steps aside.
+  if((action==='min'||action==='max')&&this.modal==='stake'){this.send(action,{});this.close();return}
   if(action==='chooseDifficulty'){this.send('difficulty',{index:Number(value)});this.close();return}
   if(action==='refill'){this.send('refill',{});this.close();return}
   if(action==='preset'){this.send('bet',{value:Number(value)});return}
@@ -392,7 +488,7 @@ class GameUI {
   controls.classList.toggle('no-settings',!settingsVisible);controls.classList.toggle('auto-only',features.auto&&!features.difficulty);controls.classList.toggle('difficulty-only',features.difficulty&&!features.auto);controls.classList.toggle('no-presets',!presetsShown);
   const featureKey=JSON.stringify(features);if(featureKey!==this.lastFeatures){const changed=this.lastFeatures!==undefined;this.lastFeatures=featureKey;const modal=this.modal||'';if((modal==='difficulty'&&!features.difficulty)||(modal.startsWith('limit:auto')&&!features.auto))this.close();else if(changed&&modal==='menu')this.open('menu')}
   const winsKey=JSON.stringify(s.wins);if(winsKey!==this.lastWins){this.lastWins=winsKey;this.q('.wins-list').innerHTML=this.winRows((s.wins||[]).slice(0,5));if(this.modal==='wins')this.q('.modal-body').innerHTML=this.winRows(s.wins||[])||'<p class=muted>No wins yet.</p>'}
-  const histKey=JSON.stringify([s.game,s.history,s.bets?.map(v=>v.time)]);if(histKey!==this.lastHistory){this.lastHistory=histKey;this.q('.history').innerHTML=(s.history||[]).slice(0,15).map((v,i)=>{const value=Number(v.multiplier).toFixed(2)+'×',colour=multiplierColour(v.multiplier,s.game);if(typeof v.cashed_out!=='boolean')return '<span style="color:'+colour+'" class="pill tier-'+tintFor(v.multiplier)+'">'+value+'</span>';const label=v.cashed_out?'Cashed out':'Lost',linked=!!s.bets?.[i],tag=linked?'button':'span';return '<'+tag+(linked?' type="button" data-action="historyDetails" data-value="'+i+'"':'')+' style="color:'+colour+'" class="pill history-result tier-'+tintFor(v.multiplier)+' '+(v.cashed_out?'is-cashout':'is-loss')+'" title="'+label+'" aria-label="'+label+', '+value+'"><span class="history-result-icon" aria-hidden="true">'+(v.cashed_out?'✓':'✕')+'</span><span>'+value+'</span></'+tag+'>'}).join('')}
+  const histKey=JSON.stringify([s.game,s.history,(Array.isArray(s.bets)?s.bets:[]).map(v=>v.time)]);if(histKey!==this.lastHistory){this.lastHistory=histKey;this.q('.history').innerHTML=(s.history||[]).slice(0,15).map((v,i)=>{const value=Number(v.multiplier).toFixed(2)+'×',colour=multiplierColour(v.multiplier,s.game);if(typeof v.cashed_out!=='boolean')return '<span style="color:'+colour+'" class="pill tier-'+tintFor(v.multiplier)+'">'+value+'</span>';const label=v.cashed_out?'Cashed out':'Lost',linked=!!s.bets?.[i],tag=linked?'button':'span';return '<'+tag+(linked?' type="button" data-action="historyDetails" data-value="'+i+'"':'')+' style="color:'+colour+'" class="pill history-result tier-'+tintFor(v.multiplier)+' '+(v.cashed_out?'is-cashout':'is-loss')+'" title="'+label+'" aria-label="'+label+', '+value+'"><span class="history-result-icon" aria-hidden="true">'+(v.cashed_out?'✓':'✕')+'</span><span>'+value+'</span></'+tag+'>'}).join('')}
   this.q('.multiplier').style.setProperty('--multiplier-color',multiplierColour(s.multiplier,s.game));
   this.q('.multiplier').hidden=s.game==='road'||this.config.multiplierPill===false;this.q('.multiplier').textContent=Number(s.multiplier||1).toFixed(2)+'×';
   this.q('.toast').hidden=!s.toast;this.q('.toast').textContent=s.toast||'';
@@ -407,7 +503,7 @@ class GameUI {
   else if(!notice){this.shownNotice=null;if(this.modal==='notice'&&this.noticeFromState)this.close()}
   if(!s.winToast&&s.win&&!this.dismissedWin&&this.modal!=='win')this.open('win');else if(!s.win&&this.modal==='win')this.close();
   if(this.modal==='win'){const total=this.q('.win-total');if(total)total.textContent=money(s.winAmount);const subtitle=this.q('.win-subtitle');if(subtitle)subtitle.textContent=s.winSubtitle||'Well played!'}
-  if(this.modal==='difficulty'&&!s.canBet)this.close();
+  if((this.modal==='difficulty'||this.modal==='stake')&&!s.canBet)this.close();
   const transfer=s.winTransferId||0;
   if(this.lastTransferId!==undefined&&transfer!==this.lastTransferId&&s.win&&!s.winToast){this.winSound.playTransfer();requestAnimationFrame(()=>this.flyWinCoins())}
   this.lastTransferId=transfer;
@@ -530,7 +626,7 @@ class GameUI {
  winRows(rows){return rows.map(v=>'<div class="winner">'+avatar(v.name,this.state.players)+'<span class="winner-name">'+esc(v.name)+'</span><span class="win-multiple">'+Number(v.multiplier||1).toFixed(2)+'×</span><span class="money">+'+money(v.payout)+'</span></div>').join('')}
  betTable(kind){
   const top=kind==='topbets',s=this.state;
-  const rows=top?[...(s.topBets||s.wins||[])].sort((a,b)=>b.payout-a.payout).slice(0,25):[...(s.bets||[])].sort((a,b)=>b.time-a.time);
+  const rows=top?[...(s.topBets||s.wins||[])].sort((a,b)=>b.payout-a.payout).slice(0,25):[...(Array.isArray(s.bets)?s.bets:[])].sort((a,b)=>b.time-a.time);
   this.betRows=rows.map(v=>({...v}));
   // A stake is counted in coins, a payout in the currency, in the table as on the panel.
   const amount=(v,stake=false)=>Number.isFinite(v)?(stake?'<span class="coin-amount">'+esc(coinAmount(v))+'</span>':esc(money(v))):'—';
@@ -603,9 +699,25 @@ class GameUI {
   // From the tabbed variant's side buttons these open as a sheet from the right on a wide
   // screen (the CSS decides the breakpoint); the same modal from the menu stays a popup.
   layer.classList.toggle('is-sheet',!drawer&&!!this.tabbed&&(kind==='topbets'||kind==='mybets'||(kind==='rules'&&this.rulesFrom==='tab')));this.q('.modal').classList.toggle('win-modal',kind==='win');
-  this.q('.modal h2').textContent={notice:NOTICES[this.noticeKind]?.title||NOTICES.error.title,menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:this.tabbed?'Difficulty':'Choose difficulty',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top bets',mybets:'My bets'}[kind];
+  this.q('.modal h2').textContent={notice:NOTICES[this.noticeKind]?.title||NOTICES.error.title,menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:this.tabbed?'Difficulty':'Choose difficulty',stake:'Bet amount',options:this.optionSpec?.title||'',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top bets',mybets:'My bets'}[kind];
   this.q('[data-action=close]').hidden=kind==='win'&&!this.config.demo;
   const body=this.q('.modal-body');body.classList.toggle('rules-content',kind==='rules');
+  // A game's own choice in the kit's option sheet (GameUI.openOptions): the level sheet's look,
+  // the game's title, head and options; an option's trusted html sits between name and reward.
+  if(kind==='options'){
+   const o=this.optionSpec||{},list=Array.isArray(o.options)?o.options:[];
+   body.innerHTML=(o.head?'<div class="level-sheet-head" aria-hidden="true">'+esc(o.head)+'</div>':'')+'<div class="option-list level-sheet" role="radiogroup" aria-label="'+esc(o.title||'')+'">'+list.map((v,i)=>this.radioOption('chooseOption',i,i===o.selected,v.title,'',v.reward,'')).join('')+'</div>';
+   body.querySelectorAll('.radio-option').forEach((option,i)=>{if(list[i]?.html)option.querySelector('.option-details')?.insertAdjacentHTML('afterend',list[i].html)});
+  }
+  // The stake as a sheet of ready amounts: one tap instead of a run of +. A game may name its
+  // own (state.stakeOptions); amounts over the balance are there but cannot be picked.
+  if(kind==='stake'){
+   const options=Array.isArray(s.stakeOptions)&&s.stakeOptions.length?s.stakeOptions:STAKE_OPTIONS;
+   const [lo,hi]=betLimits(s);
+   // MIN and MAX here are the panel's own: the game's lowest and highest stake, not a sheet amount.
+   body.innerHTML='<div class="stake-limits">'+button('min','MIN')+button('max','MAX')+'</div><div class="stake-grid" role="radiogroup" aria-label="Bet amount">'+options.map(v=>'<button type="button" class="button'+(Number(v)===Number(s.bet)?' on':'')+'" role="radio" aria-checked="'+(Number(v)===Number(s.bet))+'" data-action="chooseStake" data-value="'+esc(v)+'" '+(s.balanceKnown!==false&&Number(v)>Number(s.balance)?'disabled':'')+'>'+'<span class="money coin-amount">'+coinAmount(v)+'</span>'+'</button>').join('')+'</div>';
+   const [minB,maxB]=body.querySelectorAll('.stake-limits .button');minB.disabled=Number(s.bet)<=lo;maxB.disabled=Number(s.bet)>=hi;
+  }
   if(kind==='difficulty'){
    const content=s.difficultyContent||{};
    // The tabbed shell's sheet is just the levels and what each pays; the rules tab explains the rest.

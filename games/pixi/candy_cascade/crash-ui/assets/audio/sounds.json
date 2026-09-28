@@ -220,8 +220,13 @@
       "pitch_jitter": 0,
       "takes": [
         {
-          "file": "web/assets/audio/stake_max_0.mp3",
+          "file": "web/assets/audio/stake_min_2.mp3",
           "enabled": true,
+          "source": "stake_min"
+        },
+        {
+          "file": "web/assets/audio/stake_max_0.mp3",
+          "enabled": false,
           "source": "elevenlabs"
         },
         {
@@ -238,7 +243,7 @@
       "prompt": "Bright crisp double tick, two quick interface clicks rising, close-mic, dry",
       "generator": "ElevenLabs eleven_text_to_sound_v2",
       "flow_url": "https://elevenlabs.io/app/flows/hMGKofqliMqXYKlcJySn",
-      "volume_db": -19.7
+      "volume_db": -16.25
     },
     {
       "id": "stake_preset",

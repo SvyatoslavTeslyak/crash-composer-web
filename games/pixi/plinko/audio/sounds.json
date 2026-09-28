@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "game": "plinko",
+  "title": "Plinko",
+  "owner": "src/platform/sounds.ts (Sounds). The pegs, the buckets' mallet notes and the coin are drawn in code; the music is a file.",
+  "events": [
+    {
+      "id": "music",
+      "label": "Background music",
+      "trigger": "Loops under the game while the menu's Music switch is on.",
+      "volume_db": -9.9,
+      "pitch_jitter": 0,
+      "generator": "ElevenLabs eleven_music_v2",
+      "flow_url": "https://elevenlabs.io/app/flows/a8vqfKA1w0vvjHayFnRo",
+      "prompt": "Relaxed instrumental Caribbean night groove, about 100 BPM, warm and dreamy but lightly uplifting: soft steel pan melody, marimba plucks, gentle kompa-style guitar skank, round bass and a laid-back percussion groove with shakers and congas; crisp modern production, steady even energy with no big build or ending so it loops seamlessly as casual game background music, no vocals.",
+      "takes": [
+        {
+          "file": "public/audio/music.ogg",
+          "enabled": true,
+          "source": "elevenlabs"
+        }
+      ]
+    }
+  ]
+}
