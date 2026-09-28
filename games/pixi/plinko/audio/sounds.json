@@ -8,7 +8,7 @@
       "id": "music",
       "label": "Background music",
       "trigger": "Loops under the game while the menu's Music switch is on.",
-      "volume_db": -9.9,
+      "volume_db": -26.0,
       "pitch_jitter": 0,
       "generator": "ElevenLabs eleven_music_v2",
       "flow_url": "https://elevenlabs.io/app/flows/a8vqfKA1w0vvjHayFnRo",
