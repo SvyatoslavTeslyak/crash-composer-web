@@ -138,6 +138,8 @@
 .crash-ui .tabbed-controls .difficulty-row.with-auto{grid-template-columns:repeat(2,minmax(0,1fr))}
 /* The Auto button is a label with a small switch at its end: the knob travels only inside
    that track, and the track lights when Auto is on. The button itself stays a button. */
+/* A game with no levels may put a Turbo switch in the level's place; with neither, Auto takes the row. */
+.crash-ui .tabbed-controls .difficulty-row.with-auto:not(:has(.turbo-switch)):has(.level-pick[hidden]){grid-template-columns:minmax(0,1fr)}
 .crash-ui .tabbed-controls .difficulty-row.with-auto .auto,
 .crash-ui .tabbed-controls .difficulty-row.with-auto .auto[aria-pressed=true]{min-width:0;justify-content:space-between;gap:var(--space-8);padding:var(--space-8) var(--space-8) var(--space-8) var(--space-16);color:var(--on-button);outline:0;border-radius:var(--radius-16);border:var(--stroke-1) solid color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side)}
 .crash-ui .tabbed-controls .difficulty-row.with-auto .auto .auto-label{flex:1 1 auto;min-width:0;padding:0;text-align:left;overflow:hidden;text-overflow:ellipsis}
@@ -159,7 +161,7 @@
    narrow enough that their labels wrap. */
 .crash-ui .tabbed-controls .bet-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16)}
 .crash-ui .tabbed-controls .wager{display:grid;gap:var(--space-8);align-content:start;padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24);background:var(--surface-inset);min-width:0}
-.crash-ui .tabbed-controls .wager .stake{display:grid;grid-template-columns:minmax(var(--tap-min),1fr) var(--control-h) minmax(0,1.5fr) var(--control-h) minmax(var(--tap-min),1fr);gap:var(--space-4);padding:0;border:0;background:none;align-items:center}
+.crash-ui .tabbed-controls .wager .stake{display:grid;grid-template-columns:minmax(var(--tap-min),1fr) var(--control-h) minmax(0,2fr) var(--control-h) minmax(var(--tap-min),1fr);gap:var(--space-4);padding:0;border:0;background:none;align-items:center}
 .crash-ui .tabbed-controls .wager .stake .button{min-height:var(--control-h);font-size:var(--type-16);padding:0}
 .crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{font-size:var(--type-32)}
 .crash-ui .tabbed-controls .wager-amount{display:grid;justify-items:center;line-height:var(--leading-tight);min-width:0}
@@ -784,7 +786,7 @@
  .crash-ui .tabbed-controls .bet-grid>.wager{grid-column:1;grid-row:3}
  .crash-ui .tabbed-controls .bet-grid>.actions{grid-column:2;grid-row:2/4;grid-template-columns:repeat(2,minmax(0,1fr))}
  .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-16)}
- .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--tap-min),1fr) var(--tap-min) minmax(0,1.5fr) var(--tap-min) minmax(var(--tap-min),1fr)}
+ .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--tap-min),1fr) var(--tap-min) minmax(0,2fr) var(--tap-min) minmax(var(--tap-min),1fr)}
  .crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{width:var(--tap-min)}
  .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-24)}
  .crash-ui .tabbed-controls .actions .action{min-height:var(--web-control-height)}
@@ -795,7 +797,7 @@
 }
 
 @media(min-width:__CRASH_MEDIUM_BREAKPOINT__px){
- .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--tap-min),1fr) var(--tap-min) minmax(var(--web-control-amount-width),1.5fr) var(--tap-min) minmax(var(--tap-min),1fr)}
+ .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--tap-min),1fr) var(--tap-min) minmax(var(--web-control-amount-width),2fr) var(--tap-min) minmax(var(--tap-min),1fr)}
  .crash-ui .tabbed-controls .actions{container-type:inline-size}
 }
 @container(max-width:__WEB_COMPACT_ACTION_BREAKPOINT__px){
@@ -1235,3 +1237,46 @@
  .crash-ui .tabbed-controls.has-auto-cashout:has(.difficulty-row[hidden]) .auto-cashout-panel,
  .crash-ui .tabbed-controls.has-auto-cashout:has(.difficulty-row[hidden]) .bet-grid>.actions{grid-row:1}
 }
+
+/* MIN, −, the stake, +, MAX: the stake is a button that opens the sheet of ready amounts. */
+.crash-ui .tabbed-controls .wager-amount.stake-pick{display:flex;align-items:center;justify-content:center;gap:var(--space-6);min-height:var(--control-h);border:0;border-radius:var(--radius-16);background:transparent;color:var(--text);font:inherit;cursor:pointer}
+.crash-ui .tabbed-controls .wager-amount.stake-pick:hover:not(:disabled){background:var(--surface-hover-soft)}
+.crash-ui .tabbed-controls .wager-amount.stake-pick:disabled{cursor:default;opacity:.6}
+.crash-ui .tabbed-controls .wager-amount.stake-pick .chevron{opacity:.6}
+.crash-ui .stake-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
+.crash-ui .stake-grid .button{min-height:var(--web-control-comfort-height);font-size:var(--type-20);font-weight:800;border-radius:var(--radius-16)}
+.crash-ui .stake-grid .button.on{color:var(--on-go);border:var(--stroke-1) solid var(--action-go-edge);background:linear-gradient(var(--action-go-top),var(--action-go-bottom))}
+.crash-ui .stake-grid .button:disabled{opacity:.4}
+.crash-ui .stake-limits{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);margin-bottom:var(--space-8)}
+.crash-ui .stake-limits .button{min-height:var(--tap-min);font-weight:800;letter-spacing:.06em;border-radius:var(--radius-16)}
+/* A stake section a game placed in its own panel (GameUI.mountStake): only the section, laid
+   out as it is in the kit's panel, without the kit layer's full-screen box. */
+.crash-ui.stake-mount{position:static;inset:auto;z-index:auto;pointer-events:auto;width:100%;min-width:0}
+.crash-ui.stake-mount>.controls.tabbed-controls.navigation-only{display:block;width:100%;padding:0;margin:0;background:none;border:0;box-shadow:none}
+/* The stake rolling to its new amount after MIN or MAX: steady digits, so it does not jitter. */
+.crash-ui .coin-amount[data-slot=tbBet]{font-variant-numeric:tabular-nums}
+/* Side actions (config.sideActions): squares beside the main action, as tall as the row it
+   stands in, with an icon or a value over a small label; pressed wears the switch's green. */
+.crash-ui .tabbed-controls .actions.with-sides{display:flex;gap:var(--space-8)}
+.crash-ui .tabbed-controls .actions.with-sides>.action{flex:1 1 0;min-width:0}
+.crash-ui .tabbed-controls .actions.with-sides>.action.cash[hidden]{display:none}
+.crash-ui .tabbed-controls .side-action{flex:none;align-self:stretch;aspect-ratio:1;width:calc(var(--web-control-action-height) + var(--space-8));min-width:0;min-height:0;padding:var(--space-4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-4);border-radius:var(--radius-24);font-size:var(--type-12);letter-spacing:.06em;white-space:nowrap}
+.crash-ui .tabbed-controls .side-action .side-icon{display:flex}
+.crash-ui .tabbed-controls .side-action .side-icon svg{width:var(--type-24);height:var(--type-24)}
+.crash-ui .tabbed-controls .side-action .side-value{font:400 var(--type-24)/1 var(--font-numbers),var(--font-body),sans-serif}
+.crash-ui .tabbed-controls .side-action:not(.has-value) .side-value,.crash-ui .tabbed-controls .side-action.has-value .side-icon{display:none}
+.crash-ui .tabbed-controls .side-action.is-pending .side-value{color:var(--gold);font-size:var(--type-16)}
+.crash-ui .tabbed-controls .side-action[aria-pressed=true]{color:var(--on-success);border-color:transparent;background:var(--switch-on);outline:0}
+/* The action row is at most 80px tall in every game (the action height and a little air):
+   PLAY, GO, DROP, SPIN and CASH OUT, and the squares beside them. Where the panel gives it
+   more room, as a desktop's two-row panel does, it sits in the middle of it. */
+.crash-ui .tabbed-controls .actions{min-height:0;height:calc(var(--web-control-action-height) + var(--space-8));align-self:center}
+.crash-ui .tabbed-controls .actions .action{min-height:0}
+/* A long press on the main action (config.goRepeat) must not open the phone's callout. */
+.crash-ui [data-action=go]{-webkit-touch-callout:none;touch-action:manipulation}
+/* A title shown with its icon (GO beside CASH OUT, or state.goLabelOnly) reads at the action's size. */
+.crash-ui .tabbed-controls .actions .action .action-title.go-label{font-size:var(--type-24)}
+/* The main action's faces (state.goFace): STOP in the danger colours, SKIP as a plain button. */
+.crash-ui .tabbed-controls .actions .action.go.is-stop:not(:disabled){color:var(--on-cash);border-color:var(--danger-edge);background:linear-gradient(var(--danger-top),var(--danger-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--danger-edge) calc(var(--alpha-medium) * 100%),transparent),0 var(--web-control-depth) 0 var(--danger-shadow)}
+.crash-ui .tabbed-controls .actions .action.go.is-skip:not(:disabled){color:var(--on-button);border-color:color-mix(in srgb,var(--button-edge) calc(var(--alpha-strong) * 100%),transparent);background:linear-gradient(var(--button-top),var(--button-bottom));box-shadow:inset 0 0 0 var(--stroke-2) color-mix(in srgb,var(--button-edge) calc(var(--alpha-faint) * 100%),transparent),0 var(--web-control-depth) 0 var(--button-side)}
+.crash-ui .tabbed-controls .actions .action.go.is-skip::before{display:none}

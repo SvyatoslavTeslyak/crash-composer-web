@@ -256,11 +256,15 @@ class TabbedControls {
  // {pressed, value, pending, disabled}; a value (12, ∞) stands where the icon is.
  syncSides(s,sides){
   const actions=this.q('.actions'),key=JSON.stringify(sides.map(x=>[x.action,x.label,x.icon,x.place]));
+  // Squares as wide as the row is tall. aspect-ratio alone is not enough: Safari does not
+  // carry a stretched height across to the width in a flex row, and squeezes them.
+  if(sides.length&&!this.sideObserver&&typeof ResizeObserver==='function'){this.sideObserver=new ResizeObserver(()=>{const h=actions.clientHeight;for(const b of actions.querySelectorAll('.side-action'))b.style.width=h+'px'});this.sideObserver.observe(actions)}
   if(key!==this.sideKey){this.sideKey=key;actions.querySelectorAll('.side-action').forEach(n=>n.remove());actions.classList.toggle('with-sides',sides.length>0);
    const go=actions.querySelector('[data-action=go]');let last=go;
    for(const x of sides){const b=document.createElement('button');b.type='button';b.className='button side-action';b.dataset.action=x.action;b.setAttribute('aria-label',x.label||x.action);
     b.innerHTML='<span class="side-icon" aria-hidden="true">'+(x.icon||'')+'</span><b class="side-value"></b><span class="side-label">'+esc(x.label||'')+'</span>';
-    if(x.place==='after'){last.after(b);last=b}else go.before(b)}}
+    if(x.place==='after'){last.after(b);last=b}else go.before(b)}
+   if(actions.clientHeight)for(const b of actions.querySelectorAll('.side-action'))b.style.width=actions.clientHeight+'px'}
   for(const x of sides){const b=actions.querySelector('.side-action[data-action="'+x.action+'"]');if(!b)continue;const st=(s.sides||{})[x.action]||{};
    b.setAttribute('aria-pressed',String(!!st.pressed));b.disabled=!!st.disabled||!!s.win;
    const value=st.value===undefined||st.value===null?'':String(st.value),v=b.querySelector('.side-value');if(v.textContent!==value)v.textContent=value;
