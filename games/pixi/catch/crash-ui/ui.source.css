@@ -1252,3 +1252,31 @@
 /* The bet panel's sections - the choice row, the stake, the action row, the tabs - stand 12px
    apart, in every game and at every width. Only the vertical gap: a desktop's columns keep theirs. */
 .crash-ui .controls.tabbed-controls,.crash-ui .tabbed-controls .tabbed-main,.crash-ui .tabbed-controls .bet-grid{row-gap:var(--space-12)}
+
+/* Wide screens: the panel's rows stand taller. The choice row and the stake are one height,
+   the steppers stay square at it, and the action row fills the whole height of the two rows
+   beside it. Its side squares match that height once the panel is wide enough; on a narrower
+   desktop they are two rows' height, so they do not squeeze the main action, and the row
+   sits in the middle at their height. */
+@media(min-width:__CRASH_LAPTOP_BREAKPOINT__px){
+ .crash-ui .tabbed-controls{--desk-row:var(--web-desktop-control-height);--side-square:calc(2 * var(--desk-row))}
+ .crash-ui .tabbed-controls .difficulty-row .button{height:var(--desk-row);min-height:var(--desk-row)}
+ .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--desk-row),1fr) var(--desk-row) minmax(var(--web-control-amount-width),2fr) var(--desk-row) minmax(var(--desk-row),1fr)}
+ .crash-ui .tabbed-controls .wager .stake .button{height:var(--desk-row);min-height:var(--desk-row)}
+ .crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{width:var(--desk-row)}
+ .crash-ui .tabbed-controls .bet-grid>.actions{height:auto;align-self:stretch}
+ .crash-ui .tabbed-controls .bet-grid>.actions.with-sides{align-self:center}
+ .crash-ui .tabbed-controls .actions.with-sides>.action{align-self:stretch}
+ .crash-ui .tabbed-controls .side-action{align-self:center;width:var(--side-square);height:var(--side-square)}
+}
+@media(min-width:__WEB_WIDE_PANEL_BREAKPOINT__px){
+ .crash-ui .tabbed-controls{--side-square:calc(2 * var(--desk-row) + var(--space-12) + 2 * var(--space-8) + 2 * var(--stroke-1))}
+}
+/* Without a choice row (a slot) the stake is the only row: the squares stay two rows tall so
+   they still read as the panel's big buttons, and the stake sits in the middle beside them. */
+@media(min-width:__CRASH_LAPTOP_BREAKPOINT__px){
+ .crash-ui .tabbed-controls:not(:has(.difficulty-row:not([hidden]))){--side-square:calc(2 * var(--desk-row))}
+ .crash-ui .tabbed-controls:not(:has(.difficulty-row:not([hidden]))) .tabbed-main{grid-template-rows:auto}
+ .crash-ui .tabbed-controls:not(:has(.difficulty-row:not([hidden]))) .bet-grid>.wager{grid-row:1;align-self:center}
+ .crash-ui .tabbed-controls:not(:has(.difficulty-row:not([hidden]))) .bet-grid>.actions{grid-row:1}
+}
