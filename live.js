@@ -7,9 +7,9 @@
  // Each engine has its own build of the same game, mounted side by side by preview.py.
  const engine=()=>window.ComposerTarget.engine;
  // The games that use Goat Road's tabbed shell: its panel, its windows, rules as a tab.
- const TABBED_GAMES=['road','boom','plinko','candy_cascade'];
+ const TABBED_GAMES=['road','boom','plinko','candy_cascade','mopyon_cascades'];
  // Games whose bet panel the game itself configures: nothing in it to switch from here.
- const OWN_PANEL=['candy_cascade','plinko'];
+ const OWN_PANEL=['candy_cascade','plinko','mopyon_cascades'];
  let timer,generation=0;
  const applied={};
  const presetSelect=document.querySelector('#presentation-preset');

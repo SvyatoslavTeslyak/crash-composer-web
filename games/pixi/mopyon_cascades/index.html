@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Mòpyon Cascades</title>
+<link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon-64-DxHhpyZD.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon-DciryXTO.png">
+<!-- The board's look, set before the first paint so the ladder never flashes in the other one. -->
+<script>document.documentElement.dataset.board = new URLSearchParams(location.search).get('board') === 'notebook' ? 'notebook' : 'tiles'</script>
+<link rel="stylesheet" href="crash-ui/tokens.css?v=0c8a56b11d14">
+<link rel="stylesheet" href="crash-ui/ui.css?v=0c8a56b11d14">
+  <script type="module" crossorigin src="./assets/index-UrDz_WCN.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/CanvasPool-CX_31KdX.js">
+  <link rel="modulepreload" crossorigin href="./assets/canvasUtils-x2ND1UXV.js">
+  <link rel="modulepreload" crossorigin href="./assets/getPo2TextureFromSource-zQ4qLdpi.js">
+  <link rel="modulepreload" crossorigin href="./assets/RenderTargetSystem-BdvrGF6O.js">
+  <link rel="modulepreload" crossorigin href="./assets/getTextureBatchBindGroup-eI8ZguMn.js">
+  <link rel="modulepreload" crossorigin href="./assets/CanvasRenderer-BilkU_wP.js">
+  <link rel="stylesheet" crossorigin href="./assets/index-CGyGyPAh.css">
+</head>
+<body>
+<!-- The scene: between the kit's header and its bet panel, the cascade ladder and the board. -->
+<main id="stage">
+  <section id="play" aria-label="Mòpyon Cascades">
+    <!-- The cascade ladder, its free-game milestones and the stage readout. -->
+    <section class="hero" aria-label="Cascade multiplier">
+      <div class="cap"><span data-slot="captitle">MULTIPLIER</span><span data-slot="capstate">INITIAL BOARD</span></div>
+      <div class="pills" data-slot="pills" aria-label="Cascade progress"></div>
+      <div class="miles" data-slot="miles" aria-label="Free games by cascade depth"></div>
+      <div class="readout" data-slot="readout" aria-live="polite"></div>
+    </section>
+    <section class="board" data-slot="board" aria-label="Board"></section>
+  </section>
+</main>
+<script src="crash-ui/tokens.js?v=0c8a56b11d14"></script>
+<script src="crash-ui/ui.js?v=0c8a56b11d14"></script>
+</body>
+</html>
