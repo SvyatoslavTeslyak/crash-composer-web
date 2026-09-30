@@ -6,12 +6,18 @@ const languages=['en','fr','ht'],labels={en:'English',fr:'Français',ht:'Kreyòl
 const texts=value=>Object.fromEntries(languages.map(lang=>[lang,value[lang]??'']));
 try{const saved=localStorage.getItem('crash-language');language.value=languages.includes(saved)?saved:'en'}catch{}
 const current=()=>drafts.get(target);
+// The slots and Plinko build their own bet panel. Each exposes a handle on window with its own
+// preview hooks (previewWindow, previewTranslation, clearTranslationPreview), and the crash games'
+// sample history and PLAY / CASH OUT buttons mean nothing to them.
+const OWN_PANEL={candy_cascade:'candyCascade',plinko:'plinko',mopyon_cascades:'mopyonCascades'};
+const ownPanel=()=>Object.hasOwn(OWN_PANEL,target);
+const gameHandle=()=>{try{return ownPanel()?frame.contentWindow?.[OWN_PANEL[target]]:null}catch{return null}};
 function notify(text){$('#translate-message').textContent=text}
 let saving=false,activeKey='',previousDevice=null,previousZoom=null,importReview=null;
 const live=()=>$('#translates-tab').getAttribute('aria-pressed')==='true';
 function previewData(d){const result=structuredClone(d);for(const [key,edit] of Object.entries(d.edits||{})){if(edit.custom)result.overrides[key]=texts(edit);else{delete result.overrides[key];Object.assign(result.catalog.entries[key],texts(edit))}}return result}
 function apply(){bindPreviewDismiss();if(live())ensureHistoryPreview();const d=current();try{const api=frame.contentWindow.CrashI18n;if(api){if(d)api.setDraft(previewData(d));api.setLanguage(language.value);if(live())highlightText()}}catch{}}
-const windowNames={autoSpin:'Auto Spin',candyPays:'Candy payouts',menu:'Settings',account:'Account',rules:'How to play',topbets:'Top bets',mybets:'My bets',betDetails:'My bet details',topBetDetails:'Top bet details',wins:'Live wins',win:'Win',difficulty:'Difficulty','limit:theme':'Atmosphere','limit:auto_steps':'Auto steps','limit:auto_cashout':'Auto cash out','notice:funds':'Notice · not enough funds','notice:offline':'Notice · no connection','notice:error':'Notice · something went wrong','notice:wallet':'Notice · top up balance'};
+const windowNames={autoSpin:'Auto Spin',candyPays:'Candy payouts',linePays:'Line pays',award:'Free games award',summary:'Free games summary',plinkoRows:'Rows',stake:'Bet amount',menu:'Settings',account:'Account',rules:'How to play',topbets:'Top bets',mybets:'My bets',betDetails:'My bet details',topBetDetails:'Top bet details',wins:'Live wins',win:'Win',difficulty:'Difficulty','limit:theme':'Atmosphere','limit:auto_steps':'Auto steps','limit:auto_cashout':'Auto cash out','notice:funds':'Notice · not enough funds','notice:offline':'Notice · no connection','notice:error':'Notice · something went wrong','notice:wallet':'Notice · top up balance'};
 function usageMarkup(entry){
  if(entry.usage?.includes('unused'))return '<div class="translation-usage"><span>Unused · Not rendered</span></div><p class="translation-usage-note">'+esc(entry.unusedReason)+'</p>';
  const usage=entry.usage||[],attribute=usage.filter(x=>!['text','scene'].includes(x)),onlyAttribute=attribute.length&&!usage.includes('text');
@@ -42,7 +48,7 @@ function previewWindow(kind){
  if(kind&&![...$('#translation-preview-view').options].some(option=>option.value===kind))kind='';
  try{const ui=frame.contentWindow.CrashUI?.instance;if(!ui)return;
  const focused=document.activeElement;
- const custom=target==='candy_cascade'&&frame.contentWindow.candyCascade?.previewWindow(kind);
+ const custom=gameHandle()?.previewWindow?.(kind);
  if(custom){if(ui.modal)ui.close();$('#translation-preview-view').value=kind;apply();if(focused?.matches('textarea,.translation-row'))frame.contentWindow.requestAnimationFrame(()=>setTimeout(()=>focused.isConnected&&focused.focus({preventScroll:true}),0));return}
  if(kind==='betDetails'||kind==='topBetDetails'){const parent=kind==='topBetDetails'?'topbets':'mybets';if(ui.modal!==parent)ui.open(parent);if(ui.betRows?.length&&!ui.betDetail)ui.showBetDetails(0)}
  else if(kind.startsWith('limit:')&&!ui.limitOptions?.()[kind.slice(6)]){if(ui.modal!=='menu')ui.open('menu')}
@@ -58,7 +64,7 @@ function stopHistoryPreview(){
  preview.ui.update=preview.update;preview.update.call(preview.ui,preview.latest);
 }
 function ensureHistoryPreview(){
- if(target==='candy_cascade')return;
+ if(ownPanel())return;
  const ui=frame.contentWindow?.CrashUI?.instance;if(!ui?.state||typeof ui.update!=='function'||ui.multiBet||historyPreview?.ui===ui)return;
  stopHistoryPreview();
  const preview={ui,update:ui.update,latest:ui.state};historyPreview=preview;
@@ -80,7 +86,7 @@ function stopStateInspection(){
  try{ui.close();update.call(ui,latest)}finally{ui.send=send}
 }
 function inspectAction(source,entry){
- stopStateInspection();if(target==='candy_cascade')return;const ui=frame.contentWindow?.CrashUI?.instance;if(!ui||typeof ui.update!=='function'||ui.multiBet)return;
+ stopStateInspection();if(ownPanel())return;const ui=frame.contentWindow?.CrashUI?.instance;if(!ui||typeof ui.update!=='function'||ui.multiBet)return;
  const active=['GO','CASH OUT','SELL FUEL','NEXT LANE','NEXT FRUIT'].includes(source),idle=['PLAY','SLICE'].includes(source);
  const notification=entry?.previewState==='notification',winTransfer=entry?.previewState==='win-transfer';
  const betPreview=['betDetails','topBetDetails'].includes(entry?.previewWindow);
@@ -127,19 +133,19 @@ let revealTimer;
 function focusText(key,lang){
  const entry=available().find(([id])=>id===key)?.[1];if(!entry)return;
  clearTimeout(revealTimer);
- if(target==='candy_cascade')frame.contentWindow.candyCascade?.clearTranslationPreview();
+ gameHandle()?.clearTranslationPreview?.();
  activeKey=key;syncSelection();if(lang&&language.value!==lang){language.value=lang;try{localStorage.setItem('crash-language',lang)}catch{}}
  stopStateInspection();inspectAction(entry.source,entry);
  previewWindow(entry.previewWindow||'');
- if(target==='candy_cascade')frame.contentWindow.candyCascade?.previewTranslation(entry.source,entry);
+ gameHandle()?.previewTranslation?.(entry.source,entry);
  apply();
  revealTimer=setTimeout(()=>{frame.contentWindow.CrashI18n?.reveal?.(key);highlightText()},350);
 }
-$('#translation-preview-view').onchange=e=>{clearTimeout(revealTimer);frame.contentWindow.candyCascade?.clearTranslationPreview();const kind=e.target.value;activeKey='';syncSelection();stopStateInspection();inspectAction('',{previewWindow:kind});previewWindow(kind)};
+$('#translation-preview-view').onchange=e=>{clearTimeout(revealTimer);gameHandle()?.clearTranslationPreview?.();const kind=e.target.value;activeKey='';syncSelection();stopStateInspection();inspectAction('',{previewWindow:kind});previewWindow(kind)};
 window.addEventListener('composer-workspace',e=>{
  $('#room').classList.toggle('translations-workspace',e.detail==='translates');
  if(e.detail==='translates'){if(!previousDevice){previousDevice={...theStage.device};previousZoom=devices.zoom||'fit'}theStage.set({device:'mobile',zoom:'fit'});apply()}
- else{clearTimeout(revealTimer);frame.contentWindow.candyCascade?.clearTranslationPreview();stopStateInspection();stopHistoryPreview();try{frame.contentWindow.CrashI18n?.highlight?.('')}catch{}if(previousDevice){theStage.set({device:previousDevice.id==='custom'?previousDevice:previousDevice.id,zoom:previousZoom});previousDevice=null}}
+ else{clearTimeout(revealTimer);gameHandle()?.clearTranslationPreview?.();stopStateInspection();stopHistoryPreview();try{frame.contentWindow.CrashI18n?.highlight?.('')}catch{}if(previousDevice){theStage.set({device:previousDevice.id==='custom'?previousDevice:previousDevice.id,zoom:previousZoom});previousDevice=null}}
 });
 function exportTable(){
  const blob=new Blob([TranslationTable.encode(current(),target,currentPreset())],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='translations-'+target+'-'+currentPreset()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('CSV downloaded · Saved texts for this game.');

@@ -45,7 +45,9 @@
         "boom",
         "market_stack",
         "fuel",
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "ht": "Kontwòl miz",
       "usage": [
@@ -90,7 +92,9 @@
         "boom",
         "market_stack",
         "fuel",
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "ht": "MIN",
       "usage": [
@@ -120,7 +124,9 @@
         "boom",
         "market_stack",
         "fuel",
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "ht": "MAKS",
       "usage": [
@@ -1091,7 +1097,9 @@
         "boom",
         "market_stack",
         "fuel",
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "ht": "Remete balans lan a $1,000",
       "usage": [
@@ -1265,7 +1273,9 @@
         "boom",
         "market_stack",
         "fuel",
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "ht": "Balans",
       "usage": [
@@ -1293,7 +1303,9 @@
         "boom",
         "market_stack",
         "fuel",
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "ht": "Rekò pèsonèl",
       "usage": [
@@ -1318,7 +1330,9 @@
         "boom",
         "market_stack",
         "fuel",
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "ht": "Sesyon sa a",
       "usage": [
@@ -1343,7 +1357,9 @@
         "boom",
         "market_stack",
         "fuel",
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "ht": "Tou fini",
       "usage": [
@@ -3238,7 +3254,8 @@
       "ht": "Mwayen",
       "group": "Bet panel & messages",
       "games": [
-        "road"
+        "road",
+        "plinko"
       ],
       "usage": [
         "text"
@@ -3442,11 +3459,12 @@
     "top_up_your_balance_c11873": {
       "source": "Top up your balance",
       "en": "Top up your balance",
-      "fr": "",
-      "ht": "",
+      "fr": "Rechargez votre solde",
+      "ht": "Ajoute lajan nan balans ou",
       "group": "Header & account",
       "games": [
-        "road"
+        "road",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3459,11 +3477,12 @@
     "add_funds_in_your_wallet_12526b": {
       "source": "Add funds in your wallet, then come back to the round.",
       "en": "Add funds in your wallet, then come back to the round.",
-      "fr": "",
-      "ht": "",
+      "fr": "Ajoutez des fonds dans votre portefeuille, puis revenez au jeu.",
+      "ht": "Mete lajan nan bous ou, epi tounen nan jwèt la.",
       "group": "Header & account",
       "games": [
-        "road"
+        "road",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3476,11 +3495,12 @@
     "top_up_91d42a": {
       "source": "Top up",
       "en": "Top up",
-      "fr": "",
-      "ht": "",
+      "fr": "Recharger",
+      "ht": "Ajoute lajan",
       "group": "Bet panel & messages",
       "games": [
-        "road"
+        "road",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3548,7 +3568,8 @@
       "ht": "Antre omwen 0.01 P, ak 2 chif apre vigil la maksimòm.",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3633,7 +3654,8 @@
       "ht": "Se yon apèsi sèlman · miz ou pa chanje.",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3650,7 +3672,8 @@
       "ht": "Balans lan pa sifi · ajoute lajan pou kontinye",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3667,7 +3690,8 @@
       "ht": "Retou pou jwè : [RTP apre sètifikasyon].",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3684,7 +3708,8 @@
       "ht": "Eseye gratis · Pa gen miz ni peman",
       "group": "Scene",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3701,7 +3726,8 @@
       "ht": "Tou gratis {number} · Kaskad {index}",
       "group": "Tabs & windows",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3752,7 +3778,8 @@
       "ht": "Fini tou sa a anvan ou ajoute lajan",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3769,7 +3796,8 @@
       "ht": "Balans lan pa sifi pou tou oto",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3871,7 +3899,8 @@
       "ht": "TOU GRATIS {current}/{total}",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -3905,7 +3934,8 @@
       "ht": "Diminye kantite pou kalkil la",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "aria-label"
@@ -3922,7 +3952,8 @@
       "ht": "Ogmante kantite pou kalkil la",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "aria-label"
@@ -3939,7 +3970,8 @@
       "ht": "Miz {bet} P · Retire yon sèl fwa",
       "group": "Tabs & windows",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4041,7 +4073,8 @@
       "ht": "Kantite pou kalkil la (P)",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "aria-label"
@@ -4109,7 +4142,8 @@
       "ht": "KÒMANSE {count} TOU",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4160,7 +4194,8 @@
       "ht": "Miltiplikatè kaskad",
       "group": "Scene",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "aria-label"
@@ -4194,7 +4229,8 @@
       "ht": "Tou oto yo fini",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4228,7 +4264,8 @@
       "ht": "{count} tou gratis",
       "group": "Tabs & windows",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4262,7 +4299,8 @@
       "ht": "Pwogrè kaskad",
       "group": "Scene",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "aria-label"
@@ -4279,7 +4317,8 @@
       "ht": "Pa gen genyen nan tou sa a",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4313,7 +4352,8 @@
       "ht": "KANTITE TOU",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4347,7 +4387,8 @@
       "ht": "Kaskad {index}",
       "group": "Tabs & windows",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4398,7 +4439,8 @@
       "ht": "Afichaj genyen",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "aria-label"
@@ -4415,7 +4457,8 @@
       "ht": "Detay tou a",
       "group": "Tabs & windows",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4449,7 +4492,8 @@
       "ht": "Tès la fini",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4483,7 +4527,8 @@
       "ht": "Premye tablo",
       "group": "Tabs & windows",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4568,7 +4613,8 @@
       "ht": "Antre kantite a",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "placeholder"
@@ -4585,7 +4631,8 @@
       "ht": "{value}× miz la",
       "group": "Tabs & windows",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4687,7 +4734,9 @@
       "ht": "Kantite miz",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "usage": [
         "aria-label"
@@ -4704,7 +4753,8 @@
       "ht": "KIJAN POU GENYEN",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4721,7 +4771,8 @@
       "ht": "TOU GRATIS",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4755,7 +4806,8 @@
       "ht": "GEN ETAP",
       "group": "Scene",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4772,7 +4824,8 @@
       "ht": "GEN TOTAL",
       "group": "Scene",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4806,7 +4859,8 @@
       "ht": "TOU TÈS",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4823,7 +4877,8 @@
       "ht": "DEMO GRATIS",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4840,7 +4895,8 @@
       "ht": "KANPE OTO",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4891,7 +4947,8 @@
       "ht": "Tou otomatik",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -4908,7 +4965,8 @@
       "ht": "AP JWE…",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -5031,7 +5089,8 @@
       "ht": "KANTITE",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -5048,7 +5107,9 @@
       "ht": "Tablo",
       "group": "Scene",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "usage": [
         "aria-label"
@@ -5065,7 +5126,8 @@
       "ht": "TIBO",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -5082,7 +5144,8 @@
       "ht": "× MIZ",
       "group": "Rules",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -5099,7 +5162,8 @@
       "ht": "JWE",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -5133,7 +5197,8 @@
       "ht": "PASE",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
         "text"
@@ -5150,7 +5215,9 @@
       "ht": "KANPE",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "usage": [
         "text"
@@ -5167,7 +5234,9 @@
       "ht": "OTO",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "usage": [
         "text"
@@ -5235,7 +5304,8 @@
       "fr": "GAIN · {value}×",
       "ht": "GENYEN · {value}×",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "group": "Bet panel & messages",
       "usage": [
@@ -5252,7 +5322,8 @@
       "fr": "GROS GAIN · {value}×",
       "ht": "GWO GENYEN · {value}×",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "group": "Bet panel & messages",
       "usage": [
@@ -5269,7 +5340,8 @@
       "fr": "GAIN MÉGA · {value}×",
       "ht": "MEGA GENYEN · {value}×",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "group": "Bet panel & messages",
       "usage": [
@@ -5286,7 +5358,8 @@
       "fr": "GAIN ÉPIQUE · {value}×",
       "ht": "GENYEN EKSTRA · {value}×",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "group": "Bet panel & messages",
       "usage": [
@@ -5303,7 +5376,9 @@
       "fr": "Tours gagnants",
       "ht": "Tou ki genyen",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "group": "Header & account",
       "usage": [
@@ -5320,7 +5395,9 @@
       "fr": "Meilleur multiplicateur",
       "ht": "Pi bon miltiplikatè",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades",
+        "plinko"
       ],
       "group": "Header & account",
       "usage": [
@@ -5330,6 +5407,1757 @@
       "presets": [
         "tabbed-shell-v1"
       ]
+    },
+    "choose_bet_amount_4d97eb": {
+      "source": "Choose bet amount",
+      "en": "Choose bet amount",
+      "fr": "Choisir le montant de la mise",
+      "ht": "Chwazi kantite miz la",
+      "group": "Bet panel & messages",
+      "games": [],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "difficulty_7945d3": {
+      "source": "Difficulty",
+      "en": "Difficulty",
+      "fr": "Difficulté",
+      "ht": "Difikilte",
+      "group": "Bet panel & messages",
+      "games": [],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "view_bet_details_caacae": {
+      "source": "View bet details",
+      "en": "View bet details",
+      "fr": "Voir le détail de la mise",
+      "ht": "Gade detay miz la",
+      "group": "Tabs & windows",
+      "games": [],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "mybets"
+    },
+    "view_bet_details_for_you_6760a5": {
+      "source": "View bet details for You",
+      "en": "View bet details for You",
+      "fr": "Voir le détail de votre mise",
+      "ht": "Gade detay miz ou",
+      "group": "Tabs & windows",
+      "games": [],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "topbets"
+    },
+    "view_bet_details_for_nam_3db146": {
+      "source": "View bet details for {name}",
+      "en": "View bet details for {name}",
+      "fr": "Voir le détail de la mise de {name}",
+      "ht": "Gade detay miz {name}",
+      "group": "Tabs & windows",
+      "games": [],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "topbets"
+    },
+    "initial_board_a98e2d": {
+      "source": "INITIAL BOARD",
+      "en": "INITIAL BOARD",
+      "fr": "PLATEAU INITIAL",
+      "ht": "PREMYE TABLO",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "cascade_value_94f4dc": {
+      "source": "CASCADE {value}",
+      "en": "CASCADE {value}",
+      "fr": "CASCADE {value}",
+      "ht": "KASKAD {value}",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "sequence_ended_2391cb": {
+      "source": "SEQUENCE ENDED",
+      "en": "SEQUENCE ENDED",
+      "fr": "SÉQUENCE TERMINÉE",
+      "ht": "SEKANS LAN FINI",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "session_multiplier_814cdd": {
+      "source": "SESSION MULTIPLIER",
+      "en": "SESSION MULTIPLIER",
+      "fr": "MULTIPLICATEUR DE SESSION",
+      "ht": "MILTIPLIKATÈ SESYON",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "first_board_349964": {
+      "source": "FIRST BOARD",
+      "en": "FIRST BOARD",
+      "fr": "PREMIER PLATEAU",
+      "ht": "PREMYE TABLO",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "starts_at_value_x_eb622f": {
+      "source": "STARTS AT {value}x",
+      "en": "STARTS AT {value}x",
+      "fr": "DÉBUT À {value}x",
+      "ht": "KÒMANSE A {value}x",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "kept_from_game_value_594d14": {
+      "source": "KEPT FROM GAME {value}",
+      "en": "KEPT FROM GAME {value}",
+      "fr": "CONSERVÉ DU TOUR {value}",
+      "ht": "KENBE DEPI TOU {value}",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "next_game_at_value_x_d34c3c": {
+      "source": "NEXT GAME AT {value}x",
+      "en": "NEXT GAME AT {value}x",
+      "fr": "TOUR SUIVANT À {value}x",
+      "ht": "PWOCHEN TOU A {value}x",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "never_resets_between_fre_42bb52": {
+      "source": "Never resets between free games · max {value}x",
+      "en": "Never resets between free games · max {value}x",
+      "fr": "Conservé d’un tour gratuit à l’autre · max {value}x",
+      "ht": "Li kenbe ant tou gratis yo · maks {value}x",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "value_fg_27beab": {
+      "source": "{value} FG",
+      "en": "{value} FG",
+      "fr": "{value} TG",
+      "ht": "{value} TG",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "value_fg_29cd39": {
+      "source": "{value} FG ✓",
+      "en": "{value} FG ✓",
+      "fr": "{value} TG ✓",
+      "ht": "{value} TG ✓",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "free_games_by_cascade_de_8d3142": {
+      "source": "Free games by cascade depth",
+      "en": "Free games by cascade depth",
+      "fr": "Tours gratuits selon la profondeur de cascade",
+      "ht": "Tou gratis dapre pwofondè kaskad la",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "this_game_182f51": {
+      "source": "THIS GAME",
+      "en": "THIS GAME",
+      "fr": "CE TOUR",
+      "ht": "TOU SA A",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "free_games_win_e055d3": {
+      "source": "FREE GAMES WIN",
+      "en": "FREE GAMES WIN",
+      "fr": "GAIN TOURS GRATUITS",
+      "ht": "GEN TOU GRATIS",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "paid_game_prize_value_dc1a90": {
+      "source": "PAID GAME PRIZE {value}",
+      "en": "PAID GAME PRIZE {value}",
+      "fr": "GAIN DU TOUR PAYANT {value}",
+      "ht": "GEN TOU PEYE A {value}",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "test_spin_no_bet_or_payo_53d01e": {
+      "source": "Test Spin · no bet or payout",
+      "en": "Test Spin · no bet or payout",
+      "fr": "Tour d’essai · Sans mise ni gain réel",
+      "ht": "Tou tès · Pa gen miz ni peman",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "5_in_a_row_wins_across_d_202500": {
+      "source": "5 in a row wins: across, down or diagonal",
+      "en": "5 in a row wins: across, down or diagonal",
+      "fr": "5 alignés gagnent : en ligne, en colonne ou en diagonale",
+      "ht": "5 aliye genyen: an liy, an kolòn oswa an dyagonal",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "value_x_max_multiplier_820186": {
+      "source": "{value}x MAX MULTIPLIER",
+      "en": "{value}x MAX MULTIPLIER",
+      "fr": "MULTIPLICATEUR MAX {value}x",
+      "ht": "MILTIPLIKATÈ MAKS {value}x",
+      "group": "Scene",
+      "games": [
+        "candy_cascade",
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "game_number_value_next_a_8aedda": {
+      "source": "GAME {number} · +{value} · NEXT AT {next}x",
+      "en": "GAME {number} · +{value} · NEXT AT {next}x",
+      "fr": "TOUR {number} · +{value} · SUIVANT À {next}x",
+      "ht": "TOU {number} · +{value} · PWOCHEN A {next}x",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "game_number_no_win_next_70a767": {
+      "source": "GAME {number} · NO WIN · NEXT AT {next}x",
+      "en": "GAME {number} · NO WIN · NEXT AT {next}x",
+      "fr": "TOUR {number} · AUCUN GAIN · SUIVANT À {next}x",
+      "ht": "TOU {number} · PA GENYEN · PWOCHEN A {next}x",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "in_a_real_spin_02bcb9": {
+      "source": "IN A REAL SPIN",
+      "en": "IN A REAL SPIN",
+      "fr": "DANS UN VRAI TOUR",
+      "ht": "NAN YON VRE TOU",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "top_award_68c0ee": {
+      "source": "TOP AWARD",
+      "en": "TOP AWARD",
+      "fr": "RÉCOMPENSE MAX",
+      "ht": "PI GWO PRI",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "earned_fc1b9c": {
+      "source": "EARNED",
+      "en": "EARNED",
+      "fr": "GAGNÉS",
+      "ht": "GENYEN",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "m_pyon_cascades_ee5112": {
+      "source": "Mòpyon Cascades",
+      "en": "Mòpyon Cascades",
+      "fr": "Mòpyon Cascades",
+      "ht": "Mòpyon Cascades",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "free_games_earned_9cae88": {
+      "source": "FREE GAMES EARNED",
+      "en": "FREE GAMES EARNED",
+      "fr": "TOURS GRATUITS GAGNÉS",
+      "ht": "TOU GRATIS OU GENYEN",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "award",
+      "previewState": "round-dependent"
+    },
+    "climbs_with_every_win_up_396a53": {
+      "source": "Climbs with every win · up to {value}x",
+      "en": "Climbs with every win · up to {value}x",
+      "fr": "Monte à chaque gain · jusqu’à {value}x",
+      "ht": "Monte ak chak genyen · jiska {value}x",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "award",
+      "previewState": "round-dependent"
+    },
+    "free_game_tiers_57c3aa": {
+      "source": "Free-game tiers",
+      "en": "Free-game tiers",
+      "fr": "Paliers de tours gratuits",
+      "ht": "Nivo tou gratis yo",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "award",
+      "previewState": "round-dependent"
+    },
+    "at_value_x_f3731a": {
+      "source": "AT {value}x",
+      "en": "AT {value}x",
+      "fr": "À {value}x",
+      "ht": "A {value}x",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "award",
+      "previewState": "round-dependent"
+    },
+    "at_value_x_b4b210": {
+      "source": "AT {value}x+",
+      "en": "AT {value}x+",
+      "fr": "À {value}x+",
+      "ht": "A {value}x+",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "award",
+      "previewState": "round-dependent"
+    },
+    "start_free_games_16ea2e": {
+      "source": "START FREE GAMES",
+      "en": "START FREE GAMES",
+      "fr": "LANCER LES TOURS GRATUITS",
+      "ht": "KÒMANSE TOU GRATIS YO",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "award",
+      "previewState": "round-dependent"
+    },
+    "free_games_complete_b8c30e": {
+      "source": "FREE GAMES COMPLETE",
+      "en": "FREE GAMES COMPLETE",
+      "fr": "TOURS GRATUITS TERMINÉS",
+      "ht": "TOU GRATIS YO FINI",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "you_won_78dd46": {
+      "source": "YOU WON",
+      "en": "YOU WON",
+      "fr": "VOUS AVEZ GAGNÉ",
+      "ht": "OU GENYEN",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "paid_game_633988": {
+      "source": "PAID GAME",
+      "en": "PAID GAME",
+      "fr": "TOUR PAYANT",
+      "ht": "TOU PEYE",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "highest_b868e7": {
+      "source": "HIGHEST",
+      "en": "HIGHEST",
+      "fr": "MAXIMUM",
+      "ht": "PI WO",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "multiplier_journey_b99db3": {
+      "source": "MULTIPLIER JOURNEY",
+      "en": "MULTIPLIER JOURNEY",
+      "fr": "PARCOURS DU MULTIPLICATEUR",
+      "ht": "CHEMEN MILTIPLIKATÈ A",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "started_at_value_x_bet_b_109970": {
+      "source": "started at {value}x · bet {bet} P",
+      "en": "started at {value}x · bet {bet} P",
+      "fr": "départ à {value}x · mise {bet} P",
+      "ht": "kòmanse a {value}x · miz {bet} P",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "fg_value_98699a": {
+      "source": "FG {value}",
+      "en": "FG {value}",
+      "fr": "TG {value}",
+      "ht": "TG {value}",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "collect_88b53a": {
+      "source": "COLLECT",
+      "en": "COLLECT",
+      "fr": "ENCAISSER",
+      "ht": "RANMASE",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "line_up_5_or_more_of_the_5b214e": {
+      "source": "Line up 5 or more of the same symbol in a straight line, with no gaps.",
+      "en": "Line up 5 or more of the same symbol in a straight line, with no gaps.",
+      "fr": "Alignez au moins 5 symboles identiques en ligne droite, sans interruption.",
+      "ht": "Aliye omwen 5 senbòl menm kalite an liy dwat, san espas.",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "across_cfd46a": {
+      "source": "Across",
+      "en": "Across",
+      "fr": "Horizontale",
+      "ht": "Orizontal",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "down_bf93e5": {
+      "source": "Down",
+      "en": "Down",
+      "fr": "Verticale",
+      "ht": "Vètikal",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "diagonal_f4c472": {
+      "source": "Diagonal ↘",
+      "en": "Diagonal ↘",
+      "fr": "Diagonale ↘",
+      "ht": "Dyagonal ↘",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "diagonal_204275": {
+      "source": "Diagonal ↙",
+      "en": "Diagonal ↙",
+      "fr": "Diagonale ↙",
+      "ht": "Dyagonal ↙",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "6_in_a_row_pays_once_as_f38e49": {
+      "source": "✓ 6 in a row pays once as a 6, not as two 5s",
+      "en": "✓ 6 in a row pays once as a 6, not as two 5s",
+      "fr": "✓ 6 alignés paient une fois comme 6, pas comme deux 5",
+      "ht": "✓ 6 aliye peye yon sèl fwa kòm 6, pa kòm de 5",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "lines_that_cross_each_ot_8d01b9": {
+      "source": "Lines that cross each other both pay; a shared symbol is removed once.",
+      "en": "Lines that cross each other both pay; a shared symbol is removed once.",
+      "fr": "Des lignes qui se croisent paient toutes les deux ; un symbole commun n’est retiré qu’une fois.",
+      "ht": "Liy ki kwaze youn ak lòt peye tou de; yon senbòl yo pataje retire yon sèl fwa.",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "line_pays_09e839": {
+      "source": "LINE PAYS",
+      "en": "LINE PAYS",
+      "fr": "GAINS PAR LIGNE",
+      "ht": "GEN PA LIY",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "multiples_of_your_bet_be_c8c407": {
+      "source": "Multiples of your bet · before the multiplier",
+      "en": "Multiples of your bet · before the multiplier",
+      "fr": "Multiples de la mise · avant le multiplicateur",
+      "ht": "Miltip miz la · anvan miltiplikatè a",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "amounts_at_bet_bet_p_bef_6cab1e": {
+      "source": "Amounts at bet {bet} P · before the multiplier",
+      "en": "Amounts at bet {bet} P · before the multiplier",
+      "fr": "Gains pour une mise de {bet} P · avant le multiplicateur",
+      "ht": "Kantite pou miz {bet} P · anvan miltiplikatè a",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "symbol_5cbe62": {
+      "source": "SYMBOL",
+      "en": "SYMBOL",
+      "fr": "SYMBOLE",
+      "ht": "SENBÒL",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "value_in_a_row_06e2a5": {
+      "source": "{value} IN A ROW",
+      "en": "{value} IN A ROW",
+      "fr": "{value} ALIGNÉS",
+      "ht": "{value} ALIYE",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "cascades_free_games_96db26": {
+      "source": "CASCADES & FREE GAMES",
+      "en": "CASCADES & FREE GAMES",
+      "fr": "CASCADES ET TOURS GRATUITS",
+      "ht": "KASKAD AK TOU GRATIS",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "winning_lines_disappear_751f92": {
+      "source": "Winning lines disappear, symbols fall and new ones drop in. Each new winning cascade raises the multiplier. Deep cascades earn free games:",
+      "en": "Winning lines disappear, symbols fall and new ones drop in. Each new winning cascade raises the multiplier. Deep cascades earn free games:",
+      "fr": "Les lignes gagnantes disparaissent, les symboles descendent et de nouveaux arrivent. Chaque nouvelle cascade gagnante augmente le multiplicateur. Les longues cascades offrent des tours gratuits :",
+      "ht": "Liy ki genyen yo disparèt, senbòl yo desann epi lòt tonbe pou ranplase yo. Chak nouvo kaskad ki genyen ogmante miltiplikatè a. Kaskad ki long bay tou gratis:",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "your_cascades_ec2ef8": {
+      "source": "YOUR CASCADES",
+      "en": "YOUR CASCADES",
+      "fr": "VOS CASCADES",
+      "ht": "KASKAD OU YO",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "start_at_0b1894": {
+      "source": "START AT",
+      "en": "START AT",
+      "fr": "DÉBUT À",
+      "ht": "KÒMANSE A",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "win_value_cascade_dffdb6": {
+      "source": "Win + {value} cascade",
+      "en": "Win + {value} cascade",
+      "fr": "Gain + {value} cascade",
+      "ht": "Genyen + {value} kaskad",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "win_value_cascades_af6f9a": {
+      "source": "Win + {value} cascades",
+      "en": "Win + {value} cascades",
+      "fr": "Gain + {value} cascades",
+      "ht": "Genyen + {value} kaskad",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "win_3_or_more_cascades_f4dce8": {
+      "source": "Win + 3 or more cascades",
+      "en": "Win + 3 or more cascades",
+      "fr": "Gain + 3 cascades ou plus",
+      "ht": "Genyen + 3 kaskad oswa plis",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "value_x_or_higher_728b2e": {
+      "source": "{value}x or higher",
+      "en": "{value}x or higher",
+      "fr": "{value}x ou plus",
+      "ht": "{value}x oswa plis",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "in_free_games_the_multip_bf657e": {
+      "source": "In free games the multiplier never resets. Every winning board and every winning cascade raises it one step, it carries from game to game, even after a game with no win, and it tops out at {value}x. Free games cannot win more free games.",
+      "en": "In free games the multiplier never resets. Every winning board and every winning cascade raises it one step, it carries from game to game, even after a game with no win, and it tops out at {value}x. Free games cannot win more free games.",
+      "fr": "Pendant les tours gratuits, le multiplicateur n’est jamais remis à zéro. Chaque plateau gagnant et chaque cascade gagnante le font monter d’un cran ; il passe d’un tour à l’autre, même après un tour sans gain, et plafonne à {value}x. Les tours gratuits ne peuvent pas offrir d’autres tours gratuits.",
+      "ht": "Pandan tou gratis, miltiplikatè a pa janm retounen a zewo. Chak tablo ki genyen ak chak kaskad ki genyen fè l monte yon nivo; li pase de yon tou a lòt, menm apre yon tou ki pa genyen, epi li pa ka depase {value}x. Tou gratis pa ka bay lòt tou gratis.",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "line_pays_dc0598": {
+      "source": "Line pays",
+      "en": "Line pays",
+      "fr": "Gains par ligne",
+      "ht": "Gen pa liy",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "linePays"
+    },
+    "5_or_more_in_a_straight_66b106": {
+      "source": "5 or more in a straight line",
+      "en": "5 or more in a straight line",
+      "fr": "5 ou plus en ligne droite",
+      "ht": "5 oswa plis an liy dwat",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "linePays"
+    },
+    "value_in_a_row_3c9aef": {
+      "source": "{value} in a row",
+      "en": "{value} in a row",
+      "fr": "{value} alignés",
+      "ht": "{value} aliye",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "linePays"
+    },
+    "pays_are_multiplied_by_t_9ce79f": {
+      "source": "Pays are multiplied by the active multiplier.",
+      "en": "Pays are multiplied by the active multiplier.",
+      "fr": "Les gains sont multipliés par le multiplicateur actif.",
+      "ht": "Genyen yo miltipliye pa miltiplikatè aktif la.",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "linePays"
+    },
+    "black_dot_297780": {
+      "source": "Black dot",
+      "en": "Black dot",
+      "fr": "Point noir",
+      "ht": "Pwen nwa",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text",
+        "alt"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "linePays"
+    },
+    "red_x_7d30b1": {
+      "source": "Red X",
+      "en": "Red X",
+      "fr": "X rouge",
+      "ht": "X wouj",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text",
+        "alt"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "linePays"
+    },
+    "green_star_7ee263": {
+      "source": "Green star",
+      "en": "Green star",
+      "fr": "Étoile verte",
+      "ht": "Zetwal vèt",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text",
+        "alt"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "linePays"
+    },
+    "blue_o_6190d1": {
+      "source": "Blue O",
+      "en": "Blue O",
+      "fr": "O bleu",
+      "ht": "O ble",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text",
+        "alt"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "linePays"
+    },
+    "cascades_and_free_games_0c74e0": {
+      "source": "Cascades and free games have no extra charge",
+      "en": "Cascades and free games have no extra charge",
+      "fr": "Cascades et tours gratuits sans frais supplémentaires",
+      "ht": "Kaskad ak tou gratis pa gen frè anplis",
+      "group": "Tabs & windows",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "started_at_value_x_9bb83f": {
+      "source": "Started at {value}x",
+      "en": "Started at {value}x",
+      "fr": "Départ à {value}x",
+      "ht": "Kòmanse a {value}x",
+      "group": "Tabs & windows",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "free_game_number_board_fe887a": {
+      "source": "Free game {number} · Board",
+      "en": "Free game {number} · Board",
+      "fr": "Tour gratuit {number} · Plateau",
+      "ht": "Tou gratis {number} · Tablo",
+      "group": "Tabs & windows",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "free_game_number_value_x_27b37d": {
+      "source": "Free game {number} · {value}x",
+      "en": "Free game {number} · {value}x",
+      "fr": "Tour gratuit {number} · {value}x",
+      "ht": "Tou gratis {number} · {value}x",
+      "group": "Tabs & windows",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "no_winning_line_539cd0": {
+      "source": "No winning line",
+      "en": "No winning line",
+      "fr": "Aucune ligne gagnante",
+      "ht": "Pa gen liy ki genyen",
+      "group": "Tabs & windows",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "tiles_85f5ca": {
+      "source": "Tiles",
+      "en": "Tiles",
+      "fr": "Carreaux",
+      "ht": "Kawo",
+      "group": "Settings",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "menu"
+    },
+    "paper_22d507": {
+      "source": "Paper",
+      "en": "Paper",
+      "fr": "Papier",
+      "ht": "Papye",
+      "group": "Settings",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "menu"
+    },
+    "now_low_rows_rows_b28d8d": {
+      "source": "Now: Low, {rows} rows",
+      "en": "Now: Low, {rows} rows",
+      "fr": "Actuel : Faible, {rows} rangées",
+      "ht": "Kounye a : Ba, {rows} ranje",
+      "group": "Rules",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "now_medium_rows_rows_0b1ee7": {
+      "source": "Now: Medium, {rows} rows",
+      "en": "Now: Medium, {rows} rows",
+      "fr": "Actuel : Moyen, {rows} rangées",
+      "ht": "Kounye a : Mwayen, {rows} ranje",
+      "group": "Rules",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "now_high_rows_rows_a6ae6d": {
+      "source": "Now: High, {rows} rows",
+      "en": "Now: High, {rows} rows",
+      "fr": "Actuel : Élevé, {rows} rangées",
+      "ht": "Kounye a : Wo, {rows} ranje",
+      "group": "Rules",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "drop_a_ball_at_every_peg_c67718": {
+      "source": "Drop a ball. At every peg it bounces left or right, and the bucket it lands in pays that multiple of your bet. The middle buckets are the most likely and pay least; the edges are rare and pay most.",
+      "en": "Drop a ball. At every peg it bounces left or right, and the bucket it lands in pays that multiple of your bet. The middle buckets are the most likely and pay least; the edges are rare and pay most.",
+      "fr": "Lâchez une bille. À chaque picot, elle rebondit à gauche ou à droite, et la case où elle tombe paie ce multiple de votre mise. Les cases du milieu sont les plus probables et paient le moins ; celles des bords sont rares et paient le plus.",
+      "ht": "Lage yon boul. Sou chak klou, li rebondi agoch oswa adwat, epi kaz kote li tonbe a peye miz ou miltipliye pa chif ki sou li. Kaz nan mitan yo pi fasil rive epi yo peye mwens; kaz sou bò yo ra epi yo peye plis.",
+      "group": "Rules",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "risk_and_rows_e27832": {
+      "source": "Risk and rows",
+      "en": "Risk and rows",
+      "fr": "Risque et rangées",
+      "ht": "Risk ak ranje",
+      "group": "Rules",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "more_rows_give_the_ball_92e2f3": {
+      "source": "More rows give the ball more bounces and the edges bigger pays. A higher risk pays more at the edges and less in the middle.",
+      "en": "More rows give the ball more bounces and the edges bigger pays. A higher risk pays more at the edges and less in the middle.",
+      "fr": "Plus de rangées donnent plus de rebonds à la bille et de plus gros gains aux bords. Un risque plus élevé paie plus aux bords et moins au milieu.",
+      "ht": "Plis ranje bay boul la plis rebon, epi kaz sou bò yo peye pi gwo. Yon risk ki pi wo peye plis sou bò yo e mwens nan mitan.",
+      "group": "Rules",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "return_to_player_value_o_b2893c": {
+      "source": "Return to player: {value} % on every table [before certification].",
+      "en": "Return to player: {value} % on every table [before certification].",
+      "fr": "Retour au joueur : {value} % sur chaque table [avant certification].",
+      "ht": "Retou pou jwè : {value} % sou chak tab [anvan sètifikasyon].",
+      "group": "Rules",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
+    },
+    "drop_39514a": {
+      "source": "DROP",
+      "en": "DROP",
+      "fr": "LÂCHER",
+      "ht": "LAGE",
+      "group": "Bet panel & messages",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "rows_35c47b": {
+      "source": "ROWS",
+      "en": "ROWS",
+      "fr": "RANGÉES",
+      "ht": "RANJE",
+      "group": "Bet panel & messages",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text",
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "low_a12494": {
+      "source": "Low",
+      "en": "Low",
+      "fr": "Faible",
+      "ht": "Ba",
+      "group": "Bet panel & messages",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "high_b1a595": {
+      "source": "High",
+      "en": "High",
+      "fr": "Élevé",
+      "ht": "Wo",
+      "group": "Bet panel & messages",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "not_enough_balance_top_u_3854fd": {
+      "source": "Not enough balance · top up to keep dropping",
+      "en": "Not enough balance · top up to keep dropping",
+      "fr": "Solde insuffisant · rechargez pour continuer",
+      "ht": "Balans lan pa sifi · ajoute lajan pou kontinye",
+      "group": "Bet panel & messages",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "auto_finished_fcd6ac": {
+      "source": "AUTO FINISHED",
+      "en": "AUTO FINISHED",
+      "fr": "AUTO TERMINÉ",
+      "ht": "OTO FINI",
+      "group": "Bet panel & messages",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "balls_balls_best_best_a0074e": {
+      "source": "{balls} balls · best {best}× ·",
+      "en": "{balls} balls · best {best}× ·",
+      "fr": "{balls} billes · meilleur {best}× ·",
+      "ht": "{balls} boul · pi bon {best}× ·",
+      "group": "Bet panel & messages",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "1_ball_best_best_415256": {
+      "source": "1 ball · best {best}× ·",
+      "en": "1 ball · best {best}× ·",
+      "fr": "1 bille · meilleur {best}× ·",
+      "ht": "1 boul · pi bon {best}× ·",
+      "group": "Bet panel & messages",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "rows_52d0b3": {
+      "source": "Rows",
+      "en": "Rows",
+      "fr": "Rangées",
+      "ht": "Ranje",
+      "group": "Tabs & windows",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text",
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "plinkoRows"
+    },
+    "edge_pays_b481fd": {
+      "source": "EDGE PAYS",
+      "en": "EDGE PAYS",
+      "fr": "GAINS AUX BORDS",
+      "ht": "PEYE SOU BÒ",
+      "group": "Tabs & windows",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "plinkoRows"
+    },
+    "rows_rows_5dd7c8": {
+      "source": "{rows} rows",
+      "en": "{rows} rows",
+      "fr": "{rows} rangées",
+      "ht": "{rows} ranje",
+      "group": "Tabs & windows",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "plinkoRows"
+    },
+    "risk_5a8f23": {
+      "source": "Risk",
+      "en": "Risk",
+      "fr": "Risque",
+      "ht": "Risk",
+      "group": "Tabs & windows",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "bucket_40dafe": {
+      "source": "Bucket",
+      "en": "Bucket",
+      "fr": "Case",
+      "ht": "Kaz",
+      "group": "Tabs & windows",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "bucket_of_buckets_8b1ebc": {
+      "source": "{bucket} of {buckets}",
+      "en": "{bucket} of {buckets}",
+      "fr": "{bucket} sur {buckets}",
+      "ht": "{bucket} sou {buckets}",
+      "group": "Tabs & windows",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails"
+    },
+    "recent_results_edefe2": {
+      "source": "Recent results",
+      "en": "Recent results",
+      "fr": "Résultats récents",
+      "ht": "Dènye rezilta",
+      "group": "Scene",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "drop_at_multiplier_detai_36e771": {
+      "source": "Drop at {multiplier}×, details",
+      "en": "Drop at {multiplier}×, details",
+      "fr": "Bille à {multiplier}×, détails",
+      "ht": "Boul {multiplier}×, detay",
+      "group": "Scene",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
+    },
+    "symbol_value_0e7df7": {
+      "source": "Symbol {value}",
+      "en": "Symbol {value}",
+      "fr": "Symbole {value}",
+      "ht": "Senbòl {value}",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "aria-label",
+        "alt"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "rules"
     }
   }
 }

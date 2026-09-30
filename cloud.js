@@ -37,7 +37,7 @@ const sectionNames={translations:'Translations',design:'Design',audio:'Sounds'};
 const feedback=document.createElement('span');feedback.id='changes-feedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');button.after(feedback);
 const isReviewer=()=>ComposerAuth.member?.role!=='art_director'&&ComposerAuth.has('drafts.review',game());
 let feedbackTimer;
-let appliedRelease=null,releases=[];
+let localConfig=null,releases=[];
 let authors=new Map(),contributors=[],contributorsError=false;
 function authorName(id){return authors.get(id)||(id===session?.user?.id?(session.user.user_metadata?.full_name||session.user.email):null)||'Unknown author'}
 function authorLine(label,id,time){return '<p class="review-author">'+esc(label)+' <strong>'+esc(authorName(id))+'</strong>'+(time?' <span>· '+esc(new Date(time).toLocaleString())+'</span>':'')+'</p>'}
@@ -68,7 +68,9 @@ function renderProgress(){
  const awaiting=review?0:sentVersions().filter(v=>v.status==='submitted').length;
  const unsent=canSubmit()?1:0;
  const count=review?pending+unsent:newChanges().reduce((sum,g)=>sum+g.rows.length,0);
- button.innerHTML='<span>Changes</span>'+(count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'')+(awaiting?reviewStatus('submitted',awaiting):'');
+ // An Admin sees on the button itself what is left between an accepted version and the sites.
+ const flag=releaseFlag();
+ button.innerHTML='<span>Changes</span>'+(count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'')+(awaiting?reviewStatus('submitted',awaiting):'')+(flag?'<span class="changes-flag" title="'+esc(flag.title)+'">'+esc(flag.label)+'</span>':'');
  window.ComposerUX?.refresh();
  button.setAttribute('aria-label','Changes'+(count?', '+count+(review?' to review':' saved changes'):'')+(awaiting?', '+awaiting+' awaiting review':''));
  button.disabled=busy;
@@ -117,25 +119,75 @@ async function refresh(){
   const receipts=await client.from('composer_releases').select('version_id,published_at,git_commit').order('published_at',{ascending:false}).limit(100);
   if(request!==refreshId||id!==game())return;
   releases=receipts.error?[]:receipts.data||[];
+  // Which version this machine's configuration file holds and how far it has got: read from
+  // the file and git, so it is still known after a reload.
+  const local=localRelease()?await fetch('release/status?game='+encodeURIComponent(id)).then(r=>r.ok?r.json():null).catch(()=>null):null;
+  if(request!==refreshId||id!==game())return;
+  localConfig=local;
   contributors=attribution.data||[];contributorsError=!!attribution.error;
   authors=new Map((a.error?[]:a.data||[]).map(person=>[person.user_id,person.name?person.name+' ('+person.email+')':person.email]));versions=check(v);notices=check(n);currentDraft=d;published=check(p)[0]||null;basePayload=baseline;loadError='';
- }else{versions=[];notices=[];currentDraft=null}
+ }else{versions=[];notices=[];currentDraft=null;localConfig=null}
  render();
 }
 function jsonView(payload,title='JSON of this version'){return '<details class="review-json"><summary>'+esc(title)+'</summary><pre tabindex="0">'+esc(JSON.stringify(payload,null,2))+'</pre></details>'}
-const localRelease=()=>!window.ComposerHosting&&['127.0.0.1','localhost'].includes(location.hostname);
+function localRelease(){return !window.ComposerHosting&&['127.0.0.1','localhost'].includes(location.hostname)}
+// An accepted version's road to the sites, and where it stands on this machine: accepted, then
+// applied to the local configuration file, committed, pushed. A step that is done reads as a
+// fact with a tick; one still to do reads as a numbered action, so neither can be taken for
+// the other. Only a version that is not the one in the local file offers Apply locally.
+const STEPS_DONE=['Accepted','Applied locally','Committed','Pushed'],STEPS_TODO=['Accept','Apply locally','Commit','Push'];
+function canRelease(){return ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game())&&localRelease()}
+const releaseStep=v=>localConfig?.version_id===v.id?({uncommitted:2,committed:3,pushed:4}[localConfig.state]||1):v.status==='approved'?1:0;
+const releaseSteps=done=>'<ol class="release-steps" aria-label="Release progress">'+STEPS_DONE.map((label,i)=>i<done?'<li class="done">✓ '+label+'</li>':'<li class="'+(i===done?'next':'todo')+'">'+(i+1)+'. '+STEPS_TODO[i]+(i===done?' · next':'')+'</li>').join('')+'</ol>';
+const localFile=()=>'<code>'+esc(localConfig.path)+'</code>';
 function releaseActions(v){
- const can=ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game());
- return can&&localRelease()?'<button class="wb-button primary" data-apply="'+esc(v.id)+'">Apply locally</button>':'';
+ if(!canRelease())return '';
+ const done=releaseStep(v);
+ if(done<2){
+  // Another version is already in the local file: say what applying this one does to it.
+  const other=localConfig&&localConfig.state!=='none'&&localConfig.version_id!==v.id;
+  const note=!other?'':localConfig.state==='uncommitted'?'Not applied yet. '+localFile()+' holds revision '+esc(localConfig.revision)+', applied earlier and not committed; applying this version replaces it.':'Not applied yet. '+localFile()+' holds revision '+esc(localConfig.revision)+'; applying this version writes revision '+esc(v.revision)+' over it.';
+  return releaseSteps(done)+(note?'<p class="review-intro">'+note+'</p>':'')+'<div class="release-action"><button class="wb-button primary" data-apply="'+esc(v.id)+'">Apply locally</button></div>';
+ }
+ const next=done===2?'This version is written to '+localFile()+'. Next: commit and push that file. Pushing publishes it to Composer web and Showcase.'
+  :done===3?localFile()+' is committed. Next: push to GitHub. Pushing publishes it to Composer web and Showcase.'
+  :localFile()+' is pushed. GitHub is publishing it; this version moves to Published history when that is done.';
+ return releaseSteps(done)+'<p class="review-applied" role="status">'+next+'</p>';
 }
-function canApplyDraft(){return ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game())&&localRelease()&&!loadError&&!dirty()&&!!currentDraft&&draftChanges().some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision)&&['rejected','published'].includes(v.status))}
+// The same, in two words, for the Changes button: the first thing still to do on this computer.
+function releaseFlag(){
+ if(!canRelease()||!localConfig)return null;
+ if(versions.some(v=>v.status==='approved'&&v.id!==localConfig.version_id))return {label:'Not applied',title:'An accepted version is not applied on this computer yet.'};
+ if(localConfig.state==='uncommitted')return {label:'Not committed',title:localConfig.path+' is applied but not committed. Commit and push it to publish.'};
+ if(localConfig.state==='committed')return {label:'Not pushed',title:localConfig.path+' is committed but not pushed. Push to publish.'};
+ return null;
+}
+// What an Admin must not miss, said first: the local configuration file is applied but not
+// committed, or committed but not pushed, or an accepted version is still waiting to be applied.
+function localBanner(){
+ if(!canRelease()||!localConfig)return '';
+ const waiting=versions.filter(v=>v.status==='approved'&&v.id!==localConfig.version_id),lines=[];
+ if(waiting.length){
+  // A newer accepted version comes first: committing the file as it is would publish the old one.
+  const held=localConfig.state==='none'?'':' '+localFile()+' still holds revision '+esc(localConfig.revision)+(localConfig.state==='uncommitted'?', applied earlier and not committed':'')+'.';
+  lines.push('<strong>Not applied.</strong> '+(waiting.length===1?'Accepted revision '+esc(waiting[0].revision)+' is':waiting.length+' accepted versions are')+' not applied on this computer yet.'+held+' Apply locally below, then commit and push.');
+ }
+ else if(localConfig.state==='uncommitted')lines.push('<strong>Not committed.</strong> '+localFile()+' holds revision '+esc(localConfig.revision)+', applied on this computer but not committed. Commit and push it to publish. <button class="wb-button primary" id="copy-publish">Copy publish commands</button>');
+ else if(localConfig.state==='committed')lines.push('<strong>Not pushed.</strong> '+localFile()+' (revision '+esc(localConfig.revision)+') is committed here but not pushed. Push to GitHub to publish.');
+ else if(localConfig.state==='pushed'&&published?.id!==localConfig.version_id)lines.push('<strong>Publishing.</strong> '+localFile()+' (revision '+esc(localConfig.revision)+') is pushed; GitHub is publishing it.');
+ return lines.length?'<aside class="local-banner" role="status" aria-label="Local configuration">'+lines.map(line=>'<p>'+line+'</p>').join('')+'</aside>':'';
+}
+function canApplyDraft(){return canRelease()&&!loadError&&!dirty()&&!!currentDraft&&draftChanges().some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision)&&['rejected','published'].includes(v.status))}
 function draftReview(){
+ // A saved state that has already been sent or accepted is the version listed above; showing
+ // it again here, with a second Apply locally, only made one change look like two.
+ if(versions.some(v=>Number(v.revision)===Number(currentDraft?.revision)&&['submitted','approved'].includes(v.status)))return '';
  if(!draftChanges().some(g=>g.rows.length))return '<p class="review-intro">No saved changes to apply.</p>';
  const names=[...new Set(contributors.map(item=>authorName(item.actor)))];
  return '<section class="review-queue"><h3>All saved changes</h3><p class="review-intro">This applies the complete saved state for this game, including teammates’ changes. Review everything below before applying.</p>'+authorLine('Last saved by',currentDraft?.updated_by,currentDraft?.updated_at)+'<p class="review-author">'+(contributorsError?'Contributor history unavailable.':names.length?'Contributors since the last publication: '+names.map(esc).join(', '):'No tracked contributor history.')+' Older edits may have no attribution.</p>'+diffHTML({...basePayload,...currentDraft.payload},{...basePayload,...published?.payload})+'<p id="cloud-save-hint"></p>'+(localRelease()?'<button class="wb-button primary" id="cloud-apply-draft">Apply locally</button>':'')+'</section>';
 }
 async function applyVersion(versionId,id){
- const auth=check(await client.auth.getSession());const response=await fetch('release/apply',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({version_id:versionId})});const data=await response.json();if(!response.ok)throw Error(data.message||'Could not apply configuration');appliedRelease={game:id,path:data.path};await refresh();message('Applied locally: '+data.path+'. Review, commit and push to publish.');notify('Configuration ready to commit');
+ const auth=check(await client.auth.getSession());const response=await fetch('release/apply',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({version_id:versionId})});const data=await response.json();if(!response.ok)throw Error(data.message||'Could not apply configuration');await refresh();message('Applied locally: '+data.path+'. Review, commit and push to publish.');notify('Configuration ready to commit');
 }
 function reviewStatus(status,count){const accepted=status==='approved';return '<span class="review-status '+(accepted?'accepted':'awaiting')+'"'+(accepted?' title="Accepted by Admin; not published yet"':'')+'>'+(accepted?'Accepted':'Awaiting review')+(count?' · '+count:'')+'</span>'}
 function publicationHistory(){
@@ -143,7 +195,7 @@ function publicationHistory(){
  return items.length?'<details class="review-history"><summary>Published history · '+items.length+'</summary>'+items.map(v=>{const r=releases.find(r=>r.version_id===v.id);return '<p>Revision '+esc(v.revision)+(r?.published_at?' · '+esc(new Date(r.published_at).toLocaleString()):'')+'</p>'}).join('')+'<a target="_blank" rel="noopener" href="https://svyatoslavteslyak.github.io/game-showcase/games/'+encodeURIComponent(game())+'/index.html">Open published game ↗</a></details>':'';
 }
 function reviewVersions(){
- const groups=[['submitted','Needs review','Apply locally accepts this version. Use Discard all changes to reset unpublished changes for this game.'],['approved','Accepted · not published','Already accepted. Apply locally if needed, then commit and push to publish.']];
+ const groups=[['submitted','Needs review','Apply locally accepts this version and writes it to this game’s configuration file on this computer. Use Discard all changes to reset unpublished changes for this game.'],['approved','Accepted · not published','Accepted by Admin. It is published once its configuration file is applied here, committed and pushed.']];
  return groups.map(([status,title,hint])=>{const items=sentVersions().filter(v=>v.status===status);return items.length?'<section class="review-queue" data-review-status="'+status+'"><h3>'+title+' <span class="review-count">'+items.length+'</span></h3><p class="review-intro">'+hint+'</p><div class="cloud-list">'+items.map(v=>'<article><strong>'+esc(v.summary)+'</strong>'+authorLine('Sent by',v.submitted_by,v.submitted_at)+diffHTML(v.payload,{...basePayload,...published?.payload})+jsonView({schema_version:1,game_id:v.game_id,version_id:v.id,revision:v.revision,payload:v.payload})+'<div class="share-actions">'+releaseActions(v)+'</div>'+'</article>').join('')+'</div></section>':''}).join('');
 }
 
@@ -153,7 +205,7 @@ function render(){
  const sentExpanded=dialog.querySelector('.review-sent')?.open;
  const sent=sentVersions(),newCount=newChanges().reduce((sum,g)=>sum+g.rows.length,0);
  dialog.innerHTML='<header><div><small>'+esc(ComposerTarget.entry().title)+'</small><div class="review-heading"><h2 id="cloud-title">Changes</h2>'+(!isReviewer()?['submitted','approved'].map(status=>{const count=sent.filter(v=>v.status===status).length;return count?reviewStatus(status,count):''}).join(''):'')+'</div></div><button class="wb-button" data-close aria-label="Close">✕</button></header><button class="wb-button" id="cloud-refresh">Refresh</button>'+
- (ComposerAuth.member?.role==='admin'?' <button class="wb-button discard-changes" id="cloud-discard">Discard all changes</button>':'')+
+ (ComposerAuth.member?.role==='admin'?' <button class="wb-button discard-changes" id="cloud-discard">Discard all changes</button>':'')+localBanner()+
  (ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game())&&!localRelease()?'<aside class="review-local-note" aria-label="Publishing changes"><strong>Publish from local Composer</strong><p>You can review changes here. To publish them, open local Composer and sign in with the same Admin account. In Changes, review all saved changes or a sent version and click <b>Apply locally</b>, then commit and push the configuration file. GitHub will update Composer web and Showcase automatically.</p></aside>':'')+
  (isReviewer()?reviewVersions():'')+
  (!isReviewer()?'<p class="review-intro">Review your saved changes, then send them to Admin. This game draft is shared with your team.</p>':'')+
@@ -162,7 +214,7 @@ function render(){
 
  (!isReviewer()?'<div class="review-send"><p id="cloud-save-hint"></p><button class="wb-button discard-changes" id="cloud-discard-unsent">Discard unsent changes</button><button class="wb-button primary" id="cloud-submit"'+(!newCount?' hidden':'')+'>Send changes</button></div>'+ (sent.length?'<details class="review-sent"><summary><span>Sent to Admin</span><span class="review-count">'+sent.length+'</span></summary><p>Already sent. These changes are not included in your red counter.</p>'+sent.map(v=>'<details class="review-sent-version"><summary><span class="review-version-label"><strong>View changes</strong><time>'+esc(new Date(v.submitted_at).toLocaleString())+'</time></span>'+reviewStatus(v.status)+'</summary>'+diffHTML(v.payload,{...basePayload,...published?.payload})+jsonView(v.payload)+'</details>').join('')+'</details>':''):'')+
  publicationHistory()+
- (appliedRelease?.game===game()?'<section class="release-next"><strong>Configuration ready to publish</strong><p><code>'+esc(appliedRelease.path)+'</code></p><p>In the Composer repository, review the file, then commit and push. GitHub publishes both sites automatically.</p><button class="wb-button primary" id="copy-publish">Copy publish commands</button></section>':'')+'<p role="status" aria-live="polite"></p>';
+ '<p role="status" aria-live="polite"></p>';
  if(sentExpanded&&dialog.querySelector('.review-sent'))dialog.querySelector('.review-sent').open=true;
  for(const group of dialog.querySelectorAll('[data-review-group]'))if(collapsed.has(group.dataset.reviewGroup))group.open=false;
  dialog.querySelector('[data-close]').onclick=()=>dialog.close();$('#cloud-refresh').onclick=()=>run(refresh);
@@ -183,7 +235,7 @@ function render(){
   run(async()=>{const version=await rpc('composer_accept_draft',{p_game:id,p_revision:revision});try{await applyVersion(version.id,id)}catch(error){await refresh();throw error}});
  });
  $('#cloud-submit')?.addEventListener('click',sendChanges);
- $('#copy-publish')?.addEventListener('click',async()=>{const path=appliedRelease?.path;if(!/^configurations\/[a-z][a-z0-9_]*\.json$/.test(path))return;try{await navigator.clipboard.writeText('git add -- '+path+'\ngit diff --cached -- '+path+'\ngit commit --only '+path+' -m "Publish reviewed game configuration"\ngit push origin main');message('Publish commands copied. Run them from the Composer repository.')}catch{message('Could not copy. Review, commit and push '+path+' from the Composer repository.')}});
+ $('#copy-publish')?.addEventListener('click',async()=>{const path=localConfig?.path;if(!/^configurations\/[a-z][a-z0-9_]*\.json$/.test(path))return;try{await navigator.clipboard.writeText('git add -- '+path+'\ngit diff --cached -- '+path+'\ngit commit --only '+path+' -m "Publish reviewed game configuration"\ngit push origin main');message('Publish commands copied. Run them from the Composer repository.')}catch{message('Could not copy. Review, commit and push '+path+' from the Composer repository.')}});
  busyControls();
 }
 function open(){render();if(!dialog.open)dialog.showModal();run(refresh)}

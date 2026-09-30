@@ -7,9 +7,10 @@
 <title>Candy Cascade</title>
 <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon-64-C50qaldO.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon-CJ8ygDj9.png">
-<link rel="stylesheet" href="crash-ui/tokens.css?v=0c8a56b11d14">
-<link rel="stylesheet" href="crash-ui/ui.css?v=0c8a56b11d14">
-  <script type="module" crossorigin src="./assets/index-luZMs-yc.js"></script>
+<link rel="stylesheet" href="crash-ui/tokens.css?v=6572d395a6c7">
+<link rel="stylesheet" href="crash-ui/ui.css?v=6572d395a6c7">
+<style>#splash{z-index:1000;background:var(--surface,#212121);justify-content:center;align-items:center;transition:opacity .25s;display:flex;position:fixed;inset:0}#splash .ring{width:160px;height:160px;position:relative}#splash svg{width:100%;height:100%;position:absolute;inset:0;transform:rotate(-90deg)}#splash circle{fill:none;stroke-width:6px}#splash .track{stroke:var(--action-go,#f4b73f);stroke-opacity:.2}#splash .fill{stroke:var(--action-go,#f4b73f);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100px}@font-face{font-family:SplashFigures;src:url(crash-ui/assets/fonts/uploads/Satoshi-Variable.woff2)format("woff2");font-weight:300 900;font-display:swap}#splash .pct{color:var(--action-go,#f4b73f);font-variant-numeric:tabular-nums;justify-content:center;align-items:center;font:500 24px/1 SplashFigures,system-ui,sans-serif;display:flex;position:absolute;inset:0}#splash.waiting .fill{transition:none;stroke-dasharray:25 75!important;stroke-dashoffset:0!important}#splash.waiting svg{animation:1s linear infinite splash-turn}#splash.waiting .pct{visibility:hidden}@keyframes splash-turn{0%{transform:rotate(-90deg)}to{transform:rotate(270deg)}}@media (prefers-reduced-motion:reduce){#splash.waiting svg{animation:none}#splash.waiting .fill{stroke-dasharray:100}}#splash.done{opacity:0;pointer-events:none}</style>
+  <script type="module" crossorigin src="./assets/index-Drw-CaOI.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/CanvasPool-BQVbuTbb.js">
   <link rel="modulepreload" crossorigin href="./assets/Filter-zmD8iVhN.js">
   <link rel="modulepreload" crossorigin href="./assets/canvasUtils-CNUsJj9-.js">
@@ -24,6 +25,41 @@
   <link rel="stylesheet" crossorigin href="./assets/index-Dzb4w4L0.css">
 </head>
 <body>
+<div id="splash"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="track" cx="50" cy="50" r="46"/><circle class="fill" cx="50" cy="50" r="46" pathLength="100"/></svg><span class="pct">0%</span></div></div>
+<script>
+// Drives the splash from the first byte. Until the game's code has arrived there is nothing to
+// count, so the ring creeps towards a quarter on its own; main.ts then reports the real share of
+// files landed. What is shown eases towards that and keeps creeping, more and more slowly, while
+// the next file is on its way, so it never stands still, never jumps and never shows 100 early.
+;(function(){
+  // The splash wears the chosen brand and theme from the first frame: the ring and figures in
+  // the brand's primary colour, on its panel surface. The kit confirms both when it starts.
+  var query=new URLSearchParams(location.search),brand=query.get('brand'),theme=query.get('theme')
+  if(brand&&brand!=='default')document.documentElement.dataset.brand=brand
+  if(theme)document.documentElement.dataset.theme=theme
+  var ring=document.querySelector('#splash .fill'),pct=document.querySelector('#splash .pct')
+  var real=0,shown=0,since=performance.now(),last=since,full=[]
+  window.splashProgress={
+    set:function(share){if(share>real){real=Math.min(1,share);since=performance.now()}},
+    // Calls back once the ring has been seen full, so the splash never fades out at 90%.
+    whenFull:function(callback){if(shown>=0.995)callback();else full.push(callback)}
+  }
+  function frame(now){
+    var dt=Math.min(0.1,(now-last)/1000);last=now
+    // Before the code reports anything the creep aims at a quarter; after, at a third of
+    // what is left, approached ever more slowly until the next file lands.
+    var ceiling=real===0?0.25:real>=1?1:real+(1-real)*0.35
+    var goal=real>=1?1:real+(ceiling-real)*(1-Math.exp(-(now-since)/2500))
+    shown=Math.max(shown,shown+(goal-shown)*Math.min(1,dt*(real>=1?14:6)))
+    if(real>=1&&1-shown<0.005)shown=1
+    var share=Math.floor(shown*100+1e-6)
+    ring.style.strokeDashoffset=String(100-share);pct.textContent=share+'%'
+    if(shown>=1){while(full.length)full.shift()();return}
+    requestAnimationFrame(frame)
+  }
+  requestAnimationFrame(frame)
+})()
+</script>
 <!-- The scene: between the kit's header and its bet panel, the cascade ladder and the board. -->
 <main id="stage">
   <section id="play" aria-label="Candy Cascade">
@@ -35,7 +71,7 @@
     <section class="board" data-slot="board" aria-label="Board"></section>
   </section>
 </main>
-<script src="crash-ui/tokens.js?v=0c8a56b11d14"></script>
-<script src="crash-ui/ui.js?v=0c8a56b11d14"></script>
+<script src="crash-ui/tokens.js?v=6572d395a6c7"></script>
+<script src="crash-ui/ui.js?v=6572d395a6c7"></script>
 </body>
 </html>

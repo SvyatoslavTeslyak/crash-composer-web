@@ -8,8 +8,6 @@
  const engine=()=>window.ComposerTarget.engine;
  // The games that use Goat Road's tabbed shell: its panel, its windows, rules as a tab.
  const TABBED_GAMES=['road','boom','plinko','candy_cascade','mopyon_cascades'];
- // Games whose bet panel the game itself configures: nothing in it to switch from here.
- const OWN_PANEL=['candy_cascade','plinko','mopyon_cascades'];
  let timer,generation=0;
  const applied={};
  const presetSelect=document.querySelector('#presentation-preset');
@@ -36,9 +34,6 @@
  }
  new MutationObserver(syncModalTags).observe(modalSelect,{childList:true,attributes:true,subtree:true});
  syncModalTags();
- const nativePresets=new WeakMap();
- const amountPresets=document.querySelector('[data-feature=presets]');
- let amountOverride=null;
  function syncInspector(){
   // Goat Road and Fruit Boom share the tabbed shell and its windows.
   const candy=game()==='candy_cascade';
@@ -49,34 +44,20 @@
    modalSelect.replaceChildren(...modalOptions.map(([value,label])=>new Option(label,value)));modalSelect.dataset.game=game();modalSelect.value=modalOptions.some(([value])=>value===selected)?selected:'';
   }
   const winOption=modalSelect.querySelector('[value=win]');if(winOption)winOption.disabled=live();
-  const standard=presetSelect.querySelector('[value=standard]');
-  if(road){standard?.remove();if(presetSelect.value!=='menu-drawer-v1')presetSelect.value='tabbed-shell-v1'}
-  else if(!standard){const option=document.createElement('option');option.value='standard';option.textContent='Game default';presetSelect.prepend(option);presetSelect.value=savedPreset()}
-  const shell=['tabbed-shell-v1','menu-drawer-v1'].includes(presetSelect.value);
-  const noAmountPresets=(road&&engine()==='pixi')||document.querySelector('#control-variant').value==='tabbed';
-  // The tabbed shell has no Live wins, record or history panels to hide, and no preset
-  // amounts; what it can show or hide is Auto and the difficulty levels.
-  const tabbedFeatures=shell&&noAmountPresets;
-  const own=OWN_PANEL.includes(game());
-  document.querySelectorAll('[data-visibility-heading]').forEach(n=>n.hidden=own||(shell&&n.dataset.visibilityHeading!=='features'));
-  document.querySelectorAll('.visibility-option').forEach(label=>{
-   const input=label.querySelector('input');
-   // Goat Road's levels are compulsory, so there is nothing to switch.
-   label.hidden=own||(game()==='road'&&input.dataset.feature==='difficulty')||(input===amountPresets&&noAmountPresets)||(shell&&!!input.dataset.flag)||(shell&&!tabbedFeatures&&input!==amountPresets)||(input.dataset.flag==='multiplier_ladder'&&game()!=='market_stack')||(live()&&game()==='catch'&&!!input.dataset.feature)||(live()&&game()==='market_stack'&&['auto','difficulty'].includes(input.dataset.feature));
-  });
-  if(amountOverride===null)amountPresets.checked=frame.clientWidth>=600;
+  // Every game is previewed in one of the two tabbed layouts; the kit's classic panel (Game
+  // default) and the panel and feature switches only it read are not offered.
+  if(presetSelect.value!=='menu-drawer-v1')presetSelect.value='tabbed-shell-v1';
   syncPresetTags();
  }
- new ResizeObserver(()=>{syncInspector();if(!live())sendFeatures()}).observe(frame);
+ new ResizeObserver(()=>syncInspector()).observe(frame);
 
  const presetKey=()=> 'crash-composer-presentation:'+engine()+':'+game();
- const savedPreset=()=>{try{const saved=localStorage.getItem(presetKey());if(['tabbed-shell-v1','menu-drawer-v1'].includes(saved))return saved}catch{}return TABBED_GAMES.includes(game())?'tabbed-shell-v1':'standard'};
+ const savedPreset=()=>{try{const saved=localStorage.getItem(presetKey());if(['tabbed-shell-v1','menu-drawer-v1'].includes(saved))return saved}catch{}return 'tabbed-shell-v1'};
  function applyPresentation(){
   syncInspector();
   if(!live()){demo({presentationPreset:presetSelect.value});return true}
   const ui=instance();if(!ui?.setPresentationPreset)return false;
-  if(!nativePresets.has(ui))nativePresets.set(ui,ui.config.presentationPreset||'standard');
-  ui.setPresentationPreset(presetSelect.value==='standard'?nativePresets.get(ui):presetSelect.value);
+  ui.setPresentationPreset(presetSelect.value);
   return true;
  }
 
@@ -85,12 +66,6 @@
  const live=()=>playable();
  const instance=()=>frame.contentWindow.CrashUI?.instance;
  const demo=data=>frame.contentWindow.postMessage({type:'crash-preview',...data},location.origin);
- // Live games read features at startup, exactly like an operator iframe URL.
- // Leave preset amounts to the shared responsive default until explicitly toggled:
- // hidden on phones, visible on larger screens. Only an override adds presets=0/1.
- const switchable=n=>!OWN_PANEL.includes(game())&&!(game()==='road'&&n.dataset.feature==='difficulty');
- const featureQuery=()=>[...document.querySelectorAll('[data-feature]')].filter(switchable).filter(n=>n!==amountPresets||amountOverride!==null).map(n=>'&'+n.dataset.feature+'='+(n.checked?'1':'0')).join('');
- function flags(){if(OWN_PANEL.includes(game()))return;if(!live()){sendFlags();return}const ui=instance();if(ui)document.querySelectorAll('[data-flag]').forEach(n=>ui.send('flag',{key:n.dataset.flag,value:n.checked}))}
  function modal(){const kind=document.querySelector('#modal').value;if(!TranslationTable.windowAllowed(game(),kind))return;if(!live()){demo({modal:kind});return}const ui=instance();if(!ui)return;
   if(game()==='candy_cascade'&&frame.contentWindow.candyCascade?.previewWindow(kind))return;
   if(game()==='plinko'&&frame.contentWindow.plinko?.previewWindow?.(kind))return;
@@ -116,13 +91,13 @@
   }
   // Blank the frame first: a Godot export left running would keep its audio going under the next game.
   if(frame.src&&!frame.src.endsWith('about:blank')){frame.src='about:blank';await new Promise(r=>setTimeout(r,60));if(request!==generation)return}
-  const off=[...document.querySelectorAll('[data-feature]')].filter(switchable).filter(n=>!n.checked).map(n=>n.dataset.feature);status.textContent='Loading local web export'+(off.length?' without '+off.join(', ')+'…':'…');
+  status.textContent='Loading local web export…';
   const custom=game()==='catch';
   document.querySelector('#control-variant').value=custom?'three-position':TABBED_GAMES.includes(game())&&engine()==='pixi'?'tabbed':'standard';document.querySelector('#control-variant').disabled=true;
   syncInspector();
   document.querySelector('#modal-controls').hidden=false;
   const url='games/'+engine()+'/'+game()+'/index.html';
-  try{const response=await fetch(url,{method:'HEAD'});if(request!==generation)return;if(!response.ok)throw Error('missing');frame.src=url+'?ui-kit=1&api='+((game()==='road'&&engine()==='pixi'&&window.Lotomobil?.connected&&!applied[game()])?'1':'0')+'&revision='+request+'&build='+encodeURIComponent(window.ComposerHosting?.revision||'local')+featureQuery()+(applied[game()]?'&difficulty=0#math='+encodeURIComponent(JSON.stringify(applied[game()])):'')}
+  try{const response=await fetch(url,{method:'HEAD'});if(request!==generation)return;if(!response.ok)throw Error('missing');frame.src=url+'?ui-kit=1&api='+((game()==='road'&&engine()==='pixi'&&window.Lotomobil?.connected&&!applied[game()])?'1':'0')+'&revision='+request+'&build='+encodeURIComponent(window.ComposerHosting?.revision||'local')+(applied[game()]?'&difficulty=0#math='+encodeURIComponent(JSON.stringify(applied[game()])):'')}
   catch{if(request!==generation)return;frame.src='about:blank';status.textContent='No '+window.ComposerTarget.engineTitle()+' build for this game yet. Build it, then rebuild the preview.'}
  }
  window.ComposerMath={
@@ -148,7 +123,7 @@
  }
  window.addEventListener('composer-engine',()=>load());
  window.addEventListener('lotomobil-session',()=>{if(game()==='road')load()});
-window.addEventListener('composer-target',()=>{amountOverride=null;follow()});
+window.addEventListener('composer-target',follow);
  window.addEventListener('composer-workspace',event=>{
   if(event.detail==='layout'||event.detail==='look'||event.detail==='translates'){if(deferred){deferred=false;load()}return}
   // A Godot export behind a hidden frame keeps running, and keeps playing its audio.
@@ -165,8 +140,6 @@ window.addEventListener('composer-target',()=>{amountOverride=null;follow()});
  };
  document.querySelector('#control-variant').onchange=()=>{syncInspector();demo({controlsVariant:document.querySelector('#control-variant').value})};
  document.querySelector('#modal').onchange=()=>{modal();syncModalTags()};
- document.querySelectorAll('[data-flag]').forEach(n=>n.onchange=flags);
- document.querySelectorAll('[data-feature]').forEach(n=>n.onchange=()=>{if(n===amountPresets)amountOverride=n.checked;return live()?load():sendFeatures()});
  let modalStateObserver=null;
  function syncModalFromGame(){
   const ui=instance();if(!ui)return;
@@ -186,7 +159,7 @@ window.addEventListener('composer-target',()=>{amountOverride=null;follow()});
   const doc=frame.contentDocument;
   const style=doc.createElement('link');style.rel='stylesheet';style.href=new URL('inspection.css',location.href).href;doc.head.append(style);
   clearInterval(timer);let attempts=0;
-  timer=setInterval(()=>{if(instance()?.state.game){clearInterval(timer);flags();presetSelect.disabled=!instance().setPresentationPreset;if(!presetSelect.disabled)applyPresentation();const m=instance().state.mathPreview;status.textContent=instance().state.api?'Live · Runner API'+(instance().state.currency?' · '+instance().state.currency:''):game()==='market_stack'?'Market Stack · skill prototype · demo credits':game()==='catch'?'Catch Clash · separate duel / crash model · test credits':m?.error||(applied[game()]?(m?.version===2&&Object.keys(applied[game()]).every(k=>m.rules?.[k]===applied[game()][k])?'Math preview · applied · test wallet · '+(applied[game()].rtp*100).toFixed(1)+'% target':'Math not acknowledged — rebuild the game export'):'Live preview · '+(m?.sandbox?'isolated test wallet':'source rules'))}else if(++attempts>=600){clearInterval(timer);status.textContent='Game is taking longer to load. Check the web export.'}},100);
+  timer=setInterval(()=>{if(instance()?.state.game){clearInterval(timer);presetSelect.disabled=!instance().setPresentationPreset;if(!presetSelect.disabled)applyPresentation();const m=instance().state.mathPreview;status.textContent=instance().state.api?'Live · Runner API'+(instance().state.currency?' · '+instance().state.currency:''):game()==='market_stack'?'Market Stack · skill prototype · demo credits':game()==='catch'?'Catch Clash · separate duel / crash model · test credits':m?.error||(applied[game()]?(m?.version===2&&Object.keys(applied[game()]).every(k=>m.rules?.[k]===applied[game()][k])?'Math preview · applied · test wallet · '+(applied[game()].rtp*100).toFixed(1)+'% target':'Math not acknowledged — rebuild the game export'):'Live preview · '+(m?.sandbox?'isolated test wallet':'source rules'))}else if(++attempts>=600){clearInterval(timer);status.textContent='Game is taking longer to load. Check the web export.'}},100);
  });
  window.addEventListener('DOMContentLoaded',follow);
 })();

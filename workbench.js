@@ -44,6 +44,19 @@ function deviceBar({container,zoomContainer,device='mobile',zoom='fit',onChange}
 }
 
 /** Brand and theme chips from CrashTokens; the theme row shows the chosen brand's themes. onChange({brand,theme}). */
+// A picker's names and swatches from a brands/ catalog: the saved brands with the selected game's
+// draft over them. Every picker that shows brands is given this, so Brand and Library list the
+// same ones; left to the kit's compiled tokens, a picker misses draft brands and keeps removed ones.
+function lookTokens(catalog){
+ const each=f=>Object.fromEntries(Object.entries(catalog.brands).map(([id,b])=>[id,f(b)]));
+ const primary=b=>b.roles?.primary||b.colors?.ACTION_GO;
+ return {
+  BRANDS:each(b=>b.title),
+  THEMES:each(b=>Object.fromEntries(Object.entries(b.themes||{}).map(([id,t])=>[id,t.title]))),
+  BRAND_SWATCHES:each(primary),
+  THEME_SWATCHES:each(b=>Object.fromEntries(Object.entries(b.themes||{}).map(([id,t])=>[id,t.roles?.primary||primary(b)])))
+ };
+}
 function lookPicker({container,brand='default',theme='',onChange,onAddTheme=null,onAddBrand=null,onEditBrand=null,onEditTheme=null,themes=true,catalogTokens=null}){
  const tokens=catalogTokens||window.CrashTokens||{BRANDS:{default:'Lotomobil'},THEMES:{}};
  const themesOf=b=>(tokens.THEMES||{})[b]||{};
@@ -107,5 +120,5 @@ function stage({fit,box,stage,frame,size}){
 }
 const lookQuery=({brand,theme})=>(brand&&brand!=='default'?'&brand='+brand:'')+(theme?'&theme='+theme:'');
 
-window.Workbench={DEVICES,ZOOMS,gamePicker,deviceBar,lookPicker,applyLook,lookQuery,stage};
+window.Workbench={DEVICES,ZOOMS,gamePicker,deviceBar,lookPicker,lookTokens,applyLook,lookQuery,stage};
 })();

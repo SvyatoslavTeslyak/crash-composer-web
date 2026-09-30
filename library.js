@@ -268,7 +268,7 @@ function buildLook(){
  const box=$('#library-look');if(!box)return;
  const wantThemes=section==='colour';
  if(!wantThemes)theme='';
- Workbench.lookPicker({container:box,brand,theme,themes:wantThemes,onChange:v=>{
+ Workbench.lookPicker({container:box,catalogTokens:Workbench.lookTokens(catalog),brand,theme,themes:wantThemes,onChange:v=>{
   brand=v.brand;theme=wantThemes?v.theme:'';
   const p=window.ComposerLookPicker;if(p){p.brand=brand;if(wantThemes)p.theme=theme}
   draw();
@@ -277,8 +277,16 @@ function buildLook(){
  if(note)note.textContent=wantThemes?'Colour shows the brand and season you pick here.':'Typography shows the faces this brand is set in.';
 }
 async function open(){
- if(!catalog){catalog=await (await fetch('brands/')).json();controls()}
- else{const picker=window.ComposerLookPicker;brand=picker?.brand||brand;theme=picker?.theme||''}
+ // With a game's draft open the brands can change between visits (another tab edits them, or
+ // another game is picked), so they are read again, as the Brand tab does.
+ if(window.ComposerDraftEditors?.enabled)catalog=null;
+ const first=!catalog;
+ if(first)catalog=await (await fetch('brands/')).json();
+ const picker=window.ComposerLookPicker;brand=picker?.brand||brand;theme=picker?.theme||'';
+ // The chosen brand or season may be gone from this game's draft.
+ if(!catalog.brands[brand])brand='default';
+ if(!(theme in (catalog.brands[brand].themes||{})))theme='';
+ if(first)controls();
  draw();
 }
 window.addEventListener('composer-workspace',e=>{if(e.detail==='library')open().catch(err=>{report.innerHTML='<p class="sound-error">'+esc(err.message)+'</p>'})});
