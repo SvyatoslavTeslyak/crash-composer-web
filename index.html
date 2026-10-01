@@ -1,26 +1,26 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<meta name="composer-version" content="ux-20260923.1-e6148a200064">
+<meta name="composer-version" content="ux-20260923.1-17cab5a5f2a0">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Game Composer</title>
-<script src="cloud-config.js?v=1790868133"></script>
-<script src="hosted.js?v=1790868134790938159"></script>
-<script type="module" src="roles.js?v=1790868133"></script>
-<script type="module" src="lotomobil.js?v=1790868133"></script>
-<script src="session.js?v=1790868133"></script>
-<link rel="icon" type="image/png" sizes="64x64" href="composer-icon-64.png?v=1790868133">
-<link rel="apple-touch-icon" href="composer-icon-180.png?v=1790868133">
-<link rel="stylesheet" href="crash-ui/tokens.css?v=1790868133">
-<link rel="stylesheet" href="inspector.css?v=1790868133">
-<link rel="stylesheet" href="workbench.css?v=1790868133">
-<link rel="stylesheet" href="translates.css?v=1790868133">
-<link rel="stylesheet" href="share.css?v=1790868133">
-<script src="crash-ui/tokens.js?v=1790868133"></script>
-<script src="icons.js?v=1790868133"></script>
-<script src="workbench.js?v=1790868133"></script>
-<link rel="stylesheet" href="math.css?v=1790868133">
-<link rel="stylesheet" href="sound.css?v=1790868133">
+<script src="cloud-config.js?v=1790868781"></script>
+<script src="hosted.js?v=1790868782614641400"></script>
+<script type="module" src="roles.js?v=1790868781"></script>
+<script type="module" src="lotomobil.js?v=1790868781"></script>
+<script src="session.js?v=1790868781"></script>
+<link rel="icon" type="image/png" sizes="64x64" href="composer-icon-64.png?v=1790868781">
+<link rel="apple-touch-icon" href="composer-icon-180.png?v=1790868781">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790868781">
+<link rel="stylesheet" href="inspector.css?v=1790868781">
+<link rel="stylesheet" href="workbench.css?v=1790868781">
+<link rel="stylesheet" href="translates.css?v=1790868781">
+<link rel="stylesheet" href="share.css?v=1790868781">
+<script src="crash-ui/tokens.js?v=1790868781"></script>
+<script src="icons.js?v=1790868781"></script>
+<script src="workbench.js?v=1790868781"></script>
+<link rel="stylesheet" href="math.css?v=1790868781">
+<link rel="stylesheet" href="sound.css?v=1790868781">
 <style>
 #lotomobil-section p{margin:0;color:var(--inspector-muted);font-size:var(--inspector-type-base);line-height:1.5}#lotomobil-section .wb-button{width:100%;max-width:100%;align-self:stretch;justify-self:stretch;flex:none;height:var(--tap-min);min-height:var(--tap-min);padding:0 var(--space-12);font-size:var(--inspector-type-sm);line-height:1.4}.lotomobil-mode{font-size:var(--inspector-type-base);color:var(--inspector-accent)}.share-dialog.lotomobil-dialog{width:min(var(--inspector-size-420),calc(100vw - var(--space-32)));padding:var(--type-20);border-radius:var(--space-16)}.lotomobil-dialog h2{font-size:var(--type-20);margin:var(--space-4) 0 var(--inspector-type-base)}.lotomobil-dialog>p{margin:0 0 var(--space-16);font-size:var(--inspector-type-md)}.lotomobil-dialog form{display:grid;gap:var(--inspector-type-base)}.lotomobil-dialog label{margin:0;gap:var(--space-6);font-size:var(--inspector-type-md)}.lotomobil-dialog input{padding:var(--inspector-size-9) var(--inspector-type-xs)}.lotomobil-dialog #lotomobil-error{margin:var(--inspector-type-base) 0 0}.lotomobil-dialog #lotomobil-error:empty{display:none}.lotomobil-dialog [hidden]{display:none!important}.lotomobil-dialog button[type=submit]:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}.lotomobil-dialog button.is-loading{gap:var(--space-8)}.lotomobil-dialog button.is-loading::before{content:"";width:var(--type-14);height:var(--type-14);border:var(--stroke-2) solid currentColor;border-right-color:transparent;border-radius:50%;animation:lotomobil-spin var(--inspector-loading-duration) linear infinite}@keyframes lotomobil-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.lotomobil-dialog button.is-loading::before{animation:none}}
 
@@ -187,11 +187,6 @@ aside#side:has(#look-controls:not([hidden])){overflow:hidden}
 .lang-seg button{min-height:0;height:100%;padding:0 var(--space-12);border:0;border-radius:0;background:var(--inspector-surface);color:var(--inspector-muted);font-weight:600}
 .lang-seg button+button{border-left:var(--stroke-1) solid var(--inspector-border)}
 .lang-seg button[aria-pressed=true]{background:var(--inspector-surface-selected);color:var(--inspector-ink-selected)}
-.appbar .find{display:inline-flex;align-items:center;gap:var(--space-8);height:var(--space-40);flex:0 1 240px;min-width:0;padding:0 var(--space-12);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card);background:var(--inspector-well);color:var(--inspector-placeholder)}
-.appbar .find svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
-.appbar .find span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.appbar .find kbd{margin-left:auto;font:11px var(--inspector-mono);padding:1px 5px;border:var(--stroke-1) solid var(--inspector-border-strong);border-radius:4px;color:var(--inspector-muted)}
-@media(max-width:1250px){.appbar .find{flex:none}.appbar .find span,.appbar .find kbd{display:none}}
 .games-group{padding:var(--space-8) var(--space-8) var(--space-2);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--inspector-muted)}
 .appbar #picker .games{max-height:min(70vh,640px);overflow:auto}
 /* One panel pattern for every tab: sections, a list to move around, pills, and a bar pinned to the bottom. */
@@ -279,7 +274,6 @@ aside#side>#sound-controls,aside#side>#translates-controls{display:flex;flex-dir
 .icon-actions button{min-height:var(--space-24);padding:0 var(--space-8);font-size:var(--inspector-type-xs)}
 .icon-grid img{width:var(--space-32);height:var(--space-32);object-fit:contain}
 .icon-grid figcaption{font:var(--inspector-type-xs) var(--inspector-mono);color:var(--inspector-text);text-align:center}
-.appbar #game-kind{height:var(--type-44);flex:none;width:calc(var(--space-48) * 2);font-size:var(--inspector-type-md)}
 .appbar #picker,.appbar #language{height:var(--type-44);flex:none}
 .appbar #picker .game.pick{height:var(--type-44)}
 .appbar #language{width:var(--inspector-size-76);min-height:var(--type-44);padding:0 var(--inspector-size-30) 0 var(--inspector-type-base);border-radius:var(--inspector-radius-card);font-size:var(--inspector-type-md);background-position:right var(--inspector-type-base) center}
@@ -338,20 +332,19 @@ aside#side{grid-column:2;grid-row:2}
 .workspace-settings-wrap{position:relative;margin-bottom:var(--space-12)}
 #workspace-settings-toggle[aria-expanded=true]{background:var(--inspector-surface-selected);color:var(--inspector-accent)}
 #workspace-account-name{display:block;padding:var(--space-8);color:var(--inspector-muted);font-size:var(--inspector-type-sm);overflow-wrap:anywhere}
-#workspace-settings,#workspace-people,#workspace-roles,#workspace-password,#workspace-logout{display:flex;align-items:center;gap:var(--inspector-type-xs);width:100%;min-height:var(--tap-min);padding:var(--space-8);border:0;background:transparent;text-align:left}
-#workspace-settings:hover,#workspace-people:hover,#workspace-roles:hover,#workspace-password:hover,#workspace-logout:hover{background:var(--inspector-surface-hover)}
+#workspace-games,#workspace-settings,#workspace-people,#workspace-roles,#workspace-password,#workspace-logout{display:flex;align-items:center;gap:var(--inspector-type-xs);width:100%;min-height:var(--tap-min);padding:var(--space-8);border:0;background:transparent;text-align:left}
+#workspace-games:hover,#workspace-settings:hover,#workspace-people:hover,#workspace-roles:hover,#workspace-password:hover,#workspace-logout:hover{background:var(--inspector-surface-hover)}
 #workspace-logout svg{width:var(--type-18);height:var(--type-18)}
 #workspace-account-error{display:block;padding:var(--space-8);color:var(--inspector-danger)}
 .workspace-rail .workspace-dirty::after{content:"";position:absolute;top:var(--space-6);right:var(--space-6);width:var(--space-6);height:var(--space-6);border-radius:50%;background:var(--inspector-warning)}
 @media(max-width:640px){body{grid-template-columns:76px var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr)}}
 </style>
-<link rel="stylesheet" href="ux.css?v=1790868133">
+<link rel="stylesheet" href="ux.css?v=1790868781">
 <header class="appbar">
-<h1><img src="composer-icon-256.png?v=1790868133" alt="" width="28" height="28"><span>Game Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 30 Sep 2026, 13:02</small></span></h1>
-<select id="game-kind" aria-label="Game category" hidden><option value="slots">Slots</option><option value="crash">Crash</option><option value="instant">Instant</option></select><div id="picker" class="picker"></div><div id="look-bar" class="picker look-bar"><button id="look-bar-button" class="game pick wb-button" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="look-bar-menu"><i class="swatch"></i><span><strong>Lotomobil</strong><small>No season</small></span><i data-icon="chevron"></i></button><div id="look-bar-menu" class="games look-bar-menu" hidden><div id="look-pick"></div><small>Brands belong to every game. A season marked with a dot is this game’s own.</small></div></div><div id="language-seg" class="lang-seg" role="group" aria-label="Preview language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="fr">FR</button><button type="button" data-lang="ht">CR</button></div><select id="language" aria-label="Preview language" class="visually-hidden"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
+<h1><img src="composer-icon-256.png?v=1790868781" alt="" width="28" height="28"><span>Game Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 30 Sep 2026, 13:02</small></span></h1>
+<div id="kind-seg" class="lang-seg" role="group" aria-label="Game category"><button type="button" data-kind="crash">Crash</button><button type="button" data-kind="slots">Slots</button><button type="button" data-kind="instant">Instant</button></div><select id="game-kind" aria-label="Game category" class="visually-hidden"><option value="crash">Crash</option><option value="slots">Slots</option><option value="instant">Instant</option></select><div id="picker" class="picker"></div><div id="look-bar" class="picker look-bar"><button id="look-bar-button" class="game pick wb-button" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="look-bar-menu"><i class="swatch"></i><span><strong>Lotomobil</strong><small>No season</small></span><i data-icon="chevron"></i></button><div id="look-bar-menu" class="games look-bar-menu" hidden><div id="look-pick"></div><small>Brands belong to every game. A season marked with a dot is this game’s own.</small></div></div><div id="language-seg" class="lang-seg" role="group" aria-label="Preview language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="fr">FR</button><button type="button" data-lang="ht">CR</button></div><select id="language" aria-label="Preview language" class="visually-hidden"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
 
 <span class="grow"></span>
-<button id="palette-open" class="find" type="button" aria-keyshortcuts="Meta+K Control+K"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Find a game, brand, text…</span><kbd>⌘K</kbd></button>
 <button id="cloud-configurations" class="wb-button" type="button">Cloud</button>
 <button id="share-game" class="wb-button" type="button"><svg class="wb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg><span>Share</span></button>
 <a id="showcase-link" class="wb-button" href="https://svyatoslavteslyak.github.io/game-showcase/" target="_blank" rel="noopener" title="The public showcase of the same builds"><i data-icon="external"></i>Showcase</a>
@@ -451,16 +444,22 @@ frame.addEventListener('load',()=>Workbench.applyLook(frame,{brand:look.brand,th
 const select=document.querySelector('#target');
 const gameIcon=id=>id==='kit'?'composer-icon-256.png':`icons/${id}.png`;
 let picker=null;
-const KINDS={crash:'Crash',slots:'Slots',instant:'Instant'};
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const kindOf=id=>['candy_cascade','mopyon_cascades'].includes(id)?'slots':id==='plinko'?'instant':'crash';
 function gameSubtitle(id){
  if(id==='kit')return 'Shared UI kit';
- const build=window.ComposerTarget?.source(id)?.build;
- return KINDS[kindOf(id)]+(build&&!build.built?' · no build':'');
+ const source=window.ComposerTarget?.source(id),build=source?.build,d=/^(\d{4})-(\d{2})-(\d{2})$/.exec(source?.updated||'');
+ // The category is already named beside the list; the row says when the game last changed, as the showcase does.
+ return [d?`Updated ${+d[3]} ${MONTHS[d[2]-1]} ${d[1]}`:'',build&&!build.built?'No build':''].filter(Boolean).join(' · ');
 }
+// The category sits beside the list in the bar: it mirrors the select target.js owns, and the list shows that category's games.
+const kindSelect=document.querySelector('#game-kind'),kindSeg=document.querySelector('#kind-seg');
+kindSeg.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{if(kindSelect.value===b.dataset.kind)return;kindSelect.value=b.dataset.kind;kindSelect.dispatchEvent(new Event('change',{bubbles:true}));syncPicker()});
+function paintKind(){for(const b of kindSeg.querySelectorAll('[data-kind]')){const option=[...kindSelect.options].find(o=>o.value===b.dataset.kind);b.hidden=!!option?.disabled;b.setAttribute('aria-pressed',String(b.dataset.kind===kindSelect.value))}}
 function syncPicker(){
- const T=window.ComposerTarget,ORDER=['kit','crash','slots','instant'],rank=id=>ORDER.indexOf(id==='kit'?'kit':kindOf(id)),games=(T?.targets||[]).filter(t=>window.ComposerAuth?.canRead(t.id)).sort((a,b)=>rank(a.id)-rank(b.id)).map(t=>({id:t.id,title:t.title}));
- picker=Workbench.gamePicker({container:document.querySelector('#picker'),games,value:T?.value||select.value,thumb:gameIcon,subtitle:gameSubtitle,group:id=>id==='kit'?'':KINDS[kindOf(id)],onPick:id=>{if(!T.set(id))picker.value=T.value}});
+ paintKind();
+ const T=window.ComposerTarget,games=(T?.targets||[]).filter(t=>T.listed(t.id)&&(t.id==='kit'||kindOf(t.id)===kindSelect.value)).map(t=>({id:t.id,title:t.title}));
+ picker=Workbench.gamePicker({container:document.querySelector('#picker'),games,value:T?.value||select.value,thumb:gameIcon,subtitle:gameSubtitle,onPick:id=>{if(!T.set(id))picker.value=T.value}});
  const g=T?.entry();if(g){document.querySelector('#rail-game-icon').src=gameIcon(g.id);document.querySelector('#rail-game-name').textContent=g.title}
  showcaseLink();
 }
@@ -498,25 +497,26 @@ function syncWorkspaceAccess(){
 window.ComposerAuth.ready.then(syncWorkspaceAccess);
 document.addEventListener('composer-permissions',syncWorkspaceAccess);
 </script>
-<script src="draft-editors.js?v=1790868133"></script>
-<script src="target.js?v=1790868133"></script>
-<script src="showcase-settings.js?v=1790868133"></script>
-<script src="translation-table.js?v=1790868133"></script>
-<script src="live.js?v=1790868133"></script>
-<script src="look.js?v=1790868133"></script>
-<script src="library.js?v=1790868133"></script>
-<script type="module" src="math.js?v=1790868133"></script>
-<script src="sound.js?v=1790868133"></script>
+<script src="draft-editors.js?v=1790868781"></script>
+<script src="target.js?v=1790868781"></script>
+<script src="game-visibility.js?v=1790868781"></script>
+<script src="showcase-settings.js?v=1790868781"></script>
+<script src="translation-table.js?v=1790868781"></script>
+<script src="live.js?v=1790868781"></script>
+<script src="look.js?v=1790868781"></script>
+<script src="library.js?v=1790868781"></script>
+<script type="module" src="math.js?v=1790868781"></script>
+<script src="sound.js?v=1790868781"></script>
 
-<script type="module" src="cloud.js?v=1790868133"></script>
-<script src="translates.js?v=1790868133"></script>
-<script src="player-config.js?v=1790868133"></script><script src="share.js?v=1790868133"></script>
-<script src="dropdown.js?v=1790868133"></script>
-<script src="palette.js?v=1790868133"></script>
+<script type="module" src="cloud.js?v=1790868781"></script>
+<script src="translates.js?v=1790868781"></script>
+<script src="player-config.js?v=1790868781"></script><script src="share.js?v=1790868781"></script>
+<script src="dropdown.js?v=1790868781"></script>
+<script src="palette.js?v=1790868781"></script>
 </html>
 
-<script src="ux.js?v=1790868133"></script>
+<script src="ux.js?v=1790868781"></script>
 
-<link rel="stylesheet" href="responsive.css?v=1790868133">
-<script src="responsive.js?v=1790868133"></script>
-<link rel="stylesheet" href="studio.css?v=1790868133">
+<link rel="stylesheet" href="responsive.css?v=1790868781">
+<script src="responsive.js?v=1790868781"></script>
+<link rel="stylesheet" href="studio.css?v=1790868781">

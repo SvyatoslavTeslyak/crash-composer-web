@@ -23,7 +23,7 @@ const TABS=[['look','Brands'],['library','Assets'],['layout','Game'],['sound','S
 const LANGS=[['en','English'],['fr','Français'],['ht','Kreyòl']];
 sources.push(()=>{
  const T=window.ComposerTarget,out=[];
- for(const t of T?.targets||[])if(t.id!=='kit'&&window.ComposerAuth?.canRead(t.id))out.push({title:t.title,kind:'Game',icon:'icons/'+t.id+'.png',go:()=>T.set(t.id)});
+ for(const t of T?.targets||[])if(t.id!=='kit'&&T.offered(t.id))out.push({title:t.title,kind:'Game',icon:'icons/'+t.id+'.png',go:()=>T.set(t.id)});
  for(const [id,title] of TABS){const tab=$('#'+id+'-tab');if(tab&&!tab.hidden)out.push({title,kind:'Tab',go:()=>tab.click()})}
  const cat=window.ComposerLook?.catalog;
  if(cat)for(const [bid,b] of Object.entries(cat.brands)){

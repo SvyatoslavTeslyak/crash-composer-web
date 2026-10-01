@@ -16,7 +16,7 @@ const status=text=>dialog.querySelector('[role=status]').textContent=text;
 const count=()=>$('#showcase-visible-count').textContent=inputs().filter(n=>n.checked).length+' of '+inputs().length+' games visible';
 const wrap=$('#workspace-settings-wrap'),toggle=$('#workspace-settings-toggle'),menu=$('#workspace-settings-menu');
 const close=(focus=false)=>{menu.hidden=true;toggle.setAttribute('aria-expanded','false');if(focus)toggle.focus()};
-const sync=()=>{const auth=window.ComposerAuth;button.hidden=auth?.member?.role!=='admin';wrap.hidden=button.hidden&&!auth.has('roles.manage')&&!auth.has('users.manage')&&!auth.has('users.invite');if(wrap.hidden)close()};
+const sync=()=>{const auth=window.ComposerAuth;button.hidden=auth?.member?.role!=='admin';wrap.hidden=!menu.querySelector('button:not([hidden])');if(wrap.hidden)close()};
 toggle.onclick=()=>{const opening=menu.hidden;$('#workspace-account-menu').hidden=true;$('#workspace-avatar').setAttribute('aria-expanded','false');menu.hidden=!opening;toggle.setAttribute('aria-expanded',String(opening));if(opening)menu.querySelector('button:not([hidden])')?.focus()};
 document.addEventListener('click',e=>{if(!wrap.contains(e.target))close()});
 wrap.addEventListener('focusout',e=>{if(!wrap.contains(e.relatedTarget))close()});

@@ -1,6 +1,6 @@
-/* Studio: Composer's own place to work. A dusk valley fills the window; the bar, the rail and
-   the panel are frosted glass over it, and the game stands in the open middle like a lit
-   object on a desk. Loaded last, it only restyles: every control keeps its markup and tokens. */
+/* Studio: Composer's own place to work. A plain evening ground fills the window; the bar, the
+   rail and the panel are frosted glass over it, and the game stands in the open middle like a
+   lit object on a desk. Loaded last, it only restyles: every control keeps its markup and tokens. */
 @font-face{font-family:'Studio Sans';src:url('crash-ui/assets/fonts/Satoshi-Variable.woff2') format('woff2');font-weight:300 900;font-style:normal;font-display:swap}
 :root{
  --studio-font:'Studio Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -27,14 +27,7 @@
  --inspector-sans:var(--studio-font);
 }
 html{background:#080d18}
-body{
- font-family:var(--studio-font)!important;
- background:
-  linear-gradient(90deg,rgba(6,9,18,.78) 0,rgba(6,9,18,.42) 26%,rgba(6,9,18,.08) 55%,rgba(6,9,18,.28) 100%),
-  linear-gradient(180deg,rgba(6,9,18,.35) 0,rgba(6,9,18,0) 30%,rgba(6,9,18,.25) 100%),
-  image-set(url('studio-dusk.webp') type('image/webp'),url('studio-dusk.jpg') type('image/jpeg')) center 62%/cover fixed,
-  #0b1222!important;
-}
+body{font-family:var(--studio-font)!important;background:#0b1222!important}
 button,input,select,textarea{font-family:inherit}
 
 /* glass: the three pieces of chrome float over the valley */
@@ -49,11 +42,10 @@ aside#side{background:var(--studio-glass)!important;-webkit-backdrop-filter:blur
 .appbar h1 img{box-shadow:0 0 0 1px var(--studio-edge),0 6px 18px rgba(124,200,255,.25)}
 
 /* controls in the bar: glass chips with a lit edge */
-.appbar .picker .game.pick,.appbar .lang-seg,.appbar .find,.appbar>button,.appbar a.wb-button{background:rgba(22,31,50,.62)!important;border-color:var(--studio-edge-strong)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.appbar .picker .game.pick,.appbar .lang-seg,.appbar>button,.appbar a.wb-button{background:rgba(22,31,50,.62)!important;border-color:var(--studio-edge-strong)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .appbar .picker .game.pick:hover,.appbar>button:hover{background:rgba(36,48,73,.8)!important}
 .appbar .lang-seg button{background:transparent!important}
 .appbar .lang-seg button[aria-pressed=true]{background:linear-gradient(180deg,rgba(124,200,255,.28),rgba(124,200,255,.12))!important;color:#fff!important}
-.appbar .find{color:var(--inspector-muted)!important}
 
 /* the rail: icons on glass, the open tab lit like a window at night */
 .workspace-rail .wb-button{border-radius:14px!important;transition:background .18s,color .18s}
@@ -99,4 +91,3 @@ dialog::backdrop{background:rgba(4,7,14,.55);-webkit-backdrop-filter:blur(6px);b
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:rgba(160,185,230,.22);border-radius:10px;border:2px solid transparent;background-clip:padding-box}::-webkit-scrollbar-track{background:transparent}
 
 @media(prefers-reduced-transparency:reduce){.appbar,.workspace-rail,aside#side,#translates-report,#sound-report,#library-report{background:var(--inspector-bg)!important;-webkit-backdrop-filter:none;backdrop-filter:none}}
-@media(max-width:1000px){body{background-attachment:scroll!important}}

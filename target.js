@@ -35,6 +35,12 @@ let kind='crash';
 const engineRow=$('#engine-row'),engineSelect=$('#engine');
 const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}}};
 const known=id=>TARGETS.some(t=>t.id===id);
+// Games a person chose to hide from their own lists (Settings → Games in Composer). Kept on their
+// account, so the choice follows them between the local and the hosted Composer.
+let hidden=[];
+// Offered in the lists: readable and not hidden. The game in use stays listed until they leave it.
+const offered=id=>!!window.ComposerAuth?.canRead(id)&&(id==='kit'||!hidden.includes(id));
+const listed=id=>offered(id)||id===value;
 const entry=(id)=>TARGETS.find(t=>t.id===(id===undefined?value:id))||TARGETS[0];
 const source=(id)=>catalog?.sources.find(s=>s.id===(id===undefined?value:id))||null;
 const guards=[];
@@ -67,8 +73,8 @@ function engineOptions(){
  engineSelect.value=engine;
 }
 function options(){
- if(kindSelect){kindSelect.value=kind;for(const option of kindSelect.options)option.disabled=!TARGETS.some(t=>t.live&&category(t.id)===option.value&&window.ComposerAuth?.canRead(t.id))}
- select.replaceChildren(...TARGETS.filter(t=>t.id==='kit'||category(t.id)===kind).filter(t=>window.ComposerAuth?.canRead(t.id))
+ if(kindSelect){kindSelect.value=kind;for(const option of kindSelect.options)option.disabled=!TARGETS.some(t=>t.live&&category(t.id)===option.value&&listed(t.id))}
+ select.replaceChildren(...TARGETS.filter(t=>t.id==='kit'||category(t.id)===kind).filter(t=>listed(t.id))
   .map(t=>new Option(workspace==='math'&&!t.math?t.title+' · no model':t.title,t.id)));
  select.value=value;
 }
@@ -88,7 +94,7 @@ async function refresh(){
 // A workspace with unsaved work registers a guard; it returns false to keep the current game or build.
 function allowed(reason){return guards.every(guard=>guard(reason)!==false)}
 function set(id){
- if(!known(id)||id===value||!window.ComposerAuth?.canRead(id))return false;
+ if(!known(id)||id===value||!offered(id))return false;
  if(!allowed('switch'))return false;
  value=id;if(id!=='kit')kind=category(id);store.set(KEYS.target,id);
  options();engineOptions();writeHash();
@@ -118,7 +124,7 @@ if(ENGINES.some(e=>e.id===wantedEngine))engine=wantedEngine;
 options();engineOptions();
 if(kindSelect)kindSelect.onchange=()=>{
  const wanted=kindSelect.value;
- const next=TARGETS.find(t=>t.live&&category(t.id)===wanted&&window.ComposerAuth?.canRead(t.id));
+ const next=TARGETS.find(t=>t.live&&category(t.id)===wanted&&offered(t.id));
  if(!next||!set(next.id)){kindSelect.value=kind;return}
 };
 select.onchange=()=>{const wanted=select.value;if(!set(wanted))select.value=value};
@@ -142,8 +148,12 @@ window.ComposerTarget={
  get engine(){return engine},get engines(){return availableEngines()},
  engineTitle(id){return (ENGINES.find(e=>e.id===(id||engine))||{}).title||id||engine},
  setEngine,
- targets:TARGETS,entry,source,set,refresh,guard(fn){guards.push(fn)}
+ targets:TARGETS,entry,source,set,refresh,guard(fn){guards.push(fn)},
+ offered,listed,get hidden(){return [...hidden]},
+ // A new hidden list from Settings: the lists drop those games, and a hidden game in use is left for the first one still shown.
+ setHidden(list){hidden=[...list];leaveHidden();options();window.dispatchEvent(new CustomEvent('composer-games-shown'))}
 };
+function leaveHidden(){if(offered(value))return;const next=TARGETS.find(t=>t.live&&offered(t.id))||TARGETS[0];set(next.id)}
 
 // Restore the workspace only once every tab module has subscribed.
 window.addEventListener('DOMContentLoaded',async()=>{
@@ -151,5 +161,8 @@ window.addEventListener('DOMContentLoaded',async()=>{
  if(['look','library','sound','translates'].includes(opening.tab))$('#'+opening.tab+'-tab').click();else writeHash();
  refresh().catch(error=>say(error.message+' — start Composer with tools/preview.py so studio/ routes are available.',true));
 });
-window.ComposerAuth.ready.then(()=>{const permitted=TARGETS.filter(t=>window.ComposerAuth.canRead(t.id));if(permitted.length&&!window.ComposerAuth.canRead(value))set(permitted[0].id);options()});
+window.ComposerAuth.ready.then(()=>{
+ const saved=window.ComposerAuth.session?.user?.user_metadata?.composer_hidden_games;hidden=Array.isArray(saved)?saved.filter(known):[];
+ const permitted=TARGETS.filter(t=>window.ComposerAuth.canRead(t.id));if(permitted.length&&!window.ComposerAuth.canRead(value))set(permitted[0].id);else leaveHidden();options();
+});
 })();
