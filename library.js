@@ -72,39 +72,35 @@ function typographySection(){
 
  const inUse={};
  for(const b of Object.values(catalog.brands))for(const [role,face] of Object.entries(b.fonts)){
-  const fam=familyOf(face.file);if(fam)(inUse[fam.id]=inUse[fam.id]||[]).push(b.title+' · '+role);
+  const fam=familyOf(face.file);if(fam)((inUse[fam.id]=inUse[fam.id]||{})[b.title]=inUse[fam.id][b.title]||[]).push(role);
  }
  const families=catalog.families.filter(f=>!query||f.title.toLowerCase().includes(query)||ORIGIN[f.origin].toLowerCase().includes(query));
  const ordered=families.slice().sort((a,b)=>(applied[b.id]?1:0)-(applied[a.id]?1:0));
  const rows=ordered.map(fam=>{
   const weight=applied[fam.id]?brandFonts[applied[fam.id][0]].weight:(fam.weights.includes(500)?500:fam.weights.includes(400)?400:fam.weights[0]);
   const name=declare(fam,fam.weights.includes(weight)?weight:fam.weights[0],'normal');
-  const used=inUse[fam.id],here=applied[fam.id];
+  const used=inUse[fam.id]&&Object.entries(inUse[fam.id]).map(([title,roles])=>title+(roles.length>1?'':' · '+roles[0]+' only')),here=applied[fam.id];
   const bin=icon('remove');
   const remove=fam.origin==='uploaded'
    ?`<button type="button" class="lib-remove" data-remove="${fam.id}" aria-label="Remove ${esc(fam.title)}"${used?' disabled title="In use by '+esc(used.join(', '))+'"':' title="Remove every weight and format of it"'}>${bin}</button>`
    :'<span class="lib-remove-space" aria-hidden="true"></span>';
   return `<div class="font-row${here?' is-current':''}"><span class="font-name"><b>${esc(fam.title)}</b><small><i class="origin ${fam.origin}">${ORIGIN[fam.origin]}</i> · ${fam.variable?'variable '+fam.range[0]+'–'+fam.range[1]:fam.weights.length+' weight'+(fam.weights.length===1?'':'s')}${fam.italic?' · italic':''}</small></span>
 <span class="specimen" style="font-family:'${name}';font-weight:${weight}">${esc(SPECIMEN)}</span>
-<span class="specimen-use"><select class="use-select" data-family="${fam.id}" data-weight="${weight}" aria-label="Where ${esc(fam.title)} is used">
-<option value=""${here?'':' selected'} disabled hidden>Use as…</option>
-<option value="body"${here&&here.length===1&&here[0]==='body'?' selected':''}>Body</option>
-<option value="numbers"${here&&here.length===1&&here[0]==='numbers'?' selected':''}>Numbers</option>
-<option value="both"${here&&here.length>1?' selected':''}>Body and numbers</option>
-</select>${remove}</span></div>`;
+<span class="specimen-use"><span class="font-used${used?'':' none'}">${used?esc(used.join(', ')):'Not used'}</span>${remove}</span></div>`;
  }).join('');
  flushFaces();
  // One library card: the families it holds, and the two ways to put another one in it.
- return head('Typography','Choose body and number fonts. The size scale is shared by every brand and both navigation presets.')
-+card('UI type scale',`<p class="lib-sub">${steps.map(px=>px+' px').join(' · ')}</p><details><summary>Size roles & responsive rules</summary><table class="lib-table"><thead><tr><th>Size</th><th>Use</th></tr></thead><tbody>${steps.map(px=>`<tr><th scope="row">${px} px</th><td>${TYPE_ROLES[px]||''}</td></tr>`).join('')}</tbody></table><p class="lib-note">Use the same size for the same content in both presets. On smaller screens, switch between scale steps; keep text at least 12 px. All highlighted values in a card group use the same size.</p></details>`)
+ const toBrand=window.ComposerAuth?.has('design.edit')?`<button type="button" class="wb-button" id="library-to-brand">Set ${esc(catalog.brands[brand].title)}’s fonts…</button>`:'';
+ return head('Fonts','The families a brand can be set in. Add or remove them here; which one a brand uses is chosen in Brands.',toBrand)
 +card('Font library',`<div class="font-list">${rows||'<p class="lib-note">Nothing matches.</p>'}</div>
 <div class="lib-foot"><h4>Add a font</h4><div class="add-font">
  <div class="add-way"><b>From Google Fonts</b><p>Open the family on fonts.google.com and paste the link. Its latin cut and licence land in the kit.</p>
   <div class="add-row"><input id="library-google" type="text" placeholder="https://fonts.google.com/specimen/Inter" autocomplete="off" spellcheck="false"><button id="library-google-add" type="button" class="wb-button">Add</button></div></div>
  <div class="add-way"><b>From files</b><p>A .ttf, .otf, .woff or .woff2 for each weight, or one .zip of the whole family with its licence.</p>
   <div class="add-row"><button id="library-upload" type="button" class="wb-button">Choose files…</button><input id="library-file" type="file" accept=".ttf,.otf,.woff,.woff2,.zip" multiple hidden></div></div>
-</div></div>`,`<p class="lib-sub">Body is every label; numbers is amounts, multipliers and the action totals. Use as body, Use as numbers and Use for both write to ${esc(catalog.brands[brand].title)}. A family a brand holds cannot be removed.</p>`)
-+card('In use',cards,'<p class="lib-sub">The two faces '+esc(catalog.brands[brand].title)+' is set in, at every step of the type scale.</p>');
+</div></div>`,`<p class="lib-sub">On the right: the brands set in each family. A family a brand is set in cannot be removed.</p>`)
++card('UI type scale',`<p class="lib-sub">${steps.map(px=>px+' px').join(' · ')}</p><details><summary>Size roles & responsive rules</summary><table class="lib-table"><thead><tr><th>Size</th><th>Use</th></tr></thead><tbody>${steps.map(px=>`<tr><th scope="row">${px} px</th><td>${TYPE_ROLES[px]||''}</td></tr>`).join('')}</tbody></table><p class="lib-note">Use the same size for the same content in both presets. On smaller screens, switch between scale steps; keep text at least 12 px. All highlighted values in a card group use the same size.</p></details>`)
++card('How '+esc(catalog.brands[brand].title)+' reads',cards,'<p class="lib-sub">The two fonts of the brand picked in the top bar, at every step of the type scale. Body is every label; numbers is amounts and multipliers.</p>');
 }
 
 function colourSection(){
@@ -121,7 +117,7 @@ function colourSection(){
   const ratio=contrast(a,b),ok=ratio>=min;
   return `<tr class="${ok?'':'bad'}"><td>${esc(where)}</td><td><i class="chip" style="background:${b};color:${a}">Aa</i></td><td>${ratio.toFixed(1)}:1</td><td>${min}:1</td><td>${ok?'passes':'fails'}</td></tr>`;
  }).join('');
- return head('Colour',esc(catalog.brands[brand].title)+(theme?' · '+esc(catalog.brands[brand].themes[theme].title):'')+'. The dozen roles a brand is described with, everything they derive, and how every pair a player reads holds up against WCAG AA.')
+ return head('Colour tokens','Read-only · colours are edited in Brands. '+esc(catalog.brands[brand].title)+(theme?' · '+esc(catalog.brands[brand].themes[theme].title):'')+'. The dozen roles a brand is described with, everything they derive, and how every pair a player reads holds up against WCAG AA.')
 +card('Roles',`<div class="swatches">${roles}</div>`,'<p class="lib-sub">Click a swatch to copy its value.</p>')
 +card('Derived tokens',`<div class="swatches">${derived}</div>`,'<p class="lib-sub">Every token the roles above produce, and where a player meets it. None of these is set by hand; Brands · Advanced can override one.</p>')
 +card('Contrast',`<table class="lib-table"><thead><tr><th>Where</th><th>Sample</th><th>Ratio</th><th>Needs</th><th></th></tr></thead><tbody>${rows}</tbody></table>`);
@@ -186,7 +182,7 @@ const SECTIONS={typography:typographySection,colour:colourSection,scales:scalesS
 function draw(){
  report.innerHTML=SECTIONS[section]();
  report.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{navigator.clipboard?.writeText(b.dataset.copy);b.classList.add('copied');setTimeout(()=>b.classList.remove('copied'),900)});
- report.querySelectorAll('.use-select').forEach(n=>n.onchange=()=>{if(n.value)use(n.value,n.dataset.family,Number(n.dataset.weight)).catch(e=>note(e.message,true))});
+ const toBrand=$('#library-to-brand');if(toBrand)toBrand.onclick=()=>window.ComposerLook?.editBrand();
  report.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFamily(catalog.families.find(f=>f.id===b.dataset.remove)));
  report.querySelectorAll('[data-replace]').forEach(b=>b.onclick=()=>pickFile(f=>putIcon(b.dataset.replace,f),'.svg,.png,.webp'));
  report.querySelectorAll('[data-drop]').forEach(b=>b.onclick=()=>dropIcon(b.dataset.drop));
@@ -198,19 +194,6 @@ function draw(){
  if(google){google.onclick=addGoogle;$('#library-google').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();addGoogle()}}}
  panel.querySelectorAll('[data-section]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.section===section)));
  const lookBlock=$('#library-look-block');if(lookBlock){lookBlock.hidden=!LOOKED_AT[section];buildLook()}
-}
-async function use(role,family,weight){
- if(!confirm('Apply this font to '+(window.ComposerTarget?.entry()?.title||'selected game')+' · '+catalog.brands[brand].title+'? It will be saved to this game’s design draft.')){draw();return}
- const roles=role==='both'?['body','numbers']:[role];
- const fam=catalog.families.find(f=>f.id===family);
- const file=(fam.files[weight+'|normal']||Object.values(fam.files)[0]).split('/').pop();
- const current=catalog.brands[brand];
- const fonts=Object.fromEntries(Object.entries(current.fonts).map(([k,f])=>[k,{file:f.file,weight:f.weight,style:f.style||'normal'}]));
- for(const r of roles)fonts[r]={file,weight,style:'normal'};
- const response=await fetch('brands/'+brand,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from:brand,title:current.title,roles:current.roles,overrides:current.overrides,fonts})});
- if(!response.ok){const d=await response.json().catch(()=>({}));return note(d.message||('HTTP '+response.status),true)}
- catalog=await (await fetch('brands/')).json();draw();
- note(fam.title+' '+weight+' is now the '+roles.join(' and ')+' face of '+current.title+'.');
 }
 // A family straight from Google Fonts: the latin cut of its whole weight axis.
 async function addGoogle(){
@@ -250,10 +233,16 @@ function pickFile(then,accept){
 }
 function note(text,error){const n=$('#library-note');n.textContent=text;n.classList.toggle('sound-error',!!error)}
 function controls(){
- panel.innerHTML=`<section class="wb-section"><h2>Library</h2>
-<div class="look-row" role="group" aria-label="Section">${Object.keys(SECTIONS).map(k=>`<button type="button" class="wb-button" data-section="${k}">${k[0].toUpperCase()+k.slice(1)}</button>`).join('')}</div>
-<small>What the kit offers.</small></section>
-<section class="wb-section" id="library-look-block"><h2>Look</h2><div id="library-look"></div><small></small></section>
+ const item=(k,title,about)=>`<button type="button" class="wb-button lib-nav" data-section="${k}"><b>${title}</b><small>${about}</small></button>`;
+ panel.innerHTML=`<section class="wb-section"><h2>Assets</h2><div class="lib-navs">
+${item('typography','Fonts','Add and remove the families brands are set in')}
+${item('icons','Icons','Replace the shared artwork')}</div>
+<small>Shared by every game.</small></section>
+<section class="wb-section"><h2>Reference · read-only</h2><div class="lib-navs">
+${item('colour','Colour tokens','Every colour a brand produces, with contrast')}
+${item('scales','Scales','Spacing, radius, type and stroke steps')}
+${item('effects','Effects','Translucency, shadows and motion')}</div></section>
+<section class="wb-section" id="library-look-block"><h2>Shown for</h2><small></small></section>
 <section class="wb-section"><h2>Find</h2><label class="property">Search <input id="library-find" type="search" placeholder="gold, radius, coin"></label>
 <small id="library-note" role="status"></small></section>`;
  panel.querySelectorAll('[data-section]').forEach(b=>b.onclick=()=>{section=b.dataset.section;draw()});
@@ -265,16 +254,11 @@ function controls(){
 // Typography is about a brand's faces, Colour about a brand and its season: the picker
 // offers exactly what the section reads.
 function buildLook(){
- const box=$('#library-look');if(!box)return;
  const wantThemes=section==='colour';
- if(!wantThemes)theme='';
- Workbench.lookPicker({container:box,catalogTokens:Workbench.lookTokens(catalog),brand,theme,themes:wantThemes,onChange:v=>{
-  brand=v.brand;theme=wantThemes?v.theme:'';
-  const p=window.ComposerLookPicker;if(p){p.brand=brand;if(wantThemes)p.theme=theme}
-  draw();
- }});
- const note=box.parentElement.querySelector('small');
- if(note)note.textContent=wantThemes?'Colour shows the brand and season you pick here.':'Typography shows the faces this brand is set in.';
+ // The brand and season are the top bar's; Typography reads the brand alone.
+ const picked=window.ComposerLookPicker;brand=catalog.brands[picked?.brand]?picked.brand:'default';theme=wantThemes&&picked?.theme in (catalog.brands[brand].themes||{})?picked.theme:'';
+ const note=$('#library-look-block small'),b=catalog.brands[brand];
+ if(note)note.textContent=b.title+(theme?' · '+b.themes[theme].title:'')+' — the '+(wantThemes?'brand and season':'brand')+' picked in the top bar.';
 }
 async function open(){
  // With a game's draft open the brands can change between visits (another tab edits them, or
@@ -289,5 +273,6 @@ async function open(){
  if(first)controls();
  draw();
 }
+window.addEventListener('composer-look',()=>{if(window.ComposerTarget?.workspace==='library'&&catalog)draw()});
 window.addEventListener('composer-workspace',e=>{if(e.detail==='library')open().catch(err=>{report.innerHTML='<p class="sound-error">'+esc(err.message)+'</p>'})});
 })();

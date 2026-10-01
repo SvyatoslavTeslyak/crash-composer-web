@@ -17,6 +17,15 @@
  .rail-tooltip{display:none}.workspace-account{display:flex;align-items:center;gap:4px;margin:0 0 0 auto;padding:0}
  #workspace-settings-wrap{margin:0}#workspace-avatar{width:40px;height:40px;min-height:40px}
  #workspace-account-menu,#workspace-settings-menu{position:fixed;top:auto;bottom:calc(64px + env(safe-area-inset-bottom));left:auto;right:8px;width:min(300px,calc(100vw - 16px));max-height:calc(var(--composer-viewport-height,100dvh) - 80px);overflow:auto}
+ /* The new bar on a phone: game, brand and language on the first row; Find, Changes and Share on the second. */
+ .appbar{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) auto!important}
+ .appbar #picker{grid-column:1!important;grid-row:1}.appbar .look-bar{grid-column:2;grid-row:1;width:100%;min-width:0}.appbar .lang-seg{grid-column:3;grid-row:1;height:44px}
+ .appbar .look-bar .game.pick{height:44px}.appbar .lang-seg button{padding:0 10px}
+ .appbar .find{grid-column:1;grid-row:2;flex:none;height:44px;justify-content:center}.appbar .find span,.appbar .find kbd{display:none}
+ .appbar #cloud-configurations{grid-column:2!important;grid-row:2}.appbar #share-game{grid-column:3!important;grid-row:2}
+ .workspace-rail .rail-group{display:none}
+ .workspace-rail .wb-button{width:auto!important;flex:1;min-height:48px!important;max-width:none!important}
+ .workspace-rail .wb-button .rail-tooltip{display:block;font-size:10px}
  #mobile-workspace{grid-row:2;grid-column:1;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 12px;background:var(--inspector-bg);border-bottom:1px solid var(--inspector-border)}
  #mobile-workspace>div{display:flex;gap:4px}#mobile-workspace button,#mobile-controls-close{min-height:44px;padding:8px 12px;font-size:13px}
  body #room,body #room.translations-workspace{grid-column:1;grid-row:3;display:block;min-width:0;min-height:0;padding:12px;overflow:auto}

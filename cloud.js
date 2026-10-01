@@ -3,7 +3,11 @@ await window.ComposerAuth.ready;
 const client=window.ComposerAuth.client;
 const button=$('#cloud-configurations'),dialog=document.createElement('dialog');dialog.className='share-dialog cloud-dialog';dialog.setAttribute('aria-labelledby','cloud-title');document.body.append(dialog);
 let cloudMode=!window.ComposerAuth.local,member=null,session=null,versions=[],notices=[],busy=false,refreshId=0,currentDraft=null,published=null,basePayload={},loadError='';
-const game=()=>window.ComposerTarget.value;
+// Changes has two scopes, each with its own draft, sent versions and release: the selected
+// game's own changes, and the brands every game shares ("shared", once the cloud has it).
+const SHARED='shared';let scope='game',sharedThere=false,sharedState=null;
+const game=()=>scope===SHARED?SHARED:window.ComposerTarget.value;
+const scopeTitle=()=>scope===SHARED?'Brands · all games':ComposerTarget.entry().title;
 const check=result=>{if(result.error)throw Error(result.error.message);return result.data};
 async function rpc(name,args){return check(await client.rpc(name,args))}
 async function draft(id){const value=check(await client.from('composer_drafts').select('*').eq('game_id',id).single());return value}
@@ -70,11 +74,16 @@ function renderProgress(){
  const count=review?pending+unsent:newChanges().reduce((sum,g)=>sum+g.rows.length,0);
  // An Admin sees on the button itself what is left between an accepted version and the sites.
  const flag=releaseFlag();
- button.innerHTML='<span>Changes</span>'+(count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'')+(awaiting?reviewStatus('submitted',awaiting):'')+(flag?'<span class="changes-flag" title="'+esc(flag.title)+'">'+esc(flag.label)+'</span>':'');
+ const states=[];
+ if(flag)states.push(['release',flag.label+': '+flag.title]);
+ if(scope==='game'&&sharedState)states.push(['shared','Brands · all games: '+sharedState.label]);
+ if(awaiting)states.push(['awaiting',awaiting+' awaiting review']);
+ if(count)states.push(['saved',count+(review?' to review':' saved '+(count===1?'change':'changes')+', not sent')]);
+ button.innerHTML=(states.length?'<span class="changes-dot '+states[0][0]+'" aria-hidden="true"></span>':'')+'<span>Changes</span>'+(count?'<span class="changes-badge" aria-hidden="true">'+(count>99?'99+':count)+'</span>':'');
  window.ComposerUX?.refresh();
  button.setAttribute('aria-label','Changes'+(count?', '+count+(review?' to review':' saved changes'):'')+(awaiting?', '+awaiting+' awaiting review':''));
  button.disabled=busy;
- button.title='View saved changes';
+ button.title=states.length?states.map(x=>x[1]).join('\n'):'Nothing waiting to be published';
  button.hidden=!review&&!ComposerAuth.has('drafts.submit',game());
 }
 const showValue=v=>v===undefined?'Not set':v===null?'Default':v===true?'On':v===false?'Off':String(v);
@@ -108,6 +117,7 @@ function busyControls(){const hint=$('#cloud-save-hint');if(hint)hint.textConten
 async function run(fn){if(busy)return;busy=true;busyControls();try{await fn()}catch(e){message(e.message);notify(e.message)}finally{busy=false;busyControls();renderProgress()}}
 async function refresh(){
  const request=++refreshId,id=game();if(!client||ComposerAuth.local)return;
+ sharedThere=!!(await window.ComposerDraftEditors?.shared?.().catch(()=>false))&&ComposerAuth.has('workspace.view',SHARED);
  if(id==='kit'){currentDraft=null;versions=[];published=null;basePayload={};loadError='';render();return}
  const auth=check(await client.auth.getSession());session=auth.session;
  member=session?check(await client.from('composer_members').select('role,active').eq('user_id',session.user.id).maybeSingle()):null;
@@ -124,6 +134,7 @@ async function refresh(){
   const local=localRelease()?await fetch('release/status?game='+encodeURIComponent(id)).then(r=>r.ok?r.json():null).catch(()=>null):null;
   if(request!==refreshId||id!==game())return;
   localConfig=local;
+  if(scope==='game'&&sharedThere){const summary=await sharedSummary().catch(()=>null);if(request!==refreshId||id!==game())return;sharedState=summary}
   contributors=attribution.data||[];contributorsError=!!attribution.error;
   authors=new Map((a.error?[]:a.data||[]).map(person=>[person.user_id,person.name?person.name+' ('+person.email+')':person.email]));versions=check(v);notices=check(n);currentDraft=d;published=check(p)[0]||null;basePayload=baseline;loadError='';
  }else{versions=[];notices=[];currentDraft=null;localConfig=null}
@@ -153,6 +164,21 @@ function releaseActions(v){
   :done===3?localFile()+' is committed. Next: push to GitHub. Pushing publishes it to Composer web and Showcase.'
   :localFile()+' is pushed. GitHub is publishing it; this version moves to Published history when that is done.';
  return releaseSteps(done)+'<p class="review-applied" role="status">'+next+'</p>';
+}
+// The shared brands in two words, shown while a game's changes are open: what is waiting there.
+async function sharedSummary(){
+ const [d,v]=await Promise.all([draft(SHARED),client.from('composer_versions').select('id,revision,status').eq('game_id',SHARED).order('revision',{ascending:false}).limit(20)]);
+ const list=check(v),latest=list.find(x=>x.status==='published'),newer=x=>Number(x.revision)>Number(latest?.revision||0);
+ const admin=ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',SHARED)&&localRelease();
+ const local=admin?await fetch('release/status?game='+SHARED).then(r=>r.ok?r.json():null).catch(()=>null):null;
+ const accepted=list.filter(x=>x.status==='approved'&&newer(x)),waiting=list.filter(x=>x.status==='submitted'&&newer(x)).length;
+ if(admin&&accepted.some(x=>x.id!==local?.version_id))return {label:'Not applied'};
+ if(admin&&local?.state==='uncommitted')return {label:'Not committed'};
+ if(admin&&local?.state==='committed')return {label:'Not pushed'};
+ if(waiting&&ComposerAuth.has('drafts.review',SHARED))return {label:waiting+' to review'};
+ // Saved but not sent: the draft has moved on from every version of it.
+ if(Number(d.revision)>0&&!list.some(x=>Number(x.revision)===Number(d.revision)))return {label:'Saved, not sent'};
+ return null;
 }
 // The same, in two words, for the Changes button: the first thing still to do on this computer.
 function releaseFlag(){
@@ -184,7 +210,7 @@ function draftReview(){
  if(versions.some(v=>Number(v.revision)===Number(currentDraft?.revision)&&['submitted','approved'].includes(v.status)))return '';
  if(!draftChanges().some(g=>g.rows.length))return '<p class="review-intro">No saved changes to apply.</p>';
  const names=[...new Set(contributors.map(item=>authorName(item.actor)))];
- return '<section class="review-queue"><h3>All saved changes</h3><p class="review-intro">This applies the complete saved state for this game, including teammates’ changes. Review everything below before applying.</p>'+authorLine('Last saved by',currentDraft?.updated_by,currentDraft?.updated_at)+'<p class="review-author">'+(contributorsError?'Contributor history unavailable.':names.length?'Contributors since the last publication: '+names.map(esc).join(', '):'No tracked contributor history.')+' Older edits may have no attribution.</p>'+diffHTML({...basePayload,...currentDraft.payload},{...basePayload,...published?.payload})+'<p id="cloud-save-hint"></p>'+(localRelease()?'<button class="wb-button primary" id="cloud-apply-draft">Apply locally</button>':'')+'</section>';
+ return '<section class="review-queue"><h3>All saved changes</h3><p class="review-intro">'+(scope===SHARED?'This applies the complete saved brands for every game':'This applies the complete saved state for this game')+', including teammates’ changes. Review everything below before applying.</p>'+authorLine('Last saved by',currentDraft?.updated_by,currentDraft?.updated_at)+'<p class="review-author">'+(contributorsError?'Contributor history unavailable.':names.length?'Contributors since the last publication: '+names.map(esc).join(', '):'No tracked contributor history.')+' Older edits may have no attribution.</p>'+diffHTML({...basePayload,...currentDraft.payload},{...basePayload,...published?.payload})+'<p id="cloud-save-hint"></p>'+(localRelease()?'<button class="wb-button primary" id="cloud-apply-draft">Apply locally</button>':'')+'</section>';
 }
 async function applyVersion(versionId,id){
  const auth=check(await client.auth.getSession());const response=await fetch('release/apply',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({version_id:versionId})});const data=await response.json();if(!response.ok)throw Error(data.message||'Could not apply configuration');await refresh();message('Applied locally: '+data.path+'. Review, commit and push to publish.');notify('Configuration ready to commit');
@@ -192,7 +218,7 @@ async function applyVersion(versionId,id){
 function reviewStatus(status,count){const accepted=status==='approved';return '<span class="review-status '+(accepted?'accepted':'awaiting')+'"'+(accepted?' title="Accepted by Admin; not published yet"':'')+'>'+(accepted?'Accepted':'Awaiting review')+(count?' · '+count:'')+'</span>'}
 function publicationHistory(){
  const items=versions.filter(v=>v.status==='published');if(published&&!items.some(v=>v.id===published.id))items.unshift(published);
- return items.length?'<details class="review-history"><summary>Published history · '+items.length+'</summary>'+items.map(v=>{const r=releases.find(r=>r.version_id===v.id);return '<p>Revision '+esc(v.revision)+(r?.published_at?' · '+esc(new Date(r.published_at).toLocaleString()):'')+'</p>'}).join('')+'<a target="_blank" rel="noopener" href="https://svyatoslavteslyak.github.io/game-showcase/games/'+encodeURIComponent(game())+'/index.html">Open published game ↗</a></details>':'';
+ return items.length?'<details class="review-history"><summary>Published history · '+items.length+'</summary>'+items.map(v=>{const r=releases.find(r=>r.version_id===v.id);return '<p>Revision '+esc(v.revision)+(r?.published_at?' · '+esc(new Date(r.published_at).toLocaleString()):'')+'</p>'}).join('')+(scope===SHARED?'':'<a target="_blank" rel="noopener" href="https://svyatoslavteslyak.github.io/game-showcase/games/'+encodeURIComponent(game())+'/index.html">Open published game ↗</a>')+'</details>':'';
 }
 function reviewVersions(){
  const groups=[['submitted','Needs review','Apply locally accepts this version and writes it to this game’s configuration file on this computer. Use Discard all changes to reset unpublished changes for this game.'],['approved','Accepted · not published','Accepted by Admin. It is published once its configuration file is applied here, committed and pushed.']];
@@ -204,7 +230,9 @@ function render(){
  const collapsed=new Set([...dialog.querySelectorAll('[data-review-group]:not([open])')].map(el=>el.dataset.reviewGroup));
  const sentExpanded=dialog.querySelector('.review-sent')?.open;
  const sent=sentVersions(),newCount=newChanges().reduce((sum,g)=>sum+g.rows.length,0);
- dialog.innerHTML='<header><div><small>'+esc(ComposerTarget.entry().title)+'</small><div class="review-heading"><h2 id="cloud-title">Changes</h2>'+(!isReviewer()?['submitted','approved'].map(status=>{const count=sent.filter(v=>v.status===status).length;return count?reviewStatus(status,count):''}).join(''):'')+'</div></div><button class="wb-button" data-close aria-label="Close">✕</button></header><button class="wb-button" id="cloud-refresh">Refresh</button>'+
+ dialog.innerHTML='<header><div><small>'+esc(scopeTitle())+'</small><div class="review-heading"><h2 id="cloud-title">Changes</h2>'+(!isReviewer()?['submitted','approved'].map(status=>{const count=sent.filter(v=>v.status===status).length;return count?reviewStatus(status,count):''}).join(''):'')+'</div></div><button class="wb-button" data-close aria-label="Close">✕</button></header>'+
+ (sharedThere?'<div class="scope-tabs" role="group" aria-label="Whose changes"><button type="button" class="wb-button" data-scope="game" aria-pressed="'+(scope==='game')+'">'+esc(ComposerTarget.entry().title)+'</button><button type="button" class="wb-button" data-scope="'+SHARED+'" aria-pressed="'+(scope===SHARED)+'">Brands · all games'+(scope==='game'&&sharedState?' <span class="changes-flag shared">'+esc(sharedState.label)+'</span>':'')+'</button></div><p class="review-intro scope-about">'+(scope===SHARED?'Brands, their colours, faces and seasons belong to every game. A change here is reviewed and published once, for all of them.':'This game’s own changes: its texts, sounds, and any season or faces it keeps for itself.')+'</p>':'')+
+ '<button class="wb-button" id="cloud-refresh">Refresh</button>'+
  (ComposerAuth.member?.role==='admin'?' <button class="wb-button discard-changes" id="cloud-discard">Discard all changes</button>':'')+localBanner()+
  (ComposerAuth.member?.role==='admin'&&ComposerAuth.has('releases.publish',game())&&!localRelease()?'<aside class="review-local-note" aria-label="Publishing changes"><strong>Publish from local Composer</strong><p>You can review changes here. To publish them, open local Composer and sign in with the same Admin account. In Changes, review all saved changes or a sent version and click <b>Apply locally</b>, then commit and push the configuration file. GitHub will update Composer web and Showcase automatically.</p></aside>':'')+
  (isReviewer()?reviewVersions():'')+
@@ -218,10 +246,10 @@ function render(){
  if(sentExpanded&&dialog.querySelector('.review-sent'))dialog.querySelector('.review-sent').open=true;
  for(const group of dialog.querySelectorAll('[data-review-group]'))if(collapsed.has(group.dataset.reviewGroup))group.open=false;
  dialog.querySelector('[data-close]').onclick=()=>dialog.close();$('#cloud-refresh').onclick=()=>run(refresh);
- $('#cloud-discard')?.addEventListener('click',()=>{if(!canDiscard()||busy)return;const id=game(),revision=currentDraft.revision;if(!confirm('Discard all unpublished changes for '+ComposerTarget.entry().title+'? This includes shared draft edits, open edits in this window, and sent or approved versions. The published game stays unchanged.'))return;run(async()=>{await rpc('composer_discard_changes',{p_game:id,p_revision:revision});location.reload()})});
+ $('#cloud-discard')?.addEventListener('click',()=>{if(!canDiscard()||busy)return;const id=game(),revision=currentDraft.revision;if(!confirm('Discard all unpublished changes for '+scopeTitle()+'? This includes shared draft edits, open edits in this window, and sent or approved versions. The published game stays unchanged.'))return;run(async()=>{await rpc('composer_discard_changes',{p_game:id,p_revision:revision});location.reload()})});
  $('#cloud-discard-unsent')?.addEventListener('click',()=>{
   if(busy)return;
-  if(!confirm('Discard your unsent edits for '+ComposerTarget.entry().title+'? Your tracked edits and unsaved edits in this window will be reset. Sent versions and other people’s changes will stay. Older edits without authorship history will be preserved.'))return;
+  if(!confirm('Discard your unsent edits for '+scopeTitle()+'? Your tracked edits and unsaved edits in this window will be reset. Sent versions and other people’s changes will stay. Older edits without authorship history will be preserved.'))return;
   run(async()=>{if(!newChanges().some(g=>g.rows.length)&&dirty()){location.reload();return}await rpc('composer_discard_unsent',{p_game:game(),p_revision:currentDraft.revision});location.reload()});
  });
  for(const b of dialog.querySelectorAll('[data-apply]'))b.onclick=()=>{
@@ -235,23 +263,32 @@ function render(){
   run(async()=>{const version=await rpc('composer_accept_draft',{p_game:id,p_revision:revision});try{await applyVersion(version.id,id)}catch(error){await refresh();throw error}});
  });
  $('#cloud-submit')?.addEventListener('click',sendChanges);
+ dialog.querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{
+  if(busy||b.dataset.scope===scope)return;
+  if(dirty()){message('Save or cancel your open edits before switching.');return}
+  setScope(b.dataset.scope);render();run(refresh);
+ });
  $('#copy-publish')?.addEventListener('click',async()=>{const path=localConfig?.path;if(!/^configurations\/[a-z][a-z0-9_]*\.json$/.test(path))return;try{await navigator.clipboard.writeText('git add -- '+path+'\ngit diff --cached -- '+path+'\ngit commit --only '+path+' -m "Publish reviewed game configuration"\ngit push origin main');message('Publish commands copied. Run them from the Composer repository.')}catch{message('Could not copy. Review, commit and push '+path+' from the Composer repository.')}});
  busyControls();
 }
+// Another scope's draft, versions and local file are nothing to do with this one's.
+function setScope(next){scope=next;++refreshId;currentDraft=null;published=null;versions=[];basePayload={};localConfig=null}
 function open(){render();if(!dialog.open)dialog.showModal();run(refresh)}
+// Outside the dialog Changes is about the selected game; the shared brands show as a flag there.
+dialog.addEventListener('close',()=>{if(scope!=='game'){setScope('game');renderProgress();schedule()}});
 button.onclick=open;
 function sendChanges(){
  run(async()=>{
   if(!canSubmit())throw Error('Save your changes first.');
   const id=game(),revision=currentDraft.revision;
   const sections=newChanges().filter(g=>g.rows.length).map(g=>sectionNames[g.section]).join(', ');
-  await rpc('composer_submit',{p_game:id,p_revision:revision,p_summary:ComposerTarget.entry().title+' · '+sections});
+  await rpc('composer_submit',{p_game:id,p_revision:revision,p_summary:scopeTitle()+' · '+sections});
   await refresh();notify('Changes sent to Admin');
  });
 };
 let refreshTimer;
 function schedule(){clearTimeout(refreshTimer);refreshTimer=setTimeout(()=>{if(busy){schedule();return}run(async()=>{try{await refresh()}catch(e){loadError=e.message;renderProgress();throw e}})},250)}
-window.addEventListener('composer-target',()=>{++refreshId;currentDraft=null;published=null;versions=[];basePayload={};renderProgress();schedule()});
+window.addEventListener('composer-target',()=>{setScope('game');renderProgress();schedule()});
 window.addEventListener('composer-draft-saved',schedule);
 window.addEventListener('focus',()=>{if(!dialog.open)schedule()});
 let lastDirty=false;setInterval(()=>{const d=dirty();if(d!==lastDirty){lastDirty=d;renderProgress();busyControls()}},500);

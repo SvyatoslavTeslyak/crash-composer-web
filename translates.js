@@ -12,18 +12,11 @@ const current=()=>drafts.get(target);
 const OWN_PANEL={candy_cascade:'candyCascade',plinko:'plinko',mopyon_cascades:'mopyonCascades'};
 const ownPanel=()=>Object.hasOwn(OWN_PANEL,target);
 const gameHandle=()=>{try{return ownPanel()?frame.contentWindow?.[OWN_PANEL[target]]:null}catch{return null}};
-function notify(text){$('#translate-message').textContent=text}
 let saving=false,activeKey='',previousDevice=null,previousZoom=null,importReview=null;
 const live=()=>$('#translates-tab').getAttribute('aria-pressed')==='true';
 function previewData(d){const result=structuredClone(d);for(const [key,edit] of Object.entries(d.edits||{})){if(edit.custom)result.overrides[key]=texts(edit);else{delete result.overrides[key];Object.assign(result.catalog.entries[key],texts(edit))}}return result}
 function apply(){bindPreviewDismiss();if(live())ensureHistoryPreview();const d=current();try{const api=frame.contentWindow.CrashI18n;if(api){if(d)api.setDraft(previewData(d));api.setLanguage(language.value);if(live())highlightText()}}catch{}}
 const windowNames={autoSpin:'Auto Spin',candyPays:'Candy payouts',linePays:'Line pays',award:'Free games award',summary:'Free games summary',plinkoRows:'Rows',stake:'Bet amount',menu:'Settings',account:'Account',rules:'How to play',topbets:'Top bets',mybets:'My bets',betDetails:'My bet details',topBetDetails:'Top bet details',wins:'Live wins',win:'Win',difficulty:'Difficulty','limit:theme':'Atmosphere','limit:auto_steps':'Auto steps','limit:auto_cashout':'Auto cash out','notice:funds':'Notice · not enough funds','notice:offline':'Notice · no connection','notice:error':'Notice · something went wrong','notice:wallet':'Notice · top up balance'};
-function usageMarkup(entry){
- if(entry.usage?.includes('unused'))return '<div class="translation-usage"><span>Unused · Not rendered</span></div><p class="translation-usage-note">'+esc(entry.unusedReason)+'</p>';
- const usage=entry.usage||[],attribute=usage.filter(x=>!['text','scene'].includes(x)),onlyAttribute=attribute.length&&!usage.includes('text');
- const description=onlyAttribute?'Accessibility · '+attribute.join(', '):attribute.length?'Text + accessibility':entry.group==='Scene'?'Scene text':'UI text';
- return '<div class="translation-meta"><div class="translation-usage"><span>'+esc(description)+'</span>'+(entry.previewWindow?'<span>Window · '+esc(windowNames[entry.previewWindow]||entry.previewWindow)+'</span>':'')+(entry.presets?'<span>Preset · '+entry.presets.map(p=>p==='standard'?'Standard':p==='menu-drawer-v1'?'Menu tabs':'Tabs').join(', ')+'</span>':'')+(entry.previewState?'<span>State · '+(entry.previewState==='API difficulty'?'API difficulty':entry.previewState==='ready'?'Ready':entry.previewState==='win-transfer'?'Win transfer':entry.previewState==='notification'?'Notification':'Round-dependent')+'</span>':'')+'</div>'+(onlyAttribute?'<p class="translation-usage-note">Not a visible caption. This label describes a control to screen readers; the control is outlined in the preview.</p>':'')+'</div>';
-}
 function highlightText(){
  const api=frame.contentWindow?.CrashI18n,entry=current()?.catalog.entries[activeKey];
  api?.highlight?.(activeKey);const info=api?.describe?.(activeKey);
@@ -134,7 +127,9 @@ function focusText(key,lang){
  const entry=available().find(([id])=>id===key)?.[1];if(!entry)return;
  clearTimeout(revealTimer);
  gameHandle()?.clearTranslationPreview?.();
- activeKey=key;syncSelection();if(lang&&language.value!==lang){language.value=lang;try{localStorage.setItem('crash-language',lang)}catch{}}
+ activeKey=key;syncSelection();if(lang&&language.value!==lang){language.value=lang;try{localStorage.setItem('crash-language',lang)}catch{}
+  // The preview speaks the language of the cell being edited; the table stays as it is.
+  window.ComposerLanguagePaint?.();for(const n of report.querySelectorAll('.tx-table [lang]'))n.closest('th,td')?.classList.toggle('is-lang',n.getAttribute('lang')===lang)}
  stopStateInspection();inspectAction(entry.source,entry);
  previewWindow(entry.previewWindow||'');
  gameHandle()?.previewTranslation?.(entry.source,entry);
@@ -169,32 +164,46 @@ function importMarkup(){
  return '<section class="translation-import"><h3>Review CSV · '+changes.length+' changed texts</h3><p>'+(target==='kit'?'These changes update the shared catalog.':'These changes apply to this game only. Other games keep their translations.')+'</p><div class="translation-import-list">'+changes.map(change=>'<article><strong>'+esc(change.source)+'</strong>'+languages.filter(l=>change.before[l]!==change.after[l]).map(l=>'<p>'+labels[l]+'</p><del>'+esc(change.before[l]||'—')+'</del><ins>'+esc(change.after[l]||'— (English fallback)')+'</ins>').join('')+'</article>').join('')+'</div><div class="translation-row-actions"><button id="translate-import-cancel" '+(saving?'disabled':'')+'>Cancel</button><button id="translate-import-save" class="translation-save" '+(saving||!changes.length?'disabled':'')+'>Save '+changes.length+' changes</button></div></section>';
 }
 async function request(options,id=target){if(window.ComposerCloud?.enabled)return window.ComposerCloud.translations(id,options);const r=await fetch('translations?game='+encodeURIComponent(id),{cache:'no-store',...options});const data=await r.json();if(!r.ok)throw Error(data.message||'Could not load translations');return data}
-async function saveRow(key){
- if(saving)return;const id=target,d=current(),edit=d.edits[key];saving=true;edit.error='';rows();
- const overrides=structuredClone(d.overrides),entries={};
- if(edit.custom)overrides[key]=texts(edit);else{delete overrides[key];entries[key]=texts(edit)}
- try{const data=await request({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({revision:d.revision,entries,overrides})},id);delete d.edits[key];data.edits=d.edits;drafts.set(id,data);if(target===id){apply();notify(window.ComposerCloud?.enabled?'Saved to cloud draft':'Translation saved')}}catch(e){edit.error=e.message}
- finally{saving=false;if(target===id)rows();mark()}
-}
 const available=()=>Object.entries(current()?.catalog.entries||{}).filter(([,e])=>TranslationTable.applicable(e,target,currentPreset())).map(([key,e])=>[key,TranslationTable.context(e,target)]);
 const areaOf=e=>e.group==='Scene'?'scene':'ui';
 const windowGroup=e=>e.group==='Scene'?'Game scene':windowNames[e.previewWindow]||'Main screen';
 const windowOrder=['Main screen',...Object.values(windowNames),'Game scene'];
 const compareWindows=(a,b)=>windowOrder.indexOf(a)-windowOrder.indexOf(b);
+// The panel moves around the texts (windows, type, where); the table edits them, every language
+// side by side; the bar at the bottom of the panel saves or cancels every open edit at once.
 function render(){const d=current();if(!d)return;
- controls.innerHTML='<div class="toolbar"><strong>Text location</strong><div id="translation-areas"></div></div><div class="toolbar"><strong>Text type</strong><nav id="translation-types" class="look-row" aria-label="Translation text types"></nav></div><div class="toolbar"><strong>Windows</strong><nav id="translation-sections" class="look-row" aria-label="Translation windows"></nav></div><div class="toolbar"><label>Search<input id="translate-search" type="search" placeholder="Text or key" value="'+esc(query)+'"></label><label><input type="checkbox" id="translate-missing" '+(missing?'checked':'')+'> Missing selected language</label></div><div class="toolbar"><button id="translate-export">Download CSV template</button><button id="translate-import">Import CSV</button><input id="translate-file" type="file" accept=".csv,text/csv" hidden><button id="translate-reload">Reload shared draft</button><small role="status" id="translate-message">'+(canEdit()?'Edit and save each text separately':'Read-only access · Preview and export translations')+'</small></div>';
- $('#translate-search').oninput=e=>{query=e.target.value;rows()};$('#translate-missing').onchange=e=>{missing=e.target.checked;rows()};
+ controls.innerHTML='<section class="panel-sec"><h3>Windows</h3><nav id="translation-sections" class="panel-nav" aria-label="Translation windows"></nav></section>'
+  +'<section class="panel-sec"><h3>Text type</h3><div id="translation-types" class="panel-seg" role="group" aria-label="Translation text types"></div></section>'
+  +'<section class="panel-sec"><h3>Where</h3><div id="translation-areas" class="panel-seg" role="group" aria-label="Where the text is"></div></section>'
+  +'<div class="panel-bar" id="panel-bar"><button type="button" class="panel-bar-go" id="translate-save-all">Save</button><button type="button" id="translate-cancel-all">Cancel</button><small role="status" id="translate-message"></small></div>';
+ report.innerHTML='<div id="tx-import"></div><div class="translations-heading" id="tx-heading"></div>'
+  +'<div class="tx-toolbar"><input id="translate-search" type="search" placeholder="Find a text or key" value="'+esc(query)+'" aria-label="Find a text">'
+  +'<button type="button" class="tx-toggle" id="translate-missing" aria-pressed="'+missing+'">Only missing</button><span class="tx-progress" id="tx-progress"></span><span class="tx-grow"></span>'
+  +'<button type="button" id="translate-export" title="Download every text of this game as CSV">Download CSV</button><button type="button" id="translate-import">Import CSV</button><input id="translate-file" type="file" accept=".csv,text/csv" hidden>'
+  +'<button type="button" id="translate-reload" title="Read the saved texts again">Reload</button></div><div id="tx-table"></div>';
+ $('#translate-search').oninput=e=>{query=e.target.value;rows()};
+ $('#translate-missing').onclick=e=>{missing=!missing;e.currentTarget.setAttribute('aria-pressed',String(missing));rows()};
  $('#translate-reload').onclick=()=>{if(saving)return;if(Object.keys(current()?.edits||{}).length||importReview?.changes.length){notify('Save or cancel your open edits or CSV import before reloading.');return}drafts.delete(target);load()};
  $('#translate-import').disabled=!canEdit();$('#translate-export').onclick=exportTable;$('#translate-import').onclick=()=>$('#translate-file').click();$('#translate-file').onchange=e=>{importTable(e.target.files[0]);e.target.value=''};
+ $('#translate-save-all').onclick=saveAll;$('#translate-cancel-all').onclick=cancelAll;
  navigation();syncPreviewWindows();rows();mark();
 }
-function mark(){$('#translates-tab').classList.toggle('workspace-dirty',[...drafts.values()].some(d=>Object.keys(d.edits||{}).length))}
+function mark(){
+ $('#translates-tab').classList.toggle('workspace-dirty',[...drafts.values()].some(d=>Object.keys(d.edits||{}).length));
+ const bar=$('#panel-bar');if(!bar)return;const n=Object.keys(current()?.edits||{}).length;
+ bar.classList.toggle('dirty',!!n);$('#translate-save-all').disabled=!n||saving;$('#translate-cancel-all').disabled=!n||saving;
+ $('#translate-save-all').textContent=saving?'Saving…':n?'Save '+n+(n===1?' text':' texts'):'Save';
+ if(!bar.dataset.note)$('#translate-message').textContent=!canEdit()?'Read-only access · preview and export only':n?'Not saved yet · '+(target==='kit'?'the shared catalog':'saved to '+gameName())
+  :'No unsaved changes';
+}
+const gameName=()=>window.ComposerTarget?.entry()?.title||'this game';
+function notify(text){const m=$('#translate-message'),bar=$('#panel-bar');if(!m)return;m.textContent=text;if(bar){bar.dataset.note='1';clearTimeout(notify.timer);notify.timer=setTimeout(()=>{delete bar.dataset.note;mark()},4000)}}
 function navigation(){
  const entries=available();
- $('#translation-areas').innerHTML=[['ui','Interface'],['scene','Game scene']].map(([id,title])=>'<button type="button" class="translation-section-link" data-area="'+id+'" aria-pressed="'+(area===id)+'"><span>'+title+'</span><b>'+entries.filter(([,e])=>areaOf(e)===id).length+'</b></button>').join('');
+ $('#translation-areas').innerHTML=[['ui','Interface'],['scene','Game scene']].map(([id,title])=>'<button type="button" data-area="'+id+'" aria-pressed="'+(area===id)+'">'+title+' · '+entries.filter(([,e])=>areaOf(e)===id).length+'</button>').join('');
  const groups=[...new Set(entries.filter(([,e])=>areaOf(e)===area).map(([,e])=>windowGroup(e)))].sort(compareWindows);if(!groups.includes(category))category='all';
  const scoped=entries.filter(([,e])=>areaOf(e)===area);
- $('#translation-sections').innerHTML=[['all','All windows',scoped.length],...groups.map(g=>[g,g,scoped.filter(([,e])=>windowGroup(e)===g).length])].map(([id,label,count])=>'<button type="button" class="translation-section-link" data-section="'+esc(id)+'" aria-pressed="'+(category===id)+'"><span>'+esc(label)+'</span><b>'+count+'</b></button>').join('');
+ $('#translation-sections').innerHTML=[['all','All windows',scoped.length],...groups.map(g=>[g,g,scoped.filter(([,e])=>windowGroup(e)===g).length])].map(([id,label,count])=>'<button type="button" data-section="'+esc(id)+'" aria-pressed="'+(category===id)+'"><span>'+esc(label)+'</span><small><i class="tx-miss" hidden></i><b>'+count+'</b></small></button>').join('');
  for(const button of controls.querySelectorAll('[data-section]'))button.onclick=()=>{category=button.dataset.section;for(const link of controls.querySelectorAll('[data-section]'))link.setAttribute('aria-pressed',String(link.dataset.section===category));rows();report.scrollTop=0;
   activeKey='';syncSelection();stopStateInspection();
   if(category==='all'){apply();return}
@@ -203,45 +212,85 @@ function navigation(){
  };
  for(const b of controls.querySelectorAll('[data-area]'))b.onclick=()=>{area=b.dataset.area;category='all';textType=area==='scene'?'scene':'text';navigation();rows();report.scrollTop=0};
 }
-const typeNames={all:'All types',text:'UI texts',accessibility:'Accessibility',tooltip:'Tooltips',placeholder:'Placeholders',scene:'Scene texts'};
+const typeNames={all:'All',text:'UI texts',accessibility:'Accessibility',tooltip:'Tooltips',placeholder:'Placeholders',scene:'Scene texts'};
 function matchesType(entry,type){const usage=entry.usage||(entry.group==='Scene'?['scene']:['text']);return type==='all'||(type==='accessibility'?usage.some(x=>['aria-label','aria-labelledby','alt','caption'].includes(x)):type==='tooltip'?usage.includes('title'):usage.includes(type))}
 function typeNavigation(){
  const scope=available().filter(([,e])=>areaOf(e)===area&&(category==='all'||windowGroup(e)===category));
  const types=area==='scene'?['all','scene']:['all','text','accessibility','tooltip','placeholder'];
- $('#translation-types').innerHTML=types.map(type=>{const count=scope.filter(([,e])=>matchesType(e,type)).length;return '<button type="button" class="translation-section-link" data-text-type="'+type+'" aria-pressed="'+(textType===type)+'" '+(!count&&type!==textType?'disabled':'')+'><span>'+typeNames[type]+'</span><b>'+count+'</b></button>'}).join('');
+ // A type with nothing in it is not offered at all.
+ $('#translation-types').innerHTML=types.map(type=>{const count=scope.filter(([,e])=>matchesType(e,type)).length;return count||type===textType?'<button type="button" data-text-type="'+type+'" aria-pressed="'+(textType===type)+'">'+typeNames[type]+' · '+count+'</button>':''}).join('');
  for(const button of controls.querySelectorAll('[data-text-type]'))button.onclick=()=>{textType=button.dataset.textType;rows();report.scrollTop=0;controls.querySelector('[data-text-type="'+textType+'"]')?.focus({preventScroll:true})};
 }
+// What a text is and where it shows, in one quiet line; plain UI text says nothing.
+function metaLine(e){
+ const usage=e.usage||[];if(usage.includes('unused'))return 'Unused · '+(e.unusedReason||'not rendered');
+ const attribute=usage.filter(x=>!['text','scene'].includes(x)),parts=[];
+ if(attribute.length)parts.push((usage.includes('text')?'Text + accessibility':'Accessibility')+' · '+attribute.join(', '));
+ if(e.presets)parts.push(e.presets.map(p=>p==='standard'?'Standard':p==='menu-drawer-v1'?'Menu tabs':'Tabs').join(', ')+' only');
+ if(e.previewState)parts.push(e.previewState==='API difficulty'?'From the API':e.previewState==='ready'?'Before a round':e.previewState==='win-transfer'?'On a win':e.previewState==='notification'?'Notification':'During a round');
+ return parts.join(' · ');
+}
+const valueOf=(d,key,e,lang)=>d.edits?.[key]?.[lang]??d.overrides[key]?.[lang]??e[lang]??'';
 function rows(){const d=current();if(!d)return;typeNavigation();
- const scoped=available().filter(([key,e])=>areaOf(e)===area&&matchesType(e,textType)&&(!missing||!(d.overrides[key]?.[language.value]??e[language.value]))&&[key,e.source,d.overrides[key]?.[language.value]??e[language.value]??''].some(v=>v.toLowerCase().includes(query.toLowerCase())));
+ const lang=language.value,others=languages.filter(l=>l!=='en');
+ const isMissing=(key,e)=>(lang==='en'?others:[lang]).some(l=>!valueOf(d,key,e,l));
+ const inArea=available().filter(([,e])=>areaOf(e)===area&&matchesType(e,textType));
+ const scoped=inArea.filter(([key,e])=>(!missing||isMissing(key,e))&&[key,e.source,...languages.map(l=>valueOf(d,key,e,l))].some(v=>String(v).toLowerCase().includes(query.toLowerCase())));
  for(const button of controls.querySelectorAll('[data-section]')){
-  const count=scoped.filter(([,entry])=>button.dataset.section==='all'||windowGroup(entry)===button.dataset.section).length;
-  button.querySelector('b').textContent=count;
+  const mine=([,entry])=>button.dataset.section==='all'||windowGroup(entry)===button.dataset.section;
+  button.querySelector('b').textContent=scoped.filter(mine).length;
+  const gaps=inArea.filter(mine).filter(([key,e])=>isMissing(key,e)).length;
+  const miss=button.querySelector('.tx-miss');miss.hidden=!gaps;miss.textContent=gaps;miss.title=gaps+' missing '+(language.value==='en'?'in a translation':'in '+labels[language.value]);
  }
+ $('#tx-progress').innerHTML=others.map(l=>{const done=inArea.filter(([key,e])=>valueOf(d,key,e,l)).length,total=inArea.length;return '<span title="'+labels[l]+': '+done+' of '+total+' texts translated"><em>'+l.replace('ht','cr').toUpperCase()+'</em><b>'+done+'/'+total+'</b><i style="--p:'+(total?Math.round(done/total*100):0)+'%"></i></span>'}).join('');
  const entries=scoped.filter(([,e])=>category==='all'||windowGroup(e)===category);
  const groups=new Map();for(const row of entries){const group=windowGroup(row[1]);if(!groups.has(group))groups.set(group,[]);groups.get(group).push(row)}
- const title=category!=='all'?category:area==='scene'?'Scene texts':'UI texts',description=area==='scene'?'Hints, pop-ups and messages drawn inside the game scene.':'Texts used by this game’s '+(currentPreset()==='menu-drawer-v1'?'Menu tabs':currentPreset()==='tabbed-shell-v1'?'Tabs':'Standard')+' preset.';
- report.innerHTML=importMarkup()+'<div class="translations-heading"><div><span class="translation-eyebrow">TEXTS / '+(area==='scene'?'SCENE':'INTERFACE')+'</span><h2>'+title+'</h2><p>'+description+'</p></div><span class="translation-total">'+entries.length+' texts</span></div>'+
- (!entries.length?'<div class="translation-empty"><h3>'+(query||missing||textType!=='all'||category!=='all'?'No matching texts':'No scene texts for this game')+'</h3><p>'+(query||missing||textType!=='all'||category!=='all'?'Try another text type, window or search.':'This game uses the UI for its messages. Decorative text painted into artwork is not a text label.')+'</p></div>':'')+
- [...groups].sort(([a],[b])=>compareWindows(a,b)).map(([group,list])=>'<section class="translation-group"><header class="translation-group-heading"><h3>'+esc(group)+'</h3><span>'+list.length+'</span></header><div class="translation-group-rows">'+list.map(([key,e])=>{
- const edit=d.edits?.[key],v=edit||{...e,...d.overrides[key]},custom=edit?edit.custom:target!=='kit';
- return '<article class="translation-row '+(edit?'is-editing':'')+'" data-translation="'+key+'" tabindex="0" role="group" aria-label="Preview: '+esc(e.source)+'"><header><strong title="English source">'+esc(e.label||e.source)+'</strong><div class="translation-row-actions"><button type="button" data-mobile-show-game>Show in game</button>'+(!edit?'<button '+(!canEdit()||importReview||saving||e.usage?.includes('unused')?'disabled':'')+' data-edit="'+key+'" aria-label="Edit '+esc(e.source)+'">Edit</button>':'')+'</div></header>'+usageMarkup(e)+'<div class="translation-fields '+(!edit?'translation-values':'')+'">'+[language.value].map(lang=>'<'+(edit?'label':'div')+'><span title="'+labels[lang]+'">'+({en:'EN',fr:'FR',ht:'CR'}[lang])+'</span>'+(edit?(e.format==='markdown'?'<div class=translation-format><button type=button data-format=heading>Heading</button><button type=button data-format=bullet>• List</button><button type=button data-format=number>1. List</button><button type=button data-format=bold>Bold</button></div><small>Markdown: # heading · - bullet · 1. numbered item · **bold**</small>':'')+'<textarea '+(saving?'disabled':'')+' rows="'+(e.format==='markdown'?16:e.source.length>90?3:1)+'" lang="'+lang+'" data-key="'+key+'" data-lang="'+lang+'" aria-label="'+esc(e.source)+' — '+lang.toUpperCase()+'">'+esc(v[lang])+'</textarea>':'<p lang="'+lang+'">'+esc(v[lang]||'—')+'</p>')+'</'+(edit?'label':'div')+'>').join('')+'</div>'+(edit?'<footer><div>'+(target!=='kit'?'<label class="translation-override"><input type="checkbox" data-override="'+key+'" '+(custom?'checked':'')+' '+(saving?'disabled':'')+'> This game only</label>':'')+'</div><div class="translation-row-actions"><button data-cancel="'+key+'" '+(saving?'disabled':'')+'>Cancel</button><button class="translation-save" data-save="'+key+'" '+(saving?'disabled':'')+'>'+ (saving?'Saving…':'Save')+'</button></div></footer>'+(edit.error?'<p class="translation-error" role="alert">'+esc(edit.error)+'</p>':''):'')+'</article>'
- }).join('')+'</div></section>').join('');
- syncSelection();
- for(const row of report.querySelectorAll('[data-translation]')){
-  const select=()=>{row.focus({preventScroll:true});focusText(row.dataset.translation,language.value)};
-  row.onclick=event=>{if(event.target.closest('button,input,textarea,select,label,summary,a,details'))return;const selection=window.getSelection();if(selection&&!selection.isCollapsed&&row.contains(selection.anchorNode))return;select()};
-  row.onkeydown=event=>{if(event.target!==row||!['Enter',' '].includes(event.key))return;event.preventDefault();select()};
+ const title=category!=='all'?category:area==='scene'?'Scene texts':'UI texts',description=area==='scene'?'Hints, pop-ups and messages drawn inside the game scene.':'Texts used by this game’s '+(currentPreset()==='menu-drawer-v1'?'Menu tabs':currentPreset()==='tabbed-shell-v1'?'Tabs':'Standard')+' preset. Click a cell to edit it.';
+ $('#tx-import').innerHTML=importMarkup();
+ $('#tx-heading').innerHTML='<div><span class="translation-eyebrow">TEXTS / '+(area==='scene'?'SCENE':'INTERFACE')+'</span><h2>'+esc(title)+'</h2><p>'+description+'</p></div><span class="translation-total">'+entries.length+' texts</span>';
+ const editable=canEdit()&&!importReview&&!saving;
+ const head='<thead><tr>'+languages.map(l=>'<th scope="col" lang="'+l+'" class="'+(l===lang?'is-lang':'')+'">'+labels[l]+'</th>').join('')+'</tr></thead>';
+ const body=[...groups].sort(([a],[b])=>compareWindows(a,b)).map(([group,list])=>(category==='all'?'<tr class="tx-group"><th colspan="3" scope="rowgroup">'+esc(group)+' <span>'+list.length+'</span></th></tr>':'')+list.map(([key,e])=>{
+  const edit=d.edits?.[key],unused=e.usage?.includes('unused'),meta=metaLine(e);
+  const scope=edit&&target!=='kit'?'<button type="button" class="tx-scope" data-scope="'+key+'" title="Where this edit is saved">'+(edit.custom?esc(gameName())+' only':'Every game')+'</button>':'';
+  const format=e.format==='markdown'&&editable?'<div class="translation-format" data-format-for="'+key+'"><button type="button" data-format="heading">Heading</button><button type="button" data-format="bullet">• List</button><button type="button" data-format="number">1. List</button><button type="button" data-format="bold">Bold</button></div>':'';
+  const about=(e.label&&e.label!==e.source?'<small>'+esc(e.label)+'</small>':'')+(meta?'<small>'+esc(meta)+'</small>':'')+scope+format+(edit?.error?'<small class="translation-error" role="alert">'+esc(edit.error)+'</small>':'');
+  return '<tr class="translation-row'+(edit?' is-editing':'')+'" data-translation="'+key+'" tabindex="-1">'
+   +languages.map(l=>{const v=valueOf(d,key,e,l),changed=edit&&edit[l]!==(d.overrides[key]?.[l]??e[l]??'');return '<td class="tx-cell'+(v?'':' missing')+(changed?' changed':'')+(l===lang?' is-lang':'')+'"><textarea rows="1" lang="'+l+'" data-key="'+key+'" data-lang="'+l+'" aria-label="'+esc(e.source)+' — '+labels[l]+'" placeholder="'+(l==='en'?'':'Missing · English shows')+'"'+(editable&&!unused?'':' readonly')+(e.format==='markdown'?' class="tx-long"':'')+'>'+esc(v)+'</textarea>'+(l==='en'?'<div class="tx-text">'+about+'</div>':'')+'</td>'}).join('')+'</tr>';
+ }).join('')).join('');
+ $('#tx-table').innerHTML=entries.length?'<div class="tx-table-wrap"><table class="tx-table">'+head+'<tbody>'+body+'</tbody></table></div>'
+  :'<div class="translation-empty"><h3>'+(query||missing||textType!=='all'||category!=='all'?'No matching texts':'No scene texts for this game')+'</h3><p>'+(query||missing||textType!=='all'||category!=='all'?'Try another text type, window or search.':'This game uses the UI for its messages. Decorative text painted into artwork is not a text label.')+'</p></div>';
+ syncSelection();mark();
+ for(const row of report.querySelectorAll('tr[data-translation]'))row.onclick=event=>{if(event.target.closest('button,textarea'))return;focusText(row.dataset.translation,language.value)};
+ for(const input of report.querySelectorAll('textarea[data-key]')){
+  input.onfocus=()=>{lastField=input;focusText(input.dataset.key,input.dataset.lang)};
+  input.oninput=()=>{
+   const {key,lang:l}=input.dataset,e={...d.catalog.entries[key],...d.overrides[key]};
+   d.edits??={};d.edits[key]??={...texts(e),custom:target!=='kit'};d.edits[key][l]=input.value;
+   const original=d.overrides[key]?.[l]??d.catalog.entries[key][l]??'';
+   input.parentElement.classList.toggle('changed',input.value!==original);input.parentElement.classList.toggle('missing',!input.value);
+   const row=input.closest('tr');if(!row.classList.contains('is-editing')){row.classList.add('is-editing');if(target!=='kit'){const s=document.createElement('button');s.type='button';s.className='tx-scope';s.dataset.scope=key;s.textContent=gameName()+' only';s.title='Where this edit is saved';s.onclick=scopeClick;row.querySelector('.tx-text').prepend(s)}}
+   activeKey=key;apply();mark();
+  };
+  input.onkeydown=e=>{if(e.key==='Escape'){input.blur()}else if(e.key==='Enter'&&!e.shiftKey&&!input.classList.contains('tx-long')){e.preventDefault();const cells=[...report.querySelectorAll('textarea[data-lang="'+input.dataset.lang+'"]')];cells[cells.indexOf(input)+1]?.focus()}};
  }
- for(const button of report.querySelectorAll('[data-edit]'))button.onclick=()=>{const key=button.dataset.edit,e={...d.catalog.entries[key],...d.overrides[key]};d.edits??={};d.edits[key]={...texts(e),custom:target!=='kit'};rows();focusText(key,language.value);const field=report.querySelector('[data-translation="'+key+'"] textarea[data-lang="'+language.value+'"]');field?.focus({preventScroll:true});frame.contentWindow.requestAnimationFrame(()=>setTimeout(()=>field?.isConnected&&field.focus({preventScroll:true}),0));mark()};
- for(const button of report.querySelectorAll('[data-cancel]'))button.onclick=()=>{delete d.edits[button.dataset.cancel];if(activeKey===button.dataset.cancel){activeKey='';stopStateInspection()}rows();apply();mark()};
- for(const button of report.querySelectorAll('[data-save]'))button.onclick=()=>saveRow(button.dataset.save);
- for(const button of report.querySelectorAll('[data-format]'))button.onclick=()=>{const field=button.closest('label').querySelector('textarea'),start=field.selectionStart,end=field.selectionEnd,selected=field.value.slice(start,end),kind=button.dataset.format;const value=kind==='bold'?'**'+(selected||'text')+'**':(start&&field.value[start-1]!=='\n'?'\n':'')+(kind==='heading'?'## ':kind==='number'?'1. ':'- ')+(selected||'text');field.setRangeText(value,start,end,'select');field.dispatchEvent(new Event('input'));field.focus()};
- for(const input of report.querySelectorAll('textarea'))input.oninput=()=>{const {key,lang}=input.dataset;d.edits[key][lang]=input.value;activeKey=key;apply();mark()};
- for(const input of report.querySelectorAll('textarea'))input.onfocus=()=>focusText(input.dataset.key,input.dataset.lang);
+ for(const button of report.querySelectorAll('[data-scope]'))button.onclick=scopeClick;
+ for(const button of report.querySelectorAll('[data-format]'))button.onmousedown=e=>e.preventDefault();
+ for(const button of report.querySelectorAll('[data-format]'))button.onclick=()=>{const key=button.closest('[data-format-for]').dataset.formatFor,field=lastField?.dataset.key===key?lastField:report.querySelector('textarea[data-key="'+key+'"][data-lang="'+language.value+'"]');if(!field||field.readOnly)return;const start=field.selectionStart,end=field.selectionEnd,selected=field.value.slice(start,end),kind=button.dataset.format;const value=kind==='bold'?'**'+(selected||'text')+'**':(start&&field.value[start-1]!=='\n'?'\n':'')+(kind==='heading'?'## ':kind==='number'?'1. ':'- ')+(selected||'text');field.setRangeText(value,start,end,'select');field.dispatchEvent(new Event('input'));field.focus()};
  if($('#translate-import-cancel'))$('#translate-import-cancel').onclick=()=>{importReview=null;rows()};if($('#translate-import-save'))$('#translate-import-save').onclick=saveImport;
- for(const input of report.querySelectorAll('[data-override]'))input.onchange=()=>{d.edits[input.dataset.override].custom=input.checked;apply()};
-
 }
+let lastField=null;
+function scopeClick(event){const d=current(),key=event.currentTarget.dataset.scope,edit=d.edits?.[key];if(!edit)return;edit.custom=!edit.custom;event.currentTarget.textContent=edit.custom?gameName()+' only':'Every game';apply()}
+async function saveAll(){
+ const id=target,d=current(),keys=Object.keys(d?.edits||{});if(saving||!keys.length)return;
+ saving=true;mark();
+ const overrides=structuredClone(d.overrides),entries={};
+ for(const key of keys){const edit=d.edits[key];if(edit.custom)overrides[key]=texts(edit);else{delete overrides[key];entries[key]=texts(edit)}}
+ try{const data=await request({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({revision:d.revision,entries,overrides})},id);data.edits={};drafts.set(id,data);if(target===id){apply();saving=false;rows();notify((window.ComposerCloud?.enabled?'Saved to the cloud draft · ':'Saved · ')+keys.length+(keys.length===1?' text':' texts'))}}
+ catch(error){if(target===id)notify(error.message)}
+ finally{saving=false;if(target===id)mark();$('#translates-tab').classList.toggle('workspace-dirty',[...drafts.values()].some(x=>Object.keys(x.edits||{}).length))}
+}
+function cancelAll(){const d=current();if(!d||saving)return;d.edits={};activeKey='';stopStateInspection();rows();apply();mark()}
 
 async function load(){stopStateInspection();stopHistoryPreview();activeKey='';importReview=null;$('#translation-preview-view').value='';const id=++loadId;target=window.ComposerTarget?.value||$('#target').value||'kit';try{if(!drafts.has(target)||!Object.keys(drafts.get(target).edits||{}).length){const data=await request();if(id!==loadId)return;data.edits={};drafts.set(target,data)}render();apply()}catch(e){controls.innerHTML='<p>'+esc(e.message)+'</p>'}}
 language.onchange=()=>{rows();try{localStorage.setItem('crash-language',language.value)}catch{}apply();if(typeof showcaseLink==='function')showcaseLink()};

@@ -15,7 +15,7 @@ const DEVICES=[
 const ZOOMS=[['fit','Fit'],['0.5','50%'],['0.75','75%'],['1','100%']];
 
 /** A drop-down of games with thumbnail rows. games: [{id,title}], thumb(id) → url, subtitle(id) → text. */
-function gamePicker({container,games,value,thumb,subtitle=()=>'',onPick,footer=null}){
+function gamePicker({container,games,value,thumb,subtitle=()=>'',onPick,footer=null,group=null}){
  container.className='picker';
  const pick=h('button',{class:'game pick wb-button',type:'button','aria-haspopup':'listbox','aria-expanded':'false'},'<img alt="" width="40" height="40"><span><strong></strong><small></small></span>'+icon('chevron')+'');
  const list=h('div',{class:'games',role:'listbox',hidden:''});
@@ -24,7 +24,7 @@ function gamePicker({container,games,value,thumb,subtitle=()=>'',onPick,footer=n
  const open=on=>{list.hidden=!on;pick.setAttribute('aria-expanded',String(on))};
  const show=()=>{const g=games.find(x=>x.id===current)||games[0];if(!g)return;pick.querySelector('img').src=thumb(g.id);pick.querySelector('strong').textContent=g.title;pick.querySelector('small').textContent=subtitle(g.id);
   list.querySelectorAll('.game').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.game===current)))};
- const fill=()=>{list.replaceChildren(...games.map(g=>{const b=h('button',{class:'game wb-button',type:'button',role:'option','data-game':g.id},`<img src="${thumb(g.id)}" alt="" width="40" height="40"><span><strong>${g.title}</strong><small>${subtitle(g.id)}</small></span>`);b.onclick=()=>{open(false);if(g.id!==current){current=g.id;show();onPick(g.id)}};return b}));if(footer){footer.classList.add('games-footer');list.append(footer)}};
+ const fill=()=>{let last=null;list.replaceChildren(...games.flatMap(g=>{const head=group&&group(g.id)!==last&&group(g.id)?h('div',{class:'games-group'},group(g.id)):null;if(group)last=group(g.id);const b=h('button',{class:'game wb-button',type:'button',role:'option','data-game':g.id},`<img src="${thumb(g.id)}" alt="" width="40" height="40"><span><strong>${g.title}</strong><small>${subtitle(g.id)}</small></span>`);b.onclick=()=>{open(false);if(g.id!==current){current=g.id;show();onPick(g.id)}};return head?[head,b]:[b]}));if(footer){footer.classList.add('games-footer');list.append(footer)}};
  pick.onclick=()=>open(list.hidden);
  document.addEventListener('click',e=>{if(!container.contains(e.target))open(false)});
  document.addEventListener('keydown',e=>{if(e.key==='Escape')open(false)});
@@ -54,7 +54,9 @@ function lookTokens(catalog){
   BRANDS:each(b=>b.title),
   THEMES:each(b=>Object.fromEntries(Object.entries(b.themes||{}).map(([id,t])=>[id,t.title]))),
   BRAND_SWATCHES:each(primary),
-  THEME_SWATCHES:each(b=>Object.fromEntries(Object.entries(b.themes||{}).map(([id,t])=>[id,t.roles?.primary||primary(b)])))
+  THEME_SWATCHES:each(b=>Object.fromEntries(Object.entries(b.themes||{}).map(([id,t])=>[id,t.roles?.primary||primary(b)]))),
+  // Seasons only the selected game has, which the picker marks.
+  THEME_OWN:each(b=>b.own?.themes||[])
  };
 }
 function lookPicker({container,brand='default',theme='',onChange,onAddTheme=null,onAddBrand=null,onEditBrand=null,onEditTheme=null,themes=true,catalogTokens=null}){
@@ -75,7 +77,7 @@ function lookPicker({container,brand='default',theme='',onChange,onAddTheme=null
  function fillThemes(){
   themeRow.replaceChildren();
   const none=h('button',{class:'wb-button season-off',type:'button','data-theme':'',title:'The brand as designed, no season over it'},'No season');none.onclick=()=>{theme='';paint();onChange({brand,theme})};themeRow.append(none);
-  for(const [id,title] of Object.entries(themesOf(brand))){const b=h('button',{class:'wb-button',type:'button','data-theme':id},swatch(((tokens.THEME_SWATCHES||{})[brand]||{})[id])+escape(title));b.onclick=()=>{theme=id;paint();onChange({brand,theme})};appendChoice(themeRow,b,onEditTheme?()=>onEditTheme(brand,id):null,title)}
+  for(const [id,title] of Object.entries(themesOf(brand))){const mine=((tokens.THEME_OWN||{})[brand]||[]).includes(id);const b=h('button',{class:'wb-button'+(mine?' own-season':''),type:'button','data-theme':id,...(mine?{title:'A season of this game only'}:{})},swatch(((tokens.THEME_SWATCHES||{})[brand]||{})[id])+escape(title)+(mine?'<i class="own-mark" aria-hidden="true"></i>':''));b.onclick=()=>{theme=id;paint();onChange({brand,theme})};appendChoice(themeRow,b,onEditTheme?()=>onEditTheme(brand,id):null,title)}
   if(onAddTheme){const add=h('button',{class:'wb-button add',type:'button',title:'New theme for this brand'},icon('plus')+'Add new');add.onclick=()=>onAddTheme(brand);themeRow.append(add)}
   themeNote.textContent=(tokens.BRANDS[brand]||'This brand')+' · seasons';
  }

@@ -75,3 +75,11 @@
 .share-menu .wb-button{display:flex;align-items:center;box-sizing:border-box;margin:0;line-height:20px}
 .share-menu .wb-button svg{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .share-menu a.wb-button svg{order:1;margin-left:auto}
+
+/* Changes: whose changes are on show, and the shared brands' state beside a game's. */
+#cloud-configurations .changes-flag.shared,.scope-tabs .changes-flag.shared{display:inline-flex;align-items:center;height:20px;margin-left:8px;padding:0 8px;border-radius:999px;border:1px solid color-mix(in srgb,#b79cff 50%,transparent);background:color-mix(in srgb,#b79cff 14%,transparent);color:#b79cff;font:600 11px/1 var(--inspector-sans,system-ui);white-space:nowrap}
+.scope-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}.scope-tabs .wb-button{padding:8px 12px}.scope-tabs .wb-button[aria-pressed=true]{border-color:var(--inspector-accent);color:var(--inspector-accent)}
+.scope-about{margin:0 0 14px}
+#cloud-configurations .changes-dot{width:9px;height:9px;border-radius:50%;flex:none;margin-right:8px;background:#6cccff}
+#cloud-configurations .changes-dot.release{background:#ffd37a}#cloud-configurations .changes-dot.shared{background:#b79cff}#cloud-configurations .changes-dot.awaiting{background:#6cccff}#cloud-configurations .changes-dot.saved{background:#98a5b5}
+#cloud-configurations .changes-badge{background:#303844!important;color:#e2e7ee!important}

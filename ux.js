@@ -1,7 +1,7 @@
 /* Shared workspace feedback. Status never substitutes for server permissions. */
 (()=>{
  const $=s=>document.querySelector(s),set=(el,text)=>{if(el&&el.textContent!==text)el.textContent=text};
- const state={phase:'',error:'',lastSaved:null},names={layout:'Game',look:'Design',library:'Assets',sound:'Sounds',translates:'Texts',math:'Math Lab'};
+ const state={phase:'',error:'',lastSaved:null},names={layout:'Game',look:'Brands',library:'Assets',sound:'Sounds',translates:'Texts',math:'Math Lab'};
  const dirty=()=>!!window.ComposerLook?.dirty||!!$('.workspace-dirty');
  window.ComposerUX={dirty,refresh:update,status(phase,error=''){state.phase=phase;state.error=error;update()},published:null};
  $('#kit-updated').hidden=true;

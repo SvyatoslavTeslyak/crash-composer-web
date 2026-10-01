@@ -96,3 +96,10 @@
 #fit.preview-fullscreen #size{display:none}
 #fit.preview-fullscreen #preview-fullscreen{opacity:var(--alpha-scrim)}
 #fit.preview-fullscreen #preview-fullscreen:is(:hover,:focus-visible){opacity:1}
+
+/* A season or a face that is the selected game's own, not every game's. */
+.own-mark{display:inline-block;width:7px;height:7px;margin-left:6px;border-radius:50%;background:#5fd6a6;vertical-align:middle}
+.scope-note{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px}
+.scope-tag{display:inline-flex;align-items:center;min-height:22px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;line-height:1.2}
+.scope-tag.shared{color:#b79cff;background:color-mix(in srgb,#b79cff 14%,transparent);border:1px solid color-mix(in srgb,#b79cff 45%,transparent)}
+.scope-tag.game{color:#5fd6a6;background:color-mix(in srgb,#5fd6a6 14%,transparent);border:1px solid color-mix(in srgb,#5fd6a6 45%,transparent)}

@@ -1,26 +1,26 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<meta name="composer-version" content="ux-20260923.1-c76ed3feefc4">
+<meta name="composer-version" content="ux-20260923.1-e6148a200064">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Game Composer</title>
-<script src="cloud-config.js?v=1790769649"></script>
-<script src="hosted.js?v=1790769653051953704"></script>
-<script type="module" src="roles.js?v=1790769649"></script>
-<script type="module" src="lotomobil.js?v=1790769649"></script>
-<script src="session.js?v=1790769649"></script>
-<link rel="icon" type="image/png" sizes="64x64" href="composer-icon-64.png?v=1790769649">
-<link rel="apple-touch-icon" href="composer-icon-180.png?v=1790769649">
-<link rel="stylesheet" href="crash-ui/tokens.css?v=1790769649">
-<link rel="stylesheet" href="inspector.css?v=1790769649">
-<link rel="stylesheet" href="workbench.css?v=1790769649">
-<link rel="stylesheet" href="translates.css?v=1790769649">
-<link rel="stylesheet" href="share.css?v=1790769649">
-<script src="crash-ui/tokens.js?v=1790769649"></script>
-<script src="icons.js?v=1790769649"></script>
-<script src="workbench.js?v=1790769649"></script>
-<link rel="stylesheet" href="math.css?v=1790769649">
-<link rel="stylesheet" href="sound.css?v=1790769649">
+<script src="cloud-config.js?v=1790868133"></script>
+<script src="hosted.js?v=1790868134790938159"></script>
+<script type="module" src="roles.js?v=1790868133"></script>
+<script type="module" src="lotomobil.js?v=1790868133"></script>
+<script src="session.js?v=1790868133"></script>
+<link rel="icon" type="image/png" sizes="64x64" href="composer-icon-64.png?v=1790868133">
+<link rel="apple-touch-icon" href="composer-icon-180.png?v=1790868133">
+<link rel="stylesheet" href="crash-ui/tokens.css?v=1790868133">
+<link rel="stylesheet" href="inspector.css?v=1790868133">
+<link rel="stylesheet" href="workbench.css?v=1790868133">
+<link rel="stylesheet" href="translates.css?v=1790868133">
+<link rel="stylesheet" href="share.css?v=1790868133">
+<script src="crash-ui/tokens.js?v=1790868133"></script>
+<script src="icons.js?v=1790868133"></script>
+<script src="workbench.js?v=1790868133"></script>
+<link rel="stylesheet" href="math.css?v=1790868133">
+<link rel="stylesheet" href="sound.css?v=1790868133">
 <style>
 #lotomobil-section p{margin:0;color:var(--inspector-muted);font-size:var(--inspector-type-base);line-height:1.5}#lotomobil-section .wb-button{width:100%;max-width:100%;align-self:stretch;justify-self:stretch;flex:none;height:var(--tap-min);min-height:var(--tap-min);padding:0 var(--space-12);font-size:var(--inspector-type-sm);line-height:1.4}.lotomobil-mode{font-size:var(--inspector-type-base);color:var(--inspector-accent)}.share-dialog.lotomobil-dialog{width:min(var(--inspector-size-420),calc(100vw - var(--space-32)));padding:var(--type-20);border-radius:var(--space-16)}.lotomobil-dialog h2{font-size:var(--type-20);margin:var(--space-4) 0 var(--inspector-type-base)}.lotomobil-dialog>p{margin:0 0 var(--space-16);font-size:var(--inspector-type-md)}.lotomobil-dialog form{display:grid;gap:var(--inspector-type-base)}.lotomobil-dialog label{margin:0;gap:var(--space-6);font-size:var(--inspector-type-md)}.lotomobil-dialog input{padding:var(--inspector-size-9) var(--inspector-type-xs)}.lotomobil-dialog #lotomobil-error{margin:var(--inspector-type-base) 0 0}.lotomobil-dialog #lotomobil-error:empty{display:none}.lotomobil-dialog [hidden]{display:none!important}.lotomobil-dialog button[type=submit]:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}.lotomobil-dialog button.is-loading{gap:var(--space-8)}.lotomobil-dialog button.is-loading::before{content:"";width:var(--type-14);height:var(--type-14);border:var(--stroke-2) solid currentColor;border-right-color:transparent;border-radius:50%;animation:lotomobil-spin var(--inspector-loading-duration) linear infinite}@keyframes lotomobil-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.lotomobil-dialog button.is-loading::before{animation:none}}
 
@@ -179,6 +179,48 @@ aside#side:has(#look-controls:not([hidden])){overflow:hidden}
 .specimen-weight{font:var(--inspector-type-sm) var(--inspector-mono);color:var(--inspector-muted);white-space:nowrap}
 .specimen{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--inspector-text);line-height:1.25}
 .specimen-use{display:flex;gap:var(--space-8);align-items:center}
+.lib-head .wb-button{flex:none;min-height:var(--inspector-control);padding:0 var(--space-16);white-space:nowrap}
+#game-fonts .face{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-6) var(--space-8)}#game-fonts .face b{grid-column:1/-1;font-size:var(--inspector-type-sm);font-weight:500;color:var(--inspector-muted)}#game-fonts .face select{width:100%}
+#game-fonts .look-row button{flex:1;justify-content:center}.game-fonts-actions{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8)}.game-fonts-actions[hidden]{display:none}
+.game-fonts-actions .primary{background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}
+.lang-seg{display:flex;flex:none;height:var(--type-44);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card);overflow:hidden}
+.lang-seg button{min-height:0;height:100%;padding:0 var(--space-12);border:0;border-radius:0;background:var(--inspector-surface);color:var(--inspector-muted);font-weight:600}
+.lang-seg button+button{border-left:var(--stroke-1) solid var(--inspector-border)}
+.lang-seg button[aria-pressed=true]{background:var(--inspector-surface-selected);color:var(--inspector-ink-selected)}
+.appbar .find{display:inline-flex;align-items:center;gap:var(--space-8);height:var(--space-40);flex:0 1 240px;min-width:0;padding:0 var(--space-12);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card);background:var(--inspector-well);color:var(--inspector-placeholder)}
+.appbar .find svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.appbar .find span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbar .find kbd{margin-left:auto;font:11px var(--inspector-mono);padding:1px 5px;border:var(--stroke-1) solid var(--inspector-border-strong);border-radius:4px;color:var(--inspector-muted)}
+@media(max-width:1250px){.appbar .find{flex:none}.appbar .find span,.appbar .find kbd{display:none}}
+.games-group{padding:var(--space-8) var(--space-8) var(--space-2);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--inspector-muted)}
+.appbar #picker .games{max-height:min(70vh,640px);overflow:auto}
+/* One panel pattern for every tab: sections, a list to move around, pills, and a bar pinned to the bottom. */
+aside#side>#sound-controls,aside#side>#translates-controls{display:flex;flex-direction:column;flex:1 0 auto}
+.panel-sec input[type=search]{width:100%}
+.panel-sec>small{color:var(--inspector-muted);font-size:var(--inspector-type-xs);line-height:1.45}
+.panel-bar:not(.dirty) small:empty{display:none}
+.panel-sec{display:grid;gap:var(--space-8);padding:var(--space-4) 0 var(--space-16)}
+.panel-sec>h3{margin:0;font-size:var(--inspector-type-xs);font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--inspector-muted)}
+.panel-nav{display:grid;gap:2px}
+.panel-nav button{display:flex;align-items:center;gap:var(--space-8);width:100%;min-height:34px;padding:0 var(--space-10,10px);border:1px solid transparent;border-radius:var(--inspector-radius-card);background:none;color:var(--inspector-text);text-align:left}
+.panel-nav button:hover{background:var(--inspector-surface)}
+.panel-nav button[aria-pressed=true]{background:var(--inspector-surface-selected);border-color:var(--inspector-border);color:var(--inspector-ink-selected)}
+.panel-nav button span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.panel-nav button small{flex:none;font:11px var(--inspector-mono);color:var(--inspector-muted)}
+.panel-nav button small{display:inline-flex;align-items:center;gap:6px}.panel-nav .tx-miss{font-style:normal;min-width:18px;padding:0 5px;border-radius:999px;text-align:center;color:#2a1d00;background:var(--inspector-warning);font-weight:700}
+.panel-seg{display:flex;flex-wrap:wrap;gap:4px}
+.panel-seg button{min-height:30px;padding:0 10px;border:1px solid var(--inspector-border);border-radius:999px;background:var(--inspector-surface);color:var(--inspector-muted);font-size:12px}
+.panel-seg button[aria-pressed=true]{background:var(--inspector-surface-selected);border-color:var(--inspector-accent);color:var(--inspector-ink-selected)}
+.panel-bar{position:sticky;bottom:0;margin:auto calc(-1 * var(--space-16)) 0;display:grid;grid-template-columns:1fr auto;gap:var(--space-8);align-items:center;padding:var(--space-12) var(--space-16) var(--space-16);background:var(--inspector-bg);border-top:1px solid var(--inspector-border);z-index:2}
+.panel-bar button{min-height:var(--inspector-control)}
+.panel-bar .panel-bar-go:not(:disabled){background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}
+.panel-bar small{grid-column:1/-1;font-size:11px;color:var(--inspector-muted)}
+.panel-bar.dirty small{color:var(--inspector-warning)}
+.lib-navs{display:grid;gap:var(--space-6)}
+.lib-nav{display:grid;gap:var(--stroke-2);justify-items:start;text-align:left;width:100%;padding:var(--space-8) var(--space-12);min-height:0}
+.lib-nav b{font-size:var(--inspector-type-md);font-weight:600}.lib-nav small{font-size:var(--inspector-type-xs);color:var(--inspector-muted);line-height:1.35;white-space:normal}
+.lib-nav[aria-pressed=true]{background:var(--inspector-surface-selected);border-color:var(--inspector-accent)}
+.font-used{font-size:var(--inspector-type-xs);color:var(--inspector-text);text-align:right;max-width:calc(var(--space-48) * 4);line-height:1.4}.font-used.none{color:var(--inspector-muted)}
 .use-select{box-sizing:border-box;height:var(--inspector-control);min-height:var(--inspector-control);width:calc(17ch + var(--space-32));padding-block:0;font-size:var(--inspector-type-sm)}
 .specimen-use button{min-height:var(--inspector-control);padding:0 var(--space-12);font-size:var(--inspector-type-xs);white-space:nowrap}
 .font-list{display:grid}
@@ -241,9 +283,40 @@ aside#side:has(#look-controls:not([hidden])){overflow:hidden}
 .appbar #picker,.appbar #language{height:var(--type-44);flex:none}
 .appbar #picker .game.pick{height:var(--type-44)}
 .appbar #language{width:var(--inspector-size-76);min-height:var(--type-44);padding:0 var(--inspector-size-30) 0 var(--inspector-type-base);border-radius:var(--inspector-radius-card);font-size:var(--inspector-type-md);background-position:right var(--inspector-type-base) center}
-.appbar h1{width:calc(var(--inspector-sidebar-width) + var(--space-32))}
+.appbar h1{width:calc(var(--inspector-sidebar-width) + 44px)}
 /* Primary workspace navigation; the inspector remains beside it. */
-body{grid-template-columns:var(--radius-64) var(--inspector-sidebar-width) minmax(0,1fr)}
+/* The rail names every tab under its icon, so nothing needs a hover to be found. */
+.workspace-rail{padding-inline:var(--space-6)!important;gap:var(--space-4)!important}
+.workspace-rail .wb-button{width:64px!important;height:auto!important;min-height:52px!important;padding:var(--space-6) 0 var(--space-4)!important;gap:3px;align-content:center}
+.workspace-rail .wb-button .rail-tooltip{position:static;transform:none;visibility:visible;opacity:1;padding:0;border:0;background:none;box-shadow:none;font-size:11px;font-weight:600;line-height:1.1;color:inherit;pointer-events:none;white-space:nowrap}
+.workspace-rail .wb-button[aria-pressed=true]::before{left:-7px!important}
+.rail-game{display:grid;justify-items:center;gap:4px;text-transform:none!important;letter-spacing:0!important;font-size:10.5px!important;font-weight:600!important;color:var(--inspector-text)!important;line-height:1.2!important}
+.rail-game img{width:30px;height:30px;border-radius:8px;object-fit:cover;background:var(--inspector-well)}
+.rail-game span{max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rail-group{width:100%;padding-top:var(--space-8);font-size:9px;font-weight:700;letter-spacing:.06em;line-height:1.2;text-transform:uppercase;text-align:center;color:var(--inspector-muted)}
+.rail-group~.rail-group{margin-top:var(--space-8);border-top:var(--stroke-1) solid var(--inspector-border);padding-top:var(--space-16)}
+.rail-group:first-child{padding-top:0}
+.appbar .look-bar{width:calc(var(--space-48) * 4);flex:none;height:var(--type-44)}
+.appbar .look-bar .game.pick{height:var(--type-44);grid-template-columns:var(--space-16) minmax(0,1fr) var(--space-16);padding:0 var(--space-12);gap:var(--space-8)}
+.appbar .look-bar .game.pick .swatch{width:var(--space-16);height:var(--space-16);border-radius:50%;border:var(--stroke-1) solid var(--inspector-border)}
+.appbar .look-bar .game.pick strong,.appbar .look-bar .game.pick small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbar .look-bar .game.pick:disabled{opacity:.6;cursor:not-allowed}
+.look-bar-menu{right:auto;width:calc(var(--space-48) * 8);padding:var(--space-16);gap:var(--space-12)}
+.look-bar-menu>small{color:var(--inspector-muted);font-size:var(--inspector-type-xs);line-height:1.4}
+.appbar-rule{flex:none;width:var(--stroke-1);height:var(--space-24);background:var(--inspector-border)}
+.look-card{border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card);background:var(--inspector-well);padding:var(--space-12) var(--space-12) var(--space-16)!important}
+.look-card.editing{border:0;background:none;padding:var(--space-12) 0 0!important}
+.look-card+.look-card{margin-top:var(--space-12)}
+.look-card-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-8);min-height:var(--inspector-control)}
+.look-card [hidden]{display:none!important}
+.look-card-head button{min-height:var(--space-32);padding:0 var(--space-12);font-size:var(--inspector-type-sm)}
+.look-card .look-current b{font-size:var(--inspector-type-lg)}.look-card .look-current .none{color:var(--inspector-muted);font-weight:500}
+.look-part{display:grid;gap:var(--space-6)}.look-part .look-strip,.look-part .look-faces-view{margin-top:0!important}
+.look-card>.add{justify-self:start;min-height:var(--space-32);padding:0 var(--space-12);font-size:var(--inspector-type-sm);border-style:dashed;color:var(--inspector-muted)}
+.look-hint{display:block;margin-top:var(--space-12);color:var(--inspector-muted);font-size:var(--inspector-type-xs)}
+.look-current{display:flex;align-items:center;gap:var(--space-8);margin:0;font-size:var(--inspector-type-md)}
+.look-current .swatch{flex:none;width:var(--space-12);height:var(--space-12);border-radius:50%;border:var(--stroke-1) solid var(--inspector-border)}
+body{grid-template-columns:76px var(--inspector-sidebar-width) minmax(0,1fr)}
 .workspace-rail{grid-column:1;grid-row:2;display:flex;flex-direction:column;align-items:center;gap:var(--space-8);padding:var(--space-16) var(--space-8);background:var(--inspector-bg);border-right:var(--stroke-1) solid var(--inspector-border);position:relative;z-index:20}
 aside#side{grid-column:2;grid-row:2}
 #room{grid-column:3;grid-row:2}
@@ -270,25 +343,28 @@ aside#side{grid-column:2;grid-row:2}
 #workspace-logout svg{width:var(--type-18);height:var(--type-18)}
 #workspace-account-error{display:block;padding:var(--space-8);color:var(--inspector-danger)}
 .workspace-rail .workspace-dirty::after{content:"";position:absolute;top:var(--space-6);right:var(--space-6);width:var(--space-6);height:var(--space-6);border-radius:50%;background:var(--inspector-warning)}
-@media(max-width:640px){body{grid-template-columns:var(--radius-64) var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr)}}
+@media(max-width:640px){body{grid-template-columns:76px var(--inspector-sidebar-compact-width) minmax(var(--inspector-card-min-width),1fr)}}
 </style>
-<link rel="stylesheet" href="ux.css?v=1790769649">
+<link rel="stylesheet" href="ux.css?v=1790868133">
 <header class="appbar">
-<h1><img src="composer-icon-256.png?v=1790769649" alt="" width="28" height="28"><span>Game Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 30 Sep 2026, 12:25</small></span></h1>
-<select id="game-kind" aria-label="Game category"><option value="slots">Slots</option><option value="crash">Crash</option><option value="instant">Instant</option></select><div id="picker" class="picker"></div><select id="language" aria-label="Preview language"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
+<h1><img src="composer-icon-256.png?v=1790868133" alt="" width="28" height="28"><span>Game Composer <small id="kit-updated" title="When the shared UI kit last changed">Kit · 30 Sep 2026, 13:02</small></span></h1>
+<select id="game-kind" aria-label="Game category" hidden><option value="slots">Slots</option><option value="crash">Crash</option><option value="instant">Instant</option></select><div id="picker" class="picker"></div><div id="look-bar" class="picker look-bar"><button id="look-bar-button" class="game pick wb-button" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="look-bar-menu"><i class="swatch"></i><span><strong>Lotomobil</strong><small>No season</small></span><i data-icon="chevron"></i></button><div id="look-bar-menu" class="games look-bar-menu" hidden><div id="look-pick"></div><small>Brands belong to every game. A season marked with a dot is this game’s own.</small></div></div><div id="language-seg" class="lang-seg" role="group" aria-label="Preview language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="fr">FR</button><button type="button" data-lang="ht">CR</button></div><select id="language" aria-label="Preview language" class="visually-hidden"><option value="en">EN</option><option value="fr">FR</option><option value="ht">CR</option></select><select id="target" aria-label="Active game" class="visually-hidden"></select>
 
 <span class="grow"></span>
+<button id="palette-open" class="find" type="button" aria-keyshortcuts="Meta+K Control+K"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Find a game, brand, text…</span><kbd>⌘K</kbd></button>
 <button id="cloud-configurations" class="wb-button" type="button">Cloud</button>
 <button id="share-game" class="wb-button" type="button"><svg class="wb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg><span>Share</span></button>
 <a id="showcase-link" class="wb-button" href="https://svyatoslavteslyak.github.io/game-showcase/" target="_blank" rel="noopener" title="The public showcase of the same builds"><i data-icon="external"></i>Showcase</a>
 </header>
 <nav class="workspace-rail" aria-label="Composer workspace">
-<button class="wb-button" id="layout-tab" type="button" aria-label="Game" aria-pressed="true"><i data-icon="game"></i><span class="rail-tooltip" aria-hidden="true">Game</span></button>
+<span class="rail-group" title="Brands and assets are shared by every game">All games</span>
 <button class="wb-button" id="look-tab" type="button" aria-label="Brands" aria-pressed="false"><i data-icon="brands"></i><span class="rail-tooltip" aria-hidden="true">Brands</span></button>
-<button class="wb-button" id="library-tab" type="button" aria-label="Library" aria-pressed="false"><i data-icon="library"></i><span class="rail-tooltip" aria-hidden="true">Library</span></button>
+<button class="wb-button" id="library-tab" type="button" aria-label="Assets" aria-pressed="false"><i data-icon="library"></i><span class="rail-tooltip" aria-hidden="true">Assets</span></button>
+<span class="rail-group rail-game" id="rail-game" title="The tabs below are about the game picked in the top bar"><img id="rail-game-icon" alt="" width="30" height="30"><span id="rail-game-name"></span></span>
+<button class="wb-button" id="layout-tab" type="button" aria-label="Game" aria-pressed="true"><i data-icon="game"></i><span class="rail-tooltip" aria-hidden="true">Game</span></button>
 <button class="wb-button" id="math-tab" hidden disabled type="button" aria-label="Math" aria-pressed="false"><i data-icon="math"></i><span class="rail-tooltip" aria-hidden="true">Math</span></button>
-<button class="wb-button" id="sound-tab" type="button" aria-label="Sound effects" aria-pressed="false"><i data-icon="sound"></i><span class="rail-tooltip" aria-hidden="true">Sound effects</span></button>
-<button class="wb-button" id="translates-tab" type="button" aria-label="Translates" aria-pressed="false"><i data-icon="translates"></i><span class="rail-tooltip" aria-hidden="true">Translates</span></button>
+<button class="wb-button" id="sound-tab" type="button" aria-label="Sounds" aria-pressed="false"><i data-icon="sound"></i><span class="rail-tooltip" aria-hidden="true">Sounds</span></button>
+<button class="wb-button" id="translates-tab" type="button" aria-label="Texts" aria-pressed="false"><i data-icon="translates"></i><span class="rail-tooltip" aria-hidden="true">Texts</span></button>
 <div class="workspace-account" id="workspace-account">
 <div class="workspace-settings-wrap" id="workspace-settings-wrap" hidden>
 <button class="wb-button" id="workspace-settings-toggle" type="button" aria-label="Settings" aria-expanded="false" aria-controls="workspace-settings-menu"><i data-icon="settings"></i><span class="rail-tooltip" aria-hidden="true">Settings</span></button>
@@ -324,7 +400,7 @@ aside#side{grid-column:2;grid-row:2}
 </details>
 <span id="size"></span>
 </div>
-<div class="toolbar" aria-label="Look" hidden><strong>Look</strong><div id="look"></div><small>Brands and seasonal themes restyle the panels and controls only; the game scene is the game's.</small></div>
+
 <div class="toolbar" aria-label="Game configuration"><strong>Preview controls</strong>
 <div class="property preview-navigation"><span id="navigation-label">Navigation</span><div id="navigation-presets" class="look-row" role="group" aria-labelledby="navigation-label" aria-describedby="presentation-note"></div><select id="presentation-preset" hidden aria-label="Navigation"><option value="tabbed-shell-v1">Tabs</option><option value="menu-drawer-v1">Menu tabs</option></select></div>
 <small id="presentation-note" role="status" hidden></small>
@@ -337,7 +413,7 @@ aside#side{grid-column:2;grid-row:2}
 </div>
 <section id="look-controls" hidden aria-label="Brand editor"></section>
 <section id="library-controls" hidden aria-label="UI library"></section>
-<div id="games-footer" hidden><label class="switch"><input type="checkbox" id="show-all-games" checked>Show every game</label></div>
+
 <section id="math-controls" hidden>
 <div class="toolbar"><strong>Math configuration</strong><small id="math-mode-note">Draft analysis. Changes are saved locally. Apply explicitly to an isolated game preview.</small></div>
 <div id="math-inputs" class="toolbar"><strong>Return, limits & strategy</strong></div>
@@ -366,28 +442,35 @@ frame.addEventListener('load',()=>{
  for(const key of ['state','view','modal'])frame.contentWindow.postMessage({type:'crash-preview',[key]:document.querySelector('#'+key)?.value},location.origin)});
 const devices=Workbench.deviceBar({container:document.querySelector('#devices'),zoomContainer:document.querySelector('#zoom'),device:'mobile',onChange:({device,zoom})=>{document.querySelectorAll('[data-width]').forEach(b=>b.setAttribute('aria-pressed','false'));document.querySelector('#fluid').setAttribute('aria-pressed',String(device==='fluid'));theStage.set({device,zoom});showcaseLink()}});
 theStage.set({device:'mobile',zoom:'fit'});
-const look=Workbench.lookPicker({container:document.querySelector('#look'),onChange:v=>{Workbench.applyLook(frame,v);showcaseLink()}});
+// The brand and season on the stage, picked in the top bar (look.js) and read by every tab.
+const look={brand:'default',theme:''};
 window.ComposerLookPicker=look;
+window.addEventListener('composer-look',()=>showcaseLink());
 frame.addEventListener('load',()=>Workbench.applyLook(frame,{brand:look.brand,theme:look.theme}));
 // The game picker mirrors the select that target.js owns: it shows the games the select offers and picks through it.
 const select=document.querySelector('#target');
 const gameIcon=id=>id==='kit'?'composer-icon-256.png':`icons/${id}.png`;
 let picker=null;
-function buildSize(id){
- if(id==='kit')return '';
+const KINDS={crash:'Crash',slots:'Slots',instant:'Instant'};
+const kindOf=id=>['candy_cascade','mopyon_cascades'].includes(id)?'slots':id==='plinko'?'instant':'crash';
+function gameSubtitle(id){
+ if(id==='kit')return 'Shared UI kit';
  const build=window.ComposerTarget?.source(id)?.build;
- if(!build)return 'Build size…';
- if(!build.built)return 'No build';
- return Number.isFinite(build.sizeBytes)?(build.sizeBytes/1e6).toFixed(1)+' MB · build':'';
+ return KINDS[kindOf(id)]+(build&&!build.built?' · no build':'');
 }
 function syncPicker(){
- const games=[...select.options].map(o=>({id:o.value,title:o.textContent}));
- const footer=document.querySelector('#games-footer');footer.hidden=false;picker=Workbench.gamePicker({container:document.querySelector('#picker'),games,value:select.value,thumb:gameIcon,subtitle:buildSize,onPick:id=>{select.value=id;select.dispatchEvent(new Event('change'))},footer});
+ const T=window.ComposerTarget,ORDER=['kit','crash','slots','instant'],rank=id=>ORDER.indexOf(id==='kit'?'kit':kindOf(id)),games=(T?.targets||[]).filter(t=>window.ComposerAuth?.canRead(t.id)).sort((a,b)=>rank(a.id)-rank(b.id)).map(t=>({id:t.id,title:t.title}));
+ picker=Workbench.gamePicker({container:document.querySelector('#picker'),games,value:T?.value||select.value,thumb:gameIcon,subtitle:gameSubtitle,group:id=>id==='kit'?'':KINDS[kindOf(id)],onPick:id=>{if(!T.set(id))picker.value=T.value}});
+ const g=T?.entry();if(g){document.querySelector('#rail-game-icon').src=gameIcon(g.id);document.querySelector('#rail-game-name').textContent=g.title}
  showcaseLink();
 }
 // The showcase link opens the same game, device and look on the public site.
 function showcaseLink(){const g=select.value;const p=new URLSearchParams({lang:document.querySelector('#language').value,game:g==='kit'?'gold':g,device:devices.device==='custom'?'fluid':devices.device,brand:look.brand,theme:look.theme});document.querySelector('#showcase-link').href='https://svyatoslavteslyak.github.io/game-showcase/#'+p}
 new MutationObserver(syncPicker).observe(select,{childList:true});
+const langSelect=document.querySelector('#language'),langSeg=document.querySelector('#language-seg');
+const paintLang=()=>langSeg.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===langSelect.value)));
+langSeg.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{if(langSelect.value===b.dataset.lang)return;langSelect.value=b.dataset.lang;langSelect.dispatchEvent(new Event('change',{bubbles:true}));paintLang()});
+langSelect.addEventListener('change',paintLang);paintLang();window.ComposerLanguagePaint=paintLang;
 select.addEventListener('change',()=>setTimeout(syncPicker,0));
 window.addEventListener('composer-target',syncPicker);
 window.addEventListener('composer-catalog',()=>picker?.refresh());
@@ -402,8 +485,6 @@ for(const mode of Object.keys(workspaces))document.querySelector('#'+mode+'-tab'
  for(const nodes of Object.values(workspaces))for(const node of nodes)document.querySelector(node).hidden=true;
  for(const node of workspaces[mode])document.querySelector(node).hidden=false;
  for(const key of Object.keys(workspaces))document.querySelector('#'+key+'-tab').setAttribute('aria-pressed',String(key===mode));
- // Game is the reference view: the look it shows is the plain one, whatever the other tabs are set to.
- if(mode==='layout')Workbench.applyLook(frame,{brand:'default',theme:''});
  window.dispatchEvent(new CustomEvent('composer-workspace',{detail:mode}));
 };
 function syncWorkspaceAccess(){
@@ -417,22 +498,25 @@ function syncWorkspaceAccess(){
 window.ComposerAuth.ready.then(syncWorkspaceAccess);
 document.addEventListener('composer-permissions',syncWorkspaceAccess);
 </script>
-<script src="draft-editors.js?v=1790769649"></script>
-<script src="target.js?v=1790769649"></script>
-<script src="showcase-settings.js?v=1790769649"></script>
-<script src="translation-table.js?v=1790769649"></script>
-<script src="live.js?v=1790769649"></script>
-<script src="look.js?v=1790769649"></script>
-<script src="library.js?v=1790769649"></script>
-<script type="module" src="math.js?v=1790769649"></script>
-<script src="sound.js?v=1790769649"></script>
+<script src="draft-editors.js?v=1790868133"></script>
+<script src="target.js?v=1790868133"></script>
+<script src="showcase-settings.js?v=1790868133"></script>
+<script src="translation-table.js?v=1790868133"></script>
+<script src="live.js?v=1790868133"></script>
+<script src="look.js?v=1790868133"></script>
+<script src="library.js?v=1790868133"></script>
+<script type="module" src="math.js?v=1790868133"></script>
+<script src="sound.js?v=1790868133"></script>
 
-<script type="module" src="cloud.js?v=1790769649"></script>
-<script src="translates.js?v=1790769649"></script>
-<script src="player-config.js?v=1790769649"></script><script src="share.js?v=1790769649"></script>
+<script type="module" src="cloud.js?v=1790868133"></script>
+<script src="translates.js?v=1790868133"></script>
+<script src="player-config.js?v=1790868133"></script><script src="share.js?v=1790868133"></script>
+<script src="dropdown.js?v=1790868133"></script>
+<script src="palette.js?v=1790868133"></script>
 </html>
 
-<script src="ux.js?v=1790769649"></script>
+<script src="ux.js?v=1790868133"></script>
 
-<link rel="stylesheet" href="responsive.css?v=1790769649">
-<script src="responsive.js?v=1790769649"></script>
+<link rel="stylesheet" href="responsive.css?v=1790868133">
+<script src="responsive.js?v=1790868133"></script>
+<link rel="stylesheet" href="studio.css?v=1790868133">

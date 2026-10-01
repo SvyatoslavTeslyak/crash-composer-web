@@ -96,6 +96,14 @@ const luminance=hex=>{const [r,g,b]=rgb(hex).map(c=>c<=0.03928?c/12.92:((c+0.055
 const contrast=(a,b)=>{const l1=luminance(a),l2=luminance(b);return (Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05)};
 // --- state --------------------------------------------------------------------------------
 let catalog=null,brandId='default',themeId='',roles={},overrides={},fonts={},editing=false,creating=false,editingTheme=false,staged=false,dirty=false;
+// Brands are shared by every game. What can be a game's own: a season it adds to a brand
+// (themeScope) and the faces it sets for itself (fontsGame). Both apply only once the shared
+// scope exists in the cloud (catalog.scope); before that a brand is saved as it always was.
+let themeScope='shared',fontsGame=false;
+const layered=()=>!!catalog?.scope?.shared;
+const gameTitle=()=>window.ComposerTarget?.entry()?.title||'this game';
+const sameJSON=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const strip=f=>Object.fromEntries(Object.entries(f||{}).map(([r,x])=>[r,{file:String(x.file).split('/').pop(),weight:x.weight,style:x.style||'normal'}]));
 const brandRoles=()=>catalog.brands[brandId].roles;
 const colors=()=>({...derive(roles),...overrides});
 const label=k=>catalog.colorRoles.find(r=>r.key===k)?.title||k;
@@ -128,14 +136,24 @@ function paintFaces(){
 // --- render ---------------------------------------------------------------------------------
 function render(){
  panel.innerHTML=`
-<section class="wb-section"><h2>Brands</h2><div id="look-pick"></div></section>
-<section class="wb-section look-view" id="look-strip-section"><h2>Colours</h2><div class="look-strip" id="look-strip"></div></section>
-<section class="wb-section look-view" id="look-faces-section"><h2>Fonts</h2><div class="look-faces-view" id="look-faces-view"></div></section>
+<section class="wb-section look-card" id="look-brand-card"><h2>Brand</h2>
+<div class="look-card-head look-view"><p class="look-current" id="look-current"></p><button type="button" class="wb-button" id="look-edit-brand">Edit</button></div>
+<small class="look-view" id="look-brand-note"></small>
+<div class="look-part look-view"><em class="note">Colours</em><div class="look-strip" id="look-strip"></div></div>
+<div class="look-part look-view"><em class="note">Fonts</em><div class="look-faces-view" id="look-faces-view"></div></div>
+<button type="button" class="wb-button add look-view" id="look-add-brand">+ New brand</button></section>
+<section class="wb-section look-card look-view" id="look-season-card"><h2>Season</h2>
+<div class="look-card-head"><p class="look-current" id="look-current-theme"></p><button type="button" class="wb-button" id="look-edit-theme">Edit</button></div>
+<small id="look-season-note"></small>
+<div class="look-part" id="look-theme-part"><em class="note">Colours it changes</em><div class="look-strip" id="look-theme-strip"></div></div>
+<button type="button" class="wb-button add" id="look-add-theme">+ New season</button></section>
+<small class="look-view look-hint">Pick the brand and season in the top bar; they stay on the stage in every tab.</small>
 <div id="look-editor" hidden></div>`;
  sheet=$('#look-editor');
  sheet.innerHTML=`
 <h2 id="sheet-title"><span></span><small></small></h2>
 <div class="toolbar" id="look-head"><label class="property">Title <input id="look-title" type="text" placeholder="Numba Kenya"></label><small id="look-id-hint"></small></div>
+<div class="toolbar" id="look-scope" aria-label="Season scope" hidden><strong>This season is for</strong><div class="look-row" role="group" aria-label="Season scope"><button type="button" class="wb-button" data-theme-scope="shared">All games</button><button type="button" class="wb-button" data-theme-scope="game"></button></div><small id="look-scope-hint"></small></div>
 <div class="toolbar" id="look-season" aria-label="Season" hidden><strong>Season</strong><div class="season-row" id="look-seasons"></div><small>A season sets the play and cash-out colours and two accents over the brand; surfaces and text stay the brand\'s. Or set the primary below and generate.</small></div>
 <div class="toolbar" id="look-primary" aria-label="Primary"><strong>Primary</strong><div class="role-pair">${['primary','onPrimary'].map(k=>roleRow(k)).join('')}</div>
 <div class="generate-row"><select id="look-style" aria-label="Palette style"></select><button id="look-generate" type="button" class="wb-button">Generate the palette</button></div></div>
@@ -147,6 +165,7 @@ ${catalog.roles.map(role=>`<div class="face" data-role="${role}"><b>${role==='bo
 <select data-family="${role}" aria-label="${role} font" title="The family every ${role==="body"?"label":"amount and multiplier"} is set in">${catalog.families.map(f=>`<option value="${f.id}">${esc(f.title)}</option>`).join('')}</select>
 <select data-weight="${role}" aria-label="${role} weight"></select>
 <label class="switch"><input type="checkbox" data-italic="${role}">Italic</label></div>`).join('')}
+<label class="switch" id="look-fonts-own" hidden><input type="checkbox" id="look-fonts-game"><span></span></label><small id="look-fonts-hint" hidden></small>
 </div>
 <details class="toolbar look-group" id="look-advanced"><summary>Advanced · derived tokens<span class="count"></span></summary>
 ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-colour"><span>${nice(k)}</span><input type="color" data-key="${k}"><input type="text" data-hex="${k}" maxlength="7" spellcheck="false"><button type="button" class="wb-button reset" data-reset="${k}" title="Back to the derived value">↺</button></label>`).join('')}
@@ -156,7 +175,9 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
  const editActions=$('#look-actions'),scroll=document.createElement('div');
  scroll.className='look-scroll';editActions.remove();scroll.append(...panel.childNodes);panel.append(scroll,editActions);
  const pickerState=window.ComposerLookPicker;
- lookPicker=Workbench.lookPicker({container:$('#look-pick'),catalogTokens:Workbench.lookTokens(catalog),brand:pickerState?.brand||'default',theme:pickerState?.theme||'',onChange:v=>{if(pickerState){pickerState.brand=v.brand;pickerState.theme=v.theme}Workbench.applyLook(frame,v);if(!editing)show(v.brand,v.theme)},onAddTheme:()=>editTheme(true),onAddBrand:()=>edit(true),onEditBrand:()=>edit(false),onEditTheme:()=>editTheme(false)});
+ // The brand and season are picked in the top bar, for every tab; this panel shows and edits the pick.
+ lookPicker=Workbench.lookPicker({container:$('#look-pick'),catalogTokens:Workbench.lookTokens(catalog),brand:pickerState?.brand||'default',theme:pickerState?.theme||'',onChange:pickLook});
+ $('#look-edit-brand').onclick=()=>edit(false);$('#look-edit-theme').onclick=()=>editTheme(false);$('#look-add-theme').onclick=()=>editTheme(true);$('#look-add-brand').onclick=()=>edit(true);
  $('#look-title').oninput=()=>{if(!creating)return;const id=slug($('#look-title').value);$('#look-id-hint').textContent=id?(editingTheme?'Saved as brands/'+brandId+'/themes/'+id+'.json':'Saved as brands/'+id+'/'):'';dirty=true};
  $('#look-seasons').replaceChildren(...Object.entries(SEASONS).map(([id,sn])=>{const b=document.createElement('button');b.type='button';b.className='wb-button season';b.innerHTML=`<i style="background:linear-gradient(135deg,${sn.primary} 50%,${sn.success} 50%)"></i>${esc(sn.title)}`;b.onclick=()=>{// A season replaces the one before it: start again from the brand, then apply it.
    Object.assign(roles,brandRoles(),fromSeason(id,brandRoles()));if(creating&&!$('#look-title').value){$('#look-title').value=sn.title;$('#look-title').dispatchEvent(new Event('input'))}staged=false;dirty=true;mode();paint();apply();toast(sn.title+' applied over '+catalog.brands[brandId].title+'. Adjust any role, then Save.')};return b}));
@@ -175,9 +196,19 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
  sheet.querySelectorAll('[data-weight]').forEach(n=>n.onchange=()=>setFace(n.dataset.weight,{weight:Number(n.value)}));
  sheet.querySelectorAll('[data-italic]').forEach(n=>n.onchange=()=>setFace(n.dataset.italic,{style:n.checked?'italic':'normal'}));
 
- $('#look-save').onclick=()=>save().catch(e=>say(e.message,true));$('#look-revert').onclick=()=>{show(brandId,themeId)};$('#look-delete').onclick=remove;
+ sheet.querySelectorAll('[data-theme-scope]').forEach(n=>n.onclick=()=>{if(!creating)return;themeScope=n.dataset.themeScope;dirty=true;mode()});
+ $('#look-fonts-game').onchange=e=>{fontsGame=e.target.checked;dirty=true;mode()};
+ $('#look-save').onclick=()=>save().catch(e=>say(e.message,true));$('#look-revert').onclick=()=>{show(brandId,backTheme)};$('#look-delete').onclick=remove;
 }
-let lookPicker=null;
+// A brand and season put on the stage, from the top bar or from search.
+function pickLook(v){
+ if(editing||!catalog?.brands[v.brand])return false;
+ if(!((v.theme||'') in catalog.brands[v.brand].themes||!v.theme))v={...v,theme:''};
+ const state=window.ComposerLookPicker;if(state){state.brand=v.brand;state.theme=v.theme||''}
+ if(lookPicker){lookPicker.brand=v.brand;lookPicker.theme=v.theme||''}
+ Workbench.applyLook(frame,v);show(v.brand,v.theme||'');window.dispatchEvent(new CustomEvent('composer-look',{detail:v}));return true;
+}
+let lookPicker=null,backTheme=''; // the season on show when an edit began, put back by Cancel
 function pairs(){const k=catalog.colorRoles.map(r=>r.key);const out=[];for(let i=0;i<k.length;){if(k[i+1]&&k[i+1]==='on'+k[i][0].toUpperCase()+k[i].slice(1)){out.push([k[i],k[i+1]]);i+=2}else{out.push([k[i],null]);i++}}return out}
 function clearHighlight(){frame.contentDocument?.querySelectorAll('[data-composer-highlight]').forEach(el=>el.removeAttribute('data-composer-highlight'))}
 function highlightRole(key){
@@ -189,18 +220,104 @@ function highlightRole(key){
 function roleRow(k){const r=catalog.colorRoles.find(x=>x.key===k);return `<label class="role" data-role="${k}"><span class="role-title">${esc(r.title)}<em class="ratio"></em></span><span class="role-about">${esc(r.about)}</span><span class="role-swatch"><input type="color" data-role-key="${k}"><input type="text" data-role-hex="${k}" maxlength="7" spellcheck="false"><button type="button" class="wb-button reset" data-role-reset="${k}" title="Back to the brand colour">↺</button></span></label>`}
 const CYR={а:'a',б:'b',в:'v',г:'h',ґ:'g',д:'d',е:'e',є:'ie',ж:'zh',з:'z',и:'y',і:'i',ї:'i',й:'i',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'kh',ц:'ts',ч:'ch',ш:'sh',щ:'shch',ь:'',ю:'iu',я:'ia',ы:'y',э:'e',ё:'io',ъ:''};
 const slug=t=>{let v=t.toLowerCase().replace(/[а-яёґєіїъы]/g,c=>CYR[c]??'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,30);if(v&&!/^[a-z]/.test(v))v='brand-'+v;return v};
+// --- the top bar's pick ------------------------------------------------------------------------
+const bar={button:$('#look-bar-button'),menu:$('#look-bar-menu')};
+function openBar(on){if(!bar.menu)return;bar.menu.hidden=!on;bar.button.setAttribute('aria-expanded',String(on))}
+function paintBar(){
+ if(!bar.button||!catalog)return;
+ const brand=catalog.brands[brandId]||catalog.brands.default,season=themeId&&brand.themes[themeId];
+ bar.button.querySelector('.swatch').style.background=(season&&season.roles?.primary)||brand.roles.primary;
+ bar.button.querySelector('strong').textContent=brand.title;
+ bar.button.querySelector('small').textContent=season?season.title:'No season';
+ // An edit in progress belongs to one brand; it is saved or cancelled before another is picked.
+ bar.button.disabled=editing;bar.button.title=editing?'Save or cancel the edit before picking another brand':'Brand and season on the stage';if(editing)openBar(false);
+ const can=!!window.ComposerAuth?.has('design.edit');
+ const current=$('#look-current');if(!current)return;
+ const dot=c=>'<i class="swatch" style="background:'+esc(c)+'"></i>';
+ current.innerHTML=dot(brand.roles.primary)+'<b>'+esc(brand.title)+'</b>';
+ $('#look-current-theme').innerHTML=season?dot(season.roles?.primary||brand.roles.primary)+'<b>'+esc(season.title)+'</b>':'<b class="none">No season</b>';
+ $('#look-edit-brand').hidden=!can;$('#look-add-brand').hidden=!can;$('#look-edit-theme').hidden=!can||!season;$('#look-add-theme').hidden=!can;
+ const own=brand.own||{},mine=!!season&&(own.themes||[]).includes(themeId);
+ $('#look-brand-note').textContent=layered()?'Every game shares this brand.'+(own.fonts?' '+gameTitle()+' is set in its own fonts (Game tab).':''):'';
+ $('#look-brand-note').hidden=!layered();
+ $('#look-season-note').textContent=season?(layered()?(mine?'Only '+gameTitle()+' has this season.':'Every game has this season.')+' ':'')+'Laid over '+brand.title+'.':brand.title+' as designed, nothing laid over it.';
+ const changed=season?catalog.colorRoles.filter(r=>season.roles?.[r.key]&&season.roles[r.key]!==brand.roles[r.key]):[];
+ $('#look-theme-part').hidden=!changed.length;
+ $('#look-theme-strip').innerHTML=changed.map(r=>`<span title="${esc(r.about)}"><i style="background:${season.roles[r.key]}"></i>${esc(r.title)}</span>`).join('');
+}
+if(bar.button){
+ bar.button.onclick=()=>openBar(bar.menu.hidden);
+ document.addEventListener('click',e=>{if(!bar.button.parentElement.contains(e.target))openBar(false)});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')openBar(false)});
+}
+// --- the game's own fonts (Game tab) -----------------------------------------------------------
+// A brand's fonts are every game's; here the picked game is set in its own, for the picked brand.
+const gf={own:false,fonts:{},dirty:false,box:null};
+function gameFontsBox(){
+ if(gf.box?.isConnected)return gf.box;
+ const box=document.createElement('div');box.className='toolbar';box.id='game-fonts';box.setAttribute('aria-label','Fonts');
+ box.innerHTML=`<strong>Fonts</strong>
+<div class="look-row" role="group" aria-label="Which fonts this game is set in"><button type="button" class="wb-button" data-gf-own="0"></button><button type="button" class="wb-button" data-gf-own="1"></button></div>
+${['body','numbers'].map(role=>`<div class="face" data-gf-role="${role}"><b>${role==='body'?'Body':'Numbers'}</b><select data-gf-family="${role}" aria-label="${role} font"></select><select data-gf-weight="${role}" aria-label="${role} weight"></select></div>`).join('')}
+<small id="game-fonts-note"></small>
+<div class="game-fonts-actions" hidden><button type="button" class="wb-button primary" id="game-fonts-save">Save fonts</button><button type="button" class="wb-button" id="game-fonts-cancel">Cancel</button></div>`;
+ $('#layout-controls').append(box);gf.box=box;
+ box.querySelectorAll('[data-gf-own]').forEach(b=>b.onclick=()=>{const own=b.dataset.gfOwn==='1';if(own===gf.own)return;gf.own=own;if(!own)gf.fonts=strip(catalog.brands[brandId].sharedFonts||catalog.brands[brandId].fonts);gf.dirty=true;paintGameFonts(true)});
+ const set=(role,change)=>{
+  const now=gf.fonts[role],fam=catalog.families.find(f=>f.id===(change.family??familyOf(now.file)?.id))||familyOf(now.file)||catalog.families[0];
+  const style=fam.italic?now.style||'normal':'normal';let weight=change.weight??now.weight??400;if(!fam.weights.includes(weight))weight=nearest(fam.weights,weight);
+  gf.fonts[role]={file:bare(fam.files[weight+'|'+style]||fam.files[weight+'|normal']||Object.values(fam.files)[0]),weight,style};gf.dirty=true;paintGameFonts(true);
+ };
+ box.querySelectorAll('[data-gf-family]').forEach(n=>n.onchange=()=>set(n.dataset.gfFamily,{family:n.value}));
+ box.querySelectorAll('[data-gf-weight]').forEach(n=>n.onchange=()=>set(n.dataset.gfWeight,{weight:Number(n.value)}));
+ $('#game-fonts-cancel').onclick=()=>{resetGameFonts();apply()};
+ $('#game-fonts-save').onclick=()=>saveGameFonts().catch(e=>{$('#game-fonts-note').textContent=e.message;$('#game-fonts-note').classList.add('sound-error')});
+ return box;
+}
+function resetGameFonts(){
+ const brand=catalog.brands[brandId];
+ gf.own=!!brand.own?.fonts;gf.fonts=strip(brand.fonts);gf.dirty=false;paintGameFonts(false);
+}
+function paintGameFonts(preview){
+ const box=gameFontsBox(),brand=catalog.brands[brandId],can=!!catalog.scope?.canEditGame;
+ // Without the shared scope a brand is the game's own already, fonts and all: nothing to set apart.
+ box.hidden=!layered()||window.ComposerTarget?.value==='kit';if(box.hidden)return;
+ box.querySelector('[data-gf-own="0"]').textContent=brand.title+'’s';box.querySelector('[data-gf-own="1"]').textContent=gameTitle()+'’s own';
+ box.querySelectorAll('[data-gf-own]').forEach(b=>{b.setAttribute('aria-pressed',String((b.dataset.gfOwn==='1')===gf.own));b.disabled=!can});
+ for(const role of ['body','numbers']){
+  const face=gf.fonts[role];if(!face)continue;const fam=familyOf(face.file)||catalog.families[0];
+  const f=box.querySelector(`[data-gf-family="${role}"]`),w=box.querySelector(`[data-gf-weight="${role}"]`);
+  f.replaceChildren(...catalog.families.map(x=>new Option(x.title,x.id)));f.value=fam.id;
+  w.replaceChildren(...fam.weights.map(x=>new Option(WEIGHT_TITLES[x]+' '+x,x)));w.value=String(face.weight);
+  f.disabled=w.disabled=!gf.own||!can;
+ }
+ const note=$('#game-fonts-note');note.classList.remove('sound-error');
+ note.textContent=gf.own?'Only '+gameTitle()+' is set in these, in '+brand.title+'. The other games keep the brand’s fonts.':gameTitle()+' is set in the fonts of '+brand.title+', like every game. They are changed in Brands.';
+ box.querySelector('.game-fonts-actions').hidden=!gf.dirty;
+ if(preview){fonts=JSON.parse(JSON.stringify(gf.fonts));const root=frame.contentDocument?.documentElement;if(root)applyFaces(root)}
+}
+async function saveGameFonts(){
+ window.ComposerUX?.status('saving');
+ const response=await fetch('brands/'+brandId+'?scope=game',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fonts:gf.own?gf.fonts:null})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw Error(data.message||('HTTP '+response.status));
+ gf.dirty=false;catalog=null;await open();window.ComposerUX?.status('saved');
+}
 // --- showing and editing ---------------------------------------------------------------------
 function show(id,theme){
  staged=false;
  const brand=catalog.brands[id]||catalog.brands.default;brandId=catalog.brands[id]?id:'default';
  themeId=theme!==undefined?theme:(lookPicker?.theme||'');if(!(themeId in brand.themes))themeId='';
  roles={...brand.roles,...(themeId?brand.themes[themeId].roles:{})};overrides={...brand.overrides};fonts=JSON.parse(JSON.stringify(brand.fonts));editing=false;creating=false;editingTheme=false;dirty=false;
- mode();paint();apply();say('');
+ mode();paint();resetGameFonts();apply();say('');
+ if(window.ComposerLookPicker){window.ComposerLookPicker.brand=brandId;window.ComposerLookPicker.theme=themeId}
 }
 function editTheme(fresh){
  if(!window.ComposerAuth?.has('design.edit'))return;
- creating=fresh;editing=true;editingTheme=true;dirty=false;
+ creating=fresh;editing=true;editingTheme=true;dirty=false;backTheme=themeId;
  const brand=catalog.brands[brandId];
+ // A new season is for every game unless said otherwise; an existing one stays where it lives.
+ themeScope=!fresh&&brand.own?.themes?.includes(themeId)?'game':'shared';
  if(fresh){themeId='';roles={...brand.roles,primary:catalog.brands.default.roles.primary};$('#look-title').value='';$('#look-id-hint').textContent='';staged=true}
  else{staged=false;$('#look-title').value=brand.themes[themeId].title;$('#look-id-hint').textContent='brands/'+brandId+'/themes/'+themeId+'.json'}
  mode();paint();apply();
@@ -208,7 +325,8 @@ function editTheme(fresh){
 function edit(fresh){
  if(!window.ComposerAuth?.has('design.edit'))return;
  creating=fresh;editing=true;editingTheme=false;dirty=false;
- roles={...catalog.brands[brandId].roles};themeId='';
+ backTheme=themeId;roles={...catalog.brands[brandId].roles};themeId='';
+ fontsGame=false;fonts=JSON.parse(JSON.stringify(catalog.brands[brandId].sharedFonts||catalog.brands[brandId].fonts));
  staged=false;
  if(fresh){$('#look-title').value='';$('#look-id-hint').textContent='';roles.primary=catalog.brands.default.roles.primary;staged=true}
  else{$('#look-title').value=catalog.brands[brandId].title;$('#look-id-hint').textContent='brands/'+brandId+'/'}
@@ -218,10 +336,18 @@ function mode(){
  const brand=catalog.brands[brandId];
  sheet.hidden=!editing;
  $('#look-actions').hidden=!editing;
- $('#look-pick').hidden=editing;panel.querySelectorAll('.look-view').forEach(n=>n.hidden=editing);
- panel.querySelector('h2').textContent=editing?(editingTheme?'Theme':'Brand'):'Brands';
+ panel.querySelectorAll('.look-view').forEach(n=>n.hidden=editing);$('#look-brand-card').classList.toggle('editing',editing);
+ paintBar();
+ panel.querySelector('h2').textContent=editing?(editingTheme?'Season':'Brand'):'Brand';
  $('#sheet-title span').textContent=editingTheme?(creating?'New theme':brand.themes[themeId]?.title||''):(creating?'New brand':brand.title);
- $('#sheet-title small').textContent=editingTheme?'theme of '+brand.title:(creating?'from '+brand.title:'brand');
+ $('#sheet-title small').textContent=editingTheme?'theme of '+brand.title:(creating?'from '+brand.title:'brand')+(layered()&&!editingTheme?' · all games':'');
+ // Where a season lives: every game, or this one. Chosen for a new season, fixed afterwards.
+ const scopeBox=$('#look-scope');scopeBox.hidden=!editingTheme||!layered();
+ scopeBox.querySelectorAll('[data-theme-scope]').forEach(n=>{if(n.dataset.themeScope==='game')n.textContent='Only '+gameTitle();n.setAttribute('aria-pressed',String(n.dataset.themeScope===themeScope));n.disabled=!creating});
+ $('#look-scope-hint').textContent=themeScope==='game'?'Only '+gameTitle()+' offers this season; the other games do not.':'Every game offers this season.';
+ // A brand's faces are shared; a game may set its own.
+ $('#look-fonts-own').hidden=true;
+ const facesHint=$('#look-fonts-hint');facesHint.hidden=editingTheme||!layered();facesHint.textContent='Every game is set in these fonts'+(brand.own?.fonts?', except '+gameTitle()+', which has its own: see Fonts on the Game tab.':'. One game can have its own: see Fonts on the Game tab.');
  $('#look-faces').hidden=editingTheme;$('#look-advanced').hidden=editingTheme;
  $('#look-save').textContent=editingTheme?'Save theme':'Save brand';$('#look-delete').textContent=editingTheme?'Delete theme':'Delete brand';
  $('#look-delete').hidden=creating||(!editingTheme&&brandId==='default');$('#look-danger').hidden=$('#look-delete').hidden;
@@ -242,8 +368,8 @@ function paint(){
  for(const [k,v] of Object.entries(all)){const c=sheet.querySelector(`[data-key="${k}"]`),h=sheet.querySelector(`[data-hex="${k}"]`),row=c?.closest('.look-colour');if(c)c.value=v;if(h)h.value=v;if(row)row.classList.toggle('overridden',k in overrides)}
  $('#look-advanced .count').textContent=Object.keys(overrides).length?Object.keys(overrides).length+' overridden':'';
  if(sheet.querySelector('[data-family]'))paintFaces();
- $('#look-faces-view').innerHTML=catalog.roles.map(role=>{const f=fonts[role],fam=familyOf(f.file);return `<span><b>${role==='body'?'Body':'Numbers'}</b>${esc(fam?fam.title:f.file)} · ${WEIGHT_TITLES[f.weight]||f.weight}${f.style==='italic'?' italic':''}</span>`}).join('');
- $('#look-strip').innerHTML=catalog.colorRoles.map(r=>`<span title="${esc(r.about)}"><i style="background:${roles[r.key]}"></i>${esc(r.title)}</span>`).join('');
+ $('#look-faces-view').innerHTML=catalog.roles.map(role=>{const f=(editing?fonts:catalog.brands[brandId].sharedFonts||fonts)[role],fam=familyOf(f.file);return `<span><b>${role==='body'?'Body':'Numbers'}</b>${esc(fam?fam.title:f.file)} · ${WEIGHT_TITLES[f.weight]||f.weight}${f.style==='italic'?' italic':''}</span>`}).join('');
+ $('#look-strip').innerHTML=catalog.colorRoles.map(r=>`<span title="${esc(r.about)}"><i style="background:${brandRoles()[r.key]}"></i>${esc(r.title)}</span>`).join('');
  audit();
 }
 function setRole(k,v){roles[k]=v;dirty=true;paint();apply()}
@@ -302,7 +428,7 @@ function applyFaces(root){
  sheet.textContent=rules.join('\n');
 }
 function apply(){
- const root=frame.contentDocument?.documentElement;if(!root)return;
+ const root=frame.contentDocument?.documentElement;if(!root||!catalog?.families)return;
  if(!editing&&!window.ComposerDraftEditors?.enabled){clear();return}
  const all=colors();
  for(const [k,v] of Object.entries(all))root.style.setProperty(cssName(k),v);
@@ -321,10 +447,20 @@ async function save(){
  window.ComposerUX?.status('saving');say('Saving…');
  let response;
  if(editingTheme){
-  response=await fetch('brands/'+brandId+'/themes/'+id,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:$('#look-title').value||id,roles})});
+  response=await fetch('brands/'+brandId+'/themes/'+id+(layered()&&themeScope==='game'?'?scope=game':''),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:$('#look-title').value||id,roles})});
  }else{
-  const body={from:brandId,title:$('#look-title').value||id,roles,overrides,fonts:Object.fromEntries(Object.entries(fonts).map(([role,face])=>[role,{file:face.file.split('/').pop(),weight:face.weight,style:face.style||'normal'}]))};
-  response=await fetch('brands/'+id,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const faces=Object.fromEntries(Object.entries(fonts).map(([role,face])=>[role,{file:face.file.split('/').pop(),weight:face.weight,style:face.style||'normal'}]));
+  const body={from:brandId,title:$('#look-title').value||id,roles,overrides,fonts:faces};
+  const post=(url,data)=>fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+  if(!layered()||creating)response=await post('brands/'+id,body);
+  else{
+   // The brand is every game's, its fonts included; a game's own fonts are set on the Game tab.
+   // Saved only when something changed, so an untouched brand gets no empty change.
+   const before=catalog.brands[id];
+   const changed=body.title!==before.title||!sameJSON(roles,before.roles)||!sameJSON(overrides,before.overrides||{})||!sameJSON(faces,strip(before.sharedFonts||before.fonts));
+   response={ok:true,json:async()=>({})};
+   if(changed)response=await post('brands/'+id,body);
+  }
  }
  const data=await response.json().catch(()=>({}));
  if(!response.ok)return say(data.message||('HTTP '+response.status),true);
@@ -336,21 +472,25 @@ async function save(){
 async function remove(){
  if(creating)return;
  if(editingTheme){
-  if(!confirm('Remove theme '+catalog.brands[brandId].themes[themeId].title+' from '+catalog.brands[brandId].title+'?'))return;
-  const r=await fetch('brands/'+brandId+'/themes/'+themeId,{method:'DELETE'});
+  const own=layered()&&catalog.brands[brandId].own?.themes?.includes(themeId);
+  if(!confirm('Remove theme '+catalog.brands[brandId].themes[themeId].title+' from '+catalog.brands[brandId].title+(layered()?(own?' in '+gameTitle():' in every game'):'')+'?'))return;
+  const r=await fetch('brands/'+brandId+'/themes/'+themeId+(own?'?scope=game':''),{method:'DELETE'});
   if(!r.ok)return say('Could not remove: HTTP '+r.status,true);
   try{sessionStorage.setItem('crash-composer-look',brandId);sessionStorage.setItem('crash-composer-look-theme','')}catch{}
   const p=new URLSearchParams(location.hash.slice(1));p.set('tab','look');p.delete('theme');location.hash='#'+p;location.reload();return;
  }
  if(brandId==='default')return;
- if(!confirm('Remove brand '+catalog.brands[brandId].title+' from the kit?'))return;
+ if(!confirm('Remove brand '+catalog.brands[brandId].title+(layered()?' from every game?':' from the kit?')))return;
  const response=await fetch('brands/'+brandId,{method:'DELETE'});
  if(!response.ok)return say('Could not remove: HTTP '+response.status,true);
  try{sessionStorage.setItem('crash-composer-look','default')}catch{}
  const p=new URLSearchParams(location.hash.slice(1));p.set('tab','look');p.delete('brand');location.hash='#'+p;location.reload();
 }
 // --- lifecycle ------------------------------------------------------------------------------------
-async function open(){
+// One at a time: the games, the tabs and the first load can all ask for the look at once.
+let opening=Promise.resolve();
+function open(){return opening=opening.catch(()=>{}).then(load)}
+async function load(){
  if(window.ComposerDraftEditors?.enabled&&!editing)catalog=null;
  if(!catalog){
   catalog=await (await fetch('brands/')).json();render();
@@ -370,9 +510,19 @@ async function open(){
   if(!editing&&(current!==brandId||currentTheme!==themeId)&&catalog.brands[current]){lookPicker.brand=current;lookPicker.theme=currentTheme;show(current,currentTheme)}else apply();
  }
 }
-window.addEventListener('composer-workspace',e=>{if(e.detail==='look')open().catch(err=>{panel.innerHTML='<small class="sound-error">'+esc(err.message)+'</small>'});else{if(catalog)clear();if(sheet)sheet.hidden=true}});
-frame.addEventListener('load',()=>{if(window.ComposerTarget?.workspace==='look'&&catalog)setTimeout(apply,300)});
-window.ComposerTarget.guard(()=>{if(dirty){say('Save or cancel your design edits before switching games.',true);return false}return true});
-window.addEventListener('composer-target',()=>{catalog=null;editing=false;clear();if(window.ComposerTarget.workspace==='look')open().catch(e=>say(e.message,true))});
-window.ComposerLook={get dirty(){return dirty},get roles(){return roles},get brand(){return brandId},get editing(){return editing}};
+// The pick rides along into every tab. An unsaved edit is only previewed on the Brands tab.
+window.addEventListener('composer-workspace',e=>{
+ if(e.detail==='look')open().catch(err=>{panel.innerHTML='<small class="sound-error">'+esc(err.message)+'</small>'});
+ else if(editing){if(catalog)clear()}
+ else if(catalog){Workbench.applyLook(frame,{brand:brandId,theme:themeId});apply()}
+ else open().catch(()=>{})});
+frame.addEventListener('load',()=>{if(catalog&&(!editing||window.ComposerTarget?.workspace==='look'))setTimeout(apply,300)});
+window.ComposerTarget.guard(()=>{if(gf.dirty){$('#game-fonts-note').textContent='Save or cancel the fonts before switching games.';$('#game-fonts-note').classList.add('sound-error');return false}if(dirty){say('Save or cancel your design edits before switching games.',true);return false}return true});
+window.addEventListener('composer-target',()=>{catalog=null;editing=false;clear();open().catch(e=>say(e.message,true))});
+// Another tab (Library) can change a brand's faces; the pick is read again when it says so.
+window.addEventListener('composer-look-changed',()=>{if(editing)return;catalog=null;open().catch(e=>say(e.message,true))});
+open().catch(()=>{});
+window.ComposerLook={pick:pickLook,get catalog(){return catalog},// Assets sends here to set a brand's fonts: the one place they are chosen.
+ editBrand(){$('#look-tab').click();opening.then(()=>{if(!editing)edit(false);$('#look-faces')?.scrollIntoView({block:'center'})})},
+ get dirty(){return dirty},get roles(){return roles},get brand(){return brandId},get editing(){return editing}};
 })();

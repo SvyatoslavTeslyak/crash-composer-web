@@ -3,7 +3,7 @@
 .sound-empty{max-width:70ch}.sound-empty h2{font-size:var(--inspector-type-xl);margin:0 0 var(--space-8)}.sound-empty p{color:var(--inspector-muted)}.sound-empty code{font-size:var(--inspector-type-base);color:var(--inspector-accent)}
 #target-build details pre,#sound-controls details pre{max-height:var(--inspector-chart-height);overflow:auto;white-space:pre-wrap;font-size:var(--inspector-type-xs);color:var(--inspector-muted)}
 .sound-error{color:var(--inspector-danger)}.sound-warn{color:var(--inspector-warning)}.sound-busy{color:var(--inspector-accent)}
-#sound-report{max-width:var(--inspector-report-width);margin:auto}
+#sound-report{max-width:var(--inspector-report-width);margin:0 auto;padding-top:var(--space-24)}
 /* Composer styles bare header elements as the sidebar; Studio headers are plain layout rows. */
 #sound-report header{min-height:auto;overflow:visible;background:none;border:0;padding:0}
 .sound-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:var(--space-16);margin-bottom:var(--space-16)}

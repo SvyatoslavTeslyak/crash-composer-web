@@ -21,14 +21,13 @@ const TARGETS=[
  {id:'mopyon_cascades',title:'Mòpyon Cascades',live:true,math:false}
 ];
 // Off, the list keeps the shared kit, the two featured games and whatever is selected.
-const FEATURED=['kit','road','boom'];
-const KEYS={target:'crash-composer-target',all:'crash-composer-show-all-games',engine:'crash-composer-engine'};
+const KEYS={target:'crash-composer-target',engine:'crash-composer-engine'};
 // The same game exists once per engine. Which engines a game actually has comes from the
 // catalog, so a game that has not been ported yet simply never offers the choice.
 // PixiJS is the product; the Godot games are frozen and Composer no longer offers them.
 const ENGINES=[{id:'pixi',title:'PixiJS'}];
 const DEFAULT_ENGINE='pixi';
-const select=$('#target'),showAll=$('#show-all-games'),kindSelect=$('#game-kind');
+const select=$('#target'),kindSelect=$('#game-kind');
 // Slots (Candy Cascade, Mòpyon Cascades), crash games, and instant games (a single drop
 // settles the round: Plinko).
 const category=id=>['candy_cascade','mopyon_cascades'].includes(id)?'slots':id==='plinko'?'instant':'crash';
@@ -69,7 +68,7 @@ function engineOptions(){
 }
 function options(){
  if(kindSelect){kindSelect.value=kind;for(const option of kindSelect.options)option.disabled=!TARGETS.some(t=>t.live&&category(t.id)===option.value&&window.ComposerAuth?.canRead(t.id))}
- select.replaceChildren(...TARGETS.filter(t=>t.id==='kit'||category(t.id)===kind).filter(t=>window.ComposerAuth?.canRead(t.id)).filter(t=>showAll.checked||FEATURED.includes(t.id)||t.id===value)
+ select.replaceChildren(...TARGETS.filter(t=>t.id==='kit'||category(t.id)===kind).filter(t=>window.ComposerAuth?.canRead(t.id))
   .map(t=>new Option(workspace==='math'&&!t.math?t.title+' · no model':t.title,t.id)));
  select.value=value;
 }
@@ -111,7 +110,6 @@ function setEngine(id){
  return true;
 }
 
-showAll.checked=store.get(KEYS.all)!=='0';
 const opening=hash();
 value=known(opening.game)?opening.game:known(store.get(KEYS.target))?store.get(KEYS.target):'kit';
 kind=category(value);
@@ -125,8 +123,7 @@ if(kindSelect)kindSelect.onchange=()=>{
 };
 select.onchange=()=>{const wanted=select.value;if(!set(wanted))select.value=value};
 if(engineSelect)engineSelect.onchange=()=>{const wanted=engineSelect.value;if(!setEngine(wanted))engineSelect.value=engine};
-showAll.onchange=()=>{store.set(KEYS.all,showAll.checked?'1':'0');options()};
-window.addEventListener('composer-workspace',event=>{workspace=event.detail;$('#workspace-title').textContent=({layout:'Game',look:'Brands',library:'Library',math:'Math',sound:'Sound effects',translates:'Translates'})[workspace]||'Game';options();writeHash()});
+window.addEventListener('composer-workspace',event=>{workspace=event.detail;$('#workspace-title').textContent=({layout:'Game',look:'Brands',library:'Assets',math:'Math',sound:'Sounds',translates:'Texts'})[workspace]||'Game';options();writeHash()});
 window.addEventListener('hashchange',()=>{
  const opened=hash();
  if(opened.tab==='math')opened.tab='layout';

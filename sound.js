@@ -57,16 +57,15 @@ async function load(keepMessage=false){
 function render(){
  const game=isGame(),own=drafts[targetId()],kit=drafts[KIT];
  if(!game||!own)group='interface';
- const chip=(id,label,count,disabled)=>'<button class="wb-button" type="button" data-group="'+id+'" aria-pressed="'+(group===id)+'"'+(disabled?' disabled title="Pick a game to see its scene sounds"':'')+'>'+label+(count===null?'':'<em class="sound-count">'+count+'</em>')+'</button>';
- controls.innerHTML='<div class="toolbar"><strong>Sounds</strong><div class="look-row" id="sound-groups" role="group" aria-label="Sound group">'
-   +chip('interface','Interface events',kit?kit.events.length:0,!kit)
-   // The shared kit has no scene of its own, so the chip is left out rather than greyed.
-   +(game?chip('scene','Scene sounds',own?own.events.length:null,!own):'')
-  +'</div></div>'
-  +'<div class="toolbar"><strong>Saved sounds</strong><button id="sound-refresh" title="Reload the shared sound draft">Refresh</button>'
-   +'<button id="sound-reset" title="Put every event of this manifest back to the sounds it shipped with">Reset to default</button></div>'
-  +'<div class="toolbar"><label>Find a sound<input id="sound-search" type="search" placeholder="Event name or description"></label><small>You are hearing draft sounds here. The game beside this editor uses its built / published sounds. Changes autosave; Send changes → Apply locally → publish updates the game.</small>'+(window.ComposerDraftEditors?.enabled?'<small>Choose existing sounds. New asset uploads are not available for shared drafts.</small>':catalog().generation.available?'<small>Sound generation available.</small>':'')+'</div>'
-  +'<div class="toolbar"><small id="sound-message" role="status"></small></div>';
+ const item=(id,label,count,disabled)=>'<button type="button" data-group="'+id+'" aria-pressed="'+(group===id)+'"'+(disabled?' disabled title="Pick a game to see its scene sounds"':'')+'><span>'+label+'</span>'+(count===null?'':'<small><b>'+count+'</b></small>')+'</button>';
+ controls.innerHTML='<section class="panel-sec"><h3>Moments</h3><nav class="panel-nav" id="sound-groups" aria-label="Sound group">'
+   +item('interface','Interface events',kit?kit.events.length:0,!kit)
+   // The shared kit has no scene of its own, so the item is left out rather than greyed.
+   +(game?item('scene','Scene sounds',own?own.events.length:null,!own):'')
+  +'</nav></section>'
+  +'<section class="panel-sec"><h3>Find</h3><input id="sound-search" type="search" placeholder="Event name or description" aria-label="Find a sound"></section>'
+  +'<section class="panel-sec"><small>The preview plays the draft sounds; the game ships its published ones. Changes save by themselves and go out from Changes.</small>'+(window.ComposerDraftEditors?.enabled?'<small>Pick from the sounds already there; new files cannot be uploaded to a shared draft.</small>':catalog().generation.available?'<small>Sound generation is available.</small>':'')+'</section>'
+  +'<div class="panel-bar"><button id="sound-refresh" type="button" title="Read the saved sounds again">Refresh</button><button id="sound-reset" type="button" title="Put every event of this manifest back to the sounds it shipped with">Reset to default</button><small id="sound-message" role="status"></small></div>';
  if(!kit&&!own){report.innerHTML='<div class="sound-empty"><h2>'+esc(window.ComposerTarget.entry().title)+'</h2><p>No manifest to show yet. Start Composer with tools/preview.py so the shared kit is copied in.</p></div>';return}
  const title=game?window.ComposerTarget.entry().title:(kit?.title||'Shared UI sounds');
  report.innerHTML='<header class="sound-head"><div><h2>'+esc(title)+'</h2></div>'

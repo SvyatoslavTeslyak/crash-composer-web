@@ -1,0 +1,102 @@
+/* Studio: Composer's own place to work. A dusk valley fills the window; the bar, the rail and
+   the panel are frosted glass over it, and the game stands in the open middle like a lit
+   object on a desk. Loaded last, it only restyles: every control keeps its markup and tokens. */
+@font-face{font-family:'Studio Sans';src:url('crash-ui/assets/fonts/Satoshi-Variable.woff2') format('woff2');font-weight:300 900;font-style:normal;font-display:swap}
+:root{
+ --studio-font:'Studio Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+ --studio-glass:rgba(10,15,27,.66);
+ --studio-glass-strong:rgba(9,13,24,.84);
+ --studio-edge:rgba(196,214,255,.12);
+ --studio-edge-strong:rgba(196,214,255,.22);
+ --studio-glow:#ffb877;
+ --studio-sky:#7cc8ff;
+ /* the workbench palette, moved toward the evening sky */
+ --inspector-bg-deep:#080d18;
+ --inspector-bg:#0e1524;
+ --inspector-surface:#1a2337;
+ --inspector-surface-hover:#243049;
+ --inspector-surface-selected:#1b3854;
+ --inspector-well:#0a1120;
+ --inspector-card:#111a2b;
+ --inspector-border:#283450;
+ --inspector-border-strong:#36456a;
+ --inspector-text:#e8edf6;
+ --inspector-muted:#9eabc3;
+ --inspector-accent:var(--studio-sky);
+ --inspector-accent-hover:#a6dcff;
+ --inspector-sans:var(--studio-font);
+}
+html{background:#080d18}
+body{
+ font-family:var(--studio-font)!important;
+ background:
+  linear-gradient(90deg,rgba(6,9,18,.78) 0,rgba(6,9,18,.42) 26%,rgba(6,9,18,.08) 55%,rgba(6,9,18,.28) 100%),
+  linear-gradient(180deg,rgba(6,9,18,.35) 0,rgba(6,9,18,0) 30%,rgba(6,9,18,.25) 100%),
+  image-set(url('studio-dusk.webp') type('image/webp'),url('studio-dusk.jpg') type('image/jpeg')) center 62%/cover fixed,
+  #0b1222!important;
+}
+button,input,select,textarea{font-family:inherit}
+
+/* glass: the three pieces of chrome float over the valley */
+.appbar{background:var(--studio-glass)!important;-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border-bottom:1px solid var(--studio-edge)!important;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.workspace-rail{background:rgba(8,12,22,.72)!important;-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border-right:1px solid var(--studio-edge)!important}
+aside#side{background:var(--studio-glass)!important;-webkit-backdrop-filter:blur(26px) saturate(150%);backdrop-filter:blur(26px) saturate(150%);border-right:1px solid var(--studio-edge)!important}
+#room{background:none!important}
+
+/* the name, set like a signature at dusk */
+.appbar h1 span{font-weight:700;letter-spacing:.01em;background:linear-gradient(92deg,#f3f6ff 0,#cfe6ff 55%,var(--studio-glow) 130%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.appbar h1 small{-webkit-text-fill-color:var(--inspector-muted)}
+.appbar h1 img{box-shadow:0 0 0 1px var(--studio-edge),0 6px 18px rgba(124,200,255,.25)}
+
+/* controls in the bar: glass chips with a lit edge */
+.appbar .picker .game.pick,.appbar .lang-seg,.appbar .find,.appbar>button,.appbar a.wb-button{background:rgba(22,31,50,.62)!important;border-color:var(--studio-edge-strong)!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.appbar .picker .game.pick:hover,.appbar>button:hover{background:rgba(36,48,73,.8)!important}
+.appbar .lang-seg button{background:transparent!important}
+.appbar .lang-seg button[aria-pressed=true]{background:linear-gradient(180deg,rgba(124,200,255,.28),rgba(124,200,255,.12))!important;color:#fff!important}
+.appbar .find{color:var(--inspector-muted)!important}
+
+/* the rail: icons on glass, the open tab lit like a window at night */
+.workspace-rail .wb-button{border-radius:14px!important;transition:background .18s,color .18s}
+.workspace-rail .wb-button[aria-pressed=true]{background:linear-gradient(180deg,rgba(124,200,255,.22),rgba(124,200,255,.06))!important;border-color:rgba(124,200,255,.35)!important;color:#fff!important;box-shadow:0 6px 20px rgba(124,200,255,.16),inset 0 1px 0 rgba(255,255,255,.12)}
+.workspace-rail .wb-button[aria-pressed=true]::before{background:var(--studio-glow)!important;box-shadow:0 0 12px var(--studio-glow)}
+.rail-group{color:rgba(196,214,255,.5)!important}
+.rail-game img{box-shadow:0 0 0 1px var(--studio-edge-strong),0 6px 16px rgba(0,0,0,.35)}
+
+/* the panel title */
+#workspace-title{font-size:22px!important;font-weight:700!important;letter-spacing:-.01em}
+
+/* the stage: the device stands in the open, lit from the horizon */
+.stage.bezel{background:linear-gradient(160deg,#1a2234,#070a12 60%)!important;border:1px solid rgba(220,232,255,.16)!important;box-shadow:0 40px 80px -20px rgba(0,0,0,.65),0 0 0 1px rgba(0,0,0,.6),0 0 60px -10px rgba(255,184,119,.18),inset 0 1px 0 rgba(255,255,255,.08)!important}
+#fit::after{content:"";position:absolute;left:50%;bottom:6px;width:min(420px,60%);height:28px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);pointer-events:none;z-index:-1}
+
+/* reports read on a sheet of glass, the valley showing through at the edges */
+#translates-report,#sound-report,#library-report,#math-report{background:rgba(9,14,26,.58);-webkit-backdrop-filter:blur(24px) saturate(140%);backdrop-filter:blur(24px) saturate(140%);border:1px solid var(--studio-edge);border-radius:22px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+#translates-report{padding:28px 30px!important}
+#sound-report{padding:28px 30px!important;margin-top:4px!important}
+#library-report{margin:0!important;max-width:none!important}
+#library-report>*{max-width:var(--inspector-report-width)}
+
+/* cards and tables inside: lighter glass, a lit hairline instead of a grey border */
+#sound-report article,#library-report .lib-card,.tx-table-wrap{background:rgba(15,23,39,.74)!important}
+#library-report .add-way{background:rgba(9,14,26,.5)!important}
+.tx-table-wrap,.lib-card,.sound-event,.panel,.review-queue{border-color:var(--studio-edge)!important}
+.tx-table thead th{background:rgba(17,26,43,.96)!important}
+.tx-table .tx-group th{background:rgba(8,13,24,.7)!important;color:#dfe7f5!important}
+
+/* the panel's pinned bar and brand cards */
+.panel-bar{background:linear-gradient(180deg,rgba(14,21,36,.4),rgba(10,15,27,.92) 40%)!important;border-top:1px solid var(--studio-edge)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.panel-bar .panel-bar-go:not(:disabled),#look-actions #look-save,#game-fonts .primary{background:linear-gradient(180deg,#9ad6ff,#5fb5f2)!important;border-color:transparent!important;color:#06223a!important;box-shadow:0 6px 18px rgba(124,200,255,.3)}
+.look-card{background:rgba(9,14,26,.55)!important;border-color:var(--studio-edge)!important}
+.panel-nav button[aria-pressed=true],.lib-nav[aria-pressed=true]{background:linear-gradient(90deg,rgba(124,200,255,.2),rgba(124,200,255,.05))!important;border-color:rgba(124,200,255,.3)!important;color:#fff!important}
+
+/* popovers and lists keep a solid ground, so nothing behind them competes */
+.games,.look-bar-menu,.dd-menu,.palette{background:rgba(13,20,34,.96)!important;border-color:var(--studio-edge-strong)!important;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+dialog{background:rgba(12,18,31,.97)}
+dialog::backdrop{background:rgba(4,7,14,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+/* scrollbars that belong to the evening */
+*{scrollbar-color:rgba(160,185,230,.28) transparent}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:rgba(160,185,230,.22);border-radius:10px;border:2px solid transparent;background-clip:padding-box}::-webkit-scrollbar-track{background:transparent}
+
+@media(prefers-reduced-transparency:reduce){.appbar,.workspace-rail,aside#side,#translates-report,#sound-report,#library-report{background:var(--inspector-bg)!important;-webkit-backdrop-filter:none;backdrop-filter:none}}
+@media(max-width:1000px){body{background-attachment:scroll!important}}
