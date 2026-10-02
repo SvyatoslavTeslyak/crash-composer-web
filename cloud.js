@@ -145,7 +145,7 @@ function standing(){
  let tone='idle',text='',action=null;
  if(loadError){tone='saved';text='Cloud draft unavailable · '+loadError}
  else if(review){
-  if(flag?.label==='Not applied'){tone='release';text='An accepted version is not applied on this computer';action={label:'Apply locally',run:()=>{const one=versions.filter(v=>v.status==='approved'&&v.id!==localConfig?.version_id);if(one.length===1){if(confirm('Apply accepted revision '+one[0].revision+' to the local game configuration? Review the file, then commit and push to publish.'))run(()=>applyVersion(one[0].id,id))}else open()}}}
+  if(flag?.label==='Not applied'){tone='release';text='An accepted version is not applied on this computer';action={label:'Apply locally',run:async()=>{const one=versions.filter(v=>v.status==='approved'&&v.id!==localConfig?.version_id);if(one.length===1){if(await ask('Apply accepted revision '+one[0].revision+' to the local game configuration? Review the file, then commit and push to publish.'))run(()=>applyVersion(one[0].id,id))}else open()}}}
   else if(flag?.label==='Not committed'){tone='release';text=localConfig.path+' applied, not committed';action={label:'Copy publish commands',run:copyPublish}}
   else if(flag?.label==='Not pushed'){tone='release';text=localConfig.path+' committed, not pushed · push from the repository to publish'}
   else if(awaiting){tone='awaiting';text=awaiting+' sent '+(awaiting===1?'version':'versions')+' to review'}
@@ -155,7 +155,7 @@ function standing(){
  }else{
   const returned=returnedVersion();
   if(dirty()){tone='saved';text='Unsaved edits · save them to send'}
-  else if(newCount){tone='saved';text=newCount+' saved '+(newCount===1?'change':'changes')+' not sent'+(returned?' · returned by Admin, corrected':'');action={label:'Send changes',run:()=>{if(!canSubmit())return;if(confirm('Send '+newCount+' saved '+(newCount===1?'change':'changes')+' of '+scopeTitle()+' to Admin?'))sendChanges()}}}
+  else if(newCount){tone='saved';text=newCount+' saved '+(newCount===1?'change':'changes')+' not sent'+(returned?' · returned by Admin, corrected':'');action={label:'Send changes',run:async()=>{if(!canSubmit())return;if(await ask('Send '+newCount+' saved '+(newCount===1?'change':'changes')+' of '+scopeTitle()+' to Admin?'))sendChanges()}}}
   else if(awaiting){tone='awaiting';text=awaiting+' sent · awaiting Admin'}
   else if(accepted){tone='awaiting';text=accepted+' accepted · being published'}
   else text='Nothing unsent';
@@ -178,7 +178,7 @@ const tabFlag=(label,tone=toneOf(label))=>label?' <span class="changes-flag tone
 // changes wait, so the standing is not repeated here.
 function standingHTML(){
  if(!standing()&&!currentDraft)return '';
- const savedBy=authorName(currentDraft?.updated_by,''),saved=currentDraft?.updated_at&&draftChanges().some(g=>g.rows.length)?'last saved'+(savedBy?' by '+esc(savedBy):'')+', '+esc(new Date(currentDraft.updated_at).toLocaleString(undefined,{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})):'';
+ const savedBy=currentDraft?.updated_by&&currentDraft.updated_by===session?.user?.id?'you':authorName(currentDraft?.updated_by,''),saved=currentDraft?.updated_at&&draftChanges().some(g=>g.rows.length)?'last saved'+(savedBy?' by '+esc(savedBy):'')+', '+esc(new Date(currentDraft.updated_at).toLocaleString(undefined,{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})):'';
  const p=publishedLine(),label=esc(p.charAt(0).toUpperCase()+p.slice(1));
  // What was published before opens from the line that says what is published now.
  return '<div class="changes-meta">'+(publishedItems().length?'<details class="changes-history"><summary>'+label+'</summary>'+publicationHistory()+'</details>':'<span>'+label+'</span>')+(saved?'<span>'+saved+'</span>':'')+'</div>';
@@ -227,12 +227,13 @@ function renderProgress(){
  // The dot is the first thing waiting, and its number is how many of that: saved changes, versions
  // with Admin, updates. A step to take on this computer has no number.
  let lead=states[0],n=lead?(lead[0]==='release'?0:+(lead[1].match(/\d+/)?.[0]||0)):count;
- // Once every game's state is known, the dot counts all of them, as the tabs in Changes do: the
- // first kind of thing waiting anywhere, and how many of it across the games.
+ // Once every game's state is known, the dot counts all of them, as the tabs in Changes do.
  if(inbox){// The same order as each tab's flags: an Admin's next steps first; for someone who sends,
   // their unsent changes, then what they sent.
   const order=isAdmin()?['release','accepted','awaiting','saved']:['saved','awaiting'],all=inbox.flatMap(r=>r.flags),tone=order.find(t=>all.some(f=>f[0]===t));
-  if(tone){lead=[tone,'',''];n=tone==='release'?0:all.filter(f=>f[0]===tone).reduce((sum,f)=>sum+(+(f[1].match(/^\d+/)?.[0]||0)),0)}else{lead=states.find(x=>x[0]==='notice')||null;n=lead?+(lead[1].match(/\d+/)?.[0]||0):0}}
+  // Its colour is the first kind of thing waiting; its number adds up every count the hover card
+  // shows ("1 of your changes not sent" and "1 sent, with Admin" make 2).
+  if(tone){lead=[tone,'',''];n=all.filter(f=>order.includes(f[0])).reduce((sum,f)=>sum+(+(f[1].match(/^\d+/)?.[0]||0)),0)}else{lead=states.find(x=>x[0]==='notice')||null;n=lead?+(lead[1].match(/\d+/)?.[0]||0):0}}
  button.innerHTML=(lead||(!inbox&&count)?'<span class="changes-dot '+(lead?.[0]||'saved')+(n?' has-count':'')+'" aria-hidden="true">'+(n?(n>99?'99+':n):'')+'</span>':'')+'<span>Changes</span>';
  window.ComposerUX?.refresh();
  button.setAttribute('aria-label','Changes'+(own?', '+own+(review?' to review':own===1?' saved change':' saved changes')+' in '+ComposerTarget.entry().title:'')+(shared?', '+shared+' in Brands · all games':'')+(awaiting?', '+awaiting+' awaiting review':''));
@@ -305,7 +306,10 @@ function message(text,error=false){const near=dialog.querySelector('.review-mess
 function canSubmit(){return !loadError&&!!currentDraft&&!dirty()&&(isReviewer()?newChanges():myChanges()).some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision))&&ComposerAuth.has('drafts.submit',game())}
 function canDiscard(){return ComposerAuth.member?.role==='admin'&&!!currentDraft&&(dirty()||draftChanges().some(g=>g.rows.length)||versions.some(v=>['submitted','approved'].includes(v.status)))}
 function busyControls(){const hint=$('#cloud-save-hint');if(hint)hint.textContent=dirty()?'Save your open edits to include them in this list.':!canSubmit()&&versions.some(v=>Number(v.revision)===Number(currentDraft?.revision))?returnedVersion()?'Returned by Admin. Make your corrections and save before sending again.':'':'';const submit=$('#cloud-submit');if(submit){submit.disabled=busy||!canSubmit();submit.title=dirty()?'Save your open edits first':canSubmit()?'Send saved changes to Admin':'No new saved changes to send'}for(const b of dialog.querySelectorAll('button:not([data-close]):not(#cloud-submit)'))b.disabled=busy;const ownDiscard=$('#cloud-discard-unsent');if(ownDiscard)ownDiscard.disabled=busy||(!dirty()&&!newChanges().some(g=>g.rows.length));const discard=$('#cloud-discard');if(discard)discard.disabled=busy||!canDiscard();const apply=$('#cloud-apply-draft');if(apply)apply.disabled=busy||!canApplyDraft();renderProgress()}
-async function run(fn){if(busy)return;busy=true;busyControls();try{await fn()}catch(e){message(e.message,true);notify(e.message)}finally{busy=false;busyControls();renderProgress()}}
+// One thing at a time. An action asked for while a refresh is still loading waits for it rather
+// than being dropped: the confirmation window leaves the background refresh free to start.
+let running=Promise.resolve();
+async function run(fn){while(busy)await running;busy=true;busyControls();running=(async()=>{try{await fn()}catch(e){message(e.message,true);notify(e.message)}finally{busy=false;busyControls();renderProgress()}})();return running}
 async function refresh(){
  const request=++refreshId,id=game();if(!client||ComposerAuth.local)return;
  sharedExists=!!(await window.ComposerDraftEditors?.shared?.().catch(()=>false));sharedThere=sharedExists&&ComposerAuth.has('workspace.view',SHARED);
@@ -409,6 +413,8 @@ function localBanner(){
 function canApplyDraft(){return canRelease()&&!loadError&&!dirty()&&!!currentDraft&&draftChanges().some(g=>g.rows.length)&&!versions.some(v=>Number(v.revision)===Number(currentDraft.revision)&&['rejected','published'].includes(v.status))}
 // What is saved but not sent, one card per person who saved it (the draft's edit journal names
 // them to an Admin); what a sent version already carries is in its card above, not here.
+// A person's id, as opposed to the "teammate" and "untracked" groups nobody can be asked about.
+const PERSON=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function draftReview(){
  const sentHere=sentVersions().length,rows=changes(layer(basePayload,currentDraft?.payload),editingBaseline());
  // No Discard all: each sent version has its own Discard.
@@ -419,7 +425,7 @@ function draftReview(){
  const nameOf=k=>k===me?'You':k==='team'?'A teammate':k==='untracked'?'Saved before edits were tracked':authorName(k,'A teammate');
  const order=[...people.keys()].sort((a,b)=>(b===me)-(a===me));
  return '<section class="review-queue"><h3>Not sent yet <span class="review-count">'+rows.reduce((n,g)=>n+g.rows.length,0)+'</span></h3><div class="cloud-list">'
-  +order.map(k=>'<article class="review-version"><div class="review-version-head">'+avatarHTML(k,nameOf(k))+'<span><strong>'+esc(nameOf(k))+'</strong><small>saved, not sent · '+people.get(k)+(people.get(k)===1?' change':' changes')+'</small></span></div>'+diffHTML(layer(basePayload,currentDraft.payload),editingBaseline(),(section,path)=>keyOf(section,path)===k)+'</article>').join('')
+  +order.map(k=>'<article class="review-version"><div class="review-version-head">'+avatarHTML(k,nameOf(k))+'<span><strong>'+esc(nameOf(k))+'</strong><small>saved, not sent · '+people.get(k)+(people.get(k)===1?' change':' changes')+'</small></span></div>'+diffHTML(layer(basePayload,currentDraft.payload),editingBaseline(),(section,path)=>keyOf(section,path)===k)+(ComposerAuth.member?.role==='admin'&&PERSON.test(k)?'<div class="share-actions"><button class="wb-button discard-changes" data-discard-person="'+esc(k)+'" data-who="'+esc(k===me?'you':authorName(k,'this teammate'))+'">Discard these changes</button></div>':'')+'</article>').join('')
   +'</div><p id="cloud-save-hint"></p><p class="review-message" role="alert"></p><div class="review-actions">'+(localRelease()?'<button class="wb-button primary" id="cloud-apply-draft" title="Writes everything saved for this game, sent or not, to its configuration file on this computer">'+(sentHere?'Apply everything locally':'Apply locally')+'</button>':'')+discard+'</div></section>';
 }
 async function applyVersion(versionId,id){
@@ -439,7 +445,7 @@ function reviewVersions(){
  const before=v=>{const prev=all.filter(x=>Number(x.revision)<Number(v.revision)).pop();return prev?layer(basePayload,published?.payload,prev.payload):layer(basePayload,published?.payload)};
  const card=v=>{
   const earlier=all.filter(x=>Number(x.revision)<Number(v.revision)).length,when=new Date(v.submitted_at).toLocaleString(undefined,{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-  return '<article class="review-version"><div class="review-version-head">'+avatarHTML(v.submitted_by,authorName(v.submitted_by,'?'))+'<span><strong>'+esc(authorName(v.submitted_by,'A teammate'))+'</strong><small>sent '+esc(when)+' · revision '+esc(v.revision)+'</small></span></div>'
+  return '<article class="review-version"><div class="review-version-head">'+avatarHTML(v.submitted_by,authorName(v.submitted_by,'?'))+'<span><strong>'+esc(v.submitted_by===session?.user?.id?'You':authorName(v.submitted_by,'A teammate'))+'</strong><small>sent '+esc(when)+' · revision '+esc(v.revision)+'</small></span></div>'
    +diffHTML(layer(basePayload,published?.payload,v.payload),before(v))
    +(earlier?'<p class="changes-meta">Also carries '+earlier+' earlier '+(earlier===1?'version':'versions')+' above: applying this one applies '+(earlier===1?'it':'them')+' too.</p>':'')
    +'<div class="share-actions">'+releaseActions(v)+(ComposerAuth.member?.role==='admin'?'<button class="wb-button discard-changes" data-discard-version="'+esc(v.id)+'" data-who="'+esc(authorName(v.submitted_by,'this teammate'))+'">Discard these changes</button>':'')+jsonToggle({schema_version:1,game_id:v.game_id,version_id:v.id,revision:v.revision,payload:v.payload})+'</div></article>';
@@ -484,7 +490,7 @@ async function loadInbox(){
   const flags=[];
   if(local?.state==='uncommitted')flags.push(['release','Not committed']);else if(local?.state==='committed')flags.push(['release','Not pushed']);
   if(accepted.length)flags.push(['accepted',accepted.length+' accepted']);
-  if(waiting.length)flags.push(['awaiting',waiting.length+' to review · '+[...new Set(waiting.map(x=>authorName(x.submitted_by,'a teammate')))].join(', ')]);
+  if(waiting.length)flags.push(['awaiting',waiting.length+' to review · '+[...new Set(waiting.map(x=>authorName(x.submitted_by,'a teammate').replace(/\s*\([^)]*@[^)]*\)$/,'')))].join(', ')]);
   if(saved)flags.push(['saved',saved+' saved '+(saved===1?'change':'changes')+' not '+(waiting.length||accepted.length?'sent':'published')]);
   if(flags.length)rows.push({id,title:titleOf(id),flags});
  }
@@ -498,11 +504,15 @@ function inboxHTML(){
 }
 function adminTabs(){
  const here=ComposerTarget.value,current=scope===SHARED?SHARED:(inspected||here);
- const rows=[{id:here,title:titleOf(here),flags:inbox?.find(r=>r.id===here)?.flags||[]},...(inbox||[]).filter(r=>r.id!==here&&r.id!==SHARED)];
+ // Only games with something in them get a tab, the stage's game first; the one open keeps its tab.
+ const rows=(inbox||[]).filter(r=>r.id!==SHARED&&r.flags?.length).sort((a,b)=>(b.id===here)-(a.id===here));
+ if(current!==SHARED&&!rows.some(r=>r.id===current))rows.unshift({id:current,title:titleOf(current),flags:[]});
  // The shared brands get a tab only with something in it (or while it is the one open).
  const shared=inbox?.find(r=>r.id===SHARED);if(sharedThere&&(shared||current===SHARED))rows.push(shared||{id:SHARED,title:titleOf(SHARED),flags:[]});
- if(rows.length===1)return '';
- const lead=f=>f[0]?' <span class="changes-flag tone-'+f[0][0]+'">'+esc(/^\d+/.test(f[0][1])?f[0][1].match(/^\d+/)[0]:f[0][1].replace(/ ·.*$/,''))+'</span>':'';
+ // A lone tab still names the game, unless it is the stage's own game with nothing in it.
+ if(!rows.length||rows.length===1&&rows[0].id===here&&!rows[0].flags?.length)return '';
+ // A tab's number adds up its counts, as the Changes button does; a step without one shows its words.
+ const lead=f=>{if(!f[0])return '';const total=f.reduce((sum,x)=>sum+(+(x[1].match(/^\d+/)?.[0]||0)),0);return ' <span class="changes-flag tone-'+f[0][0]+'">'+esc(total?String(total):f[0][1].replace(/ ·.*$/,''))+'</span>'};
  return '<div class="scope-tabs admin-tabs" role="group" aria-label="Games with changes">'+rows.map(r=>'<button type="button" class="wb-button" data-inbox="'+esc(r.id)+'" aria-pressed="'+(r.id===current)+'"'+(r.flags.length?' title="'+esc(r.flags.map(x=>x[1]).join(' · '))+'"':'')+'>'+(r.id===SHARED?'<span class="changes-tab-icon" aria-hidden="true">'+(typeof icon==='function'?icon('brands'):'')+'</span>':'<img class="changes-tab-icon" src="icons/'+esc(r.id)+'.png" alt="" width="20" height="20">')+esc(r.title)+lead(r.flags)+'</button>').join('')+'</div>';
 }
 function renderInbox(){
@@ -536,26 +546,32 @@ function render(){
 
  // An Admin's tabs: the game on the stage, every other game with something waiting, and the shared brands.
  for(const b of dialog.querySelectorAll('[data-inbox]'))b.onclick=()=>{if(busy)return;const id=b.dataset.inbox;if(id===SHARED){inspected='';setScope(SHARED)}else{setScope('game');inspected=id===ComposerTarget.value?'':id}render();run(refresh)};
- $('#cloud-discard')?.addEventListener('click',()=>{if(!canDiscard()||busy)return;const id=game(),revision=currentDraft.revision;if(!confirm('Discard all unpublished changes for '+scopeTitle()+'? This includes shared draft edits, open edits in this window, and sent or approved versions. The published game stays unchanged.'))return;run(async()=>{await rpc('composer_discard_changes',{p_game:id,p_revision:revision});location.reload()})});
- $('#cloud-discard-unsent')?.addEventListener('click',()=>{
+ $('#cloud-discard')?.addEventListener('click',async()=>{if(!canDiscard()||busy)return;const id=game(),revision=currentDraft.revision;if(!await ask('Discard all unpublished changes for '+scopeTitle()+'? This includes shared draft edits, open edits in this window, and sent or approved versions. The published game stays unchanged.'))return;run(async()=>{await rpc('composer_discard_changes',{p_game:id,p_revision:revision});location.reload()})});
+ $('#cloud-discard-unsent')?.addEventListener('click',async()=>{
   if(busy)return;
-  if(!confirm('Discard your unsent edits for '+scopeTitle()+'? Your tracked edits and unsaved edits in this window will be reset. Sent versions and other people’s changes will stay. Older edits without authorship history will be preserved.'))return;
+  if(!await ask('Discard your unsent edits for '+scopeTitle()+'? Your tracked edits and unsaved edits in this window will be reset. Sent versions and other people’s changes will stay. Older edits without authorship history will be preserved.'))return;
   run(async()=>{if(!newChanges().some(g=>g.rows.length)&&dirty()){location.reload();return}try{await rpc('composer_discard_unsent',{p_game:game(),p_revision:currentDraft.revision})}catch(error){throw /No tracked unsent edits/.test(error.message)?Error(currentDraft?.updated_by===session?.user?.id?'These changes were saved before Composer tracked who made each edit, so only an Admin can discard them.':'None of these changes are yours, so there is nothing of yours to discard. They were saved by '+authorName(currentDraft?.updated_by)+'; an Admin can discard them.'):error}location.reload()});
  });
- for(const b of dialog.querySelectorAll('[data-apply]'))b.onclick=()=>{
-  if(!confirm('Apply this sent version to the local game configuration?'+(b.dataset.note?'\n\n'+b.dataset.note:'')+'\n\nReview the file, then commit and push to publish.'))return;
+ for(const b of dialog.querySelectorAll('[data-apply]'))b.onclick=async()=>{
+  if(!await ask('Apply this sent version to the local game configuration?'+(b.dataset.note?'\n\n'+b.dataset.note:'')+'\n\nReview the file, then commit and push to publish.'))return;
   const id=game();run(()=>applyVersion(b.dataset.apply,id));
  };
  // One person's sent changes, undone in the draft; anyone else's stay (composer_discard_version).
- for(const b of dialog.querySelectorAll('[data-discard-version]'))b.onclick=()=>{
+ for(const b of dialog.querySelectorAll('[data-discard-version]'))b.onclick=async()=>{
   if(busy)return;const later=sentVersions().filter(v=>Number(v.revision)>Number(versions.find(x=>x.id===b.dataset.discardVersion)?.revision||0)).length;
-  if(!confirm('Discard the changes '+b.dataset.who+' sent? They are removed from the draft; everyone else\'s stay.'+(later?' '+later+(later===1?' later version carries':' later versions carry')+' them too and will go back to '+(later===1?'its sender':'their senders')+' to send again.':'')))return;
+  if(!await ask('Discard the changes '+b.dataset.who+' sent? They are removed from the draft; everyone else\'s stay.'+(later?' '+later+(later===1?' later version carries':' later versions carry')+' them too and will go back to '+(later===1?'its sender':'their senders')+' to send again.':'')))return;
   run(async()=>{await rpc('composer_discard_version',{p_version:b.dataset.discardVersion});await refresh();message('Discarded the changes '+b.dataset.who+' sent.')});
  };
- $('#cloud-apply-draft')?.addEventListener('click',()=>{
+ // One person's saved, unsent changes, undone in the draft (composer_discard_person).
+ for(const b of dialog.querySelectorAll('[data-discard-person]'))b.onclick=async()=>{
+  if(busy)return;
+  if(!await ask('Discard the changes '+b.dataset.who+' saved? They are removed from the draft; everyone else\'s stay.'))return;
+  run(async()=>{await rpc('composer_discard_person',{p_game:game(),p_revision:currentDraft.revision,p_actor:b.dataset.discardPerson});await refresh();message('Discarded the changes '+b.dataset.who+' saved.')});
+ };
+ $('#cloud-apply-draft')?.addEventListener('click',async()=>{
   if(busy||!canApplyDraft())return;
   const id=game(),revision=currentDraft.revision;
-  if(!confirm('Apply all reviewed saved changes, including teammates’ edits, to the local configuration? This does not publish.'))return;
+  if(!await ask('Apply all reviewed saved changes, including teammates’ edits, to the local configuration? This does not publish.'))return;
   run(async()=>{const version=await rpc('composer_accept_draft',{p_game:id,p_revision:revision});try{await applyVersion(version.id,id)}catch(error){await refresh();throw error}});
  });
  $('#cloud-submit')?.addEventListener('click',sendChanges);
@@ -570,7 +586,13 @@ function render(){
 }
 // Another scope's draft, versions and local file are nothing to do with this one's.
 function setScope(next){scope=next;++refreshId;currentDraft=null;published=null;versions=[];basePayload={};owners=null;localConfig=null}
-function open(){hideCard(0);inspected='';render();if(!dialog.open)dialog.showModal();run(async()=>{await loadInbox().catch(()=>{});await refresh();await markNoticesRead()})}
+// Changes opens on the stage's game, or on the first game with something in it when that one has
+// nothing (unless a game was picked meanwhile, from the hover card).
+function landing(){
+ const here=ComposerTarget.value;if(scope!=='game'||inspected||inbox?.find(r=>r.id===here)?.flags?.length)return '';
+ return inbox?.find(r=>r.id!==SHARED&&r.id!==here&&r.flags?.length)?.id||'';
+}
+function open(){hideCard(0);inspected='';render();if(!dialog.open)dialog.showModal();run(async()=>{await loadInbox().catch(()=>{});const first=landing();if(first){inspected=first;render()}await refresh();await markNoticesRead()})}
 // Outside the dialog Changes is about the selected game; the shared brands show as a flag there.
 dialog.addEventListener('close',()=>{const away=scope!=='game'||inspected;view='game';inspected='';if(away){setScope('game');renderProgress();schedule()}});
 button.onclick=open;
@@ -589,6 +611,6 @@ window.addEventListener('composer-target',()=>{setScope('game');renderProgress()
 window.addEventListener('composer-draft-saved',schedule);
 window.addEventListener('focus',()=>{if(!dialog.open)schedule()});
 let lastDirty=false;setInterval(()=>{const d=dirty();if(d!==lastDirty){lastDirty=d;renderProgress();busyControls()}},500);
-setInterval(()=>{if((isReviewer()||ComposerAuth.has('drafts.submit',game()))&&!busy&&!dialog.contains(document.activeElement))schedule()},15000);
+setInterval(()=>{if((isReviewer()||ComposerAuth.has('drafts.submit',game()))&&!busy&&!dialog.contains(document.activeElement)&&!document.querySelector('.ask-dialog[open]'))schedule()},15000);
 if(cloudMode)run(async()=>{try{await refresh();window.dispatchEvent(new Event('composer-storage'))}catch(e){loadError=e.message;renderProgress();throw e}});
 if(ComposerAuth.local)window.dispatchEvent(new Event('composer-storage'));

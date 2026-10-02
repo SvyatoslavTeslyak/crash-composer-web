@@ -44,7 +44,7 @@ const events=sid=>drafts[sid]?.events||[];
 const eventAt=(sid,index)=>events(sid)[index];
 
 async function load(keepMessage=false){
- if(dirty.size&&!confirm('Discard unsaved sound edits and reload the shared draft?'))return;
+ if(dirty.size&&!await ask('Discard unsaved sound edits and reload the shared draft?'))return;
  dirty.clear();flagDirty();
  try{
   await window.ComposerTarget.refresh();
@@ -199,7 +199,7 @@ async function savePending(){
 // Everything in the shown manifest goes back to the sounds it shipped with.
 async function restore(){
  const sid=group==='scene'?targetId():KIT,what=sid===KIT?'the interface events':'the scene sounds of '+window.ComposerTarget.entry().title;
- if(!confirm('Put '+what+' back to the published sounds? Every choice, level and pitch in this manifest goes back to what the game ships with.'))return;
+ if(!await ask('Put '+what+' back to the published sounds? Every choice, level and pitch in this manifest goes back to what the game ships with.'))return;
  // Only now: a pending autosave must still happen if the reset was called off.
  clearTimeout(saveTimer);saveTimer=null;dirty.clear();flagDirty();
  await request('studio/restore?source='+encodeURIComponent(sid)+'&engine='+encodeURIComponent(engineId()),{method:'POST'});

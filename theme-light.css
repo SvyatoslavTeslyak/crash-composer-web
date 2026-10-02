@@ -1,0 +1,60 @@
+/* Light theme for Composer and the showcase. appearance.js puts data-appearance="light" on <html>
+   when the person picks it; every surface, line and text colour here is a token the dark pages
+   already use, so the light one only redefines them. Loaded last. */
+:root[data-appearance=light]{
+ color-scheme:light;
+ --inspector-bg-deep:#e9edf3;
+ --inspector-bg:#f6f8fb;
+ --inspector-surface:#ffffff;
+ --inspector-surface-hover:#eef2f8;
+ --inspector-surface-selected:#dcedfb;
+ --inspector-ink-selected:#0b4f80;
+ --inspector-well:#f1f4f8;
+ --inspector-card:#ffffff;
+ --inspector-border:#d6dde7;
+ --inspector-border-strong:#bac5d4;
+ --inspector-text:#17202c;
+ --inspector-muted:#5b697b;
+ --inspector-placeholder:#8a96a6;
+ --inspector-accent:#0a7fd0;
+ --inspector-accent-hover:#0669b0;
+ --inspector-accent-edge:#0a7fd0;
+ --inspector-on-accent:#ffffff;
+ --inspector-warning:#a8690c;
+ --inspector-danger:#c03a33;
+ --inspector-danger-border:#e9b5af;
+ --inspector-grid-dot:color-mix(in srgb,#0b1222 16%,transparent);
+ --inspector-glow:color-mix(in srgb,#9cc9ec 30%,transparent);
+ --inspector-overlay-shadow:#0f1d3326;
+ --studio-glass:rgba(255,255,255,.78);
+ --studio-glass-strong:rgba(255,255,255,.92);
+ --studio-edge:rgba(20,35,60,.10);
+ --studio-edge-strong:rgba(20,35,60,.18);
+ --studio-sky:#0a7fd0;
+ --studio-glow:#d9822b;
+ --studio-rail:rgba(255,255,255,.82);
+ --studio-control:#ffffff;
+ --studio-control-hover:#eef2f8;
+ --studio-faint:rgba(30,45,70,.5);
+ --studio-report:rgba(255,255,255,.72);
+ --studio-panel:#ffffff;
+ --studio-head:#f3f6fa;
+ --studio-group:#eef2f7;
+ --studio-bar-top:rgba(246,248,251,.4);
+ --studio-bar:rgba(246,248,251,.96);
+ --studio-menu:rgba(255,255,255,.98);
+ --studio-dialog:#ffffff;
+ --studio-scrim:rgba(15,25,45,.32);
+ --studio-scroll:rgba(30,45,70,.25);
+ --studio-page:#eef1f6;
+ --studio-page-deep:#e6eaf1;
+ --studio-title:#0f1a2a;
+}
+/* Shadows read as dirt on a light page: lighter and shorter. */
+:root[data-appearance=light] .appbar{box-shadow:0 1px 0 var(--studio-edge),0 6px 18px rgba(20,35,60,.06)!important}
+:root[data-appearance=light] .stage.bezel{background:linear-gradient(160deg,#2a3346,#11161f 60%)!important}
+:root[data-appearance=light] #fit::after{opacity:.35}
+:root[data-appearance=light] dialog,:root[data-appearance=light] .share-dialog{box-shadow:0 24px 60px rgba(20,35,60,.18)}
+/* Pale status colours made for a dark page get their darker siblings. */
+:root[data-appearance=light]{--tone-saved:#6b7a8f;--tone-awaiting:#0a7fd0;--tone-accepted:#16935f;--tone-release:#b7791f}
+:root[data-appearance=light] .changes-dot.has-count,:root[data-appearance=light] #cloud-configurations .changes-dot.has-count{color:#fff}

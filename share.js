@@ -19,7 +19,8 @@ menu.innerHTML='<button type="button" class="wb-button" data-share-mode="iframe"
 menu.querySelector('[data-share-mode=api]').href=new URL('player.html',window.ComposerCloudConfig.workspaceUrl).href;
 const showcase=$('#showcase-link');menu.insertBefore(showcase,menu.lastElementChild);showcase.title='Open the public game showcase';showcase.addEventListener('click',()=>closeMenu());
 document.body.append(menu);button.setAttribute('aria-controls',menu.id);button.setAttribute('aria-expanded','false');
-button.insertAdjacentHTML('beforeend',' <span aria-hidden="true">▾</span>');
+// The same chevron as the game and brand pickers beside it.
+button.insertAdjacentHTML('beforeend','<span class="share-chevron" aria-hidden="true">'+icon('chevron')+'</span>');
 function closeMenu(focus=false){menu.hidden=true;button.setAttribute('aria-expanded','false');if(focus)button.focus()}
 function positionMenu(){const r=button.getBoundingClientRect();menu.style.left=Math.max(8,Math.min(r.left,innerWidth-menu.offsetWidth-8))+'px';menu.style.top=Math.max(8,Math.min(r.bottom+6,innerHeight-menu.offsetHeight-8))+'px'}
 button.onclick=()=>{if(!menu.hidden){closeMenu();return}menu.hidden=false;button.setAttribute('aria-expanded','true');positionMenu()};

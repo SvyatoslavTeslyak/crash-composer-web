@@ -84,7 +84,8 @@ function typographySection(){
   // The one thing to do with a family from here: give it to the picked brand, as its body or its numbers.
   const canSet=!!window.ComposerAuth?.has('design.edit');
   const use=canSet?`<span class="lib-use"><button type="button" class="wb-button" data-use="${fam.id}" aria-haspopup="true" aria-expanded="false">Use for ${esc(catalog.brands[brand].title)}…</button><span class="lib-use-menu" role="group" hidden>${['body','numbers'].map(role=>`<button type="button" data-use-role="${role}" data-use-family="${fam.id}"${here?.includes(role)?' disabled title="Already its '+role+'"':''}>${role==='body'?'Body':'Numbers'}</button>`).join('')}</span></span>`:'';
-  const remove=fam.origin==='uploaded'
+  // Uploaded families and those fetched from Google Fonts can go; the kit's own faces stay.
+  const remove=fam.origin==='uploaded'||fam.origin==='google'
    ?`<button type="button" class="lib-remove" data-remove="${fam.id}" aria-label="Remove ${esc(fam.title)}"${used?' disabled title="In use by '+esc(used.join(', '))+'"':' title="Remove every weight and format of it"'}>${bin}</button>`
    :'<span class="lib-remove-space" aria-hidden="true"></span>';
   return `<div class="font-row${here?' is-current':''}"><span class="font-name"><b>${esc(fam.title)}</b><small><i class="origin ${fam.origin}">${ORIGIN[fam.origin]}</i> · ${fam.variable?'variable '+fam.range[0]+'–'+fam.range[1]:fam.weights.length+' weight'+(fam.weights.length===1?'':'s')}${fam.italic?' · italic':''}</small></span>
@@ -188,7 +189,7 @@ async function putIcon(name,file){
  note(data.icon.replaced?name+' replaced. Every game draws the new one.':name+' added.');
 }
 async function dropIcon(name){
- if(!confirm('Remove '+name+' from the kit?'))return;
+ if(!await ask('Remove '+name+' from the kit?'))return;
  const response=await fetch('brands/icons/'+encodeURIComponent(name),{method:'DELETE'});
  const data=await response.json().catch(()=>({}));
  if(!response.ok)return note(data.message||('HTTP '+response.status),true);
@@ -208,7 +209,7 @@ function draw(){
  report.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{navigator.clipboard?.writeText(b.dataset.copy);b.classList.add('copied');setTimeout(()=>b.classList.remove('copied'),900)});
  const toBrand=$('#library-to-brand');if(toBrand)toBrand.onclick=()=>window.ComposerLook?.editBrand();
  report.querySelectorAll('[data-use]').forEach(b=>b.onclick=()=>{const menu=b.nextElementSibling,open=menu.hidden;report.querySelectorAll('.lib-use-menu').forEach(m=>{m.hidden=true;m.previousElementSibling.setAttribute('aria-expanded','false')});menu.hidden=!open;b.setAttribute('aria-expanded',String(open))});
- report.querySelectorAll('[data-use-role]').forEach(b=>b.onclick=()=>useFamily(catalog.families.find(f=>f.id===b.dataset.useFamily),b.dataset.useRole));
+ report.querySelectorAll('[data-use-role]').forEach(b=>b.onclick=()=>{const menu=b.closest('.lib-use-menu');menu.hidden=true;menu.previousElementSibling.setAttribute('aria-expanded','false');useFamily(catalog.families.find(f=>f.id===b.dataset.useFamily),b.dataset.useRole)});
  report.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFamily(catalog.families.find(f=>f.id===b.dataset.remove)));
  report.querySelectorAll('[data-replace]').forEach(b=>b.onclick=()=>pickFile(f=>putIcon(b.dataset.replace,f),'.svg,.png,.webp'));
  report.querySelectorAll('[data-drop]').forEach(b=>b.onclick=()=>dropIcon(b.dataset.drop));
@@ -250,7 +251,7 @@ async function useFamily(fam,role){
  const b=catalog.brands[brand];if(!fam||!b)return;
  const current=b.fonts[role]||{},weight=fam.weights.includes(current.weight)?current.weight:fam.weights.reduce((best,w)=>Math.abs(w-(current.weight||400))<Math.abs(best-(current.weight||400))?w:best,fam.weights[0]);
  const style=fam.italic?current.style||'normal':'normal',file=fam.files[weight+'|'+style]||fam.files[weight+'|normal']||Object.values(fam.files)[0];
- if(!confirm('Set '+b.title+'’s '+role+' to '+fam.title+' '+(WEIGHT_TITLES[weight]||weight)+' for every game?'))return;
+ if(!await ask('Set '+b.title+'’s '+role+' to '+fam.title+' '+(WEIGHT_TITLES[weight]||weight)+' for every game?'))return;
  const fonts=Object.fromEntries(Object.entries(b.fonts).map(([r,f])=>[r,{file:bare(f.file),weight:f.weight,style:f.style||'normal'}]));
  fonts[role]={file:bare(file),weight,style};
  note('Saving…');window.ComposerUX?.status('saving');
@@ -262,7 +263,7 @@ async function useFamily(fam,role){
  window.dispatchEvent(new CustomEvent('composer-brand-fonts',{detail:{brand,fonts}}));
 }
 async function removeFamily(fam){
- if(!fam||!confirm('Remove '+fam.title+' from the kit? Every weight and format of it goes.'))return;
+ if(!fam||!await ask('Remove '+fam.title+' from the kit? Every weight and format of it goes.'))return;
  const response=await fetch('brands/fonts/'+encodeURIComponent(fam.id),{method:'DELETE'});
  const data=await response.json().catch(()=>({}));
  if(!response.ok)return note(data.message||('HTTP '+response.status),true);

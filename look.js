@@ -505,14 +505,14 @@ async function remove(){
  if(creating)return;
  if(editingTheme){
   const own=layered()&&catalog.brands[brandId].own?.themes?.includes(themeId);
-  if(!confirm('Remove season '+catalog.brands[brandId].themes[themeId].title+' from '+catalog.brands[brandId].title+(layered()?(own?' in '+gameTitle():' in every game'):'')+'?'))return;
+  if(!await ask('Remove season '+catalog.brands[brandId].themes[themeId].title+' from '+catalog.brands[brandId].title+(layered()?(own?' in '+gameTitle():' in every game'):'')+'?'))return;
   const r=await fetch('brands/'+brandId+'/themes/'+themeId+(own?'?scope=game':''),{method:'DELETE'});
   if(!r.ok)return say('Could not remove: HTTP '+r.status,true);
   try{sessionStorage.setItem('crash-composer-look',brandId);sessionStorage.setItem('crash-composer-look-theme','')}catch{}
   const p=new URLSearchParams(location.hash.slice(1));p.set('tab','look');p.delete('theme');location.hash='#'+p;location.reload();return;
  }
  if(brandId==='default')return;
- if(!confirm('Remove brand '+catalog.brands[brandId].title+(layered()?' from every game?':' from the kit?')))return;
+ if(!await ask('Remove brand '+catalog.brands[brandId].title+(layered()?' from every game?':' from the kit?')))return;
  const response=await fetch('brands/'+brandId,{method:'DELETE'});
  if(!response.ok)return say('Could not remove: HTTP '+response.status,true);
  try{sessionStorage.setItem('crash-composer-look','default')}catch{}

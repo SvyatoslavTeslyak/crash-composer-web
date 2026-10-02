@@ -8,7 +8,7 @@
  let runningVersion=$('meta[name=composer-version]')?.content||null;
  async function checkUpdate(){try{const r=await fetch('composer-version.json',{cache:'no-store'});if(!r.ok)return;const v=await r.json();if(!runningVersion){runningVersion=v.version;return}if(v.version!==runningVersion)$('#composer-update').hidden=false}catch{}}
  const updateBar=document.createElement('div');updateBar.id='composer-update';updateBar.hidden=true;updateBar.innerHTML='<span>Composer update available</span><button class="wb-button">Reload</button>';$('.appbar').after(updateBar);
- updateBar.querySelector('button').onclick=()=>{if(state.phase==='saving'){updateBar.querySelector('span').textContent='Wait for saving to finish before reloading.';return}if(dirty()&&!confirm('Reload Composer and discard unsaved edits? Saved drafts will remain.'))return;location.reload()};
+ updateBar.querySelector('button').onclick=async()=>{if(state.phase==='saving'){updateBar.querySelector('span').textContent='Wait for saving to finish before reloading.';return}if(dirty()&&!await ask('Reload Composer and discard unsaved edits? Saved drafts will remain.'))return;location.reload()};
  function update(){
   const mode=Object.keys(names).find(k=>$('#'+k+'-tab').getAttribute('aria-pressed')==='true')||'layout';set($('#workspace-title'),names[mode]);
   const button=$('#cloud-configurations');if(!$('#save-context')){const status=document.createElement('span');status.id='save-context';status.setAttribute('role','status');status.setAttribute('aria-live','polite');button.append(status)}

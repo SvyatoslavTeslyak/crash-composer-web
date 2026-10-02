@@ -508,21 +508,24 @@ function openDocument(key,lang){
   editor.ondrop=ev=>{const file=[...ev.dataTransfer?.files||[]].find(f=>f.type.startsWith('image/'));if(!file)return;ev.preventDefault();last=editor;addPicture(file)};
   editor.onkeydown=ev=>{if((ev.metaKey||ev.ctrlKey)&&ev.key==='Enter'){ev.preventDefault();docDialog.querySelector('[data-doc-save]')?.click()}};
   // A picture's description (read aloud by screen readers) is edited by double-clicking it.
-  editor.ondblclick=ev=>{const img=ev.target.closest('img');if(!img||!editable)return;const alt=prompt('Describe the picture (read aloud to players who cannot see it):',img.alt||'');if(alt!==null){img.alt=alt.replace(/[\[\]<>]/g,'');sync(editor)}};
+  editor.ondblclick=async ev=>{const img=ev.target.closest('img');if(!img||!editable)return;const alt=await ask('Describe the picture',{title:'Picture description',input:img.alt||'',placeholder:'Read aloud to players who cannot see it'});if(alt!==null){img.alt=alt.replace(/[\[\]<>]/g,'');sync(editor)}};
  }
  const addPicture=async file=>{status.textContent='Uploading the picture…';try{const url=await uploadPicture(file);const alt=file.name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').replace(/[\[\]<>]/g,'');everywhere('<figure contenteditable="false"><img src="'+esc(url)+'" alt="'+esc(alt)+'"></figure>');status.textContent='Picture added to every language · double-click it to describe it'}catch(error){status.textContent=error.message}};
  // Commands on the editor being typed in. Each ends by reading the editor back into the document.
  const block=()=>{const sel=getSelection();let n=sel.rangeCount?sel.getRangeAt(0).startContainer:null;while(n&&n.parentNode!==last)n=n.parentNode;return n?.nodeType===1?n:null};
  const run=(cmd,value)=>{last.focus();document.execCommand('styleWithCSS',false,false);document.execCommand(cmd,false,value);sync(last);refresh()};
  const listAt=()=>{const n=getSelection().anchorNode;return n?.nodeType===1?n.closest('ul,ol'):n?.parentElement?.closest('ul,ol')};
- const command=cmd=>{
+ const command=async cmd=>{
   if(cmd==='image'){docDialog.querySelector('[data-picture]').click();return}
   if(cmd==='ul'||cmd==='ol'){run(cmd==='ul'?'insertUnorderedList':'insertOrderedList');return}
   if(cmd==='check'){last.focus();let list=listAt();
    if(list?.classList.contains('rte-check')){list.classList.remove('rte-check');sync(last);refresh();return}
    if(!list||list.tagName!=='UL'){document.execCommand('insertUnorderedList');list=listAt()}
    if(list){list.classList.add('rte-check');for(const li of list.children)li.dataset.check??='yes'}sync(last);refresh();return}
-  if(cmd==='link'){last.focus();const sel=getSelection();const current=sel.anchorNode?.parentElement?.closest('a')?.getAttribute('href')||'';const url=prompt('Link address (https://…). Leave empty to remove the link.',current||'https://');if(url===null)return;
+  if(cmd==='link'){last.focus();const sel=getSelection();const current=sel.anchorNode?.parentElement?.closest('a')?.getAttribute('href')||'';const range=sel.rangeCount?sel.getRangeAt(0).cloneRange():null;
+   const url=await ask('Leave it empty to remove the link.',{title:'Link address',input:current||'https://',placeholder:'https://…'});
+   // The window took the focus: the words picked for the link are picked again.
+   last.focus();if(range){sel.removeAllRanges();sel.addRange(range)}if(url===null)return;
    if(!url.trim()||url.trim()==='https://'){run('unlink');return}if(!/^https:\/\/[^\s<>"]+$/.test(url.trim())){status.textContent='A link must start with https://';return}
    if(sel.isCollapsed&&!current){status.textContent='Select the words to link first.';return}run('createLink',url.trim());return}
   if(cmd==='clear'){run('removeFormat');const b=block();if(b){b.style.textAlign='';b.classList.remove('rte-small');sync(last)}return}

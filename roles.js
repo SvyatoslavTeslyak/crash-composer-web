@@ -26,7 +26,7 @@ if(!root){
   const values=[...root.querySelectorAll('[data-role]')].filter(i=>i.dataset.role===role.id&&i.checked).map(i=>i.dataset.permission).sort();
   return name.value!==role.name||JSON.stringify(values)!==JSON.stringify([...role.permissions].sort());
  });
- const discard=()=>!roleDirty()||confirm('Discard unsaved role changes?');
+ const discard=async()=>!roleDirty()||ask('Discard unsaved role changes?',{ok:'Discard'});
  const message=text=>{const box=root.querySelector('#roles-status');if(box)box.textContent=text};
  async function run(fn){if(busy)return;busy=true;root.setAttribute('aria-busy','true');memberDialog.setAttribute('aria-busy','true');try{await fn()}catch(error){const box=memberDialog.open?memberDialog.querySelector('[role=status]'):null;if(box)box.textContent=error.message;else message(error.message)}finally{busy=false;root.removeAttribute('aria-busy');memberDialog.removeAttribute('aria-busy')}}
  async function load(){
@@ -52,22 +52,22 @@ if(!root){
    <section aria-label="${tab==='roles'?'Roles and permissions':'People and invitations'}">${tab==='roles'?matrix():people()}</section><p id="roles-status" role="status" aria-live="polite"></p>`;
   const back=root.querySelector('#access-back');let returnPath=sessionStorage.getItem('composer-access-return');
   try{const url=new URL(returnPath||'index.html',location.href);if(url.origin===location.origin&&url.pathname.endsWith('/index.html'))back.href=url.href}catch{}
-  back.onclick=event=>{if(busy||!discard())event.preventDefault()};
-  for(const b of root.querySelectorAll('[data-edit-role]'))b.onclick=()=>{if(busy||!discard())return;editing=b.dataset.editRole;render();root.querySelector('[data-role-name]')?.focus()};
-  root.querySelector('[data-cancel-role]')?.addEventListener('click',()=>{if(busy||!discard())return;editing=false;render()});
-  root.querySelector('[data-refresh]')?.addEventListener('click',()=>{if(discard())run(load)});
+  back.onclick=async event=>{if(!roleDirty()&&!busy)return;event.preventDefault();if(!busy&&await discard())location.href=back.href};
+  for(const b of root.querySelectorAll('[data-edit-role]'))b.onclick=async()=>{if(busy||!await discard())return;editing=b.dataset.editRole;render();root.querySelector('[data-role-name]')?.focus()};
+  root.querySelector('[data-cancel-role]')?.addEventListener('click',async()=>{if(busy||!await discard())return;editing=false;render()});
+  root.querySelector('[data-refresh]')?.addEventListener('click',async()=>{if(await discard())run(load)});
   const create=root.querySelector('#role-create');if(create)create.onsubmit=event=>{event.preventDefault();if(roleDirty()){message('Save changed roles before creating another role.');return}const name=new FormData(create).get('name');run(async()=>{const created=await save(null,name,['workspace.view'],null);editing=created.id;await load();message('Role created. Choose its permissions and save.')})};
   for(const button of root.querySelectorAll('[data-save-role]'))button.onclick=()=>run(async()=>{
    const role=roles.find(r=>r.id===button.dataset.saveRole),name=[...root.querySelectorAll('[data-role-name]')].find(i=>i.dataset.roleName===role.id).value,selected=[...root.querySelectorAll('[data-role]')].filter(i=>i.dataset.role===role.id&&i.checked).map(i=>i.dataset.permission);
    const saved=await save(role.id,name,selected,role.revision);roles=roles.map(r=>r.id===saved.id?saved:r);editing=false;await auth.refreshPermissions();render();message(saved.name+' saved. Permissions are active.');
   });
-  for(const button of root.querySelectorAll('[data-delete-role]'))button.onclick=()=>{
-   if(roleDirty()){message('Save changed roles before deleting a role.');return}const role=roles.find(r=>r.id===button.dataset.deleteRole);if(!confirm('Delete role “'+role.name+'”?'))return;
+  for(const button of root.querySelectorAll('[data-delete-role]'))button.onclick=async()=>{
+   if(roleDirty()){message('Save changed roles before deleting a role.');return}const role=roles.find(r=>r.id===button.dataset.deleteRole);if(!await ask('Delete role “'+role.name+'”?'))return;
    run(async()=>{check(await auth.client.rpc('composer_delete_role',{p_id:role.id,p_revision:role.revision}));await load();message('Role deleted.')});
   };
   root.querySelector('[data-new-invite]')?.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('composer-open-invite')));
   for(const b of root.querySelectorAll('[data-invite-person]'))b.onclick=()=>document.dispatchEvent(new CustomEvent('composer-open-invite',{detail:members.find(m=>m.user_id===b.dataset.invitePerson)}));
-  for(const b of root.querySelectorAll('[data-remove-person]'))b.onclick=()=>{const m=members.find(m=>m.user_id===b.dataset.removePerson);if(busy||!confirm('Remove Composer access for '+m.email+'? Saved work will be kept.'))return;run(async()=>{check(await auth.client.rpc('composer_remove_member',{p_user:m.user_id}));await load();message('Access removed.')})};
+  for(const b of root.querySelectorAll('[data-remove-person]'))b.onclick=async()=>{const m=members.find(m=>m.user_id===b.dataset.removePerson);if(busy||!await ask('Remove Composer access for '+m.email+'? Saved work will be kept.'))return;run(async()=>{check(await auth.client.rpc('composer_remove_member',{p_user:m.user_id}));await load();message('Access removed.')})};
   for(const button of root.querySelectorAll('[data-edit-member]'))button.onclick=()=>openMember(members.find(m=>m.user_id===button.dataset.editMember));
  }
  function openMember(member){
@@ -82,17 +82,17 @@ if(!root){
    <div class="member-actions"><button class="wb-button primary" type="submit">${removed?'Restore access':'Save changes'}</button><button class="wb-button" type="button" data-cancel>Cancel</button></div></form>
    <p role="status" aria-live="polite"></p>
    <footer>${status(member)==='pending'?'<button class="wb-button" type="button" data-reinvite>New invite link</button>':''}${!removed?`<button class="wb-button danger" type="button" data-remove-member ${member.user_id===auth.session?.user.id?'disabled title="You cannot remove your own access"':''}>${status(member)==='pending'?'Revoke invite':'Remove access'}</button>`:''}</footer>`;
-  const close=()=>{if(!busy&&(!memberDirty()||confirm('Discard unsaved access changes?')))memberDialog.close()};
+  const close=async()=>{if(!busy&&(!memberDirty()||await ask('Discard unsaved access changes?',{ok:'Discard'})))memberDialog.close()};
   memberDialog.querySelector('[data-close]').onclick=close;memberDialog.querySelector('[data-cancel]').onclick=close;
   memberDialog.querySelector('form').onsubmit=event=>{event.preventDefault();const fields=new FormData(event.target);run(async()=>{
    check(await auth.client.rpc(removed?'composer_restore_member':'composer_set_member',{p_user:member.user_id,p_role:fields.get('role'),...(!removed?{p_active:fields.has('active')}:{}),p_games:fields.getAll('games')}));
    memberDialog.close();await auth.refreshPermissions();if(!auth.has('users.manage'))return;await load();message(removed?'Access restored.':'Access saved.');
   })};
-  memberDialog.querySelector('[data-reinvite]')?.addEventListener('click',()=>{if(busy)return;if(memberDirty()&&!confirm('Discard unsaved access changes?'))return;memberDialog.close();document.dispatchEvent(new CustomEvent('composer-open-invite',{detail:member}))});
-  memberDialog.querySelector('[data-remove-member]')?.addEventListener('click',()=>{if(busy||!confirm('Remove Composer access for '+member.email+'? Saved work will be kept.'))return;run(async()=>{check(await auth.client.rpc('composer_remove_member',{p_user:member.user_id}));memberDialog.close();await load();message('Composer access removed.')})});
+  memberDialog.querySelector('[data-reinvite]')?.addEventListener('click',async()=>{if(busy)return;if(memberDirty()&&!await ask('Discard unsaved access changes?',{ok:'Discard'}))return;memberDialog.close();document.dispatchEvent(new CustomEvent('composer-open-invite',{detail:member}))});
+  memberDialog.querySelector('[data-remove-member]')?.addEventListener('click',async()=>{if(busy||!await ask('Remove Composer access for '+member.email+'? Saved work will be kept.'))return;run(async()=>{check(await auth.client.rpc('composer_remove_member',{p_user:member.user_id}));memberDialog.close();await load();message('Composer access removed.')})});
   memberSnapshot=memberValues();memberDialog.showModal();
  }
- memberDialog.addEventListener('cancel',event=>{if(busy||(memberDirty()&&!confirm('Discard unsaved access changes?')))event.preventDefault()});
+ memberDialog.addEventListener('cancel',event=>{if(event.target!==memberDialog||!busy&&!memberDirty())return;event.preventDefault();if(!busy)ask('Discard unsaved access changes?',{ok:'Discard'}).then(ok=>{if(ok)memberDialog.close()})});
  window.addEventListener('beforeunload',event=>{if(roleDirty()||memberDirty()){event.preventDefault();event.returnValue=''}});
  document.addEventListener('composer-permissions',()=>{if(!canView()){memberDialog.close();denied()}});
  document.addEventListener('composer-invited',()=>{if(!busy&&tab==='people')run(load)});
