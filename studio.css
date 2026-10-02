@@ -34,7 +34,11 @@ button,input,select,textarea{font-family:inherit}
 .appbar{background:var(--studio-glass)!important;-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border-bottom:1px solid var(--studio-edge)!important;box-shadow:0 10px 30px rgba(0,0,0,.18)}
 .workspace-rail{background:rgba(8,12,22,.72)!important;-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border-right:1px solid var(--studio-edge)!important}
 aside#side{background:var(--studio-glass)!important;-webkit-backdrop-filter:blur(26px) saturate(150%);backdrop-filter:blur(26px) saturate(150%);border-right:1px solid var(--studio-edge)!important}
-#room{background:none!important}
+/* The dotted canvas behind a device, as in the showcase; pages of cards and tables keep a plain
+   ground, and on Texts only the preview column is dotted. */
+#room{background-color:transparent!important}
+#room:has(#library-report:not([hidden])),#room:has(#sound-report:not([hidden])),#room:has(#math-report:not([hidden])),#room.translations-workspace{background-image:none!important}
+.translations-workspace #fit{background-image:radial-gradient(var(--inspector-grid-dot) var(--stroke-1),transparent var(--stroke-1));background-size:var(--space-16) var(--space-16)}
 
 /* the name, set like a signature at dusk */
 .appbar h1 span{font-weight:700;letter-spacing:.01em;background:linear-gradient(92deg,#f3f6ff 0,#cfe6ff 55%,var(--studio-glow) 130%);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -58,12 +62,15 @@ aside#side{background:var(--studio-glass)!important;-webkit-backdrop-filter:blur
 #workspace-title{font-size:22px!important;font-weight:700!important;letter-spacing:-.01em}
 
 /* the stage: the device stands in the open, lit from the horizon */
-.stage.bezel{background:linear-gradient(160deg,#1a2234,#070a12 60%)!important;border:1px solid rgba(220,232,255,.16)!important;box-shadow:0 40px 80px -20px rgba(0,0,0,.65),0 0 0 1px rgba(0,0,0,.6),0 0 60px -10px rgba(255,184,119,.18),inset 0 1px 0 rgba(255,255,255,.08)!important}
+.stage.bezel{background:linear-gradient(160deg,#1a2234,#070a12 60%)!important;border:1px solid rgba(220,232,255,.16)!important;box-shadow:0 12px 24px -12px rgba(0,0,0,.65),0 0 0 1px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08)!important}
+/* The bezel's shadow stays within 12 px of it: the stage hangs at the top of an area that clips,
+   and a wider shadow or glow was cut there into a dark rectangle behind the device. */
+.translations-workspace #fit{overflow:visible}
 #fit::after{content:"";position:absolute;left:50%;bottom:6px;width:min(420px,60%);height:28px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);pointer-events:none;z-index:-1}
 
 /* reports read on a sheet of glass, the valley showing through at the edges */
 #translates-report,#sound-report,#library-report,#math-report{background:rgba(9,14,26,.58);-webkit-backdrop-filter:blur(24px) saturate(140%);backdrop-filter:blur(24px) saturate(140%);border:1px solid var(--studio-edge);border-radius:22px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
-#translates-report{padding:28px 30px!important}
+#translates-report{padding:20px 24px!important;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;border:0;box-shadow:none}
 #sound-report{padding:28px 30px!important;margin-top:4px!important}
 #library-report{margin:0!important;max-width:none!important}
 #library-report>*{max-width:var(--inspector-report-width)}
@@ -91,3 +98,83 @@ dialog::backdrop{background:rgba(4,7,14,.55);-webkit-backdrop-filter:blur(6px);b
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:rgba(160,185,230,.22);border-radius:10px;border:2px solid transparent;background-clip:padding-box}::-webkit-scrollbar-track{background:transparent}
 
 @media(prefers-reduced-transparency:reduce){.appbar,.workspace-rail,aside#side,#translates-report,#sound-report,#library-report{background:var(--inspector-bg)!important;-webkit-backdrop-filter:none;backdrop-filter:none}}
+
+/* ---- Compact workspace (desktop) -------------------------------------------------------------
+   One spacing rhythm for every tab: 12 px around panels, 8 px between controls, 20 px headings.
+   Reports sit on the room, not in a card of their own; their contents are the cards. */
+@media(min-width:1001px){
+ .appbar{min-height:0;padding:12px 16px;gap:16px}
+ /* The Window control stands clear of the bar, on the stage's own line. */
+ #preview-window{padding:12px 0}
+ /* Under a preview window select the device hangs from it rather than floating mid-height. */
+ #room:has(#preview-window:not([hidden])) #fit,.translations-workspace #fit{place-items:start center}
+ /* Every control in the bar is one height and sits on one centre line. The pickers' own rules
+    name them by id, so these do too. */
+ .appbar{align-items:center}
+ .appbar #picker,.appbar #look-bar,.appbar .lang-seg{height:44px;align-self:center}
+ .appbar #picker .game.pick,.appbar #look-bar .game.pick,.appbar a.wb-button,.appbar>button{height:44px}
+ .appbar .picker .game.pick img{width:32px;height:32px}
+ .appbar .lang-seg{height:44px}
+ aside#side{padding:14px 12px 0!important}
+ #workspace-title{font-size:18px!important;margin:0 0 10px!important}
+ .toolbar,#side .wb-section,#look-controls .wb-section,#library-controls .wb-section{padding:8px 0 12px}
+ .panel-sec{padding:2px 0 12px}
+ .panel-bar{margin:auto -12px 0;padding:10px 12px 12px;grid-template-columns:1fr 1fr}
+ .panel-bar button{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 8px;font-size:12px}
+ .wb-room{padding:12px}
+ #translates-report,#sound-report,#library-report,#math-report{background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:12px 8px 24px!important;margin:0!important;max-width:none!important}
+ #sound-report>*,#library-report>*{max-width:var(--inspector-report-width)}
+ .lib-head,.sound-head{margin-bottom:12px}.lib-head h2,.sound-head h2,#sound-report h2{font-size:20px;margin:0 0 4px}
+ .lib-head p,.sound-head p{font-size:13px}
+ .lib-card{padding:16px;margin-bottom:12px}.lib-card h3{margin-bottom:8px}
+ .font-row{padding:8px 0;gap:12px}.font-row .specimen{font-size:20px}
+ .sound-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+ .sound-card{padding:12px;gap:6px}.sound-card h3{font-size:14px;margin:0}
+ .sound-takes{gap:4px}
+ #room.translations-workspace{padding:12px;gap:0 16px}
+}
+/* Narrow desktops: a slimmer panel, and the Texts preview gives the table its room. */
+@media(min-width:1001px) and (max-width:1440px){
+ body{--inspector-sidebar-width:248px}
+ #room.translations-workspace{grid-template-columns:minmax(0,1fr) minmax(240px,300px)}
+ .translations-workspace #translates-report{padding-right:4px!important}
+ .tx-table{min-width:0}
+ #room.look-workspace{grid-template-columns:minmax(0,1fr) minmax(220px,280px)}
+}
+@media(min-width:1001px){
+ /* The panel's device cards: the size fits beside the icon at the slimmer panel. */
+ .device{padding:6px 8px;column-gap:6px}.device span{font-size:11px}
+ /* Dialogs: a lighter header and tighter sections. */
+ .share-dialog{--dialog-inset:18px;padding:var(--dialog-inset)}
+ .share-dialog>header h2,.review-heading h2{font-size:20px;margin:2px 0}
+ .review-queue{padding:12px;margin:12px 0}.cloud-dialog h3{margin-top:12px}
+ .review-group{margin:8px 0}.review-group summary{padding:10px 12px}
+ .cloud-dialog .wb-button.primary{min-height:36px;padding:6px 16px}
+}
+@media(min-width:1001px) and (max-width:1440px){
+ /* The brand editor's colours in one column: each role reads on one or two lines, not five. */
+ #look-room #look-colours,#look-room #look-primary,#look-room #look-faces{grid-template-columns:minmax(0,1fr)}
+ #look-room .generate-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+}
+/* The sticky Texts toolbar hides the rows under it with the page's own colour. */
+.tx-toolbar{background:#0b1222}
+.translations-workspace #translates-report{padding-top:0!important}
+/* One vertical rhythm for every side panel: 12 px from the panel's title to its first section,
+   8 px from a section's heading to its content, 24 px between sections. Brands' sections are
+   flat like the others, so every panel's content starts on the same left edge. */
+#workspace-title{margin:0 0 12px!important}
+#side .toolbar,#side .wb-section,#side .panel-sec{padding:0 0 24px!important;margin:0!important;gap:8px}
+#side .toolbar>strong,#side .wb-section>h2,#side .wb-section>h3,#side .panel-sec>h3{margin:0!important}
+#side .look-card{border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important}
+#side .look-card+.look-card{margin-top:0!important}#side .look-hint{margin-top:0!important}
+#side .tx-type-sec{padding-bottom:16px!important}.tx-type-sec+#translation-sections{padding-top:16px}
+/* Page titles in the room: one size, on the same line as the panel's title. */
+.lib-head h2,.sound-head h2,#sound-report h2,.translations-heading h2,.tx-title h2{font-size:20px!important;line-height:1.3!important;margin:0!important}
+.lib-head h2+p,.sound-head h2+p{margin-top:4px}
+#translation-live-tools{padding-top:0!important}
+/* The Texts table sits between the panel and the preview with the same 20 px on each side,
+   at every width: 12 + 8 on the left, 4 + the 16 px column gap on the right. */
+#room.translations-workspace{column-gap:16px!important}
+.translations-workspace #translates-report{padding-left:8px!important;padding-right:4px!important}
+/* The Window select and the device below it keep 12 px between them, on Game and on Texts. */
+#translation-live-tools{padding-bottom:12px!important}

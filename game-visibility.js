@@ -7,13 +7,15 @@ const $=s=>document.querySelector(s),button=document.createElement('button');
 button.id='workspace-games';button.type='button';button.textContent='Games in Composer';button.hidden=true;
 $('#workspace-settings-menu').prepend(button);
 const dialog=document.createElement('dialog');dialog.className='share-dialog';dialog.setAttribute('aria-labelledby','game-visibility-title');
-dialog.innerHTML='<header><h2 id="game-visibility-title">Settings · Games in Composer</h2><button type="button" class="wb-button" data-close aria-label="Close settings">✕</button></header><p>Choose which games your game list shows. Only your own list changes; colleagues and the Showcase are not affected.</p><form><fieldset style="border:0;padding:0;margin:0"><legend id="game-visibility-count"></legend><div id="game-visibility-games"></div></fieldset><p class="share-note">A hidden game you have open stays until you switch to another one.</p><footer><button type="submit" class="wb-button" id="game-visibility-save">Save settings</button></footer></form><p role="status" aria-live="polite"></p>';
+dialog.innerHTML='<header><h2 id="game-visibility-title">Settings · Games in Composer</h2><button type="button" class="wb-button" data-close aria-label="Close settings">'+icon('close')+'</button></header><p>Choose which games your game list shows. Only your own list changes; colleagues and the Showcase are not affected.</p><form><fieldset style="border:0;padding:0;margin:0"><legend id="game-visibility-count"></legend><div id="game-visibility-games"></div></fieldset><p class="share-note">A hidden game you have open stays until you switch to another one.</p><footer><button type="submit" class="wb-button" id="game-visibility-save">Save settings</button></footer></form><p role="status" aria-live="polite"></p>';
 document.body.append(dialog);
 let busy=false;
 const inputs=()=>[...dialog.querySelectorAll('input[type=checkbox]')];
 const status=text=>dialog.querySelector('[role=status]').textContent=text;
 const count=()=>$('#game-visibility-count').textContent=inputs().filter(n=>n.checked).length+' of '+inputs().length+' games shown';
-const sync=()=>{button.hidden=!window.ComposerAuth?.member};
+// Only an Admin sees every game, so only an Admin has a list worth narrowing; anyone else sees
+// the games an Admin gave them, and that is the list.
+const sync=()=>{button.hidden=window.ComposerAuth?.member?.role!=='admin'};
 button.onclick=()=>{
  $('#workspace-settings-menu').hidden=true;$('#workspace-settings-toggle').setAttribute('aria-expanded','false');
  const T=window.ComposerTarget,hidden=T.hidden;

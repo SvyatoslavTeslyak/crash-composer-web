@@ -53,3 +53,7 @@ color-scheme:dark;
 :root{--inspector-size-420:420px;--inspector-size-9:9px;--inspector-loading-duration:.8s;--inspector-size-76:76px;--inspector-size-30:30px;--inspector-overlay-shadow:#0005;}
 
 #workspace-avatar{--avatar-bg:hsl(var(--avatar-hue) 32% 19%);--avatar-fg:hsl(var(--avatar-hue) 75% 78%);--avatar-border:hsl(var(--avatar-hue) 55% 56%)}
+
+/* Every Hugeicons drawing (icons.js) strokes in the text colour at the text's size unless a
+   component sizes it. */
+svg.hi{width:1.15em;height:1.15em;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}

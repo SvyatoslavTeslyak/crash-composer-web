@@ -21,7 +21,7 @@
    are square, and the border it would draw along it is gone. */
 @media(max-width:__PHONE_MAX__px){.crash-ui .ladder{left:0}
 .crash-ui .ladder-list{border-top-left-radius:0;border-bottom-left-radius:0;border-left:0}}
-.crash-ui .multiplier{min-width:var(--web-multiplier-min-width);border:var(--stroke-2) solid var(--multiplier-color,var(--cyan));border-radius:var(--radius-32);background:var(--surface);text-align:center;font:var(--type-32) var(--font-numbers),var(--font-body),sans-serif;color:var(--multiplier-color,var(--cyan));padding:var(--space-4) var(--space-24)}.crash-ui .controls{width:100%;max-width:var(--web-control-max-width);display:grid;gap:var(--space-16)}.crash-ui .settings-row{display:grid;grid-template-columns:var(--web-settings-column-width) 1fr;gap:var(--space-12)}.crash-ui .auto{background:var(--switch-off);border-radius:var(--radius-pill);padding:var(--space-6) var(--space-8) var(--space-6) var(--space-6);justify-content:flex-start}.crash-ui .knob{height:var(--web-knob-size);width:var(--web-knob-size);border-radius:50%;background:var(--knob);flex:none}.crash-ui .auto[aria-pressed=true]{background:var(--switch-on);color:var(--on-success)}.crash-ui .stake{display:grid;grid-template-columns:var(--tap-min) var(--tap-min) minmax(var(--web-winner-name-min-width),1fr) var(--tap-min) var(--tap-min);gap:var(--space-8);align-items:center}.crash-ui .stake .money{text-align:center;font-size:var(--type-24);min-width:0}/* The stake reads like the balance in the header: the number, then the same coin, no currency   mark. The coin is drawn on the amount itself, so it grows and shrinks with the digits and   the pair always lands in one line box. Sizes step, never interpolate: the stake is the   panel's largest figure while it is short and gives up a step as it grows. */.crash-ui .coin-amount::after{content:'';display:inline-block;width:1em;height:1em;margin-left:var(--space-6);vertical-align:-0.12em;background:url('assets/icons/coin.webp') center/contain no-repeat}
+.crash-ui .multiplier{min-width:var(--web-multiplier-min-width);border:var(--stroke-2) solid var(--multiplier-color,var(--cyan));border-radius:var(--radius-32);background:var(--surface);text-align:center;font:var(--type-32) var(--font-numbers),var(--font-body),sans-serif;color:var(--multiplier-color,var(--cyan));padding:var(--space-4) var(--space-24)}.crash-ui .controls{width:100%;max-width:var(--web-control-max-width);display:grid;gap:var(--space-16)}.crash-ui .settings-row{display:grid;grid-template-columns:var(--web-settings-column-width) 1fr;gap:var(--space-12)}.crash-ui .auto{background:var(--switch-off);border-radius:var(--radius-pill);padding:var(--space-6) var(--space-8) var(--space-6) var(--space-6);justify-content:flex-start}.crash-ui .knob{height:var(--web-knob-size);width:var(--web-knob-size);border-radius:50%;background:var(--knob);flex:none}.crash-ui .auto[aria-pressed=true]{background:var(--switch-on);color:var(--on-success)}.crash-ui .stake{display:grid;grid-template-columns:fit-content(28%) var(--tap-min) minmax(var(--web-winner-name-min-width),1fr) var(--tap-min) fit-content(28%);gap:var(--space-8);align-items:center}.crash-ui .stake .money{text-align:center;font-size:var(--type-24);min-width:0}/* The stake reads like the balance in the header: the number, then the same coin, no currency   mark. The coin is drawn on the amount itself, so it grows and shrinks with the digits and   the pair always lands in one line box. Sizes step, never interpolate: the stake is the   panel's largest figure while it is short and gives up a step as it grows. */.crash-ui .coin-amount::after{content:'';display:inline-block;width:1em;height:1em;margin-left:var(--space-6);vertical-align:-0.12em;background:url('assets/icons/coin.webp') center/contain no-repeat}
 .crash-ui.no-webp .coin-amount::after{background-image:url('assets/icons/coin.png')}
 .crash-ui.no-webp .avatar{background-image:url('assets/avatars/players.png')}/* In a table the coin keeps a readable size whatever the row's type size. */
 .crash-ui .bets-table .coin-amount::after{width:var(--type-14);height:var(--type-14);margin-left:var(--space-4)}
@@ -94,7 +94,7 @@
 .crash-ui .controls .button[aria-pressed=true]{outline:var(--stroke-2) solid var(--focus);outline-offset:calc(-1 * var(--stroke-2))}
 .crash-ui .controls .auto{border-radius:var(--radius-pill);padding-block:var(--space-4)}
 .crash-ui .controls .stake{
- grid-template-columns:minmax(var(--tap-min),1fr) var(--control-h) minmax(var(--web-control-amount-width),1.5fr) var(--control-h) minmax(var(--tap-min),1fr);
+ grid-template-columns:fit-content(28%) var(--control-h) minmax(var(--web-control-amount-width),1fr) var(--control-h) fit-content(28%);
  gap:var(--space-4);
  padding:var(--space-8);
  border:var(--stroke-1) solid var(--border);
@@ -161,7 +161,7 @@
    narrow enough that their labels wrap. */
 .crash-ui .tabbed-controls .bet-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-16)}
 .crash-ui .tabbed-controls .wager{display:grid;gap:var(--space-8);align-content:start;padding:var(--space-8);border:var(--stroke-1) solid var(--border);border-radius:var(--radius-24);background:var(--surface-inset);min-width:0}
-.crash-ui .tabbed-controls .wager .stake{display:grid;grid-template-columns:minmax(var(--tap-min),1fr) var(--control-h) minmax(0,2fr) var(--control-h) minmax(var(--tap-min),1fr);gap:var(--space-4);padding:0;border:0;background:none;align-items:center}
+.crash-ui .tabbed-controls .wager .stake{display:grid;grid-template-columns:fit-content(28%) var(--control-h) minmax(calc(var(--space-32) * 2),1fr) var(--control-h) fit-content(28%);gap:var(--space-4);padding:0;border:0;background:none;align-items:center}
 .crash-ui .tabbed-controls .wager .stake .button{min-height:var(--control-h);font-size:var(--type-16);padding:0}
 .crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{font-size:var(--type-32)}
 .crash-ui .tabbed-controls .wager-amount{display:grid;justify-items:center;line-height:var(--leading-tight);min-width:0}
@@ -786,7 +786,7 @@
  .crash-ui .tabbed-controls .bet-grid>.wager{grid-column:1;grid-row:3}
  .crash-ui .tabbed-controls .bet-grid>.actions{grid-column:2;grid-row:2/4;grid-template-columns:repeat(2,minmax(0,1fr))}
  .crash-ui .tabbed-controls .difficulty-row .button{font-size:var(--type-16)}
- .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--tap-min),1fr) var(--tap-min) minmax(0,2fr) var(--tap-min) minmax(var(--tap-min),1fr)}
+ .crash-ui .tabbed-controls .wager .stake{grid-template-columns:fit-content(28%) var(--tap-min) minmax(calc(var(--space-32) * 2),1fr) var(--tap-min) fit-content(28%)}
  .crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{width:var(--tap-min)}
  .crash-ui .tabbed-controls .wager-amount .money{font-size:var(--type-24)}
  .crash-ui .tabbed-controls .actions .action{min-height:var(--web-control-height)}
@@ -797,7 +797,7 @@
 }
 
 @media(min-width:__CRASH_MEDIUM_BREAKPOINT__px){
- .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--tap-min),1fr) var(--tap-min) minmax(var(--web-control-amount-width),2fr) var(--tap-min) minmax(var(--tap-min),1fr)}
+ .crash-ui .tabbed-controls .wager .stake{grid-template-columns:fit-content(28%) var(--tap-min) minmax(var(--web-control-amount-width),1fr) var(--tap-min) fit-content(28%)}
  .crash-ui .tabbed-controls .actions{container-type:inline-size}
 }
 @container(max-width:__WEB_COMPACT_ACTION_BREAKPOINT__px){
@@ -1305,7 +1305,7 @@
 @media(min-width:__CRASH_LAPTOP_BREAKPOINT__px){
  .crash-ui .tabbed-controls{--desk-row:var(--web-desktop-control-height);--side-square:calc(2 * var(--desk-row))}
  .crash-ui .tabbed-controls .difficulty-row .button{height:var(--desk-row);min-height:var(--desk-row)}
- .crash-ui .tabbed-controls .wager .stake{grid-template-columns:minmax(var(--desk-row),1fr) var(--desk-row) minmax(var(--web-control-amount-width),2fr) var(--desk-row) minmax(var(--desk-row),1fr)}
+ .crash-ui .tabbed-controls .wager .stake{grid-template-columns:fit-content(28%) var(--desk-row) minmax(var(--web-control-amount-width),1fr) var(--desk-row) fit-content(28%)}
  .crash-ui .tabbed-controls .wager .stake .button{height:var(--desk-row);min-height:var(--desk-row)}
  .crash-ui .tabbed-controls .wager .stake [data-action=minus],.crash-ui .tabbed-controls .wager .stake [data-action=plus]{width:var(--desk-row)}
  .crash-ui .tabbed-controls .bet-grid>.actions{height:auto;align-self:stretch}
@@ -1332,3 +1332,21 @@
  .crash-ui .tabbed-controls.has-auto-cashout .tabbed-main .bet-grid>.wager{align-self:stretch;align-content:center}
  .crash-ui .tabbed-controls.has-auto-cashout .bet-grid>.actions{align-self:stretch}
 }
+/* A rules document's pictures and the game's blocks (a pay table and the like) sit in its flow. */
+.rules-content .rules-figure{margin:var(--space-16) 0}
+.rules-content .rules-figure img{display:block;max-width:100%;height:auto;margin:0 auto;border-radius:var(--radius-16)}
+.rules-content .rules-block{margin:var(--space-16) 0}
+/* The rules text pins its weight through font-variation-settings, which bold and headings would inherit. */
+.rules-content :is(strong,h2,h3,h4){--rules-font-weight:700;font-weight:var(--rules-font-weight);font-variation-settings:"wght" var(--rules-font-weight)}
+/* The rules document's small print, links and ✓ / ✕ lists. */
+.rules-content .rules-small{font-size:var(--type-12);color:var(--text-muted)}
+.rules-content a{color:var(--action-go);text-decoration:underline}
+.rules-content .rules-check{list-style:none;padding-left:0}
+.rules-content .rules-check li{display:flex;gap:var(--space-8);align-items:baseline}
+.rules-content .rules-mark{flex:none;font-weight:700}
+.rules-content .rules-check .is-yes .rules-mark{color:var(--success)}
+.rules-content .rules-check .is-no .rules-mark{color:var(--danger)}
+/* MIN and MAX take the width their words need, up to about a quarter of the row each (a longer
+   translation is cut with an ellipsis there); the amount between the steps gives up the room
+   down to what a few digits and the coin need. */
+.crash-ui .stake [data-action=min],.crash-ui .stake [data-action=max]{min-width:var(--tap-min);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-inline:var(--space-8)!important}

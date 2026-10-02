@@ -19,7 +19,7 @@ const css=`
 .palette .empty{padding:14px;color:var(--inspector-muted,#98a5b5)}`;
 document.head.append(Object.assign(document.createElement('style'),{textContent:css}));
 const sources=[];
-const TABS=[['look','Brands'],['library','Assets'],['layout','Game'],['sound','Sounds'],['translates','Texts']];
+const TABS=[['look','Brands'],['library','Library'],['layout','Game'],['translates','Texts'],['sound','Sounds']];
 const LANGS=[['en','English'],['fr','Français'],['ht','Kreyòl']];
 sources.push(()=>{
  const T=window.ComposerTarget,out=[];

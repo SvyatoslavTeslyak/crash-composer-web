@@ -225,7 +225,7 @@ class TabbedControls {
     '<div class="actions">'+button('cash','<span class="action-title">CASH OUT</span><span class="money" data-slot="tbCash"></span>','action cash')+button('go','<span class="money" data-slot="tbGoAmount"></span><span class="action-title" data-slot="tbGoTitle"></span><span class="go-dial" aria-hidden="true">'+GO_ARROW_SVG+'</span>','action go')+'</div>'+
    '</div></div>'+
    '<div class="tabs">'+button('topbets',icon(trophy),'tab')+button('mybets',icon(receipt),'tab')+button('rulesTab',icon(doc),'tab')+'</div>';
-  for(const [a,label] of [['topbets','Top bets'],['mybets','My bets'],['rulesTab','Rules']])this.element.querySelector('[data-action='+a+']').setAttribute('aria-label',label);
+  for(const [a,label] of [['topbets','Top bets'],['mybets','My bets'],['rulesTab','How to play']])this.element.querySelector('[data-action='+a+']').setAttribute('aria-label',label);
   this.slots=Object.fromEntries([...this.element.querySelectorAll('[data-slot]')].map(n=>[n.dataset.slot,n]));
   this.tabs=this.q('.tabs');this.tabs.setAttribute('role','navigation');this.tabs.setAttribute('aria-label','Bet panels');
   this.lastDifficulties='';
@@ -475,10 +475,14 @@ class GameUI {
   if(toastWin)this.showWinToast(s);
   if(this.state.game&&this.state.game!==s.game)this.finishWinToast();
   this.state=s;currency=typeof s.currency==='string'?s.currency:'';avatarUrls=s.avatars&&typeof s.avatars==='object'?s.avatars:{};this.host.hidden=false;this.host.classList.toggle('reduced',!!s.settings?.reduced_motion);
-  this.text('level',s.rank!==undefined&&s.rank!==null?'#'+String(s.rank):this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');this.text('balance',this.heldWinBalance!==undefined?this.heldWinBalance:s.balanceKnown===false?'—':(window.CrashI18n?.number?window.CrashI18n.number(Number(s.balance||0),{useGrouping:true,minimumFractionDigits:0,maximumFractionDigits:0}):new Intl.NumberFormat('en-US',{useGrouping:true,maximumFractionDigits:0}).format(Number(s.balance||0))));this.text('bet',coinAmount(s.bet));fitStake(this.slots.bet,this.slots.bet.textContent);
+  this.text('level',s.rank!==undefined&&s.rank!==null?'#'+String(s.rank):this.tabbed?'#'+String(s.level||'LVL 1').replace(/^LVL\s*/i,''):s.level||'LVL 1');
+   // The player's button says what it shows: in the tabbed shell the name is not drawn, only the
+   // picture and the rank, so a screen reader hears "Rank #1" rather than "You". The picture is
+   // decoration beside it.
+   {const identity=this.q('.identity'),label=this.tabbed?'Rank '+this.slots.level.textContent:'';if(identity.getAttribute('aria-label')!==(label||null)){if(label)identity.setAttribute('aria-label',label);else identity.removeAttribute('aria-label')}}this.text('balance',this.heldWinBalance!==undefined?this.heldWinBalance:s.balanceKnown===false?'—':(window.CrashI18n?.number?window.CrashI18n.number(Number(s.balance||0),{useGrouping:true,minimumFractionDigits:0,maximumFractionDigits:0}):new Intl.NumberFormat('en-US',{useGrouping:true,maximumFractionDigits:0}).format(Number(s.balance||0))));this.text('bet',coinAmount(s.bet));fitStake(this.slots.bet,this.slots.bet.textContent);
 
   this.text('personal',money(s.personal));this.text('top',money(s.record?.payout));this.text('owner',s.record?.name||'');this.q('.record-top').title=[s.record?.name,s.record?.date].filter(Boolean).join(' · ');
-  const signature=JSON.stringify([s.players,s.record?.name,s.avatars]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players)}
+  const signature=JSON.stringify([s.players,s.record?.name,s.avatars]);if(signature!==this.avatarSignature){this.avatarSignature=signature;this.slots.avatar.innerHTML=avatar('You',s.players);this.slots.avatar.firstElementChild?.setAttribute('aria-hidden','true')}
   this.text('difficulty',s.difficulties?.[s.difficulty]||'Normal');moneySlot(this.slots.cash,s.cash);this.text('goTitle',s.goTitle||'PLAY');coinSlot(this.slots.goSubtitle,(s.game==='road'&&!s.showCash)?s.bet:(s.goSubtitle||s.bet));this.text('online',(s.online||6)+' ONLINE');
   this.q('[data-action=auto]').setAttribute('aria-pressed',String(!!s.auto));
   for(const a of ['auto','difficulty','min','minus','plus','max'])this.q('[data-action='+a+']').disabled=!s.canBet;
@@ -709,7 +713,7 @@ class GameUI {
   // From the tabbed variant's side buttons these open as a sheet from the right on a wide
   // screen (the CSS decides the breakpoint); the same modal from the menu stays a popup.
   layer.classList.toggle('is-sheet',!drawer&&!!this.tabbed&&(kind==='topbets'||kind==='mybets'||(kind==='rules'&&this.rulesFrom==='tab')));this.q('.modal').classList.toggle('win-modal',kind==='win');
-  this.q('.modal h2').textContent={notice:NOTICES[this.noticeKind]?.title||NOTICES.error.title,menu:'Menu',account:'Your account',wins:'Live Wins',difficulty:this.tabbed?'Difficulty':'Choose difficulty',stake:'Bet amount',options:this.optionSpec?.title||'',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top bets',mybets:'My bets'}[kind];
+  this.q('.modal h2').textContent={notice:NOTICES[this.noticeKind]?.title||NOTICES.error.title,menu:this.tabbed&&this.config.presentationPreset!=='menu-drawer-v1'?'Settings':'Menu',account:'Your account',wins:'Live Wins',difficulty:this.tabbed?'Difficulty':'Choose difficulty',stake:'Bet amount',options:this.optionSpec?.title||'',rules:'How to play',dev:'Visible panels',win:'NICE WIN!',topbets:'Top bets',mybets:'My bets'}[kind];
   this.q('[data-action=close]').hidden=kind==='win'&&!this.config.demo;
   const body=this.q('.modal-body');body.classList.toggle('rules-content',kind==='rules');
   // A game's own choice in the kit's option sheet (GameUI.openOptions): the level sheet's look,
@@ -745,7 +749,7 @@ class GameUI {
     for(const key of ['auto_steps','auto_cashout'])body.innerHTML+=this.limitRow(key,limits[key]);
     body.innerHTML+='<p class="modal-note"><span>First limit reached cashes out.</span> <span>'+(s.game==='road'?'Auto stops after each round.':'Auto starts the next round until switched off or balance is too low.')+'</span></p>';
    }
-   if(this.config.rulesHTML)body.innerHTML+=button('rules','How to play','flat-button');
+   if(this.config.rulesHTML||window.CrashI18n?.rulesDocument?.())body.innerHTML+=button('rules','How to play','flat-button');
    if(this.config.refill!==false&&this.state?.refill!==false)body.innerHTML+=button('refill','Refill to $1,000','flat-button');
    body.innerHTML+='<p class="modal-note centered">'+esc(this.config.menuNote||'Progress saved on this device')+'</p>';
   }

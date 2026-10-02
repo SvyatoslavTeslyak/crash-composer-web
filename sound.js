@@ -8,9 +8,10 @@ const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const controls=$('#sound-controls'),report=$('#sound-report');
 const KIT='kit',AUDIO_ACCEPT='.wav,.ogg,.mp3,audio/*';
-// A take is uploaded into the kit checkout, so the control belongs to the editor that has
-// one: the local preview. The hosted Composer has the catalogue but nowhere to put a file.
+// A take is added into the kit checkout by the local preview, or, while edits go to cloud drafts,
+// into the composer-audio bucket for whoever may edit this game's sounds (draft-editors.js).
 const LOCAL_EDITOR=/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
+const canAddTake=()=>window.ComposerDraftEditors?.enabled?!!window.ComposerAuth?.has('audio.edit',window.ComposerTarget?.value):LOCAL_EDITOR;
 let drafts={},dirty=new Set(),player=null,stamp=Date.now(),loaded=false,group='interface';
 
 // The target is the global Composer game; target.js owns the catalog and the web-dev rebuild.
@@ -64,8 +65,8 @@ function render(){
    +(game?item('scene','Scene sounds',own?own.events.length:null,!own):'')
   +'</nav></section>'
   +'<section class="panel-sec"><h3>Find</h3><input id="sound-search" type="search" placeholder="Event name or description" aria-label="Find a sound"></section>'
-  +'<section class="panel-sec"><small>The preview plays the draft sounds; the game ships its published ones. Changes save by themselves and go out from Changes.</small>'+(window.ComposerDraftEditors?.enabled?'<small>Pick from the sounds already there; new files cannot be uploaded to a shared draft.</small>':catalog().generation.available?'<small>Sound generation is available.</small>':'')+'</section>'
-  +'<div class="panel-bar"><button id="sound-refresh" type="button" title="Read the saved sounds again">Refresh</button><button id="sound-reset" type="button" title="Put every event of this manifest back to the sounds it shipped with">Reset to default</button><small id="sound-message" role="status"></small></div>';
+  +(!window.ComposerDraftEditors?.enabled&&catalog().generation.available?'<section class="panel-sec"><small>Sound generation is available.</small></section>':'')
+  +'<div class="panel-bar"><button id="sound-refresh" type="button" title="Read the shared draft again, with what colleagues saved">Reload</button><button id="sound-reset" type="button" title="Put every event of this manifest back to the published sounds">Use published</button><small id="sound-message" role="status"></small></div>';
  if(!kit&&!own){report.innerHTML='<div class="sound-empty"><h2>'+esc(window.ComposerTarget.entry().title)+'</h2><p>No manifest to show yet. Start Composer with tools/preview.py so the shared kit is copied in.</p></div>';return}
  const title=game?window.ComposerTarget.entry().title:(kit?.title||'Shared UI sounds');
  report.innerHTML='<header class="sound-head"><div><h2>'+esc(title)+'</h2></div>'
@@ -115,11 +116,11 @@ function card(event,index,sid){
   +(silent?'<p class="sound-warn">No sound chosen: this event is silent.</p>':'')
   +'<label class="sound-slider"><span>Volume</span><input type="range" data-volume min="-40" max="6" step="0.5" value="'+volume+'"><output>'+volume.toFixed(1)+' dB</output></label>'
   +'<ol class="sound-takes">'+rows.map(row=>takeRow(event,row,sid,chosen)).join('')+'</ol>'
-  +(LOCAL_EDITOR?'<div class="sound-card-actions"><label class="sound-replace">Add a sound<input type="file" data-take-add accept="'+AUDIO_ACCEPT+'"></label></div>':'')
+  +(canAddTake()?'<div class="sound-card-actions"><label class="sound-replace">Add a sound<input type="file" data-take-add accept="'+AUDIO_ACCEPT+'"></label></div>':'')
   +'<details class="sound-prompt"><summary>Details</summary>'
    +'<p class="sound-meta">Event <code>'+esc(event.id)+'</code>'+(base?' · falls back to '+esc(base.label||base.id):'')+'</p>'
    +'<label class="sound-slider"><span>Pitch spread</span><input type="range" data-jitter min="0" max="0.2" step="0.01" value="'+(event.pitch_jitter||0)+'"><output>±'+Math.round((event.pitch_jitter||0)*100)+'%</output></label>'
-   +('prompt' in event?'<textarea data-prompt rows="4" maxlength="1000">'+esc(event.prompt)+'</textarea><div class="sound-prompt-actions"><button data-copy>Copy prompt</button>'+(event.flow_url?'<a href="'+esc(event.flow_url)+'" target="_blank" rel="noopener">Open flow ↗</a>':'')+'</div>':'')
+   +('prompt' in event?'<textarea data-prompt rows="4" maxlength="1000">'+esc(event.prompt)+'</textarea><div class="sound-prompt-actions"><button data-copy>Copy prompt</button>'+(event.flow_url?'<a href="'+esc(event.flow_url)+'" target="_blank" rel="noopener">Open flow '+icon('external')+'</a>':'')+'</div>':'')
   +'</details>'
   +'</article>';
 }
@@ -132,12 +133,12 @@ function takeRow(event,{take,pick,from},sid,chosen){
  return '<li class="'+(missing?'sound-missing':'')+(borrowed?' sound-borrowed':'')+'">'
   +'<label class="sound-toggle"><input type="radio" name="take-'+esc(event.id)+'" data-take-choice="'+pick+'"'+((borrowed?chosen<0:chosen===pick)?' checked':'')+(missing?' disabled':'')+'><span class="sound-file">'+name+'</span></label>'
   +'<span class="sound-meta"'+(missing?'':' data-duration="'+esc(take.file)+'"')+'>'+(missing?'missing file':'…')+'</span>'
-  +'<button data-take-play="'+pick+'" data-play-label="Play '+(borrowed?'the shared sound':'sound '+(pick+1))+'" aria-label="Play '+(borrowed?'the shared sound':'sound '+(pick+1))+'"'+(missing?' disabled':'')+'>▶</button>'
+  +'<button data-take-play="'+pick+'" data-play-label="Play '+(borrowed?'the shared sound':'sound '+(pick+1))+'" aria-label="Play '+(borrowed?'the shared sound':'sound '+(pick+1))+'"'+(missing?' disabled':'')+'>'+icon('play')+'</button>'
   +'</li>';
 }
 
 const engineId=()=>window.ComposerTarget.engine;
-const audioUrl=(file,sid)=>window.ComposerHosting?.audioUrl(sid,file)||'studio/audio?source='+encodeURIComponent(sid)+'&engine='+encodeURIComponent(engineId())+'&file='+encodeURIComponent(file)+'&v='+stamp;
+const audioUrl=(file,sid)=>String(file).startsWith('media:')?window.ComposerDraftEditors.mediaUrl(String(file).slice(6)):window.ComposerHosting?.audioUrl(sid,file)||'studio/audio?source='+encodeURIComponent(sid)+'&engine='+encodeURIComponent(engineId())+'&file='+encodeURIComponent(file)+'&v='+stamp;
 // Durations load a few at a time with one retry; bursts of metadata requests fail intermittently.
 let probes=[],probing=0;
 function measure(node){probes.push({node,retry:1,sid:node.closest('[data-source]').dataset.source});pump()}
@@ -148,19 +149,19 @@ function pump(){
   probe.preload='metadata';
   probe.onloadedmetadata=()=>{job.node.textContent=probe.duration.toFixed(2)+' s';done()};
   probe.onerror=()=>{if(job.retry-->0)probes.push(job);else job.node.textContent='unreadable';done()};
-  probe.src=audioUrl(job.node.dataset.duration,job.sid)+'&probe='+job.retry;
+  const probeUrl=audioUrl(job.node.dataset.duration,job.sid);probe.src=probeUrl+(probeUrl.includes('?')?'&':'?')+'probe='+job.retry;
  }
 }
 
 let playingButton=null,auditionContext=null;
 function stop(){
  if(auditionContext){void auditionContext.close();auditionContext=null}
- if(playingButton){playingButton.textContent='▶';playingButton.setAttribute('aria-pressed','false');playingButton.setAttribute('aria-label',playingButton.dataset.playLabel||'Play');playingButton.setAttribute('aria-pressed','false');playingButton=null}
+ if(playingButton){playingButton.innerHTML=icon('play');playingButton.setAttribute('aria-pressed','false');playingButton.setAttribute('aria-label',playingButton.dataset.playLabel||'Play');playingButton.setAttribute('aria-pressed','false');playingButton=null}
  if(player){player.onended=null;player.pause();player=null}
 }
 function play(event,take,sid,button,trigger=event){
  stop();
- if(button){playingButton=button;button.textContent='■';button.setAttribute('aria-label','Stop');button.setAttribute('aria-pressed','true')}
+ if(button){playingButton=button;button.innerHTML=icon('stop');button.setAttribute('aria-label','Stop');button.setAttribute('aria-pressed','true')}
  player=new Audio(audioUrl(event.takes[take].file,sid));
  const db=level(trigger,sid);player.volume=gain(db);
  if(sid!==KIT&&event.group!=='interface'&&db>0){auditionContext=new AudioContext();const source=auditionContext.createMediaElementSource(player),boost=auditionContext.createGain();boost.gain.value=Math.pow(10,db/20);source.connect(boost).connect(auditionContext.destination);void auditionContext.resume()}
@@ -182,14 +183,14 @@ async function save(){if(saving)return saving;saving=savePending();try{return aw
 async function savePending(){
  const pending=[...dirty];if(!pending.length)return;
  for(const sid of pending){
-  const payload={source:sid,engine:engineId(),events:events(sid).map(e=>({id:e.id,volume_db:e.volume_db===null||e.volume_db===undefined?null:Number(e.volume_db),pitch_jitter:Number(e.pitch_jitter||0),...('prompt' in e?{prompt:e.prompt}:{}),takes:e.takes.map(t=>({enabled:t.enabled!==false}))}))};
+  const payload={source:sid,engine:engineId(),events:events(sid).map(e=>({id:e.id,volume_db:e.volume_db===null||e.volume_db===undefined?null:Number(e.volume_db),pitch_jitter:Number(e.pitch_jitter||0),...('prompt' in e?{prompt:e.prompt}:{}),takes:e.takes.map(t=>t.media?{enabled:t.enabled!==false,media:t.media,name:t.name}:{enabled:t.enabled!==false})}))};
   const submitted=JSON.stringify(events(sid));
   await request('studio/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
   if(JSON.stringify(events(sid))===submitted)dirty.delete(sid);
  }
  flagDirty();
  if(dirty.size){await savePending();return}
- if(window.ComposerDraftEditors?.enabled){message('Saved to private draft. Use Send changes to send it to Admin.');return}
+ if(window.ComposerDraftEditors?.enabled){message('Saved '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' · in the shared draft. Send it from Changes.');return}
  message('Saved'+(isGame()&&pending.includes(targetId())?'. Rebuild web-dev to hear it in the game.':'.'));
 }
 
@@ -197,12 +198,13 @@ async function savePending(){
 
 // Everything in the shown manifest goes back to the sounds it shipped with.
 async function restore(){
- clearTimeout(saveTimer);saveTimer=null;dirty.clear();flagDirty();
  const sid=group==='scene'?targetId():KIT,what=sid===KIT?'the interface events':'the scene sounds of '+window.ComposerTarget.entry().title;
- if(!confirm('Reset '+what+' to default? Every choice, level and pitch in this manifest goes back to what it shipped with.'))return;
+ if(!confirm('Put '+what+' back to the published sounds? Every choice, level and pitch in this manifest goes back to what the game ships with.'))return;
+ // Only now: a pending autosave must still happen if the reset was called off.
+ clearTimeout(saveTimer);saveTimer=null;dirty.clear();flagDirty();
  await request('studio/restore?source='+encodeURIComponent(sid)+'&engine='+encodeURIComponent(engineId()),{method:'POST'});
  await load(true);
- message('Reset to default'+(sid===KIT?'.':'. Rebuild web-dev to hear it in the game.'));
+ message('Back to the published sounds'+(sid===KIT?'.':'. Rebuild web-dev to hear it in the game.'));
 }
 
 async function addTake(sid,eventIndex,file){
@@ -211,7 +213,7 @@ async function addTake(sid,eventIndex,file){
  message('Uploading '+file.name+'…');
  await request('studio/upload?source='+encodeURIComponent(sid)+'&engine='+encodeURIComponent(engineId())+'&event='+encodeURIComponent(event.id)+'&take='+event.takes.length,{method:'POST',headers:{'X-File-Name':encodeURIComponent(file.name),'Content-Type':'application/octet-stream'},body:file});
  await load(true);
- message('Added a sound for '+event.id+(sid!==KIT?'. Rebuild web-dev so Godot imports it.':'.'));
+ message(window.ComposerDraftEditors?.enabled?'Added '+file.name+' to '+(event.label||event.id)+' · in the draft; it reaches players once released from Changes.':'Added a sound for '+event.id+(sid!==KIT?'. Rebuild web-dev so Godot imports it.':'.'));
 }
 
 controls.addEventListener('click',event=>{

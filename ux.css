@@ -20,3 +20,7 @@
 .review-history{margin-top:20px;padding-top:16px;border-top:1px solid var(--inspector-border)}.review-history summary{cursor:pointer;color:var(--inspector-muted)}
 
 #cloud-configurations #save-context{font-size:var(--inspector-type-xs);font-weight:400}
+/* Saving, saved and unsaved are announced to screen readers but not drawn in the Changes button,
+   so the header keeps its width; the rail's dot marks a tab with unsaved edits. A failed save
+   stays on screen. */
+#cloud-configurations #save-context:not([data-state=error]){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}

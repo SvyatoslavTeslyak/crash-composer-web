@@ -1,6 +1,6 @@
 #language{background-color:var(--inspector-surface,#202934);color:var(--inspector-text,#e6edf5);border:1px solid var(--inspector-border,#35414f);border-radius:12px;padding:10px 32px 10px 12px;min-height:44px;width:76px;flex-shrink:0}
 #translates-report{width:100%;max-width:1120px;margin:0 auto;padding:32px;color:var(--inspector-text,#e6edf5)}
-.translations-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:32px}.translation-eyebrow{font-size:12px;letter-spacing:.12em;color:var(--inspector-muted,#9baabd)}.translations-heading h2{font-size:24px;margin:8px 0 10px}.translations-heading p{font-size:14px;margin:0;line-height:1.5;color:var(--inspector-muted,#9baabd)}.translation-total{white-space:nowrap;border:1px solid var(--inspector-border,#35414f);border-radius:20px;padding:7px 12px;font-size:12px;margin-top:24px}
+.translations-heading{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:16px}.tx-title{display:flex;align-items:baseline;gap:12px}.tx-title h2{margin:0}.tx-title .translation-total{margin:0;border:0;padding:0;color:var(--inspector-muted);font-size:13px}.translation-eyebrow{font-size:12px;letter-spacing:.12em;color:var(--inspector-muted,#9baabd)}.translations-heading h2{font-size:24px;margin:8px 0 10px}.translations-heading p{font-size:14px;margin:0;line-height:1.5;color:var(--inspector-muted,#9baabd)}.translation-total{white-space:nowrap;border:1px solid var(--inspector-border,#35414f);border-radius:20px;padding:7px 12px;font-size:12px;margin-top:24px}
 #translates-controls select,#translates-controls input[type=search]{width:100%;margin-top:8px;padding:10px;min-height:40px;background:var(--inspector-surface,#202934);border:1px solid var(--inspector-border,#35414f);border-radius:8px;color:inherit}#translates-controls .toolbar>label{display:block;width:100%}#translate-save:not(:disabled){background:#173447;border-color:#6cccff;color:#d8f2ff}
 .translation-group{margin-bottom:32px}.translation-group-heading{display:flex;align-items:center;gap:10px;margin-bottom:12px}.translation-group-heading h3{font-size:16px;margin:0}.translation-group-heading>span{font-size:12px;color:var(--inspector-muted,#9baabd);background:var(--inspector-surface,#202934);border-radius:12px;padding:3px 8px}.translation-group-rows{display:grid;gap:12px}
 .translation-row{padding:20px;background:var(--inspector-surface,#202934);border:1px solid var(--inspector-border,#35414f);border-radius:16px}.translation-row:focus-within{border-color:#6cccff}.translation-row>header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.translation-row>header>strong{font-size:14px;line-height:1.5;font-weight:500;overflow-wrap:anywhere}.translation-scope{flex:none;font-size:12px;line-height:1.4;color:var(--inspector-muted,#9baabd);padding:4px 8px;background:rgba(0,0,0,.15);border-radius:6px}.translation-scope.custom{color:#a8dfff;background:#173447}
@@ -9,14 +9,17 @@
 @media(max-width:900px){#translates-report{padding:20px}.translation-fields{grid-template-columns:minmax(0,1fr)}.translations-heading{gap:12px}.translations-heading h2{font-size:24px}.translation-row{padding:16px}.translation-row>header{flex-wrap:wrap}}
 .translation-row-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}.translation-row-actions button{padding:7px 14px;border:1px solid #465565;border-radius:8px;background:transparent;color:#e6edf5;font:inherit;font-size:12px;cursor:pointer}.translation-row-actions button:hover{background:#304252}.translation-row-actions button:focus-visible{outline:2px solid #6cccff;outline-offset:2px}.translation-row-actions button:disabled{opacity:.5;cursor:wait}.translation-row-actions .translation-save{background:#173447;border-color:#6cccff;color:#d8f2ff}.translation-values>div>span{font-size:12px;color:#9baabd}.translation-values p{font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;margin:6px 0 0}.translation-row.is-editing{border-color:#6cccff}.translation-row .translation-override{margin:0;min-height:var(--inspector-control);line-height:1.4}.translation-error{color:#ffb4b4;font-size:12px;line-height:1.5;margin-bottom:0}
 #room.translations-workspace{display:grid;grid-template-columns:minmax(380px,1fr) minmax(280px,390px);grid-template-rows:auto minmax(0,1fr);gap:0 20px;padding:20px;overflow-x:auto}
-.translations-workspace #translates-report{grid-column:1;grid-row:1/3;padding:12px 16px 32px 0;container-type:inline-size}
+.translations-workspace #translates-report{grid-column:1;grid-row:1/3;padding:0 16px 32px 0;container-type:inline-size}
 .translations-workspace #fit{grid-column:2;grid-row:2;min-height:0;overflow:hidden}
-#translation-live-tools{grid-column:2;grid-row:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:12px 0 24px;font-size:12px}
-#translation-live-tools select{max-width:170px}#translation-preview-note{flex-basis:100%;font-size:12px;line-height:1.5;color:var(--inspector-muted)}
+/* The label sits right beside its select, so it reads as the select's name; the note goes under both. */
+#translation-live-tools{grid-column:2;grid-row:1;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:6px 10px;align-content:start;padding:12px 0 20px;font-size:12px}
+#translation-live-tools #translation-preview-note{grid-column:1/-1}
+#translation-live-tools label{font-weight:600;color:var(--inspector-text)}
+#translation-live-tools select{width:100%;max-width:none}#translation-live-tools #translation-preview-note{margin-top:2px}#translation-preview-note{flex-basis:100%;font-size:12px;line-height:1.5;color:var(--inspector-muted)}
 @container(max-width:650px){.translation-fields{grid-template-columns:minmax(0,1fr);gap:12px}.translations-heading{flex-wrap:wrap}.translation-total{margin-top:0}.translation-row{padding:16px}}
 .translation-import{border:1px solid #6cccff;border-radius:12px;background:#173447;padding:16px;margin-bottom:24px;font-size:12px}.translation-import h3{margin:0 0 10px}.translation-import p{line-height:1.5}.translation-import-list{max-height:260px;overflow:auto;margin:12px 0}.translation-import-list article{border-top:1px solid #465565;padding:12px 0}.translation-import-list del,.translation-import-list ins{display:block;white-space:pre-wrap;overflow-wrap:anywhere;padding:4px;text-decoration:none}.translation-import-list del{color:#ffb4b4}.translation-import-list ins{color:#acf0c0}
 
-#translation-sections{display:flex;flex-wrap:wrap;gap:var(--space-6);width:100%}
+#translation-sections{display:block;width:100%}
 #translates-controls .translation-section-link{display:inline-flex;align-items:center;gap:var(--space-6);width:auto;min-height:var(--inspector-control);padding:6px var(--space-12);background:var(--inspector-surface);border:var(--stroke-1) solid var(--inspector-border);border-radius:var(--inspector-radius-card);text-align:left;color:var(--inspector-text);font-size:var(--inspector-type-sm);line-height:1.4;white-space:normal}
 #translates-controls .translation-section-link:hover{background:var(--inspector-surface-hover)}
 #translates-controls .translation-section-link[aria-pressed=true]{background:var(--inspector-surface-selected);border-color:var(--inspector-accent);color:var(--inspector-ink-selected)}
@@ -24,7 +27,7 @@
 
 .translation-usage{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;color:var(--inspector-muted);font-size:12px}.translation-usage span{background:rgba(0,0,0,.16);border-radius:5px;padding:4px 7px}.translation-usage-note{font-size:12px;line-height:1.5;color:var(--inspector-muted);margin:10px 0 0}
 
-#translation-areas,#translation-types{display:flex;flex-wrap:wrap;gap:var(--space-6);width:100%}#translates-controls .translation-section-link:disabled{opacity:.4;cursor:not-allowed}
+#translation-areas{display:flex;flex-wrap:wrap;gap:var(--space-6);width:100%}#translates-controls .translation-section-link:disabled{opacity:.4;cursor:not-allowed}
 
 .translation-row{cursor:pointer}.translation-row:hover{border-color:#617386}.translation-row.is-selected{border-color:var(--inspector-accent,#6cccff);box-shadow:inset 3px 0 0 var(--inspector-accent,#6cccff)}.translation-row:focus-visible{outline:2px solid var(--inspector-accent,#6cccff);outline-offset:2px}.translation-row textarea{cursor:text}
 
@@ -52,13 +55,13 @@
 
 /* Texts: the panel moves around, the table edits every language side by side. */
 #translates-controls{display:flex;flex-direction:column;flex:1 0 auto}
-.tx-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-8);margin:0 0 var(--space-16)}
+.tx-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-8);margin:0 0 var(--space-12)}
 .tx-toolbar input[type=search]{height:34px;min-width:200px;flex:1;max-width:320px;border:1px solid var(--inspector-border);border-radius:var(--inspector-radius-card);background:var(--inspector-well);padding:0 12px}
 .tx-toolbar button{height:34px;min-height:0;padding:0 12px}
 .tx-toolbar .tx-toggle[aria-pressed=true]{background:var(--inspector-surface-selected);border-color:var(--inspector-accent);color:var(--inspector-ink-selected)}
 .tx-grow{flex:1}
 .tx-progress{display:inline-flex;gap:var(--space-8)}
-.tx-progress>span{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 10px;border:1px solid var(--inspector-border);border-radius:var(--inspector-radius-card);background:var(--inspector-card);font-size:12px;color:var(--inspector-muted)}
+.tx-progress>span{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0;font-size:12px;color:var(--inspector-muted)}
 .tx-progress em{font-style:normal;font-weight:600}.tx-progress b{color:var(--inspector-text);font-variant-numeric:tabular-nums}
 .tx-progress i{display:block;width:52px;height:5px;border-radius:3px;background:var(--inspector-surface);overflow:hidden}
 .tx-progress i::after{content:"";display:block;height:100%;width:var(--p);background:var(--inspector-accent)}
@@ -74,8 +77,6 @@
 .tx-text{padding:0 12px 9px;margin-top:-4px}.tx-text:empty{display:none}
 .tx-text b{display:block;font-weight:500;font-size:13px;color:var(--inspector-text);overflow-wrap:anywhere}
 .tx-text small{display:block;margin-top:2px;font-size:11px;color:var(--inspector-muted)}
-.tx-text .translation-format{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-.tx-text .translation-format button{min-height:24px;padding:0 8px;font-size:11px}
 .tx-scope{display:inline-flex;margin-top:6px;min-height:22px!important;padding:0 8px!important;border-radius:999px!important;font-size:11px!important;font-weight:600;color:#5fd6a6;background:color-mix(in srgb,#5fd6a6 12%,transparent)!important;border:1px solid color-mix(in srgb,#5fd6a6 45%,transparent)!important}
 .tx-cell{padding:0}
 .tx-cell textarea{display:block;width:100%;min-height:38px;max-height:none;margin:0;padding:9px 12px;border:0;border-radius:0;background:transparent;color:var(--inspector-text);font:inherit;font-size:13px;line-height:1.45;resize:none;field-sizing:content;overflow:hidden}
@@ -88,3 +89,127 @@
 .tx-cell.missing{background:repeating-linear-gradient(135deg,transparent 0 6px,color-mix(in srgb,var(--inspector-warning) 7%,transparent) 6px 12px)}
 .tx-cell.changed{box-shadow:inset 3px 0 0 var(--inspector-accent)}
 .tx-cell.is-lang textarea{color:var(--inspector-ink-selected)}
+/* Saving sits where the editing is: a bar above the table for status and "save all", and each changed row's own Save and Cancel. */
+.tx-savebar{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:var(--space-12);margin:0 0 var(--space-12);padding:var(--space-8) var(--space-12);border:1px solid var(--inspector-border);border-radius:var(--inspector-radius-card);background:var(--inspector-card)}
+.tx-savebar[hidden]{display:none}
+.tx-savebar small{font-size:12px;color:var(--inspector-muted)}
+.tx-savebar.dirty{border-color:color-mix(in srgb,var(--inspector-warning) 55%,transparent)}
+.tx-savebar.dirty small{color:var(--inspector-warning)}
+.tx-savebar .translation-row-actions button[hidden]{display:none}
+.tx-table tr.is-editing>*{border-bottom:0}
+.tx-table tr.tx-actions>td{padding:0 12px 10px;border-bottom:1px solid color-mix(in srgb,var(--inspector-border) 70%,transparent)}
+.tx-table tr.is-editing>*,.tx-table tr.tx-actions>td{background:color-mix(in srgb,var(--inspector-surface-selected) 45%,transparent)}
+.tx-row-save{display:flex;align-items:center;gap:12px;min-height:34px}
+.tx-row-save .tx-scope{margin-top:0}
+.tx-row-save small{font-size:11px;color:var(--inspector-muted)}
+.tx-row-save .translation-row-actions{margin-left:auto;gap:8px}
+.tx-row-save .translation-row-actions button{min-height:32px;padding:0 16px}
+/* The panel only navigates: interface or game scene first (when a game has both), then the screens, windows and notices. */
+.tx-areas{margin:0 0 var(--space-12)}.tx-areas[hidden]{display:none}
+.tx-areas button{flex:1}
+/* Search and Only missing narrow the table from above it; the text type is in the panel. */
+.tx-toolbar{flex-direction:column;align-items:stretch}
+.tx-toolbar>div{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-8)}
+.tx-toolbar input[type=search]{max-width:none}
+.tx-type-sec [hidden]{display:none}
+.tx-type-sec .tx-toggle{justify-self:start;min-height:30px;padding:0 12px;border:1px solid var(--inspector-border);border-radius:999px;background:var(--inspector-surface);color:var(--inspector-muted);font-size:12px}
+.tx-type-sec .tx-toggle[aria-pressed=true]{background:var(--inspector-surface-selected);border-color:var(--inspector-accent);color:var(--inspector-ink-selected)}
+/* The type is picked above a line; the places under it count that type, and one with none of it is quiet. */
+.tx-type-sec+#translation-sections{border-top:1px solid var(--inspector-border);padding-top:var(--space-12)}
+#translation-sections .panel-nav button.is-empty:not([aria-pressed=true]){color:var(--inspector-muted);opacity:.55}
+.tx-toolbar .tx-icon{width:34px;padding:0;font-size:16px}
+/* Translation progress sits with the text count in the heading. */
+.tx-summary{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-8);margin-top:var(--space-12)}
+.tx-summary .translation-total{margin:0}
+.tx-toolbar .tx-toggle{border-radius:999px;font-size:12px}
+/* A long document in the table: a short preview of each language that opens the editor. */
+.tx-doc{display:grid;gap:6px;width:100%;min-height:0;padding:9px 12px;border:0;border-radius:0;background:transparent;color:var(--inspector-text);font:inherit;font-size:13px;line-height:1.45;text-align:left;cursor:pointer}
+.tx-doc span{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
+.tx-doc em{font-style:normal;color:var(--inspector-warning)}
+.tx-doc small{font-size:11px;font-weight:600;color:var(--inspector-accent)}
+.tx-doc:hover{background:color-mix(in srgb,var(--inspector-surface) 55%,transparent)}
+/* The document editor: every language side by side, at full height. */
+.share-dialog.tx-doc-dialog{display:none;width:min(1280px,calc(100vw - 48px));height:calc(100dvh - 48px);max-height:none;overflow:hidden}
+.share-dialog.tx-doc-dialog[open]{display:flex;flex-direction:column;gap:12px}
+.tx-doc-dialog>header{position:static;margin:-24px -24px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.tx-doc-dialog h2{margin:0 0 4px;font-size:20px}
+.tx-doc-dialog header small{color:var(--inspector-muted);font-size:12px}
+.tx-doc-columns{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tx-doc-columns section{display:flex;flex-direction:column;gap:6px;min-height:0}
+.tx-doc-columns section>span{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--inspector-muted)}
+/* The visual editor: what the player will read, in the editor's own quiet type. */
+.rte{flex:1;min-height:0;overflow:auto;padding:14px 18px;border:1px solid var(--inspector-border);border-radius:var(--inspector-radius-card);background:var(--inspector-well);color:var(--inspector-text);font:14px/1.6 var(--inspector-sans,inherit);outline:0;cursor:text}
+.rte:focus{border-color:var(--inspector-accent)}
+.rte>*:first-child{margin-top:0}
+.rte p{margin:0 0 10px}
+.tx-doc-dialog .rte h2{margin:18px 0 8px;font-size:18px;line-height:1.3}
+.tx-doc-dialog .rte h3{margin:14px 0 6px;font-size:15px;line-height:1.3}
+.rte ul,.rte ol{margin:0 0 10px;padding-left:22px}
+.rte li{margin:2px 0}
+.rte figure{margin:12px 0}
+.rte figure img{display:block;max-width:100%;height:auto;border-radius:10px;cursor:pointer}
+.rte .rte-block{margin:12px 0;padding:12px 14px;border:1px dashed var(--inspector-accent);border-radius:10px;color:var(--inspector-accent);font-size:12px;font-weight:600;user-select:none}
+.rte-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px;padding:6px 8px;border:1px solid var(--inspector-border);border-radius:12px;background:var(--inspector-surface)}
+.rte-toolbar button{display:inline-grid;place-items:center;min-width:34px;height:34px;min-height:0;padding:0 8px;border:0;border-radius:8px;background:transparent;color:var(--inspector-text);font:inherit;font-size:15px;cursor:pointer}
+.rte-toolbar button svg{width:19px;height:19px}
+.rte-toolbar button:hover{background:var(--inspector-surface-hover)}
+.rte-toolbar button[aria-pressed=true]{background:var(--inspector-surface-selected);color:var(--inspector-accent)}
+.tx-doc-dialog .rte-toolbar select{flex:none;width:auto;height:34px;min-height:0;margin:0 2px;padding:0 30px 0 10px;border:0;border-radius:8px;background-color:var(--inspector-well);color:var(--inspector-text);font:inherit;font-size:13px;cursor:pointer}
+.rte-toolbar select[data-style]{min-width:132px}
+.rte-sep{width:1px;height:22px;margin:0 6px;background:var(--inspector-border)}
+.rte-colour{position:relative;display:inline-flex}
+.rte-colour [data-colour-open]{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding-top:2px}
+.rte-colour .rte-a{font-weight:600;line-height:1}
+.rte-colour [data-colour-open] i{display:block;width:16px;height:3px;border-radius:2px;background:linear-gradient(90deg,#ffba2c,#4ace68,#00d7ff,#ff9a9a)}
+.rte-swatches{position:absolute;top:calc(100% + 6px);left:0;z-index:5;display:grid;gap:2px;min-width:150px;padding:6px;border:1px solid var(--inspector-border-strong);border-radius:10px;background:var(--inspector-card);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.rte-swatches[hidden]{display:none}
+.rte-swatches button{display:flex;justify-content:flex-start;gap:10px;width:100%;font-size:13px}
+.rte-swatches button i{width:14px;height:14px;border-radius:4px;background:var(--swatch,transparent);border:1px solid rgba(255,255,255,.25)}
+.tx-doc-dialog .rte :is(h1,h2,h3){display:block;gap:0;letter-spacing:normal;font-weight:700}
+.tx-doc-dialog .rte h1{margin:20px 0 10px;font-size:22px;line-height:1.25}
+.rte .rte-small{font-size:12px;color:var(--inspector-muted)}
+.rte a{color:var(--inspector-accent);text-decoration:underline}
+.rte .rte-check{list-style:none;padding-left:4px}
+.rte .rte-check li{position:relative;padding-left:24px}
+.rte .rte-check li::before{position:absolute;left:0;top:0;width:18px;text-align:center;font-weight:700;cursor:pointer;content:"✓";color:#4ace68}
+.rte .rte-check li[data-check=no]::before{content:"✕";color:#ff9a9a}
+.tx-doc-dialog footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tx-doc-dialog footer small{font-size:12px;color:var(--inspector-muted)}
+.tx-doc-dialog footer button{min-height:36px;padding:0 18px}
+@media(max-width:900px){.tx-doc-columns{grid-template-columns:minmax(0,1fr);overflow:auto}.rte{min-height:40vh}}
+/* A row being edited reads as one: an accent edge, and the field itself carries the focus ring. */
+.tx-table tr.is-editing>td:first-child,.tx-table tr.tx-actions>td{box-shadow:inset 3px 0 0 var(--inspector-accent)}
+.tx-table tr.is-editing textarea:focus{outline:2px solid color-mix(in srgb,var(--inspector-accent) 70%,transparent);outline-offset:-2px;border-radius:6px}
+
+/* A sheet under the screen, a list's details under the list: one step in, with a guide line. */
+/* A sheet or a list's details follows its window in the list, at the same level: its name says
+   what it belongs to, and indents read as a staircase. */
+/* What kind each text is: the same icons as the Text type pills, top right of the English cell. */
+.tx-cell.has-kinds{position:relative}
+.tx-cell.has-kinds textarea,.tx-cell.has-kinds .tx-doc{padding-right:58px}
+.tx-kinds{position:absolute;top:11px;right:10px;z-index:1;display:flex;gap:5px;color:var(--inspector-muted)}
+.tx-kind-icon{width:15px;height:15px;flex:none}
+.tx-type-sec [data-text-type]{display:inline-flex;align-items:center;gap:5px}
+.tx-type-sec [data-text-type] .tx-kind-icon{width:13px;height:13px}
+/* Texts and Brands show the stage beside what is being edited; there is nothing to see full screen. */
+#room.translations-workspace #preview-fullscreen,body:has(#look-tab[aria-pressed=true]) #preview-fullscreen{display:none}
+/* How the table works, said where it is used; the note above the preview speaks only about the picked text. */
+.translations-heading{flex-wrap:wrap;row-gap:4px}
+.tx-hint{flex-basis:100%;margin:2px 0 0;font-size:12px;color:var(--inspector-muted)}
+/* Search and the file buttons stay in reach while the table scrolls: the report has no top
+   padding, so the bar sticks to the very top of the scrolling area, and the save bar under it. */
+.tx-toolbar{position:sticky;top:0;z-index:3;margin:-8px 0 4px;padding:8px 0;background:var(--inspector-bg)}
+.tx-savebar{top:54px}
+/* Picking and editing, as in a spreadsheet: a cell shows its text until it is entered. */
+.tx-table textarea:not(.is-typing),.tx-table .tx-doc{pointer-events:none}
+.tx-table tr.translation-row:focus{outline:0}
+.tx-table td.is-cell{box-shadow:inset 0 0 0 2px var(--inspector-accent)}
+.tx-table td.is-cell.changed{box-shadow:inset 0 0 0 2px var(--inspector-accent),inset 5px 0 0 var(--inspector-accent)}
+/* The preview column: the window picker above the device and the note about the picked text
+   right under it. The note keeps its height when empty, so the device never moves or resizes as
+   it comes and goes (translates.js puts it in #fit, after the device). */
+#translation-live-tools:not([hidden]){display:contents}
+#translation-live-tools .tx-preview-pick{grid-column:2;grid-row:1;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px;padding:0 0 12px;font-size:12px}
+.translations-workspace #fit{align-content:start}
+#fit>#translation-preview-note{display:none}
+.translations-workspace #fit>#translation-preview-note{display:block;width:100%;min-height:36px;margin:0;padding-top:10px;text-align:center}

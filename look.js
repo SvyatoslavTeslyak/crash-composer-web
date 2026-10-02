@@ -172,13 +172,13 @@ ${Object.keys(derive(catalog.brands.default.roles)).map(k=>`<label class="look-c
 <small>Each one follows the roles above until you set it here.</small></details>
 <div class="toolbar look-danger" id="look-danger"><button id="look-delete" type="button">Delete brand</button></div>
 <div class="toolbar" id="look-actions" aria-label="Actions"><button id="look-save" type="button">Save brand</button><button id="look-revert" type="button">Cancel</button><small id="look-message" role="status"></small></div>`;
- const editActions=$('#look-actions'),scroll=document.createElement('div');
+ const editActions=$('#look-actions'),scroll=document.createElement('div');scrollBox=scroll;
  scroll.className='look-scroll';editActions.remove();scroll.append(...panel.childNodes);panel.append(scroll,editActions);
  const pickerState=window.ComposerLookPicker;
  // The brand and season are picked in the top bar, for every tab; this panel shows and edits the pick.
  lookPicker=Workbench.lookPicker({container:$('#look-pick'),catalogTokens:Workbench.lookTokens(catalog),brand:pickerState?.brand||'default',theme:pickerState?.theme||'',onChange:pickLook});
  $('#look-edit-brand').onclick=()=>edit(false);$('#look-edit-theme').onclick=()=>editTheme(false);$('#look-add-theme').onclick=()=>editTheme(true);$('#look-add-brand').onclick=()=>edit(true);
- $('#look-title').oninput=()=>{if(!creating)return;const id=slug($('#look-title').value);$('#look-id-hint').textContent=id?(editingTheme?'Saved as brands/'+brandId+'/themes/'+id+'.json':'Saved as brands/'+id+'/'):'';dirty=true};
+ $('#look-title').oninput=()=>{$('#look-title').removeAttribute('aria-invalid');if($('#look-message').classList.contains('sound-error'))say('');if(!creating)return;const id=slug($('#look-title').value);$('#look-id-hint').textContent=id?'id · '+id:'';$('#look-id-hint').title=id?(editingTheme?'brands/'+brandId+'/themes/'+id+'.json':'brands/'+id+'/'):'';dirty=true};
  $('#look-seasons').replaceChildren(...Object.entries(SEASONS).map(([id,sn])=>{const b=document.createElement('button');b.type='button';b.className='wb-button season';b.innerHTML=`<i style="background:linear-gradient(135deg,${sn.primary} 50%,${sn.success} 50%)"></i>${esc(sn.title)}`;b.onclick=()=>{// A season replaces the one before it: start again from the brand, then apply it.
    Object.assign(roles,brandRoles(),fromSeason(id,brandRoles()));if(creating&&!$('#look-title').value){$('#look-title').value=sn.title;$('#look-title').dispatchEvent(new Event('input'))}staged=false;dirty=true;mode();paint();apply();toast(sn.title+' applied over '+catalog.brands[brandId].title+'. Adjust any role, then Save.')};return b}));
  const styleSel=$('#look-style');styleSel.replaceChildren(...Object.entries(STYLES).map(([id,st])=>Object.assign(new Option(st.title,id),{title:st.about})));try{styleSel.value=localStorage.getItem('crash-composer-palette-style')||'neutral'}catch{}
@@ -236,10 +236,13 @@ function paintBar(){
  const dot=c=>'<i class="swatch" style="background:'+esc(c)+'"></i>';
  current.innerHTML=dot(brand.roles.primary)+'<b>'+esc(brand.title)+'</b>';
  $('#look-current-theme').innerHTML=season?dot(season.roles?.primary||brand.roles.primary)+'<b>'+esc(season.title)+'</b>':'<b class="none">No season</b>';
- $('#look-edit-brand').hidden=!can;$('#look-add-brand').hidden=!can;$('#look-edit-theme').hidden=!can||!season;$('#look-add-theme').hidden=!can;
  const own=brand.own||{},mine=!!season&&(own.themes||[]).includes(themeId);
- $('#look-brand-note').textContent=layered()?'Every game shares this brand.'+(own.fonts?' '+gameTitle()+' is set in its own fonts (Game tab).':''):'';
- $('#look-brand-note').hidden=!layered();
+ // Brands and their shared seasons are changed only by those who may edit Brands · all games;
+ // anyone who may edit this game's design can still add and change a season of its own.
+ const shared=!catalog.scope||catalog.scope.canEditShared!==false;
+ $('#look-edit-brand').hidden=!can||!shared;$('#look-add-brand').hidden=!can||!shared;$('#look-edit-theme').hidden=!can||!season||(!shared&&!mine);$('#look-add-theme').hidden=!can;
+ $('#look-brand-note').textContent=layered()?'Every game shares this brand.'+(own.fonts?' '+gameTitle()+' is set in its own fonts (below).':''):'';
+ $('#look-brand-note').hidden=!$('#look-brand-note').textContent;
  $('#look-season-note').textContent=season?(layered()?(mine?'Only '+gameTitle()+' has this season.':'Every game has this season.')+' ':'')+'Laid over '+brand.title+'.':brand.title+' as designed, nothing laid over it.';
  const changed=season?catalog.colorRoles.filter(r=>season.roles?.[r.key]&&season.roles[r.key]!==brand.roles[r.key]):[];
  $('#look-theme-part').hidden=!changed.length;
@@ -250,18 +253,36 @@ if(bar.button){
  document.addEventListener('click',e=>{if(!bar.button.parentElement.contains(e.target))openBar(false)});
  document.addEventListener('keydown',e=>{if(e.key==='Escape')openBar(false)});
 }
-// --- the game's own fonts (Game tab) -----------------------------------------------------------
+// --- the game's own fonts (Brands, under the season) -----------------------------------------------------------
 // A brand's fonts are every game's; here the picked game is set in its own, for the picked brand.
 const gf={own:false,fonts:{},dirty:false,box:null};
+let scrollBox=null,stageBefore=null;
+function lookRoom(){
+ let room=$('#look-room');
+ if(!room){room=document.createElement('div');room.id='look-room';room.hidden=true;room.setAttribute('aria-label','Brand editor');const fit=$('#fit');fit.parentElement.insertBefore(room,fit)}
+ return room;
+}
+// Where the editor sits: in the room while editing on the Brands tab, back in the panel otherwise.
+function placeEditor(){
+ const room=lookRoom(),here=window.ComposerTarget?.workspace==='look';
+ if(editing){room.append(sheet,$('#look-actions'));if(!stageBefore){stageBefore={device:{...theStage.device},zoom:devices.zoom||'fit'};theStage.set({device:'mobile',zoom:'fit'})}}
+ else{if(scrollBox)scrollBox.append(sheet);panel.append($('#look-actions'));if(stageBefore){const id=stageBefore.device?.id;theStage.set({device:id==='custom'?stageBefore.device:id,zoom:stageBefore.zoom});stageBefore=null}}
+ room.hidden=!(editing&&here);$('#room').classList.toggle('look-workspace',editing&&here);
+}
+const cloudDrafts=()=>!!window.ComposerDraftEditors?.enabled&&window.ComposerTarget?.value!=='kit';
 function gameFontsBox(){
  if(gf.box?.isConnected)return gf.box;
- const box=document.createElement('div');box.className='toolbar';box.id='game-fonts';box.setAttribute('aria-label','Fonts');
- box.innerHTML=`<strong>Fonts</strong>
+ // In Brands, under the brand and its season: fonts are a brand's, and this is where one game
+ // is set in others. (It sat on the Game tab, far from the fonts it departs from.)
+ const box=document.createElement('section');box.className='wb-section';box.id='game-fonts';box.setAttribute('aria-label','Fonts in '+gameTitle());
+ box.innerHTML=`<h2>Fonts in <span data-gf-game></span></h2>
+<p id="game-fonts-summary"></p>
+<details id="game-fonts-more"><summary>Set different fonts for this game</summary>
 <div class="look-row" role="group" aria-label="Which fonts this game is set in"><button type="button" class="wb-button" data-gf-own="0"></button><button type="button" class="wb-button" data-gf-own="1"></button></div>
 ${['body','numbers'].map(role=>`<div class="face" data-gf-role="${role}"><b>${role==='body'?'Body':'Numbers'}</b><select data-gf-family="${role}" aria-label="${role} font"></select><select data-gf-weight="${role}" aria-label="${role} weight"></select></div>`).join('')}
 <small id="game-fonts-note"></small>
-<div class="game-fonts-actions" hidden><button type="button" class="wb-button primary" id="game-fonts-save">Save fonts</button><button type="button" class="wb-button" id="game-fonts-cancel">Cancel</button></div>`;
- $('#layout-controls').append(box);gf.box=box;
+<div class="game-fonts-actions" hidden><button type="button" class="wb-button primary" id="game-fonts-save">Save fonts</button><button type="button" class="wb-button" id="game-fonts-cancel">Cancel</button></div></details>`;
+ ($('#look-season-card')||$('#look-controls')).after?.(box);gf.box=box;
  box.querySelectorAll('[data-gf-own]').forEach(b=>b.onclick=()=>{const own=b.dataset.gfOwn==='1';if(own===gf.own)return;gf.own=own;if(!own)gf.fonts=strip(catalog.brands[brandId].sharedFonts||catalog.brands[brandId].fonts);gf.dirty=true;paintGameFonts(true)});
  const set=(role,change)=>{
   const now=gf.fonts[role],fam=catalog.families.find(f=>f.id===(change.family??familyOf(now.file)?.id))||familyOf(now.file)||catalog.families[0];
@@ -282,6 +303,7 @@ function paintGameFonts(preview){
  const box=gameFontsBox(),brand=catalog.brands[brandId],can=!!catalog.scope?.canEditGame;
  // Without the shared scope a brand is the game's own already, fonts and all: nothing to set apart.
  box.hidden=!layered()||window.ComposerTarget?.value==='kit';if(box.hidden)return;
+ box.querySelector('[data-gf-game]').textContent=gameTitle();
  box.querySelector('[data-gf-own="0"]').textContent=brand.title+'’s';box.querySelector('[data-gf-own="1"]').textContent=gameTitle()+'’s own';
  box.querySelectorAll('[data-gf-own]').forEach(b=>{b.setAttribute('aria-pressed',String((b.dataset.gfOwn==='1')===gf.own));b.disabled=!can});
  for(const role of ['body','numbers']){
@@ -291,6 +313,10 @@ function paintGameFonts(preview){
   w.replaceChildren(...fam.weights.map(x=>new Option(WEIGHT_TITLES[x]+' '+x,x)));w.value=String(face.weight);
   f.disabled=w.disabled=!gf.own||!can;
  }
+ // The one line read without opening anything: whose fonts, and which.
+ const faceName=role=>{const face=gf.fonts[role];if(!face)return '';const fam=familyOf(face.file)||catalog.families[0];return fam.title+' '+(WEIGHT_TITLES[face.weight]||face.weight)};
+ $('#game-fonts-summary').textContent=(gf.own?gameTitle()+'’s own':brand.title+'’s')+' · '+faceName('body')+' / '+faceName('numbers');
+ if(gf.own||gf.dirty)$('#game-fonts-more').open=true;
  const note=$('#game-fonts-note');note.classList.remove('sound-error');
  note.textContent=gf.own?'Only '+gameTitle()+' is set in these, in '+brand.title+'. The other games keep the brand’s fonts.':gameTitle()+' is set in the fonts of '+brand.title+', like every game. They are changed in Brands.';
  box.querySelector('.game-fonts-actions').hidden=!gf.dirty;
@@ -317,7 +343,7 @@ function editTheme(fresh){
  creating=fresh;editing=true;editingTheme=true;dirty=false;backTheme=themeId;
  const brand=catalog.brands[brandId];
  // A new season is for every game unless said otherwise; an existing one stays where it lives.
- themeScope=!fresh&&brand.own?.themes?.includes(themeId)?'game':'shared';
+ themeScope=!fresh&&brand.own?.themes?.includes(themeId)?'game':catalog.scope?.canEditShared===false?'game':'shared';
  if(fresh){themeId='';roles={...brand.roles,primary:catalog.brands.default.roles.primary};$('#look-title').value='';$('#look-id-hint').textContent='';staged=true}
  else{staged=false;$('#look-title').value=brand.themes[themeId].title;$('#look-id-hint').textContent='brands/'+brandId+'/themes/'+themeId+'.json'}
  mode();paint();apply();
@@ -336,20 +362,23 @@ function mode(){
  const brand=catalog.brands[brandId];
  sheet.hidden=!editing;
  $('#look-actions').hidden=!editing;
- panel.querySelectorAll('.look-view').forEach(n=>n.hidden=editing);$('#look-brand-card').classList.toggle('editing',editing);
+ placeEditor();
+ // The cards stay in the panel as a summary while the editor works in the room; they only stop offering edits.
+ panel.querySelectorAll('.look-view').forEach(n=>n.hidden=false);$('#look-brand-card').classList.toggle('editing',editing);
+ for(const id of ['look-edit-brand','look-add-brand','look-edit-theme','look-add-theme']){const b=$('#'+id);if(b)b.disabled=editing}
  paintBar();
  panel.querySelector('h2').textContent=editing?(editingTheme?'Season':'Brand'):'Brand';
- $('#sheet-title span').textContent=editingTheme?(creating?'New theme':brand.themes[themeId]?.title||''):(creating?'New brand':brand.title);
- $('#sheet-title small').textContent=editingTheme?'theme of '+brand.title:(creating?'from '+brand.title:'brand')+(layered()&&!editingTheme?' · all games':'');
+ $('#sheet-title span').textContent=editingTheme?(creating?'New season':brand.themes[themeId]?.title||''):(creating?'New brand':brand.title);
+ $('#sheet-title small').textContent=editingTheme?'season of '+brand.title:(creating?'from '+brand.title:'brand')+(!editingTheme?(layered()?' · all games':cloudDrafts()?' · '+gameTitle()+' only':''):'');
  // Where a season lives: every game, or this one. Chosen for a new season, fixed afterwards.
  const scopeBox=$('#look-scope');scopeBox.hidden=!editingTheme||!layered();
- scopeBox.querySelectorAll('[data-theme-scope]').forEach(n=>{if(n.dataset.themeScope==='game')n.textContent='Only '+gameTitle();n.setAttribute('aria-pressed',String(n.dataset.themeScope===themeScope));n.disabled=!creating});
+ scopeBox.querySelectorAll('[data-theme-scope]').forEach(n=>{if(n.dataset.themeScope==='game')n.textContent='Only '+gameTitle();n.setAttribute('aria-pressed',String(n.dataset.themeScope===themeScope));n.disabled=!creating||(n.dataset.themeScope!=='game'&&catalog.scope?.canEditShared===false)});
  $('#look-scope-hint').textContent=themeScope==='game'?'Only '+gameTitle()+' offers this season; the other games do not.':'Every game offers this season.';
  // A brand's faces are shared; a game may set its own.
  $('#look-fonts-own').hidden=true;
- const facesHint=$('#look-fonts-hint');facesHint.hidden=editingTheme||!layered();facesHint.textContent='Every game is set in these fonts'+(brand.own?.fonts?', except '+gameTitle()+', which has its own: see Fonts on the Game tab.':'. One game can have its own: see Fonts on the Game tab.');
+ const facesHint=$('#look-fonts-hint');facesHint.hidden=editingTheme||!layered();facesHint.textContent='Every game is set in these fonts'+(brand.own?.fonts?', except '+gameTitle()+', which has its own: see Fonts in '+gameTitle()+'.':'. One game can have its own, set below.');
  $('#look-faces').hidden=editingTheme;$('#look-advanced').hidden=editingTheme;
- $('#look-save').textContent=editingTheme?'Save theme':'Save brand';$('#look-delete').textContent=editingTheme?'Delete theme':'Delete brand';
+ $('#look-save').textContent=editingTheme?'Save season':'Save brand';$('#look-delete').textContent=editingTheme?'Delete season':'Delete brand';
  $('#look-delete').hidden=creating||(!editingTheme&&brandId==='default');$('#look-danger').hidden=$('#look-delete').hidden;
  $('#look-title').placeholder=editingTheme?'Christmas':'Numba Kenya';
  sheet.classList.toggle('theme-mode',editingTheme);
@@ -443,7 +472,7 @@ function say(text,error){if(error)window.ComposerUX?.status('error',text);const 
 function targetId(){if(editingTheme)return creating?slug($('#look-title').value):themeId;return creating?slug($('#look-title').value):brandId}
 async function save(){
  const id=targetId();
- if(!id)return say('Give the brand a title first',true);
+ if(!id){const t=$('#look-title');t.setAttribute('aria-invalid','true');t.focus();const m=$('#look-message');m.textContent=editingTheme?'Give the season a title first':'Give the brand a title first';m.classList.add('sound-error');return}
  window.ComposerUX?.status('saving');say('Saving…');
  let response;
  if(editingTheme){
@@ -454,7 +483,7 @@ async function save(){
   const post=(url,data)=>fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
   if(!layered()||creating)response=await post('brands/'+id,body);
   else{
-   // The brand is every game's, its fonts included; a game's own fonts are set on the Game tab.
+   // The brand is every game's, its fonts included; a game's own fonts are set under it in Brands.
    // Saved only when something changed, so an untouched brand gets no empty change.
    const before=catalog.brands[id];
    const changed=body.title!==before.title||!sameJSON(roles,before.roles)||!sameJSON(overrides,before.overrides||{})||!sameJSON(faces,strip(before.sharedFonts||before.fonts));
@@ -467,13 +496,16 @@ async function save(){
  dirty=false;
  const savedBrand=editingTheme?brandId:id,savedTheme=editingTheme?id:'';
  try{sessionStorage.setItem('crash-composer-look',savedBrand);sessionStorage.setItem('crash-composer-look-theme',savedTheme)}catch{}
- const p=new URLSearchParams(location.hash.slice(1));p.set('tab','look');p.set('brand',savedBrand);if(savedTheme)p.set('theme',savedTheme);else p.delete('theme');location.hash='#'+p;location.reload();
+ const p=new URLSearchParams(location.hash.slice(1));p.set('tab','look');p.set('brand',savedBrand);if(savedTheme)p.set('theme',savedTheme);else p.delete('theme');
+ // The page comes back without this module's memory; the toast is left for it to show.
+ try{sessionStorage.setItem('composer-toast','Saved to '+(layered()&&!(editingTheme&&themeScope==='game')?'the brands draft of every game':gameTitle()+'’s draft')+' · see Changes')}catch{}
+ location.hash='#'+p;location.reload();
 }
 async function remove(){
  if(creating)return;
  if(editingTheme){
   const own=layered()&&catalog.brands[brandId].own?.themes?.includes(themeId);
-  if(!confirm('Remove theme '+catalog.brands[brandId].themes[themeId].title+' from '+catalog.brands[brandId].title+(layered()?(own?' in '+gameTitle():' in every game'):'')+'?'))return;
+  if(!confirm('Remove season '+catalog.brands[brandId].themes[themeId].title+' from '+catalog.brands[brandId].title+(layered()?(own?' in '+gameTitle():' in every game'):'')+'?'))return;
   const r=await fetch('brands/'+brandId+'/themes/'+themeId+(own?'?scope=game':''),{method:'DELETE'});
   if(!r.ok)return say('Could not remove: HTTP '+r.status,true);
   try{sessionStorage.setItem('crash-composer-look',brandId);sessionStorage.setItem('crash-composer-look-theme','')}catch{}
@@ -517,8 +549,12 @@ window.addEventListener('composer-workspace',e=>{
  else if(catalog){Workbench.applyLook(frame,{brand:brandId,theme:themeId});apply()}
  else open().catch(()=>{})});
 frame.addEventListener('load',()=>{if(catalog&&(!editing||window.ComposerTarget?.workspace==='look'))setTimeout(apply,300)});
+// The editor in the room belongs to the Brands tab: another tab puts it away, coming back brings it out.
+window.addEventListener('composer-workspace',()=>{if(catalog&&sheet)placeEditor()});
 window.ComposerTarget.guard(()=>{if(gf.dirty){$('#game-fonts-note').textContent='Save or cancel the fonts before switching games.';$('#game-fonts-note').classList.add('sound-error');return false}if(dirty){say('Save or cancel your design edits before switching games.',true);return false}return true});
 window.addEventListener('composer-target',()=>{catalog=null;editing=false;clear();open().catch(e=>say(e.message,true))});
+// The Library gave a brand a family: the brands are read again so the cards and the stage show it.
+window.addEventListener('composer-brand-fonts',()=>{if(editing)return;catalog=null;open().catch(e=>say(e.message,true))});
 // Another tab (Library) can change a brand's faces; the pick is read again when it says so.
 window.addEventListener('composer-look-changed',()=>{if(editing)return;catalog=null;open().catch(e=>say(e.message,true))});
 open().catch(()=>{});

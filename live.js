@@ -22,8 +22,11 @@
   }
  }
  new MutationObserver(syncPresetTags).observe(presetSelect,{childList:true,attributes:true,subtree:true});
- const modalSelect=document.querySelector('#modal'),modalTags=document.querySelector('#modal-options');
+ // The Window control lives above the stage, with the Texts tab's; it is moved there once the page is up.
+ const modalSelect=document.querySelector('#modal'),modalTags=document.querySelector('#modal-options'),modalControls=document.querySelector('#modal-controls'),previewWindow=document.querySelector('#preview-window');
+ if(previewWindow&&modalControls){previewWindow.append(modalControls);modalControls.hidden=false}
  function syncModalTags(){
+  if(!modalTags)return;
   const options=Array.from(modalSelect.options);
   for(const button of modalTags.children)if(!options.some(o=>o.value===button.dataset.modal))button.remove();
   for(const option of options){
@@ -39,7 +42,7 @@
   const candy=game()==='candy_cascade';
   const road=TABBED_GAMES.includes(game())||candy;
   const modalSelect=document.querySelector('#modal'),selected=modalSelect.value;
-  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details'],...(candy?[['autoSpin','Auto Spin'],['candyPays','Candy payouts']]:[]),...(game()==='plinko'?[['plinkoRows','Rows'],['stake','Bet amount']]:[]),['notice:funds','Notice · not enough funds'],['notice:offline','Notice · no connection'],['notice:error','Notice · something went wrong'],['notice:wallet','Notice · top up balance'],...(['road','candy_cascade','plinko'].includes(game())?[]:[['difficulty','Difficulty sheet']])]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
+  const modalOptions=road?[['','No modal'],['menu','Settings'],['account','Account'],['rules','How to play'],['topbets','Top bets'],['mybets','My bets'],['topBetDetails','Top bet details'],['betDetails','My bet details'],...(candy?[['autoSpin','Auto Spin'],['candyPays','Candy payouts']]:[]),...(game()==='plinko'?[['plinkoRows','Rows'],['stake','Bet amount']]:[]),...(game()==='road'?[['stake','Bet amount']]:[]),['notice:funds','Notice · not enough funds'],['notice:offline','Notice · no connection'],['notice:error','Notice · something went wrong'],['notice:wallet','Notice · top up balance'],...(['road','candy_cascade','plinko'].includes(game())?[]:[['difficulty','Difficulty sheet']])]:[['','No modal'],['difficulty','Difficulty'],['menu','Settings / Auto'],['account','Account'],['wins','All wins'],['win','Win']];
   if(modalSelect.dataset.game!==game()){
    modalSelect.replaceChildren(...modalOptions.map(([value,label])=>new Option(label,value)));modalSelect.dataset.game=game();modalSelect.value=modalOptions.some(([value])=>value===selected)?selected:'';
   }
@@ -159,7 +162,7 @@ window.addEventListener('composer-target',follow);
   const doc=frame.contentDocument;
   const style=doc.createElement('link');style.rel='stylesheet';style.href=new URL('inspection.css',location.href).href;doc.head.append(style);
   clearInterval(timer);let attempts=0;
-  timer=setInterval(()=>{if(instance()?.state.game){clearInterval(timer);presetSelect.disabled=!instance().setPresentationPreset;if(!presetSelect.disabled)applyPresentation();const m=instance().state.mathPreview;status.textContent=instance().state.api?'Live · Runner API'+(instance().state.currency?' · '+instance().state.currency:''):game()==='market_stack'?'Market Stack · skill prototype · demo credits':game()==='catch'?'Catch Clash · separate duel / crash model · test credits':m?.error||(applied[game()]?(m?.version===2&&Object.keys(applied[game()]).every(k=>m.rules?.[k]===applied[game()][k])?'Math preview · applied · test wallet · '+(applied[game()].rtp*100).toFixed(1)+'% target':'Math not acknowledged — rebuild the game export'):'Live preview · '+(m?.sandbox?'isolated test wallet':'source rules'))}else if(++attempts>=600){clearInterval(timer);status.textContent='Game is taking longer to load. Check the web export.'}},100);
+  timer=setInterval(()=>{if(instance()?.state.game){clearInterval(timer);presetSelect.disabled=!instance().setPresentationPreset;if(!presetSelect.disabled)applyPresentation();const m=instance().state.mathPreview;status.textContent=instance().state.api?'Live · Runner API'+(instance().state.currency?' · '+instance().state.currency:''):game()==='market_stack'?'Market Stack · skill prototype · demo credits':game()==='catch'?'Catch Clash · separate duel / crash model · test credits':m?.error||(applied[game()]?(m?.version===2&&Object.keys(applied[game()]).every(k=>m.rules?.[k]===applied[game()][k])?'Math preview · applied · test wallet · '+(applied[game()].rtp*100).toFixed(1)+'% target':'Math not acknowledged — rebuild the game export'):(m?.sandbox?'Isolated test wallet':''))}else if(++attempts>=600){clearInterval(timer);status.textContent='Game is taking longer to load. Check the web export.'}},100);
  });
  window.addEventListener('DOMContentLoaded',follow);
 })();

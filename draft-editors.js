@@ -2,8 +2,7 @@
  * Brands belong to every game: they are read and saved in a scope of their own, "shared",
  * which has a draft like a game's. A game's own draft keeps only what is the game's: its
  * sounds, and for a brand the seasons it adds and the faces it sets for itself.
- * Until the shared scope exists in the database (migration 202609300001), brands are read and
- * saved in the selected game's draft, as before. */
+ * A role that cannot read the shared scope sees the kit's brands and adds only its game's own. */
 (()=>{
  const nativeFetch=window.fetch.bind(window),base=new URL('./',location.href),snapshots=new Map();
  const clone=v=>structuredClone(v),key=(g,s)=>g+':'+s;
@@ -26,16 +25,6 @@
  }
  const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}});
  async function original(path){const r=await nativeFetch(path,{cache:'no-store'});if(!r.ok)throw Error('Editor catalog unavailable');return r.json()}
- // Before brands were shared: a game's draft could adjust the kit's brands or add its own.
- function mergeBrands(catalog,design){
-  const titles=new Set(Object.values(catalog.brands).map(b=>String(b.title||'').trim().toLowerCase()));
-  for(const [id,brand] of Object.entries(design?.brands||{})){
-   if(brand===null)delete catalog.brands[id];
-   else if(!catalog.brands[id]&&titles.has(String(brand.title||'').trim().toLowerCase()))continue;
-   else catalog.brands[id]={...(catalog.brands[id]||{}),...clone(brand)};
-  }
-  return catalog;
- }
  // Whether the shared scope is there to use: asked once, then remembered for the session.
  async function shared(){
   if(sharedScope===null){try{await read(SHARED,'design');sharedScope=true}catch{sharedScope=false}}
@@ -74,20 +63,59 @@
   return catalog;
  }
  async function sharedCatalog(){return mergeShared(await original('brands/'),(await read(SHARED,'design')).payload.design)}
+ // The brands a game's own seasons and faces are told apart from: the shared ones, or, for a role
+ // that cannot read the shared draft, the kit's.
+ async function comparisonCatalog(){try{return await sharedCatalog()}catch{return original('brands/')}}
  function editableBrand(b){return {title:b.title,roles:clone(b.roles||{}),overrides:clone(b.overrides||{}),fonts:clone(b.fonts||{}),themes:Object.fromEntries(Object.entries(b.themes||{}).map(([id,t])=>[id,{title:t.title,roles:clone(t.roles||{})}]))}}
+ // A sound the team added: a file in the composer-audio bucket, under the game's folder, that the
+ // draft lists after the library's takes. The preview plays it from the bucket; Apply locally
+ // copies it beside the configuration (tools/release_config.py).
+ const AUDIO_BUCKET='composer-audio',AUDIO_TYPES={wav:'audio/wav',ogg:'audio/ogg',mp3:'audio/mpeg'},AUDIO_LIMIT=8*1024*1024;
+ const mediaUrl=path=>ComposerAuth.client.storage.from(AUDIO_BUCKET).getPublicUrl(path).data.publicUrl;
  function applyAudio(manifest,patch){
   if(!patch)return manifest;
   for(const change of patch.events||[]){
    const event=manifest.events.find(e=>e.id===change.id);if(!event)throw Error('Sound catalog changed. Reload before saving.');
-   if(event.takes.length!==change.takes.length)throw Error('Sound files changed. Reload before saving.');
+   const known=event.takes.filter(t=>!t.media).length;
+   if(change.takes.length<known)throw Error('Sound files changed. Reload before saving.');
    for(const field of ['volume_db','pitch_jitter','prompt'])if(field in change)event[field]=change[field];
+   event.takes=event.takes.filter(t=>!t.media);
    event.takes.forEach((t,i)=>t.enabled=change.takes[i].enabled);
+   for(const added of change.takes.slice(known)){
+    if(!added?.media)throw Error('Sound files changed. Reload before saving.');
+    event.takes.push({file:'media:'+added.media,media:added.media,name:added.name,url:mediaUrl(added.media),source:'upload:'+added.name,exists:true,enabled:added.enabled!==false});
+   }
   }
   return manifest;
  }
+ // The draft's form of a manifest's events: positions for the library's takes, files for added ones.
+ const audioPatch=manifest=>({events:manifest.events.map(e=>({id:e.id,volume_db:e.volume_db??null,pitch_jitter:Number(e.pitch_jitter||0),...('prompt' in e?{prompt:e.prompt}:{}),takes:e.takes.map(t=>t.media?{enabled:t.enabled!==false,media:t.media,name:t.name}:{enabled:t.enabled!==false})}))});
+ async function uploadTake(g,url,options){
+  const source=url.searchParams.get('source'),eventId=url.searchParams.get('event')||'',file=options.body;
+  if(!['kit',g].includes(source))throw Error('Sound belongs to another game.');
+  if(!ComposerAuth.has('audio.edit',g))throw Error('You do not have permission to edit this game’s sounds.');
+  const name=decodeURIComponent(new Headers(options.headers).get('X-File-Name')||file?.name||''),ext=name.split('.').pop().toLowerCase();
+  if(!AUDIO_TYPES[ext])throw Error('Use a .wav, .ogg or .mp3 file.');
+  if(!file?.size||file.size>AUDIO_LIMIT)throw Error('The sound must be larger than 0 and at most 8 MB.');
+  const digest=[...new Uint8Array(await crypto.subtle.digest('SHA-256',await file.arrayBuffer()))].slice(0,8).map(b=>b.toString(16).padStart(2,'0')).join('');
+  const path=g+'/'+source+'/'+(eventId.toLowerCase().replace(/[^a-z0-9_-]+/g,'-').slice(0,60)||'sound')+'-'+digest+'.'+ext;
+  const {error}=await ComposerAuth.client.storage.from(AUDIO_BUCKET).upload(path,file,{contentType:AUDIO_TYPES[ext],upsert:false,cacheControl:'31536000'});
+  // The same file added before is already there under its own name; that is not an error.
+  if(error&&!/exists|duplicate/i.test(error.message))throw Error(/bucket|not found/i.test(error.message)?'Sound storage is not set up yet: apply migration 202610020001_sound_media.sql.':error.message||'Upload failed.');
+  const old=snapshots.get(key(g,'audio'))||await read(g,'audio');
+  const catalog=await original('studio/catalog?engine=pixi'),base=catalog.sources.find(s=>s.id===source)?.manifest;
+  if(!base)throw Error('Sound source unavailable');
+  const manifest=applyAudio(clone(base),old.payload.audio?.[source]),event=manifest.events.find(e=>e.id===eventId);
+  if(!event)throw Error('Sound catalog changed. Reload before saving.');
+  // The added sound is the one the moment plays; the others stay in the list to switch back to.
+  event.takes.forEach(t=>t.enabled=false);
+  if(!event.takes.some(t=>t.media===path))event.takes.push({media:path,name:name.slice(0,120),enabled:true});else event.takes.find(t=>t.media===path).enabled=true;
+  const audio=clone(old.payload.audio||{});audio[source]=audioPatch(manifest);await save(g,'audio',audio);
+  return json({saved:true,cloud:true,media:path});
+ }
  async function baseline(payload,g){
   const out={translations:{},design:{brands:{}},audio:{},_labels:{translations:{},brands:{},events:{}}};
-  if(payload.translations&&g!==SHARED){const data=await original('translations?game='+encodeURIComponent(g));out.translations=data.overrides||{};for(const [id,values] of Object.entries(payload.translations)){const entry=data.catalog.entries[id];if(entry){out._labels.translations[id]=entry.source;out.translations[id]={...Object.fromEntries(Object.keys(values).map(lang=>[lang,entry[lang]||entry.source])),...out.translations[id]}}}}
+  if(payload.translations){const data=await original('translations?game='+encodeURIComponent(g===SHARED?'kit':g));out.translations=data.overrides||{};for(const [id,values] of Object.entries(payload.translations)){const entry=data.catalog.entries[id];if(entry){out._labels.translations[id]=entry.source;out.translations[id]={...Object.fromEntries(Object.keys(values).map(lang=>[lang,entry[lang]||entry.source])),...out.translations[id]}}}}
   if(payload.design){
    // A game's own entry for a brand (its seasons and faces) is compared with the shared brand it
    // sits on; anything else (the shared scope, or a draft from before brands were shared) with the kit's.
@@ -101,10 +129,13 @@
   if(payload.audio){const data=await original('studio/catalog?engine=pixi');for(const [id,patch] of Object.entries(payload.audio)){const m=data.sources.find(s=>s.id===id)?.manifest;if(m){out._labels.events[id]=Object.fromEntries(m.events.map(e=>[e.id,e.label||e.id]));out.audio[id]={events:patch.events.map(c=>m.events.find(e=>e.id===c.id)).filter(Boolean).map(e=>({id:e.id,volume_db:e.volume_db??null,pitch_jitter:e.pitch_jitter||0,...('prompt' in e?{prompt:e.prompt}:{}),takes:e.takes.map(t=>({enabled:t.enabled!==false}))}))}}}}
   return out;
  }
- window.ComposerDraftEditors={get enabled(){return enabled()},baseline,applyAudio,shared,SHARED};
+ window.ComposerDraftEditors={get enabled(){return enabled()},baseline,applyAudio,mediaUrl,shared,sharedCatalog,comparisonCatalog,ownDesign,SHARED};
  window.fetch=async(input,options={})=>{
   const url=new URL(input instanceof Request?input.url:input,location.href),path=url.pathname.slice(base.pathname.length),method=(options.method||'GET').toUpperCase();
   if(url.origin!==base.origin||!url.pathname.startsWith(base.pathname)||!(/^(brands\/|studio\/(catalog|save|restore|upload))/.test(path)))return nativeFetch(input,options);
+  // The kit's libraries (font families, icons) are files, not settings of a draft: they are added
+  // and removed on the local server as before, whichever scope the brands are saved in.
+  if(/^brands\/(fonts|google|icons)\//.test(path))return nativeFetch(input,options);
   await window.ComposerAuth.ready;
   if(!enabled())return nativeFetch(input,options);
   const g=game();
@@ -112,9 +143,10 @@
   try{
    const layered=await shared();
    if(path==='brands/'&&method==='GET'){
-    if(!layered)return json(mergeBrands(await original('brands/'),(await read(g,'design')).payload.design));
-    const catalog=mergeOwn(await sharedCatalog(),(await read(g,'design')).payload.design);
-    catalog.scope={shared:true,game:g,canEditShared:ComposerAuth.has('design.edit',SHARED),canEditGame:ComposerAuth.has('design.edit',g)};
+    // Brands are every game's. A role that cannot read the shared draft sees the kit's brands with
+    // this game's own seasons and faces, and may add only to those.
+    const catalog=mergeOwn(layered?await sharedCatalog():await original('brands/'),(await read(g,'design')).payload.design);
+    catalog.scope={shared:true,game:g,canEditShared:layered&&ComposerAuth.has('design.edit',SHARED),canEditGame:ComposerAuth.has('design.edit',g)};
     return json(catalog);
    }
    if(path==='studio/catalog'&&method==='GET'){
@@ -125,9 +157,9 @@
    if(path.startsWith('brands/')&&['POST','DELETE'].includes(method)){
     const parts=path.split('/');if(!/^[a-z][a-z0-9-]{1,30}$/.test(parts[1])||(parts.length>2&&(parts.length!==4||parts[2]!=='themes'||!/^[a-z][a-z0-9-]{1,30}$/.test(parts[3]))))throw Error('Invalid brand or theme');
     const body=options.body?JSON.parse(options.body):{},id=parts[1],theme=parts[3];
-    if(layered){
-     const gameOld=snapshots.get(key(g,'design')),sharedOld=snapshots.get(key(SHARED,'design'));if(!gameOld||!sharedOld)throw Error('Reload Brands before saving.');
-     const catalog=mergeShared(await original('brands/'),sharedOld.payload.design);
+    {
+     const gameOld=snapshots.get(key(g,'design')),sharedOld=layered?snapshots.get(key(SHARED,'design')):null;if(!gameOld||(layered&&!sharedOld))throw Error('Reload Brands before saving.');
+     const catalog=sharedOld?mergeShared(await original('brands/'),sharedOld.payload.design):await original('brands/');
      const own=ownDesign(gameOld.payload.design,catalog),mine=own.brands[id]||{};
      // The game's own: a season only it has, or the faces it sets for itself.
      const forGame=url.searchParams.get('scope')==='game'||(!!theme&&!!mine.themes?.[theme]);
@@ -148,6 +180,7 @@
       if(Object.keys(mine).length)own.brands[id]=mine;else delete own.brands[id];
       await save(g,'design',own);return json({saved:true,cloud:true,scope:'game'});
      }
+     if(!sharedOld)throw Error('Brands belong to every game, and your role cannot change them. You can add a season for this game only.');
      const design=clone(sharedOld.payload.design||{brands:{}});design.brands||={};
      if(method==='DELETE'&&!theme){if(id==='default')throw Error('Cannot remove default brand');design.brands[id]=null}
      else{
@@ -161,19 +194,6 @@
      delete design.selection;
      await save(SHARED,'design',design);return json({saved:true,cloud:true,scope:'shared'});
     }
-    const old=snapshots.get(key(g,'design'));if(!old)throw Error('Reload Brands before saving.');
-    const design=clone(old.payload.design||{brands:{}}),catalog=mergeBrands(await original('brands/'),design);
-    if(method==='DELETE'&&!theme){if(id==='default')throw Error('Cannot remove default brand');design.brands[id]=null}
-    else{
-     const originalBrand=catalog.brands[id]||catalog.brands[body.from]||catalog.brands.default,b=editableBrand(originalBrand);
-     if(theme){if(method==='DELETE')delete b.themes[theme];else b.themes[theme]={title:body.title,roles:body.roles}}
-     else{for(const field of ['title','roles','overrides','fonts'])if(field in body)b[field]=clone(body[field])}
-     const allowedFonts=new Set(catalog.fonts.map(f=>typeof f==='string'?f:f.file));
-     for(const face of Object.values(b.fonts))if(!allowedFonts.has(face.file)&&!catalog.fonts.some(f=>(typeof f==='string'?f:f.file)?.split('/').pop()===face.file))throw Error('Choose a font from the shared library.');
-     design.brands[id]=b;
-    }
-    delete design.selection; // Preview choices belong to the iframe URL, not the shared draft.
-    await save(g,'design',design);return json({saved:true,cloud:true});
    }
    if(path==='studio/save'&&method==='POST'){
     const body=JSON.parse(options.body),old=snapshots.get(key(g,'audio'));if(!old)throw Error('Reload Sounds before saving.');
@@ -186,7 +206,7 @@
     const old=snapshots.get(key(g,'audio')),audio=clone(old?.payload.audio||{}),source=url.searchParams.get('source');
     if(!['kit',g].includes(source))throw Error('Sound belongs to another game.');delete audio[source];await save(g,'audio',audio);return json({saved:true});
    }
-   if(path==='studio/upload')throw Error('New audio files need shared asset storage. You can edit the existing takes in this draft.');
+   if(path==='studio/upload'&&method==='POST')return await uploadTake(g,url,options);
    return nativeFetch(input,options);
   }catch(e){return json({message:e.message},409)}
  };

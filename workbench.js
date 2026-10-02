@@ -63,7 +63,7 @@ function lookPicker({container,brand='default',theme='',onChange,onAddTheme=null
  const tokens=catalogTokens||window.CrashTokens||{BRANDS:{default:'Lotomobil'},THEMES:{}};
  const themesOf=b=>(tokens.THEMES||{})[b]||{};
  container.className='look';
- const brandRow=h('div',{class:'look-row',role:'group','aria-label':'Brand'}),themeRow=h('div',{class:'look-row',role:'group','aria-label':'Theme'}),themeNote=h('em',{class:'note'},'Theme');
+ const brandRow=h('div',{class:'look-row',role:'group','aria-label':'Brand'}),themeRow=h('div',{class:'look-row',role:'group','aria-label':'Season'}),themeNote=h('em',{class:'note'},'Season');
  const themeBox=h('div',{class:'look-themes'});
  const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function appendChoice(row,button,edit,label){
@@ -77,8 +77,8 @@ function lookPicker({container,brand='default',theme='',onChange,onAddTheme=null
  function fillThemes(){
   themeRow.replaceChildren();
   const none=h('button',{class:'wb-button season-off',type:'button','data-theme':'',title:'The brand as designed, no season over it'},'No season');none.onclick=()=>{theme='';paint();onChange({brand,theme})};themeRow.append(none);
-  for(const [id,title] of Object.entries(themesOf(brand))){const mine=((tokens.THEME_OWN||{})[brand]||[]).includes(id);const b=h('button',{class:'wb-button'+(mine?' own-season':''),type:'button','data-theme':id,...(mine?{title:'A season of this game only'}:{})},swatch(((tokens.THEME_SWATCHES||{})[brand]||{})[id])+escape(title)+(mine?'<i class="own-mark" aria-hidden="true"></i>':''));b.onclick=()=>{theme=id;paint();onChange({brand,theme})};appendChoice(themeRow,b,onEditTheme?()=>onEditTheme(brand,id):null,title)}
-  if(onAddTheme){const add=h('button',{class:'wb-button add',type:'button',title:'New theme for this brand'},icon('plus')+'Add new');add.onclick=()=>onAddTheme(brand);themeRow.append(add)}
+  for(const [id,title] of Object.entries(themesOf(brand))){const mine=((tokens.THEME_OWN||{})[brand]||[]).includes(id);const b=h('button',{class:'wb-button'+(mine?' own-season':''),type:'button','data-theme':id,...(mine?{title:'A season of this game only'}:{})},swatch(((tokens.THEME_SWATCHES||{})[brand]||{})[id])+escape(title)+(mine?'<small class="own-mark">this game only</small>':''));b.onclick=()=>{theme=id;paint();onChange({brand,theme})};appendChoice(themeRow,b,onEditTheme?()=>onEditTheme(brand,id):null,title)}
+  if(onAddTheme){const add=h('button',{class:'wb-button add',type:'button',title:'New season for this brand'},icon('plus')+'Add new');add.onclick=()=>onAddTheme(brand);themeRow.append(add)}
   themeNote.textContent=(tokens.BRANDS[brand]||'This brand')+' · seasons';
  }
  themeBox.replaceChildren(themeNote,themeRow);

@@ -81,16 +81,19 @@ function typographySection(){
   const name=declare(fam,fam.weights.includes(weight)?weight:fam.weights[0],'normal');
   const used=inUse[fam.id]&&Object.entries(inUse[fam.id]).map(([title,roles])=>title+(roles.length>1?'':' · '+roles[0]+' only')),here=applied[fam.id];
   const bin=icon('remove');
+  // The one thing to do with a family from here: give it to the picked brand, as its body or its numbers.
+  const canSet=!!window.ComposerAuth?.has('design.edit');
+  const use=canSet?`<span class="lib-use"><button type="button" class="wb-button" data-use="${fam.id}" aria-haspopup="true" aria-expanded="false">Use for ${esc(catalog.brands[brand].title)}…</button><span class="lib-use-menu" role="group" hidden>${['body','numbers'].map(role=>`<button type="button" data-use-role="${role}" data-use-family="${fam.id}"${here?.includes(role)?' disabled title="Already its '+role+'"':''}>${role==='body'?'Body':'Numbers'}</button>`).join('')}</span></span>`:'';
   const remove=fam.origin==='uploaded'
    ?`<button type="button" class="lib-remove" data-remove="${fam.id}" aria-label="Remove ${esc(fam.title)}"${used?' disabled title="In use by '+esc(used.join(', '))+'"':' title="Remove every weight and format of it"'}>${bin}</button>`
    :'<span class="lib-remove-space" aria-hidden="true"></span>';
   return `<div class="font-row${here?' is-current':''}"><span class="font-name"><b>${esc(fam.title)}</b><small><i class="origin ${fam.origin}">${ORIGIN[fam.origin]}</i> · ${fam.variable?'variable '+fam.range[0]+'–'+fam.range[1]:fam.weights.length+' weight'+(fam.weights.length===1?'':'s')}${fam.italic?' · italic':''}</small></span>
 <span class="specimen" style="font-family:'${name}';font-weight:${weight}">${esc(SPECIMEN)}</span>
-<span class="specimen-use"><span class="font-used${used?'':' none'}">${used?esc(used.join(', ')):'Not used'}</span>${remove}</span></div>`;
+<span class="specimen-use"><span class="font-used${used?'':' none'}">${used?esc(used.join(', ')):'Not used'}</span>${use}${remove}</span></div>`;
  }).join('');
  flushFaces();
  // One library card: the families it holds, and the two ways to put another one in it.
- const toBrand=window.ComposerAuth?.has('design.edit')?`<button type="button" class="wb-button" id="library-to-brand">Set ${esc(catalog.brands[brand].title)}’s fonts…</button>`:'';
+ const toBrand=window.ComposerAuth?.has('design.edit')?`<button type="button" class="wb-button" id="library-to-brand">Choose ${esc(catalog.brands[brand].title)}’s fonts in Brands…</button>`:'';
  return head('Fonts','The families a brand can be set in. Add or remove them here; which one a brand uses is chosen in Brands.',toBrand)
 +card('Font library',`<div class="font-list">${rows||'<p class="lib-note">Nothing matches.</p>'}</div>
 <div class="lib-foot"><h4>Add a font</h4><div class="add-font">
@@ -148,6 +151,22 @@ function effectsSection(){
  return head('Effects','How the interface layers and moves: the translucency behind a scrim, the shadow each surface casts, and how long a transition lasts. Like the scales, these are the kit\'s and the same in every game.')
  +effects.map(([title,body])=>card(title,body)).join('');
 }
+// Every take the games can be set to, read from the same catalogue Sounds edits: the kit's
+// interface sounds, shared by every game, and each game's own scene sounds. Which take an
+// event plays is chosen in Sounds; here they are only heard.
+let libraryPlayer=null;
+function soundsSection(){
+ const cat=window.ComposerTarget?.catalog,engine=window.ComposerTarget?.engine;
+ const about='Every take the games can be set to: the interface sounds every game shares, and each game’s own scene sounds. Which take an event plays is chosen in Sounds.';
+ if(!cat)return head('Sounds',about)+card('','<p class="lib-note">The sound catalogue is still loading.</p>');
+ const url=(sid,file)=>window.ComposerHosting?.audioUrl(sid,file)||'studio/audio?source='+encodeURIComponent(sid)+'&engine='+encodeURIComponent(engine)+'&file='+encodeURIComponent(file);
+ const cards=cat.sources.filter(s=>s.manifest).map(s=>{
+  const rows=s.manifest.events.flatMap(e=>e.takes.map((take,i)=>({e,take,i}))).filter(({e,take})=>take.exists!==false&&(!query||(e.label||e.id).toLowerCase().includes(query)||bare(take.file).toLowerCase().includes(query)))
+   .map(({e,take,i})=>`<div class="lib-sound"><button type="button" class="wb-button" data-play="${esc(url(s.id,take.file))}" aria-label="Play ${esc(e.label||e.id)} ${i+1}">${icon('play')}</button><span><b>${esc(e.label||e.id)}</b><small>${esc(bare(take.file))}${take.enabled===false?' · not chosen':''}</small></span></div>`).join('');
+  return rows?card(s.id==='kit'?'Interface · shared by every game':esc(s.title||s.id)+' · scene',`<div class="lib-sounds">${rows}</div>`):'';
+ }).join('');
+ return head('Sounds',about)+(cards||card('','<p class="lib-note">Nothing matches.</p>'));
+}
 function iconsSection(){
  const all=catalog.icons||[];
  const list=all.filter(i=>!query||i.name.includes(query));
@@ -178,11 +197,18 @@ async function dropIcon(name){
 
 // --- shell -------------------------------------------------------------------------------------
 const LOOKED_AT={typography:1,colour:1};
-const SECTIONS={typography:typographySection,colour:colourSection,scales:scalesSection,effects:effectsSection,icons:iconsSection};
+const SECTIONS={typography:typographySection,colour:colourSection,scales:scalesSection,effects:effectsSection,icons:iconsSection,sounds:soundsSection};
 function draw(){
  report.innerHTML=SECTIONS[section]();
+ report.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>{
+  const same=libraryPlayer&&libraryPlayer.src===new URL(b.dataset.play,location.href).href&&!libraryPlayer.paused;
+  if(libraryPlayer){libraryPlayer.pause();libraryPlayer=null;report.querySelectorAll('[data-play]').forEach(x=>x.innerHTML=icon('play'))}
+  if(same)return;libraryPlayer=new Audio(b.dataset.play);b.innerHTML=icon('stop');libraryPlayer.onended=()=>{b.innerHTML=icon('play');libraryPlayer=null};libraryPlayer.play().catch(()=>{b.innerHTML=icon('play');note('Playback failed.',true)});
+ });
  report.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{navigator.clipboard?.writeText(b.dataset.copy);b.classList.add('copied');setTimeout(()=>b.classList.remove('copied'),900)});
  const toBrand=$('#library-to-brand');if(toBrand)toBrand.onclick=()=>window.ComposerLook?.editBrand();
+ report.querySelectorAll('[data-use]').forEach(b=>b.onclick=()=>{const menu=b.nextElementSibling,open=menu.hidden;report.querySelectorAll('.lib-use-menu').forEach(m=>{m.hidden=true;m.previousElementSibling.setAttribute('aria-expanded','false')});menu.hidden=!open;b.setAttribute('aria-expanded',String(open))});
+ report.querySelectorAll('[data-use-role]').forEach(b=>b.onclick=()=>useFamily(catalog.families.find(f=>f.id===b.dataset.useFamily),b.dataset.useRole));
  report.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFamily(catalog.families.find(f=>f.id===b.dataset.remove)));
  report.querySelectorAll('[data-replace]').forEach(b=>b.onclick=()=>pickFile(f=>putIcon(b.dataset.replace,f),'.svg,.png,.webp'));
  report.querySelectorAll('[data-drop]').forEach(b=>b.onclick=()=>dropIcon(b.dataset.drop));
@@ -219,6 +245,22 @@ async function addFonts(){
  input.value='';catalog=await (await fetch('brands/')).json();draw();
  note(added.length+' file'+(added.length===1?'':'s')+' added to the library.');
 }
+// Sets the picked brand's body or numbers to a family, keeping the weight it has where the family carries it.
+async function useFamily(fam,role){
+ const b=catalog.brands[brand];if(!fam||!b)return;
+ const current=b.fonts[role]||{},weight=fam.weights.includes(current.weight)?current.weight:fam.weights.reduce((best,w)=>Math.abs(w-(current.weight||400))<Math.abs(best-(current.weight||400))?w:best,fam.weights[0]);
+ const style=fam.italic?current.style||'normal':'normal',file=fam.files[weight+'|'+style]||fam.files[weight+'|normal']||Object.values(fam.files)[0];
+ if(!confirm('Set '+b.title+'’s '+role+' to '+fam.title+' '+(WEIGHT_TITLES[weight]||weight)+' for every game?'))return;
+ const fonts=Object.fromEntries(Object.entries(b.fonts).map(([r,f])=>[r,{file:bare(f.file),weight:f.weight,style:f.style||'normal'}]));
+ fonts[role]={file:bare(file),weight,style};
+ note('Saving…');window.ComposerUX?.status('saving');
+ const response=await fetch('brands/'+encodeURIComponent(brand),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:b.title,roles:b.roles,overrides:b.overrides||{},fonts})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok){window.ComposerUX?.status('error',data.message||('HTTP '+response.status));return note(data.message||('HTTP '+response.status),true)}
+ window.ComposerUX?.status('saved');catalog=await (await fetch('brands/')).json();draw();
+ note(b.title+'’s '+role+' is now '+fam.title+'. Weight and italic are set in Brands.'+(window.ComposerDraftEditors?.enabled?' Saved to the brands draft · see Changes.':''));
+ window.dispatchEvent(new CustomEvent('composer-brand-fonts',{detail:{brand,fonts}}));
+}
 async function removeFamily(fam){
  if(!fam||!confirm('Remove '+fam.title+' from the kit? Every weight and format of it goes.'))return;
  const response=await fetch('brands/fonts/'+encodeURIComponent(fam.id),{method:'DELETE'});
@@ -234,9 +276,10 @@ function pickFile(then,accept){
 function note(text,error){const n=$('#library-note');n.textContent=text;n.classList.toggle('sound-error',!!error)}
 function controls(){
  const item=(k,title,about)=>`<button type="button" class="wb-button lib-nav" data-section="${k}"><b>${title}</b><small>${about}</small></button>`;
- panel.innerHTML=`<section class="wb-section"><h2>Assets</h2><div class="lib-navs">
+ panel.innerHTML=`<section class="wb-section"><h2>Library</h2><div class="lib-navs">
 ${item('typography','Fonts','Add and remove the families brands are set in')}
-${item('icons','Icons','Replace the shared artwork')}</div>
+${item('icons','Icons','Replace the shared artwork')}
+${item('sounds','Sounds','Every take the games can be set to')}</div>
 <small>Shared by every game.</small></section>
 <section class="wb-section"><h2>Reference · read-only</h2><div class="lib-navs">
 ${item('colour','Colour tokens','Every colour a brand produces, with contrast')}
@@ -274,5 +317,6 @@ async function open(){
  draw();
 }
 window.addEventListener('composer-look',()=>{if(window.ComposerTarget?.workspace==='library'&&catalog)draw()});
+window.addEventListener('composer-catalog',()=>{if(window.ComposerTarget?.workspace==='library'&&catalog&&section==='sounds')draw()});
 window.addEventListener('composer-workspace',e=>{if(e.detail==='library')open().catch(err=>{report.innerHTML='<p class="sound-error">'+esc(err.message)+'</p>'})});
 })();

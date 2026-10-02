@@ -7,7 +7,6 @@
 const $=s=>document.querySelector(s);
 // live: has a web export to run in Layout. math: has a model in math-baseline.json.
 const TARGETS=[
- {id:'kit',title:'Shared · UI kit',live:false,math:false},
  {id:'road',title:'Goat Road',live:true,math:true},
  {id:'haul',title:'Big Haul',live:true,math:true},
  {id:'gold',title:'Goat Gold',live:true,math:true},
@@ -27,11 +26,10 @@ const KEYS={target:'crash-composer-target',engine:'crash-composer-engine'};
 // PixiJS is the product; the Godot games are frozen and Composer no longer offers them.
 const ENGINES=[{id:'pixi',title:'PixiJS'}];
 const DEFAULT_ENGINE='pixi';
-const select=$('#target'),kindSelect=$('#game-kind');
+const select=$('#target');
 // Slots (Candy Cascade, Mòpyon Cascades), crash games, and instant games (a single drop
 // settles the round: Plinko).
 const category=id=>['candy_cascade','mopyon_cascades'].includes(id)?'slots':id==='plinko'?'instant':'crash';
-let kind='crash';
 const engineRow=$('#engine-row'),engineSelect=$('#engine');
 const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}}};
 const known=id=>TARGETS.some(t=>t.id===id);
@@ -44,7 +42,7 @@ const listed=id=>offered(id)||id===value;
 const entry=(id)=>TARGETS.find(t=>t.id===(id===undefined?value:id))||TARGETS[0];
 const source=(id)=>catalog?.sources.find(s=>s.id===(id===undefined?value:id))||null;
 const guards=[];
-let value='kit',engine=DEFAULT_ENGINE,workspace='layout',catalog=null;
+let value='road',engine=DEFAULT_ENGINE,workspace='layout',catalog=null;
 
 // Catalog trouble is a setup problem, not something a control can fix: it goes to the console.
 function say(text,error){if(error)console.warn('Composer:',text)}
@@ -72,9 +70,12 @@ function engineOptions(){
  if(!list.some(e=>e.id===engine))engine=list.find(e=>e.id===DEFAULT_ENGINE)?.id||list[0].id;
  engineSelect.value=engine;
 }
+// The kit first, then the games by category: the list is one, headed by category, and the
+// category in the bar only says where the picked game is and jumps to a category's first game.
+const ORDER={crash:0,slots:1,instant:2};
+const inOrder=list=>list.slice().sort((a,b)=>(a.id==='kit'?-1:ORDER[category(a.id)])-(b.id==='kit'?-1:ORDER[category(b.id)]));
 function options(){
- if(kindSelect){kindSelect.value=kind;for(const option of kindSelect.options)option.disabled=!TARGETS.some(t=>t.live&&category(t.id)===option.value&&listed(t.id))}
- select.replaceChildren(...TARGETS.filter(t=>t.id==='kit'||category(t.id)===kind).filter(t=>listed(t.id))
+ select.replaceChildren(...inOrder(TARGETS.filter(t=>listed(t.id)))
   .map(t=>new Option(workspace==='math'&&!t.math?t.title+' · no model':t.title,t.id)));
  select.value=value;
 }
@@ -96,7 +97,7 @@ function allowed(reason){return guards.every(guard=>guard(reason)!==false)}
 function set(id){
  if(!known(id)||id===value||!offered(id))return false;
  if(!allowed('switch'))return false;
- value=id;if(id!=='kit')kind=category(id);store.set(KEYS.target,id);
+ value=id;store.set(KEYS.target,id);
  options();engineOptions();writeHash();
  window.dispatchEvent(new CustomEvent('composer-target',{detail:id}));
  refresh().catch(error=>say(error.message,true));
@@ -117,19 +118,13 @@ function setEngine(id){
 }
 
 const opening=hash();
-value=known(opening.game)?opening.game:known(store.get(KEYS.target))?store.get(KEYS.target):'kit';
-kind=category(value);
+value=known(opening.game)?opening.game:known(store.get(KEYS.target))?store.get(KEYS.target):TARGETS[0].id;
 const wantedEngine=opening.engine||store.get(KEYS.engine);
 if(ENGINES.some(e=>e.id===wantedEngine))engine=wantedEngine;
 options();engineOptions();
-if(kindSelect)kindSelect.onchange=()=>{
- const wanted=kindSelect.value;
- const next=TARGETS.find(t=>t.live&&category(t.id)===wanted&&offered(t.id));
- if(!next||!set(next.id)){kindSelect.value=kind;return}
-};
 select.onchange=()=>{const wanted=select.value;if(!set(wanted))select.value=value};
 if(engineSelect)engineSelect.onchange=()=>{const wanted=engineSelect.value;if(!setEngine(wanted))engineSelect.value=engine};
-window.addEventListener('composer-workspace',event=>{workspace=event.detail;$('#workspace-title').textContent=({layout:'Game',look:'Brands',library:'Assets',math:'Math',sound:'Sounds',translates:'Texts'})[workspace]||'Game';options();writeHash()});
+window.addEventListener('composer-workspace',event=>{workspace=event.detail;$('#workspace-title').textContent=({layout:'Game',look:'Brands',library:'Library',math:'Math',sound:'Sounds',translates:'Texts'})[workspace]||'Game';options();writeHash()});
 window.addEventListener('hashchange',()=>{
  const opened=hash();
  if(opened.tab==='math')opened.tab='layout';
@@ -148,7 +143,7 @@ window.ComposerTarget={
  get engine(){return engine},get engines(){return availableEngines()},
  engineTitle(id){return (ENGINES.find(e=>e.id===(id||engine))||{}).title||id||engine},
  setEngine,
- targets:TARGETS,entry,source,set,refresh,guard(fn){guards.push(fn)},
+ targets:TARGETS,entry,source,set,refresh,guard(fn){guards.push(fn)},category,
  offered,listed,get hidden(){return [...hidden]},
  // A new hidden list from Settings: the lists drop those games, and a hidden game in use is left for the first one still shown.
  setHidden(list){hidden=[...list];leaveHidden();options();window.dispatchEvent(new CustomEvent('composer-games-shown'))}
@@ -162,7 +157,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
  refresh().catch(error=>say(error.message+' — start Composer with tools/preview.py so studio/ routes are available.',true));
 });
 window.ComposerAuth.ready.then(()=>{
- const saved=window.ComposerAuth.session?.user?.user_metadata?.composer_hidden_games;hidden=Array.isArray(saved)?saved.filter(known):[];
+ const saved=window.ComposerAuth.member?.role==='admin'?window.ComposerAuth.session?.user?.user_metadata?.composer_hidden_games:null;hidden=Array.isArray(saved)?saved.filter(known):[];
  const permitted=TARGETS.filter(t=>window.ComposerAuth.canRead(t.id));if(permitted.length&&!window.ComposerAuth.canRead(value))set(permitted[0].id);else leaveHidden();options();
 });
 })();

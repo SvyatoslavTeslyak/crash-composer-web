@@ -16,7 +16,7 @@
  function paint(){
   mode=currentMode();document.body.dataset.mobileMode=mode;document.body.dataset.mobileView=view;
   bar.querySelector('[role=group]').hidden=mode!=='translates';
-  $('#mobile-controls').textContent=mode==='translates'?'Filters':mode==='look'?'Edit brand':mode==='library'?'Assets sections':mode==='sound'?'Sound filters':'Game controls';
+  $('#mobile-controls').textContent=mode==='translates'?'Filters':mode==='look'?'Edit brand':mode==='library'?'Library sections':mode==='sound'?'Sound filters':'Game controls';
   for(const b of bar.querySelectorAll('[data-mobile-view]'))b.setAttribute('aria-pressed',String(b.dataset.mobileView===view));
   side.inert=media.matches&&!document.body.classList.contains('mobile-controls-open');
  }

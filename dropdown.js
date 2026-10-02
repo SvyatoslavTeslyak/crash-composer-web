@@ -15,7 +15,7 @@ const css=`
 .dd-menu .dd-group{padding:8px 8px 2px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--inspector-muted,#8a97a8)}
 select.dd-open{border-color:var(--inspector-accent,#70ccff)}`;
 document.head.append(Object.assign(document.createElement('style'),{textContent:css}));
-const CHECK='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8.5 3.2 3.2L13 4.8"/></svg>';
+const CHECK=icon('check');
 let menu=null,owner=null,active=-1,typed='',typedAt=0;
 const custom=s=>s instanceof HTMLSelectElement&&!s.multiple&&s.size<2;
 const items=()=>menu?[...menu.querySelectorAll('[role=option]')]:[];

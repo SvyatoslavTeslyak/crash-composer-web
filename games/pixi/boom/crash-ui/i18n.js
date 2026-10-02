@@ -20,29 +20,57 @@ function t(source,values={}){
 }
 function updateValue(node,key,value,set){const record=originals.get(node)||{};const old=record[key];const source=old&&value===old.output?old.source:value;const output=t(source);record[key]={source,output};originals.set(node,record);if(output!==value)set(output)}
 let highlightKey='',highlightLayer=null;
-// Limited Markdown: escape all HTML before adding supported formatting.
-function markdown(value){
+// Limited Markdown: escape all HTML before adding supported formatting. A rules document takes
+// a little more, all of it plain text so a value never holds HTML:
+//  inline   **bold**  *italic*  ++underline++  ~~strike~~  [text](https://…) a link,
+//           [text](color:brand|green|red|blue|grey) a colour from the brand's own roles;
+//  blocks   # title  ## heading  ### subheading  -# small print, - list, 1. list,
+//           - [x] / - [ ] a ✓ / ✕ list, and a leading [center] or [right] to align a block;
+//  lines    ![alt](url) a picture (only from Composer's media bucket), [[name]] a game block.
+// In a document every element carries data-no-translate, so its words are not translated
+// twice, while a block's content is the game's own text and is translated like any other.
+const MEDIA=/^https:\/\/[a-z0-9-]+\.supabase\.co\/storage\/v1\/object\/public\/composer-media\/[A-Za-z0-9._\/-]+$/;
+const DOC_COLOURS={brand:'var(--action-go)',green:'var(--success)',red:'var(--danger)',blue:'var(--pill-cyan)',grey:'var(--text-muted)'};
+function markdown(value,{document=false}={}){
  const safe=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const inline=s=>safe(s).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/\*([^*]+)\*/g,'<em>$1</em>');
- const out=[];let paragraph=[],list='';
- const flush=()=>{if(paragraph.length){out.push('<p>'+inline(paragraph.join(' '))+'</p>');paragraph=[]}if(list){out.push('</'+list+'>');list=''}};
- for(const line of String(value).split(/\r?\n/)){
-  const heading=line.match(/^(#{1,3})\s+(.+)$/),bullet=line.match(/^\s*(?:[-*]|\d+\.)\s+(.+)$/);
+ const inline=s=>{let out=safe(s);
+  if(document)out=out.replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+|color:[a-z]+)\)/g,(m,text,target)=>target.startsWith('color:')?(DOC_COLOURS[target.slice(6)]?'<span style="color:'+DOC_COLOURS[target.slice(6)]+'">'+text+'</span>':text):'<a href="'+target+'" target="_blank" rel="noopener noreferrer">'+text+'</a>')
+   .replace(/\+\+([^+]+)\+\+/g,'<u>$1</u>').replace(/~~([^~]+)~~/g,'<s>$1</s>');
+  return out.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/\*([^*]+)\*/g,'<em>$1</em>')};
+ const own=document?' data-no-translate':'';
+ const out=[];let paragraph=[],list='',listAlign='',paraAlign='';
+ const style=align=>align?' style="text-align:'+align+'"':'';
+ const flush=()=>{if(paragraph.length){out.push('<p'+own+style(paraAlign)+'>'+inline(paragraph.join(' '))+'</p>');paragraph=[]}if(list){out.push('</'+(list==='check'?'ul':list)+'>');list=''}};
+ for(let line of String(value).split(/\r?\n/)){
+  let align='';const aligned=document&&line.match(/^\s*\[(center|right)\]\s+(.*)$/);if(aligned){align=aligned[1];line=aligned[2]}
+  const heading=line.match(/^(#{1,3})\s+(.+)$/),small=document&&line.match(/^-#\s+(.+)$/),check=document&&line.match(/^\s*[-*]\s+\[( |x|X)\]\s+(.+)$/),bullet=line.match(/^\s*(?:[-*]|\d+\.)\s+(.+)$/);
+  const image=document&&line.match(/^\s*!\[([^\]]*)\]\((\S+)\)\s*$/),block=document&&line.match(/^\s*\[\[([a-z][a-z0-9_-]*)\]\]\s*$/);
   if(!line.trim()){flush();continue}
-  if(heading){flush();const level=heading[1].length+1;out.push('<h'+level+' style="font-size:'+({2:'1.35em',3:'1.15em',4:'1em'}[level])+';font-weight:700;text-align:left;color:inherit;margin:1em 0 .5em;line-height:1.3">'+inline(heading[2])+'</h'+level+'>');continue}
-  if(bullet){const type=/^\s*\d/.test(line)?'ol':'ul';if(list!==type){flush();list=type;out.push('<'+type+'>')}out.push('<li>'+inline(bullet[1])+'</li>');continue}
-  if(list)flush();paragraph.push(line);
+  if(image){flush();if(MEDIA.test(image[2]))out.push('<figure class="rules-figure"'+own+'><img src="'+safe(image[2])+'" alt="'+safe(image[1])+'" loading="lazy" decoding="async"></figure>');continue}
+  if(block){flush();out.push('<div class="rules-block" data-rules-block="'+block[1]+'"></div>');continue}
+  if(heading){flush();const level=heading[1].length+1;out.push('<h'+level+own+' style="font-size:'+({2:'1.35em',3:'1.15em',4:'1em'}[level])+';font-weight:700;text-align:'+(align||'left')+';color:inherit;margin:1em 0 .5em;line-height:1.3">'+inline(heading[2])+'</h'+level+'>');continue}
+  if(small){flush();out.push('<p class="rules-small"'+own+style(align)+'>'+inline(small[1])+'</p>');continue}
+  if(check){if(list!=='check'){flush();list='check';out.push('<ul class="rules-check"'+own+style(align)+'>')}const yes=check[1]!==' ';out.push('<li class="'+(yes?'is-yes':'is-no')+'"><span class="rules-mark" aria-hidden="true">'+(yes?'✓':'✕')+'</span>'+inline(check[2])+'</li>');continue}
+  if(bullet){const type=/^\s*\d/.test(line)?'ol':'ul';if(list!==type){flush();list=type;out.push('<'+type+own+style(align)+'>')}out.push('<li>'+inline(bullet[1])+'</li>');continue}
+  if(list)flush();if(!paragraph.length)paraAlign=align;paragraph.push(line);
  }
  flush();return out.join('');
 }
+// The game's rules document, if it has one: the catalog entry Composer edits as How to play.
+const rulesDocument=(id=game)=>Object.entries(catalog.entries).find(([,e])=>e.format==='markdown'&&e.previewWindow==='rules'&&e.games?.includes(id))?.[0]||'';
 function translateDocuments(){
  if(window.CrashUI?.instance?.modal!=='rules')return;
- const pair=Object.entries(catalog.entries).find(([,e])=>e.format==='markdown'&&e.previewWindow==='rules'&&e.games?.includes(game));
- const body=document.querySelector('.modal-body');if(!pair||!body)return;
- const [key,entry]=pair;let block=body.querySelector('[data-i18n-document]');
- if(!block){const back=body.querySelector('.back-button');body.replaceChildren();if(back)body.append(back);block=document.createElement('div');block.dataset.i18nDocument=key;block.dataset.noTranslate='';block.className='translated-document';body.append(block)}
- const html=markdown(overrides[key]?.[locale]||entry[locale]||entry.en||entry.source);
- if(block.innerHTML!==html)block.innerHTML=html;
+ const key=rulesDocument(),entry=catalog.entries[key];
+ const body=document.querySelector('.modal-body');if(!key||!body)return;
+ let block=body.querySelector('[data-i18n-document]');
+ if(!block){const back=body.querySelector('.back-button');body.replaceChildren();if(back)body.append(back);block=document.createElement('div');block.dataset.i18nDocument=key;block.className='translated-document';body.append(block)}
+ // Compared with what was last drawn, not with the page: the blocks inside change as they are translated.
+ const html=markdown(overrides[key]?.[locale]||entry[locale]||entry.en||entry.source,{document:true});
+ // A redraw (another language, an edit) keeps the game's blocks as they are, so a pay table's
+ // switch or amount survives it; only the document's own words are drawn again.
+ if(block.rulesSource!==html){const kept=new Map([...block.querySelectorAll('[data-rules-block]')].map(slot=>[slot.dataset.rulesBlock,slot]));block.innerHTML=html;block.rulesSource=html;for(const slot of block.querySelectorAll('[data-rules-block]')){const old=kept.get(slot.dataset.rulesBlock);if(old){slot.replaceWith(old);kept.delete(slot.dataset.rulesBlock)}}}
+ const blocks=window.CrashUI?.instance?.config?.rulesBlocks||{};
+ for(const slot of block.querySelectorAll('[data-rules-block]')){const make=blocks[slot.dataset.rulesBlock];const content=typeof make==='function'?String(make()??''):String(make??'');if(slot.rulesSource!==content){slot.innerHTML=content;slot.rulesSource=content}}
 }
 
 function locate(key){
@@ -113,7 +141,7 @@ function changed(){revision++;document.documentElement.lang=locale;translate();f
 function setLanguage(value){locale=['en','fr','ht'].includes(value)?value:'en';try{localStorage.setItem('crash-language',locale)}catch{}changed()}
 function setDraft(data){draftActive=true;catalog=data.catalog||catalog;overrides=data.overrides||{};rebuild();changed()}
 async function setGame(id){if(!id||id===game)return;game=id;rebuild();changed();if(/(?:^|\/)(?:demo|game)\.html$/.test(location.pathname))return;const current=id;try{const r=await fetch(new URL('../locales/overrides.json',base));if(r.ok&&current===game&&!draftActive){overrides=(await r.json()).entries||{};rebuild();changed()}}catch{}}
-const api={t,markdown,highlight,describe,reveal,setLanguage,setDraft,setGame,translate,get locale(){return locale},get revision(){return revision},get catalog(){return catalog},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn)},number(value,options={}){return new Intl.NumberFormat(locale==='fr'?'fr-FR':'en-US',options).format(value)}};
+const api={t,markdown,rulesDocument,highlight,describe,reveal,setLanguage,setDraft,setGame,translate,get locale(){return locale},get revision(){return revision},get catalog(){return catalog},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn)},number(value,options={}){return new Intl.NumberFormat(locale==='fr'?'fr-FR':'en-US',options).format(value)}};
 window.CrashI18n=api;
 // Any embedding site can select a supported language, but only our immediate
 // parent may do so. Editable dictionaries remain restricted to same-origin Composer.

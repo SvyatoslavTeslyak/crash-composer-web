@@ -31,7 +31,20 @@
       ],
       "presets": [
         "standard"
-      ]
+      ],
+      "presetsByGame": {
+        "road": [
+          "tabbed-shell-v1"
+        ]
+      },
+      "usageByGame": {
+        "road": [
+          "text"
+        ]
+      },
+      "previewWindowByGame": {
+        "road": "topbets"
+      }
     },
     "bet_controls_d69dbc": {
       "source": "Bet controls",
@@ -185,11 +198,10 @@
       "games": [],
       "ht": "Règ",
       "usage": [
-        "aria-label",
         "text"
       ],
       "presets": [
-        "tabbed-shell-v1"
+        "menu-drawer-v1"
       ],
       "previewWindow": "rules"
     },
@@ -837,6 +849,9 @@
       "usageByGame": {
         "candy_cascade": [
           "unused"
+        ],
+        "road": [
+          "unused"
         ]
       }
     },
@@ -917,7 +932,17 @@
         "text",
         "aria-label"
       ],
-      "previewWindow": "menu"
+      "previewWindow": "menu",
+      "usageByGame": {
+        "road": [
+          "aria-label"
+        ]
+      },
+      "presetsByGame": {
+        "road": [
+          "menu-drawer-v1"
+        ]
+      }
     },
     "your_account_4ab291": {
       "source": "Your account",
@@ -932,7 +957,17 @@
       "previewWindow": "account",
       "presets": [
         "standard"
-      ]
+      ],
+      "presetsByGame": {
+        "road": [
+          "tabbed-shell-v1"
+        ]
+      },
+      "usageByGame": {
+        "road": [
+          "aria-labelledby"
+        ]
+      }
     },
     "choose_difficulty_aa9796": {
       "source": "Choose difficulty",
@@ -965,7 +1000,8 @@
       "games": [],
       "ht": "Kijan pou jwe",
       "usage": [
-        "text"
+        "text",
+        "aria-label"
       ],
       "previewWindow": "rules",
       "presetsByGame": {
@@ -1047,7 +1083,13 @@
       "usage": [
         "text"
       ],
-      "previewWindow": "menu"
+      "previewWindow": "menu",
+      "usageByGame": {
+        "road": [
+          "text",
+          "aria-label"
+        ]
+      }
     },
     "music_131260": {
       "source": "Music",
@@ -1091,7 +1133,6 @@
       "fr": "Recharger à 1 000 $",
       "group": "Settings",
       "games": [
-        "road",
         "haul",
         "gold",
         "boom",
@@ -1288,7 +1329,18 @@
       "presetsByGame": {
         "candy_cascade": [
           "tabbed-shell-v1"
+        ],
+        "road": [
+          "tabbed-shell-v1"
         ]
+      },
+      "usageByGame": {
+        "road": [
+          "aria-label"
+        ]
+      },
+      "previewWindowByGame": {
+        "road": ""
       }
     },
     "personal_record_24e81d": {
@@ -1485,9 +1537,10 @@
       ],
       "ht": "Nou pa t kapab sove pwogrè a sou aparèy sa a.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewState": "notification"
+      "previewState": "notification",
+      "unusedReason": "Goat Road shows no toasts; a browser that cannot store the profile plays on."
     },
     "easy_00f031": {
       "source": "Easy",
@@ -1594,9 +1647,10 @@
       ],
       "ht": "Pa gen pyès ki rete. Louvri pwofil ou pou ranpli balans lan.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewState": "notification"
+      "previewState": "notification",
+      "unusedReason": "Goat Road has no demo refill any more."
     },
     "not_enough_coins_lower_your_bet_612c65": {
       "source": "Not enough coins. Lower your bet.",
@@ -1608,9 +1662,10 @@
       ],
       "ht": "Pa gen ase pyès. Diminye miz ou.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewState": "notification"
+      "previewState": "notification",
+      "unusedReason": "Goat Road answers a bet the wallet cannot cover with the Not enough funds notice, as the Runner API does."
     },
     "finish_this_round_before_refilling_e174bd": {
       "source": "Finish this round before refilling.",
@@ -1622,9 +1677,10 @@
       ],
       "ht": "Fini tou sa a anvan ou ranpli balans lan.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewState": "notification"
+      "previewState": "notification",
+      "unusedReason": "Goat Road has no demo refill any more."
     },
     "your_balance_is_already_full_f41053": {
       "source": "Your balance is already full.",
@@ -1636,9 +1692,10 @@
       ],
       "ht": "Balans ou deja plen.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewState": "notification"
+      "previewState": "notification",
+      "unusedReason": "Goat Road has no demo refill any more."
     },
     "balance_restored_to_1_000_coins_970621": {
       "source": "Balance restored to 1,000 coins",
@@ -1650,9 +1707,10 @@
       ],
       "ht": "Balans lan retabli a 1,000 pyès",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewState": "notification"
+      "previewState": "notification",
+      "unusedReason": "Goat Road has no demo refill any more."
     },
     "cashed_out_3d6b49": {
       "source": "Cashed out",
@@ -1664,12 +1722,13 @@
       ],
       "ht": "Lajan pran",
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "betDetails"
+      "previewWindow": "betDetails",
+      "unusedReason": "Goat Road's leaderboard bets carry difficulty and lanes, as the Runner API's do; no result row."
     },
     "crashed_998507": {
       "source": "Crashed",
@@ -1681,12 +1740,13 @@
       ],
       "ht": "Aksidan",
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "betDetails"
+      "previewWindow": "betDetails",
+      "unusedReason": "Your own bet's details show the outcome by their picture and title, without a result card; the leaderboard lists only wins."
     },
     "difficulty_9106e9": {
       "source": "DIFFICULTY",
@@ -1732,12 +1792,13 @@
       ],
       "ht": "Tou a retabli",
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewState": "notification"
+      "previewState": "notification",
+      "unusedReason": "Goat Road shows no toasts; a restored round simply continues."
     },
     "insufficient_balance_auto_stopped_394b75": {
       "source": "Insufficient balance · Auto stopped",
@@ -2599,9 +2660,10 @@
       ],
       "ht": "1. Tann METE MIZ OU.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "2_left_right_8b2091": {
       "source": "2. Left / Right:",
@@ -2613,9 +2675,10 @@
       ],
       "ht": "2. Gòch / Dwat:",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "3_main_catch_b6cad3": {
       "source": "3. Main Catch:",
@@ -2627,9 +2690,10 @@
       ],
       "ht": "3. Priz prensipal:",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "bet_accepted_fb7a8f": {
       "source": "BET ACCEPTED",
@@ -2682,9 +2746,10 @@
       ],
       "ht": "ANILE remèt tout miz ou anvan dekont lan fini. Depi tou a kòmanse, miz yo fèmen jiska pwochen tou a.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "cashout_9e3b7c": {
       "source": "CASHOUT",
@@ -2738,9 +2803,10 @@
       ],
       "ht": "Chwazi yon montan, epi peze MIZE sou nenpòt pozisyon. Ou ka chwazi youn, de oswa tout twa.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "for_example_5_on_left_at_2_37_returns_11_85_6_85_91d5ca": {
       "source": "For example, $5 on Left at 2.37× returns $11.85 ($6.85 profit) if Left wins. $8 on Main cashed out at 1.50× returns $12 ($4 profit). Main without a cashout loses even if your chosen side wins.",
@@ -2752,9 +2818,10 @@
       ],
       "ht": "Pa egzanp, $5 sou Gòch nan 2.37× bay $11.85 ($6.85 pwofi) si Gòch genyen. $8 sou Priz prensipal la, lè ou pran lajan nan 1.50×, bay $12 ($4 pwofi). Priz prensipal la pèdi si ou pa pran lajan, menm si bò ou chwazi a genyen.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "lost_29494e": {
       "source": "LOST",
@@ -2780,9 +2847,10 @@
       ],
       "ht": "Gòch ak Dwat regle lè tou a fini; se yon sèl bò ki genyen. Ou dwe pran lajan Priz prensipal la anvan tou a fini. Pran lajan Priz prensipal la pa fini konpetisyon an.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "left_or_right_always_wins_the_duel_main_is_an_in_92bd77": {
       "source": "Left or Right always wins the duel. Main is an independent cash-out bet.",
@@ -2794,9 +2862,10 @@
       ],
       "ht": "Se toujou Gòch oswa Dwat ki genyen konpetisyon an. Priz prensipal la se yon miz endepandan kote ou dwe pran lajan.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "main_already_cashed_out_left_and_right_settle_wh_80dbf9": {
       "source": "Main already cashed out. Left and Right settle when the round ends.",
@@ -2821,9 +2890,10 @@
       ],
       "ht": "Priz prensipal la pa yon twazyèm gayan.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "no_bet_ebd9ed": {
       "source": "NO BET",
@@ -2849,9 +2919,10 @@
       ],
       "ht": "Gany lan gen miz ou ladan l.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "stake_1_1_000_per_position_main_is_automatically_363a88": {
       "source": "Stake: $1–$1,000 per position. Main is automatically cashed out at the 1,000× ceiling. Local demo credits.",
@@ -2863,9 +2934,10 @@
       ],
       "ht": "Miz: $1–$1,000 pou chak pozisyon. Lajan Priz prensipal la pran otomatikman nan plafon 1,000× la. Kredi demonstrasyon lokal.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "your_side_bet_is_accepted_it_settles_automatical_5318d8": {
       "source": "Your side bet is accepted. It settles automatically when the round ends.",
@@ -2890,9 +2962,10 @@
       ],
       "ht": "devine ki pechè k ap genyen. Miz sa yo regle otomatikman lè tou a fini.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "press_cashout_while_the_catch_grows_before_the_r_9fc861": {
       "source": "press CASHOUT while the catch grows, before the round ends. If the round ends before you cash out, Main loses.",
@@ -2904,9 +2977,10 @@
       ],
       "ht": "peze PRAN LAJAN pandan priz la ap grandi, anvan tou a fini. Si tou a fini anvan ou pran lajan, Priz prensipal la pèdi.",
       "usage": [
-        "text"
+        "unused"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "round_starts_in_value_seconds_cededd": {
       "source": "Round starts in {value} seconds",
@@ -3269,44 +3343,52 @@
       "group": "Tabs & windows",
       "games": [],
       "usage": [
-        "text"
+        "text",
+        "aria-labelledby"
       ],
       "previewWindow": "menu",
       "presets": [
-        "menu-drawer-v1"
-      ]
+        "tabbed-shell-v1"
+      ],
+      "usageByGame": {
+        "road": [
+          "aria-labelledby"
+        ]
+      }
     },
     "check_round_f2d124": {
       "source": "CHECK ROUND",
       "en": "CHECK ROUND",
-      "fr": "",
-      "ht": "",
+      "fr": "VÉRIFIER LA MANCHE",
+      "ht": "TCHEKE TOU A",
       "group": "Bet panel & messages",
       "games": [
         "road"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
-      ]
+      ],
+      "unusedReason": "No game renders it."
     },
     "cash_out_to_finish_this_round_55f464": {
       "source": "Cash out to finish this round.",
       "en": "Cash out to finish this round.",
-      "fr": "",
-      "ht": "",
+      "fr": "Encaissez pour terminer cette manche.",
+      "ht": "Pran lajan an pou fini tou sa a.",
       "group": "Bet panel & messages",
       "games": [
         "road"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
-      ]
+      ],
+      "unusedReason": "At the last lane GO is off; the round ends on CASH OUT."
     },
     "multiplier_b94c55": {
       "source": "MULTIPLIER",
@@ -3335,19 +3417,21 @@
       ],
       "presets": [
         "tabbed-shell-v1"
-      ]
+      ],
+      "previewState": "win-transfer"
     },
     "not_enough_funds_631600": {
       "source": "Not enough funds",
       "en": "Not enough funds",
-      "fr": "",
-      "ht": "",
+      "fr": "Fonds insuffisants",
+      "ht": "Pa gen ase lajan",
       "group": "Bet panel & messages",
       "games": [
         "road"
       ],
       "usage": [
-        "text"
+        "text",
+        "aria-labelledby"
       ],
       "previewWindow": "notice:funds",
       "presets": [
@@ -3357,8 +3441,8 @@
     "your_balance_is_too_low_ece4eb": {
       "source": "Your balance is too low for this bet. Top up to keep playing.",
       "en": "Your balance is too low for this bet. Top up to keep playing.",
-      "fr": "",
-      "ht": "",
+      "fr": "Votre solde est trop bas pour cette mise. Rechargez pour continuer à jouer.",
+      "ht": "Balans ou twò ba pou miz sa a. Ajoute lajan pou kontinye jwe.",
       "group": "Bet panel & messages",
       "games": [
         "road"
@@ -3374,14 +3458,15 @@
     "no_connection_e33899": {
       "source": "No connection",
       "en": "No connection",
-      "fr": "",
-      "ht": "",
+      "fr": "Pas de connexion",
+      "ht": "Pa gen koneksyon",
       "group": "Bet panel & messages",
       "games": [
         "road"
       ],
       "usage": [
-        "text"
+        "text",
+        "aria-labelledby"
       ],
       "previewWindow": "notice:offline",
       "presets": [
@@ -3391,8 +3476,8 @@
     "you_seem_to_be_offline_c_e08e0d": {
       "source": "You seem to be offline. Check your connection and try again.",
       "en": "You seem to be offline. Check your connection and try again.",
-      "fr": "",
-      "ht": "",
+      "fr": "Vous semblez être hors ligne. Vérifiez votre connexion et réessayez.",
+      "ht": "Sanble ou pa konekte. Verifye koneksyon ou epi eseye ankò.",
       "group": "Bet panel & messages",
       "games": [
         "road"
@@ -3408,8 +3493,8 @@
     "try_again_042c86": {
       "source": "Try again",
       "en": "Try again",
-      "fr": "",
-      "ht": "",
+      "fr": "Réessayer",
+      "ht": "Eseye ankò",
       "group": "Bet panel & messages",
       "games": [
         "road"
@@ -3425,14 +3510,15 @@
     "something_went_wrong_8d886c": {
       "source": "Something went wrong",
       "en": "Something went wrong",
-      "fr": "",
-      "ht": "",
+      "fr": "Un problème est survenu",
+      "ht": "Gen yon bagay ki pa mache",
       "group": "Bet panel & messages",
       "games": [
         "road"
       ],
       "usage": [
-        "text"
+        "text",
+        "aria-labelledby"
       ],
       "previewWindow": "notice:error",
       "presets": [
@@ -3442,8 +3528,8 @@
     "we_could_not_reach_the_g_999757": {
       "source": "We could not reach the game just now. Try again in a moment.",
       "en": "We could not reach the game just now. Try again in a moment.",
-      "fr": "",
-      "ht": "",
+      "fr": "Impossible de joindre le jeu pour le moment. Réessayez dans un instant.",
+      "ht": "Nou pa t kapab jwenn jwèt la kounye a. Eseye ankò nan yon ti moman.",
       "group": "Bet panel & messages",
       "games": [
         "road"
@@ -3467,7 +3553,8 @@
         "mopyon_cascades"
       ],
       "usage": [
-        "text"
+        "text",
+        "aria-labelledby"
       ],
       "previewWindow": "notice:wallet",
       "presets": [
@@ -3520,12 +3607,13 @@
         "candy_cascade"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "candy_b8526a51da54": {
       "source": "5 or more matching candies touching up, down, left or right form a cluster. Every cluster on the board pays at the same time.",
@@ -3537,12 +3625,13 @@
         "candy_cascade"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "candy_dc248242d467": {
       "source": "Winning clusters disappear, candies fall down and new ones drop in. Each new winning cascade raises the multiplier.",
@@ -3554,12 +3643,13 @@
         "candy_cascade"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "candy_d21eff652b09": {
       "source": "Enter an amount of at least 0.01 P, with up to 2 decimal places.",
@@ -3699,7 +3789,15 @@
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "usageByGame": {
+        "candy_cascade": [
+          "unused"
+        ],
+        "mopyon_cascades": [
+          "unused"
+        ]
+      }
     },
     "candy_bbb20c0bfc06": {
       "source": "Try a free Test Spin · No bet or payout",
@@ -4599,12 +4697,13 @@
         "candy_cascade"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "candy_01f20462f88e": {
       "source": "Enter amount",
@@ -4736,7 +4835,8 @@
       "games": [
         "candy_cascade",
         "mopyon_cascades",
-        "plinko"
+        "plinko",
+        "road"
       ],
       "usage": [
         "aria-label"
@@ -4744,7 +4844,16 @@
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewState": "round-dependent"
+      "previewState": "round-dependent",
+      "usageByGame": {
+        "road": [
+          "text",
+          "aria-label"
+        ]
+      },
+      "previewWindowByGame": {
+        "road": "stake"
+      }
     },
     "candy_d06400f175a7": {
       "source": "HOW TO WIN",
@@ -4762,7 +4871,15 @@
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "usageByGame": {
+        "candy_cascade": [
+          "unused"
+        ],
+        "mopyon_cascades": [
+          "unused"
+        ]
+      }
     },
     "candy_41ec3e751c60": {
       "source": "FREE GAMES",
@@ -5022,12 +5139,13 @@
         "candy_cascade"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "candy_3621211f962f": {
       "source": "No bonus",
@@ -6147,12 +6265,13 @@
         "mopyon_cascades"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "across_cfd46a": {
       "source": "Across",
@@ -6249,12 +6368,13 @@
         "mopyon_cascades"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "line_pays_09e839": {
       "source": "LINE PAYS",
@@ -6266,12 +6386,13 @@
         "mopyon_cascades"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "multiples_of_your_bet_be_c8c407": {
       "source": "Multiples of your bet · before the multiplier",
@@ -6351,12 +6472,13 @@
         "mopyon_cascades"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "winning_lines_disappear_751f92": {
       "source": "Winning lines disappear, symbols fall and new ones drop in. Each new winning cascade raises the multiplier. Deep cascades earn free games:",
@@ -6368,12 +6490,13 @@
         "mopyon_cascades"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "your_cascades_ec2ef8": {
       "source": "YOUR CASCADES",
@@ -6814,12 +6937,13 @@
         "plinko"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "risk_and_rows_e27832": {
       "source": "Risk and rows",
@@ -6831,12 +6955,13 @@
         "plinko"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "more_rows_give_the_ball_92e2f3": {
       "source": "More rows give the ball more bounces and the edges bigger pays. A higher risk pays more at the edges and less in the middle.",
@@ -6848,12 +6973,13 @@
         "plinko"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
       ],
-      "previewWindow": "rules"
+      "previewWindow": "rules",
+      "unusedReason": "Now part of the How to play document."
     },
     "return_to_player_value_o_b2893c": {
       "source": "Return to player: {value} % on every table [before certification].",
@@ -7158,6 +7284,236 @@
         "tabbed-shell-v1"
       ],
       "previewWindow": "rules"
+    },
+    "road_lanes_crossed": {
+      "source": "LANES CROSSED",
+      "en": "LANES CROSSED",
+      "fr": "VOIES FRANCHIES",
+      "ht": "LIY TRAVÈSE",
+      "group": "Bet panel & messages",
+      "games": [
+        "road"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "betDetails",
+      "previewWindowByGame": {
+        "road": "topBetDetails"
+      }
+    },
+    "haul_rules_document": {
+      "source": "The net fills with fish while the multiplier climbs. The longer you wait, the more your catch is worth.\n\nPress **CASH OUT** to haul the net in and bank the current multiplier on your stake.\n\nThe net can rip at any moment. If it rips before you cash out, the round ends with nothing.\n\nChoose Easy, Normal, Hard or Expert. Higher difficulty makes the multiplier climb faster. Turn on Auto to cash out at a multiplier you set.",
+      "en": "The net fills with fish while the multiplier climbs. The longer you wait, the more your catch is worth.\n\nPress **CASH OUT** to haul the net in and bank the current multiplier on your stake.\n\nThe net can rip at any moment. If it rips before you cash out, the round ends with nothing.\n\nChoose Easy, Normal, Hard or Expert. Higher difficulty makes the multiplier climb faster. Turn on Auto to cash out at a multiplier you set.",
+      "fr": "Le filet se remplit de poissons pendant que le multiplicateur grimpe. Plus vous attendez, plus votre pêche vaut cher.\n\nAppuyez sur **ENCAISSER** pour remonter le filet et encaisser votre mise au multiplicateur actuel.\n\nLe filet peut se déchirer à tout moment. S’il se déchire avant que vous encaissiez, la manche se termine sans gain.\n\nChoisissez Facile, Normal, Difficile ou Expert. Plus la difficulté est élevée, plus le multiplicateur grimpe vite. Activez Auto pour encaisser au multiplicateur que vous choisissez.",
+      "ht": "Filè a ap plen pwason pandan miltiplikatè a ap monte. Plis ou tann, se plis pwason ou kenbe yo vo.\n\nPeze **PRAN LAJAN** pou rale filè a epi pran gany miz ou a dapre miltiplikatè aktyèl la.\n\nFilè a ka chire nenpòt ki lè. Si li chire anvan ou pran lajan an, tou a fini san ou pa genyen anyen.\n\nChwazi Fasil, Nòmal, Difisil oswa Ekspè. Plis nivo a difisil, se plis miltiplikatè a monte vit. Mete Oto pou pran lajan an otomatikman nan miltiplikatè ou chwazi a.",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "haul"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "gold_rules_document": {
+      "source": "The goat’s sack fills with coins, notes, gold bars, diamonds and rubies while the multiplier climbs.\n\nPress **CASH OUT** to close the sack and bank the current multiplier on your stake.\n\nThe sack can burst at any moment. If it bursts before you cash out, the round ends with nothing.\n\nChoose Easy, Normal, Hard or Expert. Higher difficulty makes the multiplier climb faster. Turn on Auto to cash out at a multiplier you set.",
+      "en": "The goat’s sack fills with coins, notes, gold bars, diamonds and rubies while the multiplier climbs.\n\nPress **CASH OUT** to close the sack and bank the current multiplier on your stake.\n\nThe sack can burst at any moment. If it bursts before you cash out, the round ends with nothing.\n\nChoose Easy, Normal, Hard or Expert. Higher difficulty makes the multiplier climb faster. Turn on Auto to cash out at a multiplier you set.",
+      "fr": "Le sac de la chèvre se remplit de pièces, de billets, de lingots d’or, de diamants et de rubis pendant que le multiplicateur grimpe.\n\nAppuyez sur **ENCAISSER** pour fermer le sac et encaisser votre mise au multiplicateur actuel.\n\nLe sac peut éclater à tout moment. S’il éclate avant que vous encaissiez, la manche se termine sans gain.\n\nChoisissez Facile, Normal, Difficile ou Expert. Plus la difficulté est élevée, plus le multiplicateur grimpe vite. Activez Auto pour encaisser au multiplicateur que vous choisissez.",
+      "ht": "Sak kabrit la ap plen ak pyès, biyè, ba lò, dyaman ak ribi pandan miltiplikatè a ap monte.\n\nPeze **PRAN LAJAN** pou fèmen sak la epi pran gany miz ou a dapre miltiplikatè aktyèl la.\n\nSak la ka pete nenpòt ki lè. Si li pete anvan ou pran lajan an, tou a fini san ou pa genyen anyen.\n\nChwazi Fasil, Nòmal, Difisil oswa Ekspè. Plis nivo a difisil, se plis miltiplikatè a monte vit. Mete Oto pou pran lajan an otomatikman nan miltiplikatè ou chwazi a.",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "gold"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "boom_rules_document": {
+      "source": "Fruit flies across the street. Swipe it or press **SLICE** to cut it open and grow the multiplier.\n\nA golden core gives a big boost. A rotten core takes a little off.\n\nPress **CASH OUT** after any good slice to bank the current multiplier on your stake.\n\nSome fruit hides a bomb. Cut into one and the round ends with nothing.\n\nOne swipe can cut two fruits. They open one after the other, each a slice of its own, and a bomb in either ends the round.\n\nAfter each slice you have 10 seconds to slice again or cash out. When the time runs out, your win is cashed out for you.\n\nChoose Easy, Normal or Hard. Higher difficulty means more bombs and bigger rewards.",
+      "en": "Fruit flies across the street. Swipe it or press **SLICE** to cut it open and grow the multiplier.\n\nA golden core gives a big boost. A rotten core takes a little off.\n\nPress **CASH OUT** after any good slice to bank the current multiplier on your stake.\n\nSome fruit hides a bomb. Cut into one and the round ends with nothing.\n\nOne swipe can cut two fruits. They open one after the other, each a slice of its own, and a bomb in either ends the round.\n\nAfter each slice you have 10 seconds to slice again or cash out. When the time runs out, your win is cashed out for you.\n\nChoose Easy, Normal or Hard. Higher difficulty means more bombs and bigger rewards.",
+      "fr": "Des fruits traversent la rue. Glissez le doigt dessus ou appuyez sur **COUPER** pour les ouvrir et faire grimper le multiplicateur.\n\nUn cœur doré donne un gros coup de pouce. Un cœur pourri en retire un peu.\n\nAppuyez sur **ENCAISSER** après n’importe quelle bonne coupe pour encaisser votre mise au multiplicateur actuel.\n\nCertains fruits cachent une bombe. Si vous en coupez une, la manche se termine sans gain.\n\nUn seul geste peut couper deux fruits. Ils s’ouvrent l’un après l’autre, chacun compte comme une coupe, et une bombe dans l’un ou l’autre termine la manche.\n\nAprès chaque coupe, vous avez 10 secondes pour couper à nouveau ou encaisser. Quand le temps est écoulé, votre gain est encaissé pour vous.\n\nChoisissez Facile, Normal ou Difficile. Plus la difficulté est élevée, plus il y a de bombes et plus les gains sont grands.",
+      "ht": "Fwi ap vole travèse lari a. Glise dwèt ou sou yo oswa peze **KOUPE** pou louvri yo epi fè miltiplikatè a monte.\n\nYon nwayo an lò bay yon gwo pouse. Yon nwayo pouri retire yon ti kras.\n\nPeze **PRAN LAJAN** apre nenpòt bon koupe pou pran gany miz ou a dapre miltiplikatè aktyèl la.\n\nGen kèk fwi ki kache yon bonm. Si ou koupe youn, tou a fini san ou pa genyen anyen.\n\nYon sèl glise ka koupe de fwi. Yo louvri youn apre lòt, chak youn konte pou yon koupe, epi yon bonm nan nenpòt nan yo fini tou a.\n\nApre chak koupe, ou gen 10 segonn pou koupe ankò oswa pran lajan an. Lè tan an fini, yo pran gany ou a pou ou.\n\nChwazi Fasil, Nòmal oswa Difisil. Plis nivo a difisil, se plis gen bonm epi se plis gany yo gwo.",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "boom"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "sky_tap_tap_rules_document": {
+      "source": "## Sky Tap-Tap\n\nChoose your stake and press **PLAY**. The plane takes off as the multiplier grows. Press **CASH OUT** before the crash to collect your stake multiplied by the current multiplier. A crash loses the stake, including crashes before takeoff.\n\nAuto Cashout collects at your chosen multiplier if the plane reaches it before crashing. Start each round manually with **PLAY**.\n\nThis is a demo with virtual credits. Live Wins are simulated. Refill restores 1,000 credits.",
+      "en": "## Sky Tap-Tap\n\nChoose your stake and press **PLAY**. The plane takes off as the multiplier grows. Press **CASH OUT** before the crash to collect your stake multiplied by the current multiplier. A crash loses the stake, including crashes before takeoff.\n\nAuto Cashout collects at your chosen multiplier if the plane reaches it before crashing. Start each round manually with **PLAY**.\n\nThis is a demo with virtual credits. Live Wins are simulated. Refill restores 1,000 credits.",
+      "fr": "## Sky Tap-Tap\n\nChoisissez votre mise et appuyez sur **JOUER**. L’avion décolle pendant que le multiplicateur grimpe. Appuyez sur **ENCAISSER** avant le crash pour récupérer votre mise multipliée par le multiplicateur actuel. Un crash fait perdre la mise, même s’il arrive avant le décollage.\n\nL’encaissement automatique encaisse au multiplicateur choisi si l’avion l’atteint avant de s’écraser. Lancez chaque manche vous-même avec **JOUER**.\n\nCeci est une démo avec des crédits virtuels. Les gains en direct sont simulés. La recharge rétablit 1 000 crédits.",
+      "ht": "## Sky Tap-Tap\n\nChwazi miz ou epi peze **JWE**. Avyon an dekole pandan miltiplikatè a ap monte. Peze **PRAN LAJAN** anvan li fè aksidan pou ou touche miz ou miltipliye pa miltiplikatè aktyèl la. Si avyon an fè aksidan, ou pèdi miz la, menm si li fèt anvan li dekole.\n\nPran lajan otomatik la pran gany ou nan miltiplikatè ou chwazi a si avyon an rive la anvan li fè aksidan. Kòmanse chak tou ou menm ak **JWE**.\n\nSa a se yon demo ak kredi vityèl. Gany an dirèk yo se simulasyon. Ranpli a remèt 1 000 kredi.",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "sky_tap_tap"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "market_stack_rules_document": {
+      "source": "Press **PLAY** to start a round. The porter carries a crate back and forth above the tower.\n\nPress **PLACE**, tap the scene or press Space to drop the crate where the porter holds it. Every crate that lands safely raises the multiplier.\n\nPlace each crate carefully. If the tower leans too far it collapses, and the round ends with nothing. Even a well-built tower can give way, and the taller it is, the bigger the risk.\n\nPress **CASH OUT** at any time between crates to bank the current multiplier on your stake. The tower holds at most 10 crates; at the top, cash out to collect.",
+      "en": "Press **PLAY** to start a round. The porter carries a crate back and forth above the tower.\n\nPress **PLACE**, tap the scene or press Space to drop the crate where the porter holds it. Every crate that lands safely raises the multiplier.\n\nPlace each crate carefully. If the tower leans too far it collapses, and the round ends with nothing. Even a well-built tower can give way, and the taller it is, the bigger the risk.\n\nPress **CASH OUT** at any time between crates to bank the current multiplier on your stake. The tower holds at most 10 crates; at the top, cash out to collect.",
+      "fr": "Appuyez sur **JOUER** pour lancer une manche. Le porteur fait aller et venir une caisse au-dessus de la tour.\n\nAppuyez sur **PLACER**, touchez la scène ou appuyez sur Espace pour lâcher la caisse là où le porteur la tient. Chaque caisse posée sans tomber fait grimper le multiplicateur.\n\nPlacez chaque caisse avec soin. Si la tour penche trop, elle s’effondre et la manche se termine sans gain. Même une tour bien construite peut céder, et plus elle est haute, plus le risque est grand.\n\nAppuyez sur **ENCAISSER** à tout moment entre deux caisses pour encaisser votre mise au multiplicateur actuel. La tour compte au plus 10 caisses ; arrivé en haut, encaissez pour récupérer votre gain.",
+      "ht": "Peze **JWE** pou kòmanse yon tou. Pòtè a ap pote yon kès ale vini anlè gwo kay la.\n\nPeze **METE**, touche sèn nan oswa peze Espas pou lage kès la kote pòtè a kenbe l la. Chak kès ki poze san li pa tonbe fè miltiplikatè a monte.\n\nMete chak kès ak atansyon. Si pil la panche twòp, li tonbe epi tou a fini san ou pa genyen anyen. Menm yon pil ki byen fèt ka lage, epi plis li wo, se plis risk la gwo.\n\nPeze **PRAN LAJAN** nenpòt ki lè ant de kès pou pran gany miz ou a dapre miltiplikatè aktyèl la. Pil la pa ka gen plis pase 10 kès; lè ou rive anlè a, pran lajan an pou touche gany ou.",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "market_stack"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "fuel_rules_document": {
+      "source": "Press **PLAY** to start a round. The rider sets off down the road with cans of fuel.\n\nEach buyer the rider reaches is served. A sale raises the multiplier, and a big sale raises it a lot.\n\nSome cans burst. If a can bursts before you sell, the round ends with nothing. Hot buyers pay more but carry more risk.\n\nPress **SELL FUEL** after any sale to bank the current multiplier on your stake. A round serves at most 25 buyers.\n\nChoose Easy, Normal, Hard or Expert. Higher difficulty means more bursts and bigger rewards. Turn on Auto to sell at a limit you set.",
+      "en": "Press **PLAY** to start a round. The rider sets off down the road with cans of fuel.\n\nEach buyer the rider reaches is served. A sale raises the multiplier, and a big sale raises it a lot.\n\nSome cans burst. If a can bursts before you sell, the round ends with nothing. Hot buyers pay more but carry more risk.\n\nPress **SELL FUEL** after any sale to bank the current multiplier on your stake. A round serves at most 25 buyers.\n\nChoose Easy, Normal, Hard or Expert. Higher difficulty means more bursts and bigger rewards. Turn on Auto to sell at a limit you set.",
+      "fr": "Appuyez sur **JOUER** pour lancer une manche. Le livreur part sur la route avec des bidons de carburant.\n\nChaque acheteur que le livreur rejoint est servi. Une vente fait grimper le multiplicateur, une grosse vente le fait grimper beaucoup.\n\nCertains bidons éclatent. Si un bidon éclate avant que vous vendiez, la manche se termine sans gain. Les acheteurs pressés paient plus mais comportent plus de risque.\n\nAppuyez sur **VENDRE** après n’importe quelle vente pour encaisser votre mise au multiplicateur actuel. Une manche sert au plus 25 acheteurs.\n\nChoisissez Facile, Normal, Difficile ou Expert. Plus la difficulté est élevée, plus il y a d’éclatements et plus les gains sont grands. Activez Auto pour vendre à la limite que vous choisissez.",
+      "ht": "Peze **JWE** pou kòmanse yon tou. Livrè a pran wout la ak galon gaz.\n\nChak achtè livrè a rive kote l, li sèvi l. Yon vant fè miltiplikatè a monte, yon gwo vant fè l monte anpil.\n\nGen kèk galon ki pete. Si yon galon pete anvan ou vann, tou a fini san ou pa genyen anyen. Achtè ki prese yo peye plis men yo pote plis risk.\n\nPeze **VANN GAZ** apre nenpòt vant pou pran gany miz ou a dapre miltiplikatè aktyèl la. Yon tou pa sèvi plis pase 25 achtè.\n\nChwazi Fasil, Nòmal, Difisil oswa Ekspè. Plis nivo a difisil, se plis galon pete epi se plis gany yo gwo. Mete Oto pou vann nan limit ou chwazi a.",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "fuel"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "plinko_rules_document": {
+      "source": "Drop a ball. At every peg it bounces left or right, and the bucket it lands in pays that multiple of your bet. The middle buckets are the most likely and pay least; the edges are rare and pay most.\n\n## Risk and rows\n\nMore rows give the ball more bounces and the edges bigger pays. A higher risk pays more at the edges and less in the middle.\n\n[[multipliers]]\n\n[[rtp]]",
+      "en": "Drop a ball. At every peg it bounces left or right, and the bucket it lands in pays that multiple of your bet. The middle buckets are the most likely and pay least; the edges are rare and pay most.\n\n## Risk and rows\n\nMore rows give the ball more bounces and the edges bigger pays. A higher risk pays more at the edges and less in the middle.\n\n[[multipliers]]\n\n[[rtp]]",
+      "fr": "Lâchez une bille. À chaque picot, elle rebondit à gauche ou à droite, et la case où elle tombe paie ce multiple de votre mise. Les cases du milieu sont les plus probables et paient le moins ; celles des bords sont rares et paient le plus.\n\n## Risque et rangées\n\nPlus de rangées donnent plus de rebonds à la bille et de plus gros gains aux bords. Un risque plus élevé paie plus aux bords et moins au milieu.\n\n[[multipliers]]\n\n[[rtp]]",
+      "ht": "Lage yon boul. Sou chak klou, li rebondi agoch oswa adwat, epi kaz kote li tonbe a peye miz ou miltipliye pa chif ki sou li. Kaz nan mitan yo pi fasil rive epi yo peye mwens; kaz sou bò yo ra epi yo peye plis.\n\n## Risk ak ranje\n\nPlis ranje bay boul la plis rebon, epi kaz sou bò yo peye pi gwo. Yon risk ki pi wo peye plis sou bò yo e mwens nan mitan.\n\n[[multipliers]]\n\n[[rtp]]",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "plinko"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "catch_rules_document": {
+      "source": "1. **Wait for PLACE YOUR BET.** Choose an amount, then press BET on any position. You can choose one, two or all three.\n2. **Left / Right:** predict the winning fisherman. These bets settle automatically when the round ends.\n3. **Main Catch:** press CASHOUT while the catch grows, before the round ends. If the round ends before you cash out, Main loses.\n\nCANCEL returns your entire stake before the countdown finishes. Once the round starts, betting is closed until the next round.\n\nLeft and Right settle when the round ends; only one side wins. Main must be cashed out before the round ends. Cashing out Main does not end the duel.\n\n**Main is not a third winner.** Left or Right always wins the duel. Main is an independent cash-out bet.\n\n**Payout includes your stake.** For example, $5 on Left at 2.37× returns $11.85 ($6.85 profit) if Left wins. $8 on Main cashed out at 1.50× returns $12 ($4 profit). Main without a cashout loses even if your chosen side wins.\n\nStake: $1–$1,000 per position. Main is automatically cashed out at the 1,000× ceiling. Local demo credits.",
+      "en": "1. **Wait for PLACE YOUR BET.** Choose an amount, then press BET on any position. You can choose one, two or all three.\n2. **Left / Right:** predict the winning fisherman. These bets settle automatically when the round ends.\n3. **Main Catch:** press CASHOUT while the catch grows, before the round ends. If the round ends before you cash out, Main loses.\n\nCANCEL returns your entire stake before the countdown finishes. Once the round starts, betting is closed until the next round.\n\nLeft and Right settle when the round ends; only one side wins. Main must be cashed out before the round ends. Cashing out Main does not end the duel.\n\n**Main is not a third winner.** Left or Right always wins the duel. Main is an independent cash-out bet.\n\n**Payout includes your stake.** For example, $5 on Left at 2.37× returns $11.85 ($6.85 profit) if Left wins. $8 on Main cashed out at 1.50× returns $12 ($4 profit). Main without a cashout loses even if your chosen side wins.\n\nStake: $1–$1,000 per position. Main is automatically cashed out at the 1,000× ceiling. Local demo credits.",
+      "fr": "1. **Attendez le début des mises.** Choisissez un montant, puis appuyez sur MISER sur une position. Vous pouvez en choisir une, deux ou trois.\n2. **Gauche / Droite :** prédisez le pêcheur gagnant. Ces mises sont réglées automatiquement en fin de manche.\n3. **Prise principale :** appuyez sur ENCAISSER pendant que la prise augmente, avant la fin de la manche. Sinon, la mise principale est perdue.\n\nANNULER rembourse votre mise avant la fin du compte à rebours. Une fois la manche commencée, les mises sont fermées jusqu’à la prochaine manche.\n\nLes mises gauche et droite sont réglées en fin de manche ; un seul côté gagne. La mise principale doit être encaissée avant la fin. L’encaisser ne termine pas le duel.\n\n**La mise principale n’est pas un troisième gagnant.** La gauche ou la droite gagne toujours le duel. La mise principale est une mise indépendante à encaisser.\n\n**Le gain inclut votre mise.** Par exemple, 5 $ à gauche à 2,37× rapportent 11,85 $ (6,85 $ de bénéfice) si la gauche gagne. Une mise principale de 8 $ encaissée à 1,50× rapporte 12 $ (4 $ de bénéfice). Sans encaissement, la mise principale est perdue même si votre côté gagne.\n\nMise : de 1 à 1 000 $ par position. La mise principale est encaissée automatiquement au plafond de 1 000×. Crédits de démo locaux.",
+      "ht": "1. **Tann METE MIZ OU.** Chwazi yon montan, epi peze MIZE sou nenpòt pozisyon. Ou ka chwazi youn, de oswa tout twa.\n2. **Gòch / Dwat:** devine ki pechè k ap genyen. Miz sa yo regle otomatikman lè tou a fini.\n3. **Priz prensipal:** peze PRAN LAJAN pandan priz la ap grandi, anvan tou a fini. Si tou a fini anvan ou pran lajan, Priz prensipal la pèdi.\n\nANILE remèt tout miz ou anvan dekont lan fini. Depi tou a kòmanse, miz yo fèmen jiska pwochen tou a.\n\nGòch ak Dwat regle lè tou a fini; se yon sèl bò ki genyen. Ou dwe pran lajan Priz prensipal la anvan tou a fini. Pran lajan Priz prensipal la pa fini konpetisyon an.\n\n**Priz prensipal la pa yon twazyèm gayan.** Se toujou Gòch oswa Dwat ki genyen konpetisyon an. Priz prensipal la se yon miz endepandan kote ou dwe pran lajan.\n\n**Gany lan gen miz ou ladan l.** Pa egzanp, $5 sou Gòch nan 2.37× bay $11.85 ($6.85 pwofi) si Gòch genyen. $8 sou Priz prensipal la, lè ou pran lajan nan 1.50×, bay $12 ($4 pwofi). Priz prensipal la pèdi si ou pa pran lajan, menm si bò ou chwazi a genyen.\n\nMiz: $1–$1,000 pou chak pozisyon. Lajan Priz prensipal la pran otomatikman nan plafon 1,000× la. Kredi demonstrasyon lokal.",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "catch"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "candy_cascade_rules_document": {
+      "source": "## HOW TO WIN\n\n[[cluster_examples]]\n\n5 or more matching candies touching up, down, left or right form a cluster. Every cluster on the board pays at the same time.\n\n## CLUSTER PAYS\n\n[[paytable]]\n\n## CASCADES\n\nWinning clusters disappear, candies fall down and new ones drop in. Each new winning cascade raises the multiplier.\n\n[[ladder]]\n\n## FREE GAMES\n\nIf your first board has no win, you get a Bonus Wheel that can award 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%) free games, or no bonus (79%). Each free game starts on a new board at 1x. Free games cannot win more free games.\n\nReturn to player: [RTP after certification].",
+      "en": "## HOW TO WIN\n\n[[cluster_examples]]\n\n5 or more matching candies touching up, down, left or right form a cluster. Every cluster on the board pays at the same time.\n\n## CLUSTER PAYS\n\n[[paytable]]\n\n## CASCADES\n\nWinning clusters disappear, candies fall down and new ones drop in. Each new winning cascade raises the multiplier.\n\n[[ladder]]\n\n## FREE GAMES\n\nIf your first board has no win, you get a Bonus Wheel that can award 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%) free games, or no bonus (79%). Each free game starts on a new board at 1x. Free games cannot win more free games.\n\nReturn to player: [RTP after certification].",
+      "fr": "## COMMENT GAGNER\n\n[[cluster_examples]]\n\nAu moins 5 bonbons identiques reliés par leurs côtés forment un groupe gagnant. Tous les groupes du plateau rapportent un gain en même temps.\n\n## GAINS PAR GROUPE\n\n[[paytable]]\n\n## CASCADES\n\nLes groupes gagnants disparaissent, les bonbons descendent et de nouveaux arrivent. Chaque nouvelle cascade gagnante augmente le multiplicateur.\n\n[[ladder]]\n\n## TOURS GRATUITS\n\nSi le premier plateau ne rapporte aucun gain, la roue bonus peut offrir 1 (10 %), 2 (5 %), 3 (2 %), 4 (1 %) ou 5 (3 %) tours gratuits, ou aucun bonus (79 %). Chaque tour gratuit commence sur un nouveau plateau à 1×. Il ne peut pas offrir d’autres tours gratuits.\n\nRetour au joueur : [RTP après certification].",
+      "ht": "## KIJAN POU GENYEN\n\n[[cluster_examples]]\n\nOmwen 5 sirèt menm kalite ki touche anlè, anba, agoch oswa adwat fòme yon gwoup. Tout gwoup sou tablo a peye an menm tan.\n\n## GEN PA GWOUP\n\n[[paytable]]\n\n## KASKAD\n\nGwoup ki genyen yo disparèt, sirèt yo desann epi lòt tonbe pou ranplase yo. Chak nouvo kaskad ki genyen ogmante miltiplikatè a.\n\n[[ladder]]\n\n## TOU GRATIS\n\nSi premye tablo a pa bay genyen, wou bonis la ka bay 1 (10%), 2 (5%), 3 (2%), 4 (1%) oswa 5 (3%) tou gratis, oswa pa bay bonis (79%). Chak tou gratis kòmanse sou yon nouvo tablo a 1×. Tou gratis pa ka bay lòt tou gratis.\n\nRetou pou jwè : [RTP apre sètifikasyon].",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "mopyon_cascades_rules_document": {
+      "source": "## HOW TO WIN\n\nLine up 5 or more of the same symbol in a straight line, with no gaps.\n\n[[directions]]\n\n[[longrun]]\n\nLines that cross each other both pay; a shared symbol is removed once.\n\n## LINE PAYS\n\n[[paytable]]\n\n## CASCADES & FREE GAMES\n\nWinning lines disappear, symbols fall and new ones drop in. Each new winning cascade raises the multiplier. Deep cascades earn free games:\n\n[[freegames]]\n\n[[multiplier]]\n\nReturn to player: [RTP after certification].",
+      "en": "## HOW TO WIN\n\nLine up 5 or more of the same symbol in a straight line, with no gaps.\n\n[[directions]]\n\n[[longrun]]\n\nLines that cross each other both pay; a shared symbol is removed once.\n\n## LINE PAYS\n\n[[paytable]]\n\n## CASCADES & FREE GAMES\n\nWinning lines disappear, symbols fall and new ones drop in. Each new winning cascade raises the multiplier. Deep cascades earn free games:\n\n[[freegames]]\n\n[[multiplier]]\n\nReturn to player: [RTP after certification].",
+      "fr": "## COMMENT GAGNER\n\nAlignez au moins 5 symboles identiques en ligne droite, sans interruption.\n\n[[directions]]\n\n[[longrun]]\n\nDes lignes qui se croisent paient toutes les deux ; un symbole commun n’est retiré qu’une fois.\n\n## GAINS PAR LIGNE\n\n[[paytable]]\n\n## CASCADES ET TOURS GRATUITS\n\nLes lignes gagnantes disparaissent, les symboles descendent et de nouveaux arrivent. Chaque nouvelle cascade gagnante augmente le multiplicateur. Les longues cascades offrent des tours gratuits :\n\n[[freegames]]\n\n[[multiplier]]\n\nRetour au joueur : [RTP après certification].",
+      "ht": "## KIJAN POU GENYEN\n\nAliye omwen 5 senbòl menm kalite an liy dwat, san espas.\n\n[[directions]]\n\n[[longrun]]\n\nLiy ki kwaze youn ak lòt peye tou de; yon senbòl yo pataje retire yon sèl fwa.\n\n## GEN PA LIY\n\n[[paytable]]\n\n## KASKAD AK TOU GRATIS\n\nLiy ki genyen yo disparèt, senbòl yo desann epi lòt tonbe pou ranplase yo. Chak nouvo kaskad ki genyen ogmante miltiplikatè a. Kaskad ki long bay tou gratis:\n\n[[freegames]]\n\n[[multiplier]]\n\nRetou pou jwè : [RTP apre sètifikasyon].",
+      "label": "How to play · Content",
+      "format": "markdown",
+      "group": "Rules",
+      "games": [
+        "mopyon_cascades"
+      ],
+      "usage": [
+        "text"
+      ],
+      "previewWindow": "rules"
+    },
+    "rank_value_0c4ac2": {
+      "source": "Rank {value}",
+      "en": "Rank {value}",
+      "fr": "Classement {value}",
+      "ht": "Ran {value}",
+      "group": "Header & account",
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "cashed_out_value_e10f63": {
+      "source": "Cashed out, {value}",
+      "en": "Cashed out, {value}",
+      "fr": "Encaissé, {value}",
+      "ht": "Lajan pran, {value}",
+      "group": "Bet panel & messages",
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "lost_value_e9faef": {
+      "source": "Lost, {value}",
+      "en": "Lost, {value}",
+      "fr": "Perdu, {value}",
+      "ht": "Pèdi, {value}",
+      "group": "Bet panel & messages",
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ]
+    },
+    "menu_sections_3fcbae": {
+      "source": "Menu sections",
+      "en": "Menu sections",
+      "fr": "Sections du menu",
+      "ht": "Seksyon meni an",
+      "group": "Settings",
+      "usage": [
+        "aria-label"
+      ],
+      "presets": [
+        "menu-drawer-v1"
+      ],
+      "previewWindow": "menu"
     }
   }
 }

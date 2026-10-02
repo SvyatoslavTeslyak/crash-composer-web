@@ -3,7 +3,9 @@
 .cloud-dialog .cloud-list article{padding:12px 0;border-bottom:1px solid #394451}.cloud-dialog .cloud-list article:last-child{border-bottom:0;padding-bottom:0}.cloud-dialog h3{margin-top:24px}.cloud-dialog pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0e151e;padding:12px;border-radius:8px}.cloud-dialog details{margin-top:20px}.cloud-dialog form{margin-top:16px}
 #invite-form{display:grid;gap:16px}#invite-form label{display:grid;gap:6px}#invite-form fieldset{margin:0;border:1px solid var(--inspector-border);border-radius:8px;padding:12px}#invite-games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}#invite-games label{display:flex;align-items:center;gap:8px;font-size:12px}#invite-games input{width:16px;min-height:16px;flex:none}#invite-result input{width:100%;margin:8px 0}#invite-status{overflow-wrap:anywhere}
 /* Compact change review; editors only get the Send changes action. */
-#changes-feedback{max-width:240px;color:#a1afbf;font-size:12px;line-height:1.4}#changes-feedback:empty{display:none}
+/* What a save or a Changes action just did floats as a toast under the header, as Brands' toasts do,
+   so the header never moves to make room for it. */
+#changes-feedback{position:fixed;left:50%;top:calc(var(--space-48) + var(--space-24));transform:translateX(-50%);z-index:50;max-width:min(560px,calc(100vw - 32px));padding:var(--space-12) var(--space-16);border-radius:var(--inspector-radius-card);background:var(--inspector-surface-selected);color:var(--inspector-ink-selected);border:var(--stroke-1) solid var(--inspector-accent);box-shadow:var(--elevation-2,0 12px 32px rgba(0,0,0,.4));font-size:13px;line-height:1.4;pointer-events:none}#changes-feedback:empty{display:none}
 .cloud-dialog{width:min(900px,calc(100vw - 32px))}.cloud-dialog button:disabled{opacity:.45;cursor:default}
 .review-changes{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px}.review-changes th,.review-changes td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid #394451;overflow-wrap:anywhere;white-space:pre-wrap}.review-changes thead{color:#a1afbf}.review-changes tbody th{font-weight:500;width:40%}.review-changes td:last-child{color:#bce8cc}.review-section h3 small{font-size:12px;font-weight:400}.review-section{overflow:auto}
 
@@ -82,4 +84,153 @@
 .scope-about{margin:0 0 14px}
 #cloud-configurations .changes-dot{width:9px;height:9px;border-radius:50%;flex:none;margin-right:8px;background:#6cccff}
 #cloud-configurations .changes-dot.release{background:#ffd37a}#cloud-configurations .changes-dot.shared{background:#b79cff}#cloud-configurations .changes-dot.awaiting{background:#6cccff}#cloud-configurations .changes-dot.saved{background:#98a5b5}
+.changes-standing{display:flex;align-items:center;gap:10px;margin:0 0 12px;padding:10px 12px;border:1px solid #394451;border-radius:10px;background:#111923}.changes-standing>span:nth-child(2){flex:1;display:grid;gap:2px}.changes-standing small{color:#8796a8;font-size:12px}
+.changes-standing .changes-dot{width:9px;height:9px;border-radius:50%;flex:none;background:#3b4a5e}.changes-standing .changes-dot.release{background:#ffd37a}.changes-standing .changes-dot.awaiting{background:#6cccff}.changes-standing .changes-dot.saved{background:#98a5b5}
+#cloud-configurations .changes-dot.notice{background:#5fd6a6}
+.review-help{margin:12px 0 0;padding-left:20px;color:#a1afbf;line-height:1.7}.review-help li{margin:4px 0}.review-help code{color:#d6e0ea}
 #cloud-configurations .changes-badge{background:#303844!important;color:#e2e7ee!important}
+/* Hovering Changes: where the picked game stands and the next step, without opening the dialog. */
+#changes-card{position:fixed;z-index:60;width:320px;padding:12px;background:#161e28;border:1px solid #394451;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.45);font-size:13px;color:#e2e7ee}
+#changes-card[hidden]{display:none}
+#changes-card .changes-standing{margin:0;padding:0;border:0;background:none}
+#changes-card p{margin:0;color:#a1afbf}
+#changes-card ul{margin:10px 0 0;padding:8px 0 0 18px;border-top:1px solid #2a3442;color:#a1afbf;font-size:12px}
+#changes-card .changes-card-actions{display:flex;gap:8px;margin-top:12px}
+#changes-card .changes-card-actions .wb-button{min-height:32px;padding:0 12px;font-size:12px}
+#changes-card .changes-card-actions .primary{background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}
+#changes-card .changes-standing{align-items:flex-start;padding:8px 0}#changes-card .changes-standing+.changes-standing{border-top:1px solid #2a3442}
+#changes-card .changes-standing .changes-dot{margin-top:5px}#changes-card .changes-standing .changes-dot.shared{background:#b79cff}#changes-card .changes-standing .changes-dot.idle{background:#3b4a5e}
+#changes-card .changes-scope{text-transform:uppercase;letter-spacing:.08em;font-size:10px;color:#8796a8}
+#changes-card .changes-standing .wb-button{flex:none;min-height:28px;padding:0 10px;font-size:12px}#changes-card .changes-standing .wb-button.primary{background:var(--inspector-accent);border-color:var(--inspector-accent);color:var(--inspector-on-accent);font-weight:600}
+#changes-card .changes-card-note{margin:8px 0 0;font-size:12px;color:#8796a8}
+.review-audio{display:block;width:100%;max-width:280px;height:32px}
+/* Changes, compact: the tabs, one quiet line, the changes, the actions under them. */
+.cloud-dialog .review-header-actions{display:flex;gap:8px;align-items:center}
+.cloud-dialog .review-header-actions .wb-button{width:36px;height:36px;padding:0;display:grid;place-items:center;font-size:16px}
+.cloud-dialog .changes-meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;margin:8px 0 12px;font-size:12px;color:var(--inspector-muted)}
+.cloud-dialog .changes-meta>span+span::before,.cloud-dialog .changes-history+span::before{content:"· "}
+/* Earlier publications drop down from the line that says what is published now. */
+.cloud-dialog .changes-history{position:relative}
+.cloud-dialog .changes-history summary{cursor:pointer;list-style:none;color:var(--inspector-text);text-decoration:underline dotted;text-underline-offset:3px}
+.cloud-dialog .changes-history summary::-webkit-details-marker{display:none}
+.cloud-dialog .changes-history summary::after{content:" ▾";color:var(--inspector-muted)}
+.cloud-dialog .changes-history-list{position:absolute;left:0;top:calc(100% + 6px);z-index:5;min-width:240px;padding:10px 12px;border:1px solid var(--inspector-border);border-radius:10px;background:var(--inspector-card,#111923);box-shadow:0 12px 32px rgba(0,0,0,.45)}
+.cloud-dialog .changes-history-list p{margin:0 0 6px;color:var(--inspector-text)}.cloud-dialog .changes-history-list a{color:var(--inspector-accent)}
+.cloud-dialog .scope-tabs{margin-bottom:0}
+.cloud-dialog .review-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:12px}
+.cloud-dialog .review-empty details{margin-top:8px}.cloud-dialog .review-empty summary{cursor:pointer;color:var(--inspector-muted);font-size:12px}
+.cloud-dialog .review-changes .review-before{color:var(--inspector-muted)}
+.cloud-dialog .review-changes .review-arrow{width:24px;padding-left:0;padding-right:0;text-align:center;color:var(--inspector-muted)}
+/* Label, then before → after side by side: the label takes a third, the values share the rest. */
+.cloud-dialog .review-changes th[scope=row]{width:32%}
+.cloud-dialog .review-changes td:not(.review-arrow){width:calc(34% - 12px)}
+.cloud-dialog .review-changes tr:last-child>*{border-bottom:0}
+.cloud-dialog .review-message{margin:8px 0 0;font-size:12px;color:var(--inspector-muted)}.cloud-dialog .review-message.is-error{color:var(--inspector-danger)}.cloud-dialog .review-message:empty{display:none}
+.cloud-dialog .review-others{margin-top:16px;padding-top:12px;border-top:1px solid var(--inspector-border)}.cloud-dialog .review-others>summary{cursor:pointer;font-weight:600;color:var(--inspector-muted)}
+.cloud-dialog .review-count:empty{display:none}
+/* A sent version is one person's: their name heads it, in a card of its own. */
+.cloud-dialog .review-version{margin:0 0 16px;padding:14px 16px;border:1px solid var(--inspector-border);border-radius:12px;background:color-mix(in srgb,var(--inspector-surface) 40%,transparent)}
+.cloud-dialog .review-version-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.cloud-dialog .review-version-head strong{display:block;font-size:14px}.cloud-dialog .review-version-head small{display:block;font-size:12px;color:var(--inspector-muted)}
+.cloud-dialog .review-avatar{display:grid;place-items:center;flex:none;width:28px;height:28px;border-radius:50%;background:var(--inspector-surface-selected);color:var(--inspector-ink-selected);font-weight:700;font-size:13px}
+/* Changes, flat: one table of lines, a quiet title line over each text, season or sound. */
+.cloud-dialog .review-flat{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px;margin:4px 0 8px}
+.cloud-dialog .review-flat th,.cloud-dialog .review-flat td{padding:6px 8px;text-align:left;vertical-align:top;overflow-wrap:anywhere;border:0}
+.cloud-dialog .review-flat th[scope=row]{width:30%;font-weight:500;color:var(--inspector-muted);padding-left:16px}
+.cloud-dialog .review-flat td{width:calc(35% - 12px)}
+.cloud-dialog .review-flat .review-arrow{width:24px;padding:6px 0;text-align:center;color:var(--inspector-muted)}
+.cloud-dialog .review-flat .review-before{color:var(--inspector-muted)}
+.cloud-dialog .review-flat-group th{padding-top:12px;font-weight:600;color:var(--inspector-text);border-top:1px solid var(--inspector-border)}
+.cloud-dialog .review-flat tbody tr.review-flat-group:first-child th{border-top:0;padding-top:4px}
+/* One frame per thing: version cards and the saved-changes block are not boxed again by their list. */
+.cloud-dialog .review-queue{border:0!important;background:none!important;padding:0!important}
+.cloud-dialog .review-queue>h3{margin:16px 0 8px}
+.cloud-dialog .review-version .review-json{margin-top:8px}
+/* A version's actions on one line under its changes; the release steps above them, the JSON below. */
+.cloud-dialog .review-version .share-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:8px;padding-top:10px;border-top:1px solid var(--inspector-border)}
+.cloud-dialog .review-version .share-actions>.release-steps,.cloud-dialog .review-version .share-actions>p{flex-basis:100%;margin:0}
+.cloud-dialog .review-version .release-action{margin:0}
+.cloud-dialog .review-version .review-json summary{font-size:12px;color:var(--inspector-muted)}
+/* The state colours, one set for Changes everywhere. */
+.cloud-dialog,#cloud-configurations,#changes-card{--tone-saved:#98a5b5;--tone-awaiting:#6cccff;--tone-accepted:#5fd6a6;--tone-release:#ffd37a}
+.changes-dot.saved{background:var(--tone-saved)!important}.changes-dot.awaiting{background:var(--tone-awaiting)!important}.changes-dot.release{background:var(--tone-release)!important}.changes-dot.shared{background:var(--tone-saved)!important}
+.changes-flag[class*=tone-]{display:inline-flex;align-items:center;height:20px;margin-left:8px;padding:0 8px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid color-mix(in srgb,var(--tone) 50%,transparent);background:color-mix(in srgb,var(--tone) 14%,transparent);color:var(--tone)}
+.changes-flag.tone-saved{--tone:var(--tone-saved)}.changes-flag.tone-awaiting,.changes-flag.tone-idle{--tone:var(--tone-awaiting)}.changes-flag.tone-accepted{--tone:var(--tone-accepted)}.changes-flag.tone-release{--tone:var(--tone-release)}
+.review-status.awaiting{color:var(--tone-awaiting)!important;background:color-mix(in srgb,var(--tone-awaiting) 12%,transparent)!important;border-color:color-mix(in srgb,var(--tone-awaiting) 45%,transparent)!important}
+.review-status.accepted{color:var(--tone-accepted)!important;background:color-mix(in srgb,var(--tone-accepted) 12%,transparent)!important;border-color:color-mix(in srgb,var(--tone-accepted) 45%,transparent)!important}
+/* Nothing waiting is not a success to celebrate: a quiet line, no green panel. */
+.cloud-dialog .review-empty{margin:12px 0;padding:0;border:0;background:none}
+.cloud-dialog .review-empty strong{color:var(--inspector-text);font-size:14px;font-weight:600}
+/* The Changes button: the state's dot carries the count. */
+#cloud-configurations .changes-dot.has-count{display:inline-grid;place-items:center;width:auto;height:18px;min-width:18px;padding:0 5px;margin-right:0;border-radius:999px;color:#0b1222;font:700 11px/1 var(--inspector-sans,sans-serif)}
+.cloud-dialog .review-version-head .review-status{margin-left:auto}
+.cloud-dialog .review-sent-list{margin-top:20px}
+/* A version card keeps its own inner margin; the older list rule had set it to none at the sides. */
+.cloud-dialog .cloud-list article.review-version,.cloud-dialog article.review-version{padding:14px 16px!important;border:1px solid var(--inspector-border)!important;margin:0 0 12px}
+.cloud-dialog .review-version .review-flat th[scope=rowgroup]{padding-left:0}
+.cloud-dialog .review-version .review-flat th[scope=row]{padding-left:8px}
+.cloud-dialog .review-version .review-json{margin:8px 0 0}
+/* An added sound: a small round play button before its name, on the line. */
+.cloud-dialog .review-play{display:inline-grid;place-items:center;width:22px;height:22px;margin:-2px 8px 0 0;padding:0;vertical-align:middle;border:1px solid var(--inspector-border);border-radius:50%;background:var(--inspector-surface);color:var(--inspector-text);font-size:9px;cursor:pointer}
+.cloud-dialog .review-play:hover{border-color:var(--inspector-accent);color:var(--inspector-accent)}
+/* JSON is a small link at the end of a version's actions; open, it takes the row below. */
+.cloud-dialog .share-actions .review-json{margin:0 0 0 auto;border:0;padding:0}
+.cloud-dialog .share-actions .review-json[open]{flex-basis:100%;margin-left:0}
+.cloud-dialog .share-actions .review-json summary{font-size:12px;color:var(--inspector-muted);cursor:pointer}
+.cloud-dialog .review-version .review-json{border-top:0!important;padding-top:0!important}
+.cloud-dialog .review-version .share-actions{border-top:0;padding-top:4px}
+/* Admin's Changes: every game with something waiting, one row each. */
+.cloud-dialog .changes-inbox{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+.cloud-dialog .changes-inbox button{display:grid;grid-template-columns:minmax(140px,auto) 1fr auto;align-items:center;gap:12px;width:100%;padding:12px 16px;border:1px solid var(--inspector-border);border-radius:12px;background:color-mix(in srgb,var(--inspector-surface) 40%,transparent);color:var(--inspector-text);text-align:left;cursor:pointer;font:inherit}
+.cloud-dialog .changes-inbox button:hover{border-color:var(--inspector-accent)}
+.cloud-dialog .changes-inbox-title{font-weight:600}
+.cloud-dialog .changes-inbox-flags{display:flex;flex-wrap:wrap;gap:6px}.cloud-dialog .changes-inbox-flags .changes-flag{margin:0}
+.cloud-dialog .changes-back{display:block;margin:0 0 4px;padding:0;border:0;background:none;color:var(--inspector-muted);font-size:12px;cursor:pointer}.cloud-dialog .changes-back:hover{color:var(--inspector-text)}
+/* A version's actions sit in a footer of their own, set off from its changes. */
+.cloud-dialog .review-version .share-actions{margin:12px -16px -14px!important;padding:12px 16px!important;border-top:1px solid var(--inspector-border)!important;border-radius:0 0 12px 12px;background:color-mix(in srgb,var(--inspector-surface) 70%,transparent)}
+.cloud-dialog .admin-tabs{display:flex;flex-wrap:wrap;gap:8px}
+/* The play button is a 22 px circle whatever the dialog's buttons are; it and the name share a line. */
+.cloud-dialog .review-sound{display:inline-flex;align-items:center;gap:8px;vertical-align:middle}
+.cloud-dialog button.review-play{box-sizing:border-box;flex:none;width:22px!important;height:22px!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0 0 0 2px!important;border-radius:50%!important;line-height:1!important;font-size:9px!important}
+/* Changes sits a fixed distance from the top: switching tabs changes how far it reaches down,
+   never where it starts. */
+.share-dialog.cloud-dialog{margin-top:48px;margin-bottom:auto;max-height:calc(100dvh - 96px)}
+.cloud-dialog .admin-tabs .wb-button{display:inline-flex;align-items:center;gap:8px}
+.cloud-dialog .changes-tab-icon{width:20px;height:20px;flex:none;border-radius:5px;object-fit:cover}
+.cloud-dialog span.changes-tab-icon{display:inline-grid;place-items:center}.cloud-dialog span.changes-tab-icon svg{width:18px;height:18px}
+/* The hover card: one row per game with something waiting. */
+#changes-card .changes-card-games{list-style:none;margin:0 0 8px;padding:0;display:grid;gap:4px;min-width:260px}
+#changes-card .changes-card-games button{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start;width:100%;padding:8px;border:0;border-radius:10px;background:none;color:inherit;text-align:left;cursor:pointer;font:inherit}
+#changes-card .changes-card-games button:hover{background:var(--inspector-surface)}
+#changes-card .changes-card-games strong{display:block;font-size:13px}
+#changes-card .changes-card-games small{display:grid;gap:2px;margin-top:2px;font-size:12px;color:var(--inspector-muted)}
+#changes-card .changes-card-flag{display:inline-flex;align-items:center;gap:6px}
+#changes-card .changes-card-flag .changes-dot{width:7px;height:7px;margin:0}
+#changes-card .changes-tab-icon{width:20px;height:20px;border-radius:5px;object-fit:cover;display:inline-grid;place-items:center}
+#changes-card .changes-card-flag .changes-dot{display:inline-block;flex:none;border-radius:50%}
+/* Discard is a button: red outline, the same size as the button beside it. Send and Discard
+   stand together on the left, Send first. */
+.cloud-dialog .wb-button.discard-changes{display:inline-flex;align-items:center;min-height:36px;padding:0 16px!important;border:1px solid color-mix(in srgb,var(--inspector-danger,#ff8a8a) 70%,transparent)!important;border-radius:10px;background:transparent!important;color:var(--inspector-danger,#ff9a9a)!important;font-weight:600;text-decoration:none}
+.cloud-dialog .wb-button.discard-changes:hover:not(:disabled){background:color-mix(in srgb,var(--inspector-danger,#ff8a8a) 12%,transparent)!important}
+.cloud-dialog .review-send{justify-content:flex-start!important;gap:12px}
+.cloud-dialog .review-send .discard-changes{margin-right:0!important;order:2}
+.cloud-dialog .review-send #cloud-submit{order:1;min-height:36px}
+.cloud-dialog .review-send p{order:0}
+.cloud-dialog .wb-button.primary{min-height:36px}
+/* The sticky header meets the dialog's top edge exactly: its offset is the dialog's own padding,
+   so nothing scrolls through a gap above it. */
+.share-dialog{padding-top:var(--dialog-inset,24px)}
+/* A card's header is set off like its footer: its own band and a line under it. */
+.cloud-dialog .review-version>.review-version-head{margin:-14px -16px 12px;padding:12px 16px;border-bottom:1px solid var(--inspector-border);border-radius:12px 12px 0 0;background:color-mix(in srgb,var(--inspector-surface) 70%,transparent)}
+.cloud-dialog .review-json-toggle{margin-left:auto;padding:4px 8px;border:0;background:none;color:var(--inspector-muted);font-size:12px;cursor:pointer}.cloud-dialog .review-json-toggle:hover,.cloud-dialog .review-json-toggle[aria-expanded=true]{color:var(--inspector-text)}
+.cloud-dialog .review-json-toggle::before{content:"▸ "}.cloud-dialog .review-json-toggle[aria-expanded=true]::before{content:"▾ "}
+.cloud-dialog .review-json-pre{max-height:360px;overflow:auto;margin:0 -16px -14px;padding:14px 16px;background:#0e151e;border-radius:0 0 12px 12px;font:12px/1.6 monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.cloud-dialog .review-version:has(.review-json-pre:not([hidden])) .share-actions{border-radius:0}
+.cloud-dialog .review-avatar.has-face{background-size:cover;background-position:center;background-color:var(--inspector-surface)}
+/* JSON: a chevron the size of the label, turning when open; the code sits under the footer
+   with its own line and room, not against the buttons. */
+.cloud-dialog .review-json-toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.cloud-dialog .review-json-toggle::before{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s}
+.cloud-dialog .review-json-toggle[aria-expanded=true]::before{content:"";transform:rotate(45deg) translate(-2px,-2px)}
+.cloud-dialog .review-version:has(.review-json-pre:not([hidden])) .share-actions{margin-bottom:0!important;border-radius:0}
+.cloud-dialog .review-json-pre{margin:0 -16px -14px!important;padding:16px!important;border-top:1px solid var(--inspector-border)}

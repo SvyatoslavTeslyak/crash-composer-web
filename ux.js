@@ -1,7 +1,7 @@
 /* Shared workspace feedback. Status never substitutes for server permissions. */
 (()=>{
  const $=s=>document.querySelector(s),set=(el,text)=>{if(el&&el.textContent!==text)el.textContent=text};
- const state={phase:'',error:'',lastSaved:null},names={layout:'Game',look:'Brands',library:'Assets',sound:'Sounds',translates:'Texts',math:'Math Lab'};
+ const state={phase:'',error:'',lastSaved:null},names={layout:'Game',look:'Brands',library:'Library',sound:'Sounds',translates:'Texts',math:'Math Lab'};
  const dirty=()=>!!window.ComposerLook?.dirty||!!$('.workspace-dirty');
  window.ComposerUX={dirty,refresh:update,status(phase,error=''){state.phase=phase;state.error=error;update()},published:null};
  $('#kit-updated').hidden=true;
@@ -23,4 +23,15 @@
  window.addEventListener('composer-workspace',()=>setTimeout(update,0));window.addEventListener('composer-target',()=>{state.phase='';state.error='';state.lastSaved=null;update()});
  window.addEventListener('beforeunload',e=>{if(dirty()||state.phase==='saving'){e.preventDefault();e.returnValue=''}});
  setInterval(update,1000);update();checkUpdate();setInterval(checkUpdate,60000);window.addEventListener('focus',checkUpdate);
+ // The side panel on a desktop: the button atop the rail or ⌘\ / Ctrl+\ puts it away or brings
+ // it back, and the choice is remembered. The stage refits to the room it gains.
+ const sideToggle=$('#side-toggle');
+ const showSide=on=>{document.body.classList.toggle('side-hidden',!on);sideToggle.setAttribute('aria-expanded',String(on));const label=on?'Hide panel':'Show panel';sideToggle.setAttribute('aria-label',label);sideToggle.title=label+' (⌘\\)';try{localStorage.setItem('composer-side-hidden',on?'':'1')}catch{}window.dispatchEvent(new Event('resize'))};
+ if(sideToggle){
+  let hidden=false;try{hidden=localStorage.getItem('composer-side-hidden')==='1'}catch{}if(hidden)showSide(false);
+  sideToggle.onclick=()=>showSide(document.body.classList.contains('side-hidden'));
+  // Picking a section in the rail opens its panel: the panel is what the section is about.
+  document.querySelector('.workspace-rail')?.addEventListener('click',e=>{if(document.body.classList.contains('side-hidden')&&e.target.closest('button[id$="-tab"]'))showSide(true)});
+  document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&!e.altKey&&e.key==='\\'){e.preventDefault();sideToggle.click()}});
+ }
 })();

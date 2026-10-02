@@ -23,7 +23,7 @@
 .games-footer{margin-top:var(--space-4);padding:var(--space-6) var(--space-8) 0;border-top:var(--stroke-1) solid var(--inspector-border)}
 .games-footer .switch{min-height:var(--space-32);font-size:var(--inspector-type-sm)}
 /* Devices: an icon each, with the size beneath. */
-.devices{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8)}
+.devices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-8)}
 .device{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:var(--space-8);text-align:left;padding:var(--space-8) var(--space-12);font-size:var(--inspector-type-sm);color:var(--inspector-muted)}
 .device svg{grid-row:span 2;width:var(--web-icon-md);height:var(--web-icon-md);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .device b{font-weight:600;font-size:var(--inspector-type-base);color:var(--inspector-text)}.device span{white-space:nowrap}
@@ -99,7 +99,8 @@
 #fit.preview-fullscreen #preview-fullscreen:is(:hover,:focus-visible){opacity:1}
 
 /* A season or a face that is the selected game's own, not every game's. */
-.own-mark{display:inline-block;width:7px;height:7px;margin-left:6px;border-radius:50%;background:#5fd6a6;vertical-align:middle}
+/* A season only this game has says so in words; a dot read as one more colour among the swatches. */
+.own-mark{margin-left:6px;font-size:var(--inspector-type-xs);color:var(--inspector-muted)}
 .scope-note{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px}
 .scope-tag{display:inline-flex;align-items:center;min-height:22px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;line-height:1.2}
 .scope-tag.shared{color:#b79cff;background:color-mix(in srgb,#b79cff 14%,transparent);border:1px solid color-mix(in srgb,#b79cff 45%,transparent)}
