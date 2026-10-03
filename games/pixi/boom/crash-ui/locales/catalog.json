@@ -3598,10 +3598,10 @@
       ]
     },
     "candy_796403b5d5be": {
-      "source": "If your first board has no win, you get a Bonus Wheel that can award 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%) free games, or no bonus (79%). Each free game starts on a new board at 1x. Free games cannot win more free games.",
-      "en": "If your first board has no win, you get a Bonus Wheel that can award 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%) free games, or no bonus (79%). Each free game starts on a new board at 1x. Free games cannot win more free games.",
-      "fr": "Si le premier plateau ne rapporte aucun gain, la roue bonus peut offrir 1 (10 %), 2 (5 %), 3 (2 %), 4 (1 %) ou 5 (3 %) tours gratuits, ou aucun bonus (79 %). Chaque tour gratuit commence sur un nouveau plateau à 1×. Il ne peut pas offrir d’autres tours gratuits.",
-      "ht": "Si premye tablo a pa bay genyen, wou bonis la ka bay 1 (10%), 2 (5%), 3 (2%), 4 (1%) oswa 5 (3%) tou gratis, oswa pa bay bonis (79%). Chak tou gratis kòmanse sou yon nouvo tablo a 1×. Tou gratis pa ka bay lòt tou gratis.",
+      "source": "If your first board has no win, it can still win free games: 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%); otherwise (79%) there are none. When it does, the Free Games wheel shows how many. Each free game starts on a new board at 1x. Free games cannot win more free games.",
+      "en": "If your first board has no win, it can still win free games: 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%); otherwise (79%) there are none. When it does, the Free Games wheel shows how many. Each free game starts on a new board at 1x. Free games cannot win more free games.",
+      "fr": "Si le premier plateau ne rapporte aucun gain, il peut quand même offrir des tours gratuits : 1 (10 %), 2 (5 %), 3 (2 %), 4 (1 %) ou 5 (3 %) ; sinon (79 %), aucun. Dans ce cas, la roue des tours gratuits indique combien. Chaque tour gratuit commence sur un nouveau plateau à 1×. Il ne peut pas offrir d’autres tours gratuits.",
+      "ht": "Si premye tablo a pa bay genyen, li ka toujou bay tou gratis: 1 (10%), 2 (5%), 3 (2%), 4 (1%) oswa 5 (3%); sinon (79%), pa gen. Lè sa rive, wou tou gratis la montre konbyen. Chak tou gratis kòmanse sou yon nouvo tablo a 1×. Tou gratis pa ka bay lòt tou gratis.",
       "group": "Rules",
       "games": [
         "candy_cascade"
@@ -4802,7 +4802,7 @@
         "candy_cascade"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -5159,7 +5159,7 @@
         "candy_cascade"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -7443,10 +7443,10 @@
       "previewWindow": "rules"
     },
     "candy_cascade_rules_document": {
-      "source": "## HOW TO WIN\n\n[[cluster_examples]]\n\n5 or more matching candies touching up, down, left or right form a cluster. Every cluster on the board pays at the same time.\n\n## CLUSTER PAYS\n\n[[paytable]]\n\n## CASCADES\n\nWinning clusters disappear, candies fall down and new ones drop in. Each new winning cascade raises the multiplier.\n\n[[ladder]]\n\n## FREE GAMES\n\nIf your first board has no win, you get a Bonus Wheel that can award 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%) free games, or no bonus (79%). Each free game starts on a new board at 1x. Free games cannot win more free games.\n\nReturn to player: [RTP after certification].",
-      "en": "## HOW TO WIN\n\n[[cluster_examples]]\n\n5 or more matching candies touching up, down, left or right form a cluster. Every cluster on the board pays at the same time.\n\n## CLUSTER PAYS\n\n[[paytable]]\n\n## CASCADES\n\nWinning clusters disappear, candies fall down and new ones drop in. Each new winning cascade raises the multiplier.\n\n[[ladder]]\n\n## FREE GAMES\n\nIf your first board has no win, you get a Bonus Wheel that can award 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%) free games, or no bonus (79%). Each free game starts on a new board at 1x. Free games cannot win more free games.\n\nReturn to player: [RTP after certification].",
-      "fr": "## COMMENT GAGNER\n\n[[cluster_examples]]\n\nAu moins 5 bonbons identiques reliés par leurs côtés forment un groupe gagnant. Tous les groupes du plateau rapportent un gain en même temps.\n\n## GAINS PAR GROUPE\n\n[[paytable]]\n\n## CASCADES\n\nLes groupes gagnants disparaissent, les bonbons descendent et de nouveaux arrivent. Chaque nouvelle cascade gagnante augmente le multiplicateur.\n\n[[ladder]]\n\n## TOURS GRATUITS\n\nSi le premier plateau ne rapporte aucun gain, la roue bonus peut offrir 1 (10 %), 2 (5 %), 3 (2 %), 4 (1 %) ou 5 (3 %) tours gratuits, ou aucun bonus (79 %). Chaque tour gratuit commence sur un nouveau plateau à 1×. Il ne peut pas offrir d’autres tours gratuits.\n\nRetour au joueur : [RTP après certification].",
-      "ht": "## KIJAN POU GENYEN\n\n[[cluster_examples]]\n\nOmwen 5 sirèt menm kalite ki touche anlè, anba, agoch oswa adwat fòme yon gwoup. Tout gwoup sou tablo a peye an menm tan.\n\n## GEN PA GWOUP\n\n[[paytable]]\n\n## KASKAD\n\nGwoup ki genyen yo disparèt, sirèt yo desann epi lòt tonbe pou ranplase yo. Chak nouvo kaskad ki genyen ogmante miltiplikatè a.\n\n[[ladder]]\n\n## TOU GRATIS\n\nSi premye tablo a pa bay genyen, wou bonis la ka bay 1 (10%), 2 (5%), 3 (2%), 4 (1%) oswa 5 (3%) tou gratis, oswa pa bay bonis (79%). Chak tou gratis kòmanse sou yon nouvo tablo a 1×. Tou gratis pa ka bay lòt tou gratis.\n\nRetou pou jwè : [RTP apre sètifikasyon].",
+      "source": "## HOW TO WIN\n\n[[cluster_examples]]\n\n5 or more matching candies touching up, down, left or right form a cluster. Every cluster on the board pays at the same time.\n\n## CLUSTER PAYS\n\n[[paytable]]\n\n## CASCADES\n\nWinning clusters disappear, candies fall down and new ones drop in. Each new winning cascade raises the multiplier.\n\n[[ladder]]\n\n## FREE GAMES\n\nIf your first board has no win, it can still win free games: 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%); otherwise (79%) there are none. When it does, the Free Games wheel shows how many. Each free game starts on a new board at 1x. Free games cannot win more free games.\n\nReturn to player: [RTP after certification].",
+      "en": "## HOW TO WIN\n\n[[cluster_examples]]\n\n5 or more matching candies touching up, down, left or right form a cluster. Every cluster on the board pays at the same time.\n\n## CLUSTER PAYS\n\n[[paytable]]\n\n## CASCADES\n\nWinning clusters disappear, candies fall down and new ones drop in. Each new winning cascade raises the multiplier.\n\n[[ladder]]\n\n## FREE GAMES\n\nIf your first board has no win, it can still win free games: 1 (10%), 2 (5%), 3 (2%), 4 (1%) or 5 (3%); otherwise (79%) there are none. When it does, the Free Games wheel shows how many. Each free game starts on a new board at 1x. Free games cannot win more free games.\n\nReturn to player: [RTP after certification].",
+      "fr": "## COMMENT GAGNER\n\n[[cluster_examples]]\n\nAu moins 5 bonbons identiques reliés par leurs côtés forment un groupe gagnant. Tous les groupes du plateau rapportent un gain en même temps.\n\n## GAINS PAR GROUPE\n\n[[paytable]]\n\n## CASCADES\n\nLes groupes gagnants disparaissent, les bonbons descendent et de nouveaux arrivent. Chaque nouvelle cascade gagnante augmente le multiplicateur.\n\n[[ladder]]\n\n## TOURS GRATUITS\n\nSi le premier plateau ne rapporte aucun gain, il peut quand même offrir des tours gratuits : 1 (10 %), 2 (5 %), 3 (2 %), 4 (1 %) ou 5 (3 %) ; sinon (79 %), aucun. Dans ce cas, la roue des tours gratuits indique combien. Chaque tour gratuit commence sur un nouveau plateau à 1×. Il ne peut pas offrir d’autres tours gratuits.\n\nRetour au joueur : [RTP après certification].",
+      "ht": "## KIJAN POU GENYEN\n\n[[cluster_examples]]\n\nOmwen 5 sirèt menm kalite ki touche anlè, anba, agoch oswa adwat fòme yon gwoup. Tout gwoup sou tablo a peye an menm tan.\n\n## GEN PA GWOUP\n\n[[paytable]]\n\n## KASKAD\n\nGwoup ki genyen yo disparèt, sirèt yo desann epi lòt tonbe pou ranplase yo. Chak nouvo kaskad ki genyen ogmante miltiplikatè a.\n\n[[ladder]]\n\n## TOU GRATIS\n\nSi premye tablo a pa bay genyen, li ka toujou bay tou gratis: 1 (10%), 2 (5%), 3 (2%), 4 (1%) oswa 5 (3%); sinon (79%), pa gen. Lè sa rive, wou tou gratis la montre konbyen. Chak tou gratis kòmanse sou yon nouvo tablo a 1×. Tou gratis pa ka bay lòt tou gratis.\n\nRetou pou jwè : [RTP apre sètifikasyon].",
       "label": "How to play · Content",
       "format": "markdown",
       "group": "Rules",
@@ -7650,6 +7650,143 @@
       "games": [
         "candy_cascade"
       ]
+    },
+    "spin_the_wheel_314a63": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "source": "SPIN THE WHEEL",
+      "en": "SPIN THE WHEEL",
+      "fr": "TOURNER LA ROUE",
+      "ht": "VIRE WOU A",
+      "games": [
+        "candy_cascade"
+      ]
+    },
+    "value_free_games_8b5ee7": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "source": "+{value} FREE GAMES",
+      "en": "+{value} FREE GAMES",
+      "fr": "+{value} TOURS GRATUITS",
+      "ht": "+{value} TOU GRATIS",
+      "games": [
+        "candy_cascade"
+      ]
+    },
+    "1_free_game_97f836": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "source": "+1 FREE GAME",
+      "en": "+1 FREE GAME",
+      "fr": "+1 TOUR GRATUIT",
+      "ht": "+1 TOU GRATIS",
+      "games": [
+        "candy_cascade"
+      ]
+    },
+    "free_games_f94f47": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "games": [
+        "candy_cascade"
+      ],
+      "source": "FREE GAMES!",
+      "en": "FREE GAMES!",
+      "fr": "TOURS GRATUITS !",
+      "ht": "TOU GRATIS!"
+    },
+    "free_game_2c81f0": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "games": [
+        "candy_cascade"
+      ],
+      "source": "FREE GAME",
+      "en": "FREE GAME",
+      "fr": "TOUR GRATUIT",
+      "ht": "TOU GRATIS"
+    },
+    "you_won_free_games_spin_17b5aa": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "games": [
+        "candy_cascade"
+      ],
+      "source": "You won free games: spin to see how many",
+      "en": "You won free games: spin to see how many",
+      "fr": "Vous avez gagné des tours gratuits : tournez pour voir combien",
+      "ht": "Ou genyen tou gratis: vire pou wè konbyen"
+    },
+    "free_games_156df4": {
+      "source": "Free games",
+      "en": "Free games",
+      "fr": "Tours gratuits",
+      "ht": "Tou gratis",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "betDetails",
+      "previewState": "round-dependent"
+    },
+    "tap_the_button_to_spin_58554d": {
+      "source": "Tap the button to spin",
+      "en": "Tap the button to spin",
+      "fr": "Touchez le bouton pour lancer",
+      "ht": "Touche bouton an pou vire",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent"
     }
   }
 }
