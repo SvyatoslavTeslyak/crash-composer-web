@@ -5100,10 +5100,11 @@
       "ht": "MEGA GENYEN",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
-        "unused"
+        "text"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -5118,10 +5119,11 @@
       "ht": "GENYEN EKSTRA",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
-        "unused"
+        "text"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -5189,10 +5191,11 @@
       "ht": "GWO GENYEN",
       "group": "Bet panel & messages",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "usage": [
-        "unused"
+        "text"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -5404,11 +5407,12 @@
       "fr": "GAIN",
       "ht": "GENYEN",
       "games": [
-        "candy_cascade"
+        "candy_cascade",
+        "mopyon_cascades"
       ],
       "group": "Bet panel & messages",
       "usage": [
-        "unused"
+        "text"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -6100,7 +6104,8 @@
       "ht": "KÒMANSE TOU GRATIS YO",
       "group": "Scene",
       "games": [
-        "mopyon_cascades"
+        "mopyon_cascades",
+        "candy_cascade"
       ],
       "usage": [
         "text"
@@ -6118,7 +6123,8 @@
       "ht": "TOU GRATIS YO FINI",
       "group": "Scene",
       "games": [
-        "mopyon_cascades"
+        "mopyon_cascades",
+        "candy_cascade"
       ],
       "usage": [
         "text"
@@ -6136,7 +6142,8 @@
       "ht": "OU GENYEN",
       "group": "Scene",
       "games": [
-        "mopyon_cascades"
+        "mopyon_cascades",
+        "candy_cascade"
       ],
       "usage": [
         "text"
@@ -6154,10 +6161,11 @@
       "ht": "TOU PEYE",
       "group": "Scene",
       "games": [
-        "mopyon_cascades"
+        "mopyon_cascades",
+        "candy_cascade"
       ],
       "usage": [
-        "text"
+        "unused"
       ],
       "presets": [
         "tabbed-shell-v1"
@@ -6172,7 +6180,8 @@
       "ht": "PI WO",
       "group": "Scene",
       "games": [
-        "mopyon_cascades"
+        "mopyon_cascades",
+        "candy_cascade"
       ],
       "usage": [
         "text"
@@ -6190,7 +6199,8 @@
       "ht": "CHEMEN MILTIPLIKATÈ A",
       "group": "Scene",
       "games": [
-        "mopyon_cascades"
+        "mopyon_cascades",
+        "candy_cascade"
       ],
       "usage": [
         "text"
@@ -6226,7 +6236,8 @@
       "ht": "TG {value}",
       "group": "Scene",
       "games": [
-        "mopyon_cascades"
+        "mopyon_cascades",
+        "candy_cascade"
       ],
       "usage": [
         "text"
@@ -6244,7 +6255,8 @@
       "ht": "RANMASE",
       "group": "Scene",
       "games": [
-        "mopyon_cascades"
+        "mopyon_cascades",
+        "candy_cascade"
       ],
       "usage": [
         "text"
@@ -7514,6 +7526,130 @@
         "menu-drawer-v1"
       ],
       "previewWindow": "menu"
+    },
+    "started_at_value_bet_bet_c76238": {
+      "source": "started at {value}× · bet {bet} P",
+      "en": "started at {value}× · bet {bet} P",
+      "fr": "départ à {value}× · mise {bet} P",
+      "ht": "kòmanse a {value}× · miz {bet} P",
+      "group": "Scene",
+      "games": [
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "best_game_6f813a": {
+      "source": "BEST GAME",
+      "en": "BEST GAME",
+      "fr": "MEILLEUR TOUR",
+      "ht": "PI BON TOU",
+      "group": "Scene",
+      "games": [
+        "mopyon_cascades",
+        "candy_cascade"
+      ],
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewWindow": "summary",
+      "previewState": "round-dependent"
+    },
+    "cascade_value_aace68": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "source": "CASCADE ×{value}",
+      "en": "CASCADE ×{value}",
+      "fr": "CASCADE ×{value}",
+      "ht": "KASKAD ×{value}",
+      "games": [
+        "candy_cascade"
+      ]
+    },
+    "value_your_bet_f7a9f1": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "source": "{value}× your bet",
+      "en": "{value}× your bet",
+      "fr": "{value}× votre mise",
+      "ht": "{value}× miz ou",
+      "games": [
+        "candy_cascade",
+        "mopyon_cascades"
+      ]
+    },
+    "tap_to_continue_cbaabf": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "source": "Tap to continue",
+      "en": "Tap to continue",
+      "fr": "Touchez pour continuer",
+      "ht": "Touche pou kontinye",
+      "games": [
+        "candy_cascade",
+        "mopyon_cascades"
+      ]
+    },
+    "game_number_value_7fb62a": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "source": "GAME {number} · +{value}",
+      "en": "GAME {number} · +{value}",
+      "fr": "TOUR {number} · +{value}",
+      "ht": "TOU {number} · +{value}",
+      "games": [
+        "candy_cascade"
+      ]
+    },
+    "game_number_no_win_ada414": {
+      "group": "Scene",
+      "usage": [
+        "text"
+      ],
+      "presets": [
+        "tabbed-shell-v1"
+      ],
+      "previewState": "round-dependent",
+      "source": "GAME {number} · NO WIN",
+      "en": "GAME {number} · NO WIN",
+      "fr": "TOUR {number} · AUCUN GAIN",
+      "ht": "TOU {number} · PA GENYEN",
+      "games": [
+        "candy_cascade"
+      ]
     }
   }
 }

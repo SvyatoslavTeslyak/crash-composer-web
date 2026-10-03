@@ -1102,6 +1102,14 @@
 
 @keyframes win-toast-exit{0%{transform:translateX(-50%) scale(1);opacity:1}30%{transform:translateX(-50%) scale(1.06);opacity:1}100%{transform:translateX(-50%) scale(.5);opacity:0}}
 .crash-ui .win-toast.is-leaving{animation:win-toast-exit var(--win-toast-motion) cubic-bezier(.4,0,1,1) both}
+/* The same toast in the middle of the screen, larger (config.winPresentation='center'): its own
+   motion and logic unchanged; the vertical centring rides on `translate`, beside the animations' transform. */
+.crash-ui .win-toast.is-center{top:50%;translate:0 -50%}
+.crash-ui .win-toast.is-center::before{inset:calc(-1 * var(--space-40));border-radius:var(--radius-48)}
+.crash-ui .win-toast.is-center .win-toast-card{border-radius:var(--radius-24);gap:var(--space-16);padding:var(--space-16) var(--space-32) var(--space-16) var(--space-24)}
+.crash-ui .win-toast.is-center .win-flip{width:var(--space-48);height:var(--space-48)}
+.crash-ui .win-toast.is-center .win-toast-card>div>strong{font-size:var(--type-16)}
+.crash-ui .win-toast.is-center .win-toast-card>div>span{font-size:var(--type-32)}
 
 /* The settings popover in the tabbed shell is a small card next to its button, not a panel:
    a panel's 32px corner and comfort-height rows made it look inflated. A card corner, one
@@ -1298,3 +1306,45 @@
    translation is cut with an ellipsis there); the amount between the steps gives up the room
    down to what a few digits and the coin need. */
 .crash-ui .stake [data-action=min],.crash-ui .stake [data-action=max]{min-width:var(--tap-min);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-inline:var(--space-8)!important}
+
+/* A big win's celebration (ui.celebrate): the whole game, a tier colour that climbs BIG → MEGA → EPIC,
+   each drawn from the brand's roles (gold, success, cyan). */
+.crash-ui .big-win{--big-win-top:var(--action-go-edge);--big-win-mid:var(--gold);--big-win-low:var(--gold-strong);--big-win-ink:var(--action-go-shadow);--big-win-glow:var(--gold);--big-win-beat:calc(var(--motion-ms) * 4);position:fixed;inset:0;z-index:95;display:grid;place-items:center;overflow:hidden;cursor:pointer;pointer-events:auto;isolation:isolate;animation:big-win-in var(--motion-fast-ms) ease-out}
+/* The dim behind the celebration. */
+.crash-ui .big-win::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--big-win-glow) calc(var(--alpha-soft) * 100%),var(--scrim)),color-mix(in srgb,var(--shadow) calc(var(--alpha-bright) * 100%),var(--scrim)))}
+
+.crash-ui .big-win[data-tier=mega]{--big-win-top:var(--action-cash-edge);--big-win-mid:var(--success);--big-win-low:var(--action-cash-strong);--big-win-ink:var(--cash-shadow);--big-win-glow:var(--success)}
+.crash-ui .big-win[data-tier=epic]{--big-win-top:color-mix(in srgb,var(--cyan) 40%,var(--highlight));--big-win-mid:var(--cyan);--big-win-low:color-mix(in srgb,var(--cyan) 70%,var(--shadow));--big-win-ink:color-mix(in srgb,var(--cyan) 30%,var(--shadow));--big-win-glow:var(--cyan)}
+.crash-ui .big-win.is-leaving{animation:big-win-out calc(var(--motion-ms) * 1.75) ease-in forwards}
+@keyframes big-win-in{from{opacity:0}}
+@keyframes big-win-out{to{opacity:0}}
+.crash-ui .big-win-rays{position:absolute;left:50%;top:45%;width:calc(var(--space-40) * 16);height:calc(var(--space-40) * 16);margin:calc(var(--space-40) * -8) 0 0 calc(var(--space-40) * -8);border-radius:50%;background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--big-win-glow) calc(var(--alpha-medium) * 100%),transparent) 0 9deg,transparent 9deg 18deg);mask:radial-gradient(circle,var(--shadow) 18%,transparent 66%);-webkit-mask:radial-gradient(circle,var(--shadow) 18%,transparent 66%);animation:big-win-turn calc(var(--motion-win-halo-ms) * 1.75) linear infinite}
+@keyframes big-win-turn{to{transform:rotate(360deg)}}
+.crash-ui .big-win-rain{position:absolute;inset:0;z-index:0;pointer-events:none}
+.crash-ui .big-win-drop{position:absolute;top:calc(var(--space-40) * -2);left:var(--x);width:var(--s);height:var(--s);object-fit:contain;filter:drop-shadow(0 var(--space-4) var(--space-6) color-mix(in srgb,var(--shadow) calc(var(--alpha-strong) * 100%),transparent));animation:big-win-fall var(--t) linear var(--d) infinite}
+@keyframes big-win-fall{to{transform:translateY(calc(100dvh + var(--space-40) * 4)) rotate(var(--r))}}
+.crash-ui .big-win-confetti{position:absolute;top:calc(var(--space-24) * -1);left:var(--x);width:var(--w);height:var(--h);border-radius:var(--radius-4);background:var(--c);opacity:0;animation:big-win-flutter var(--t) linear var(--d) infinite}
+@keyframes big-win-flutter{0%{opacity:1;transform:translate(0,0) rotate3d(1,.3,.2,0deg)}25%{transform:translate(var(--sway),25dvh) rotate3d(1,.3,.2,calc(var(--spin) * .25))}50%{transform:translate(calc(var(--sway) * -1),50dvh) rotate3d(1,.3,.2,calc(var(--spin) * .5))}75%{transform:translate(var(--sway),75dvh) rotate3d(1,.3,.2,calc(var(--spin) * .75))}100%{opacity:1;transform:translate(0,calc(100dvh + var(--space-40))) rotate3d(1,.3,.2,var(--spin))}}
+.crash-ui .big-win-card{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:var(--space-8);padding:0 var(--space-16);text-align:center;font-family:var(--font-body),sans-serif}
+/* A soft dark pool behind the words, so the game under the scrim and the rain never fight them. */
+.crash-ui .big-win-card::before{content:"";position:absolute;inset:calc(var(--space-40) * -1) calc(var(--space-24) * -1);z-index:-1;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--shadow) calc(var(--alpha-bright) * 100%),transparent),transparent)}
+/* The brand's faces may be variable fonts declared at one weight: the axis is set directly, so the
+   title and the amount are truly heavy rather than a thin face made bold by the browser. */
+.crash-ui .big-win-title{font-size:calc(var(--type-52) * var(--big-win-fit,1));font-weight:900;font-variation-settings:"wght" 900;line-height:1.05;letter-spacing:.02em;white-space:nowrap;background:linear-gradient(var(--big-win-top),var(--big-win-mid) 55%,var(--big-win-low));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 var(--space-4) 0 var(--big-win-ink));animation:big-win-pop var(--big-win-beat) cubic-bezier(.2,1.6,.4,1)}
+.crash-ui .big-win[data-tier=mega] .big-win-title{font-size:calc(var(--type-64) * var(--big-win-fit,1))}
+.crash-ui .big-win[data-tier=epic] .big-win-title{font-size:calc(var(--type-72) * var(--big-win-fit,1))}
+@keyframes big-win-pop{from{transform:scale(.3)}}
+.crash-ui .big-win-amount{font-family:var(--font-numbers),sans-serif;font-size:var(--type-52);font-weight:900;font-variation-settings:"wght" 900;font-variant-numeric:tabular-nums;color:var(--text);text-shadow:0 var(--space-4) 0 color-mix(in srgb,var(--shadow) calc(var(--alpha-strong) * 100%),transparent),0 0 var(--space-24) color-mix(in srgb,var(--big-win-glow) calc(var(--alpha-strong) * 100%),transparent)}
+.crash-ui .big-win.is-done .big-win-amount{animation:big-win-pop calc(var(--motion-ms) * 2.5) cubic-bezier(.2,1.6,.4,1)}
+.crash-ui .big-win-x{font-size:var(--type-16);font-weight:800;font-variation-settings:"wght" 800;color:var(--big-win-mid)}
+.crash-ui .big-win-tap{margin-top:var(--space-16);font-size:var(--type-12);letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.crash-ui .big-win-flash{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--big-win-top) calc(var(--alpha-bright) * 100%),transparent),transparent 60%)}
+/* Climbing a tier: the title bursts, light flashes and the whole thing shakes. */
+.crash-ui .big-win.tier-up .big-win-title{animation:big-win-burst var(--big-win-beat) cubic-bezier(.2,1.6,.4,1)}
+.crash-ui .big-win.tier-up .big-win-flash{animation:big-win-flash var(--big-win-beat) ease-out}
+.crash-ui .big-win.tier-up .big-win-card{animation:big-win-shake calc(var(--motion-ms) * 3) ease-out}
+@keyframes big-win-burst{0%{transform:scale(.4) rotate(-6deg)}60%{transform:scale(1.18) rotate(2deg)}100%{transform:none}}
+@keyframes big-win-flash{0%{opacity:1}100%{opacity:0}}
+@keyframes big-win-shake{0%,100%{translate:0 0}20%{translate:calc(var(--space-8) * -1) var(--space-4)}40%{translate:var(--space-6) calc(var(--space-4) * -1)}60%{translate:calc(var(--space-4) * -1) var(--space-4)}80%{translate:var(--space-4) 0}}
+.crash-ui.reduced .big-win *,.crash-ui.reduced .big-win{animation:none!important}
+@media(prefers-reduced-motion:reduce){.crash-ui .big-win,.crash-ui .big-win *{animation:none!important}}

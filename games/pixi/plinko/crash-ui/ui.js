@@ -465,8 +465,9 @@ class GameUI {
  }
  update(s){
   // A win shows as a toast over the scene rather than as the win window: Goat Road's way, and
-  // any game's that asks for it with config.winPresentation='toast'.
-  s={...s,flags:{...s.flags,...this.embedFlags},features:{...s.features,...this.embedFeatures},winToast:s.game==='road'||this.config.winPresentation==='toast'};
+  // any game's that asks for it with config.winPresentation='toast', or 'center' for the same
+  // toast larger in the middle of the screen.
+  s={...s,flags:{...s.flags,...this.embedFlags},features:{...s.features,...this.embedFeatures},winToast:s.game==='road'||this.config.winPresentation==='toast'||this.config.winPresentation==='center'};
   window.CrashI18n?.setGame(s.game);
   this.winSound.update(s);
   this.bettingSound.setEnabled(s.settings?.sound===true);
@@ -529,7 +530,7 @@ class GameUI {
   this.finishWinToast();
   this.heldWinBalance=this.slots.balance.textContent;
   this.winBalanceFrom=this.state.balanceKnown===false?null:Number(this.state.balance);
-  const toast=document.createElement('div');toast.className='win-toast';toast.setAttribute('role','status');
+  const toast=document.createElement('div');toast.className='win-toast'+(this.config.winPresentation==='center'?' is-center':'');toast.setAttribute('role','status');
   const amount=s.winToastAmount??s.winAmount,multiplier=s.history?.[0]?.multiplier;
   // The card sits inside a transparent wrapper so the bloom behind it can show around it.
   // The check flips over into the coin, and only then do the coins set off for the balance.
@@ -566,6 +567,49 @@ class GameUI {
   if(this.state.settings?.reduced_motion||matchMedia('(prefers-reduced-motion: reduce)').matches){this.finishWinToast();return}
   toast.classList.add('is-leaving');
   this.toastHideTimer=setTimeout(()=>{if(this.winToast===toast)this.finishWinToast()},300);
+ }
+ // A big win's celebration over the whole game. The amount counts up from nothing and the title
+ // climbs through every tier it passes (BIG WIN, then MEGA, then EPIC), each with its own colour,
+ // a burst and a shake; coins and the game's own symbols rain behind it. A first tap jumps to the
+ // final tier and amount; a second tap, or a moment's wait, closes it. Games give their tiers
+ // (lowest first, `from` as a multiple of the bet), the images for the rain and their sounds.
+ // Resolves once it has closed.
+ celebrate({amount,bet,tiers,rain=[],hurried=false,onTier=()=>{},onTick=()=>{}}){
+  const multiple=bet>0?amount/bet:0,reached=(tiers||[]).filter(t=>multiple>=t.from);
+  if(!reached.length)return Promise.resolve();
+  const reduced=this.state.settings?.reduced_motion||matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The game's symbols tumble down with confetti in the brand's colours; no coins, which belong to
+  // the win toast that carries them to the balance afterwards. Every tier climbed throws in
+  // another handful, so EPIC is thicker than BIG.
+  const images=rain.length?rain:[base+'assets/icons/'+pick('coin.png')];
+  const confettiColours=['var(--gold)','var(--success)','var(--cyan)','var(--danger)','var(--highlight)','var(--action-go-edge)'];
+  const shower=(symbols,confetti,delay)=>Array.from({length:symbols},(_,i)=>'<img class="big-win-drop" src="'+esc(images[Math.floor(Math.random()*images.length)])+'" alt="" style="--x:'+Math.round(Math.random()*100)+'%;--d:'+(delay+Math.random()*1.4).toFixed(2)+'s;--t:'+(1.6+Math.random()*1.6).toFixed(2)+'s;--s:'+Math.round(28+Math.random()*34)+'px;--r:'+Math.round(Math.random()*720-360)+'deg">').join('')
+   +Array.from({length:confetti},()=>'<i class="big-win-confetti" style="--x:'+Math.round(Math.random()*100)+'%;--d:'+(delay+Math.random()*1.8).toFixed(2)+'s;--t:'+(2.4+Math.random()*2).toFixed(2)+'s;--c:'+confettiColours[Math.floor(Math.random()*confettiColours.length)]+';--w:'+Math.round(6+Math.random()*6)+'px;--h:'+Math.round(10+Math.random()*8)+'px;--sway:'+Math.round(20+Math.random()*40)+'px;--spin:'+Math.round(360+Math.random()*720)+'deg"></i>').join('');
+  const drops=reduced?'':shower(44,60,0);
+  const root=document.createElement('div');root.className='big-win';root.setAttribute('role','dialog');root.setAttribute('aria-live','polite');
+  root.innerHTML='<div class="big-win-rays" aria-hidden="true"></div><div class="big-win-rain" aria-hidden="true">'+drops+'</div><div class="big-win-card"><div class="big-win-title"></div><div class="big-win-amount">'+esc(money(0))+'</div><div class="big-win-x">'+esc(multiple.toFixed(2))+'× your bet</div><div class="big-win-tap">Tap to continue</div></div><div class="big-win-flash" aria-hidden="true"></div>';
+  this.host.append(root);
+  const title=root.querySelector('.big-win-title'),figure=root.querySelector('.big-win-amount');
+  let level=-1;
+  const showers=root.querySelector('.big-win-rain');
+  const show=i=>{if(i===level)return;level=i;const t=reached[i];root.dataset.tier=t.key||String(i);root.setAttribute('aria-label',t.name);title.textContent=t.name;title.style.removeProperty('--big-win-fit');const room=root.clientWidth-32,wide=Math.max(title.offsetWidth,title.scrollWidth);if(wide>room)title.style.setProperty('--big-win-fit',(room/wide).toFixed(3));if(i>0&&!reduced){root.classList.remove('tier-up');void root.offsetWidth;root.classList.add('tier-up');showers.insertAdjacentHTML('beforeend',shower(18,40,0))}onTier(t,i)};
+  // Each tier gets its stretch of the count: the first runs up to the next threshold, the last
+  // slows to the final figure so its digits land one by one.
+  const stretch=hurried?.9:1.7,last=hurried?1.1:2.2;
+  const marks=reached.map((t,i)=>({from:i?t.from*bet:0,to:i<reached.length-1?reached[i+1].from*bet:amount,seconds:i<reached.length-1?stretch:last}));
+  const total=marks.reduce((sum,m)=>sum+m.seconds,0);
+  return new Promise(resolve=>{
+   const started=performance.now();let finished=false,closed=false,lastTick=0,frameId=0;
+   const close=()=>{if(closed)return;closed=true;cancelAnimationFrame(frameId);root.classList.add('is-leaving');setTimeout(()=>{root.remove();resolve()},reduced?0:280)};
+   const finish=()=>{if(finished)return;finished=true;cancelAnimationFrame(frameId);show(reached.length-1);figure.textContent=money(amount);root.classList.add('is-done');setTimeout(close,hurried?1200:2600)};
+   const frame=now=>{if(finished)return;let t=(now-started)/1000,i=0;while(i<marks.length-1&&t>marks[i].seconds){t-=marks[i].seconds;i++}
+    const m=marks[i],k=Math.min(1,t/m.seconds),eased=i===marks.length-1?1-Math.pow(1-k,2.2):k;
+    show(i);figure.textContent=money(m.from+(m.to-m.from)*eased);
+    if(now-lastTick>90){lastTick=now;onTick()}
+    if((now-started)/1000>=total)finish();else frameId=requestAnimationFrame(frame)};
+   if(reduced)finish();else frameId=requestAnimationFrame(frame);
+   root.addEventListener('click',()=>finished?close():finish());
+  });
  }
  finishWinToast(){
   clearTimeout(this.toastFlightTimer);clearTimeout(this.toastEndTimer);clearTimeout(this.toastHideTimer);
